@@ -2,7 +2,7 @@
 // === Twab ===
 struct Twab {
     timestamp: Int as uint64;
-    amount: Int;
+    amount: Int as uint128;
 }
 
 inline fun averageBalance(start: Twab, end: Twab): Int {

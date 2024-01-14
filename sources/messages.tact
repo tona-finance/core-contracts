@@ -42,34 +42,15 @@ message(0x595f07bc) TokenBurn {
 
 // === Pool messages ===
 
-message DeployDraw {
-    query_id: Int as uint64;
-    timestamp: Int as uint64;
+message SetPrize {
     amount: Int as coins;
-}
-
-message DrawStartRequest {
-    query_id: Int as uint64;
-}
-
-message DrawEndRequest {
-    query_id: Int as uint64;
-}
-
-message DrawStart {
-    timestamp: Int as uint64;
-    amount: Int;
-}
-
-message DrawEnd {
-    timestamp: Int as uint64;
-    amount: Int;
 }
 
 message WithdrawInternal {
-    query_id: Int as uint64;
-    owner: Address;
-    amount: Int as coins;
+    user: Address;
+    withdraw_amount: Int as coins;
+    acc_contribute_amount: Int as coins;
+    acc_withdraw_amount: Int as coins;
 }
 
 message Deposit {
@@ -77,7 +58,6 @@ message Deposit {
 }
 
 message Withdraw {
-    query_id: Int as uint64;
     amount: Int as coins;
 }
 
@@ -88,5 +68,12 @@ message WithdrawNotification {
 message WithdrawReceipt {
     timestamp: Int as uint64;
     owner: Address;
-    amount: Int as coins;
+    share_amount: Int as coins;
+}
+
+// === Draw Beacon messages ===
+
+message DeployDrawBeacon {
+    timestamp: Int as uint64;
+    amount: Int;
 }
