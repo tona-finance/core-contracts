@@ -5,7 +5,14 @@ struct Twab {
     amount: Int as uint128;
 }
 
-inline fun averageBalance(start: Twab, end: Twab): Int {
+inline fun newTwab(): Twab {
+    return Twab {
+        timestamp: now(),
+        amount: 0
+    };
+}
+
+inline fun average_balance(start: Twab, end: Twab): Int {
     require(start.timestamp < end.timestamp, "invalid timestamp");
     return (end.amount - start.amount) / (end.timestamp - start.timestamp);
 }
@@ -21,8 +28,15 @@ inline extends fun nextTwab(self: Twab, balance: Int, timestamp: Int): Twab {
 // === TwabStore ===
 // TODO: replace with ring buffer
 struct TwabStore {
-    store: map<Int as uint64, Twab>;
+    store: map<Int, Twab>;
     size: Int as uint64;
+}
+
+inline fun newTwabStore(): TwabStore {
+    return TwabStore {
+        store: emptyMap(),
+        size: 0
+    };
 }
 
 extends fun binarySearchTwab(self: TwabStore, timestamp: Int): Twab {

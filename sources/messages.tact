@@ -53,6 +53,19 @@ message WithdrawInternal {
     acc_withdraw_amount: Int as coins;
 }
 
+message WithdrawFinishInternal {
+    user: Address;
+    timestamp: Int as uint64;
+    amount: Int as coins;
+}
+
+// === pool account messages ===
+
+message InitPoolAccountInternal {
+    staker: Address;
+    jetton_wallet: Address;
+}
+
 message Deposit {
     query_id: Int as uint64;
 }
@@ -61,19 +74,54 @@ message Withdraw {
     amount: Int as coins;
 }
 
-message WithdrawNotification {
+// === Draw messages ===
+
+message InitDraw {
+    deployer: Address;
+    reserve: Address;
+    jetton_wallet: Address;
+    twab_timestamp: Int as uint64;
+    twab_amount: Int as uint128;
+}
+
+message ClaimPrizeInternal {
     query_id: Int as uint64;
+    user: Address;
+    pick_payload: Slice as remaining;
 }
 
-message WithdrawReceipt {
-    timestamp: Int as uint64;
-    owner: Address;
-    share_amount: Int as coins;
+// === Reserve messages ===
+
+message RepayToOwner {
+    query_id: Int as coins;
+    amount: Int as coins;
 }
 
-// === Draw Beacon messages ===
+message ClaimPrizeDebtInternal {
+    query_id: Int as uint64;
+    period: Int as uint32;
+    user: Address;
+    amount: Int as coins;
+}
 
-message DeployDrawBeacon {
-    timestamp: Int as uint64;
-    amount: Int;
+// === Ticket messages ===
+
+message InitTicket {
+    beacon_avg_balance: Int as coins;
+    user_avg_balance: Int as coins;
+}
+
+message PayPrizeDebtInternal {
+    amount: Int as coins;
+}
+
+message ClaimPrize {
+    query_id: Int as uint64;
+    index_payload: Slice as remaining;
+}
+
+message ClaimPrizeDebt {
+    query_id: Int as uint64;
+    amount: Int as coins;
+    reserve: Address;
 }

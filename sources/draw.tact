@@ -1,80 +1,67 @@
-import "@stdlib/ownable.tact";
-import "./library/twab.tact";
-import "./tonstakers/wallet.tact";
-import "./messages.tact";
+import "./library/twab";
+import "./tonstakers/wallet";
+import "./draw/beacon";
+import "./draw/distributor";
+import "./messages";
 
-contract DrawBeacon {
-    override const storageReserve: Int = ton("0.01");
+const INVALID_SENDER: Int = 0x0;
 
-    const DEPOSIT_GAS_FEE: Int = ton("0.1");
-    const STAKER_DEPOSIT_FEE: Int = ton("1.0");
-    const TRANSFER_FWD_FEE: Int = ton("0.01");
+contract Draw with PrizeDistributor {
 
-    pool: Address;
-    
-    jetton_wallet: Address;
+    const EXPIRATION_INTERVAL: Int = 60 * 60 * 24 * 14; // 14 days
 
-    period: Int;
-    start: Twab;
-    end: Twab?;
-    share_amount: Int;
-    prize_amount: Int;
+    // from prize distributor
+    // ---------------------
     active: Bool;
+    pool: Address;
+    reserve: Address?;
+    period: Int as uint32;
+    jetton_wallet: Address?;
+    start: Twab?;
+    end: Twab?;
 
-    init(
-        pool: Address,
-        jetton_master: Address,
-        jetton_wallet_code: Cell,
-        period: Int
-    ) {
-        self.pool = pool;
-        self.jetton_wallet = get_jetton_wallet_address(
-            myAddress(),
-            jetton_master,
-            jetton_wallet_code
-        );
-        self.period = period;
-        self.start = null;
-        self.end = null;
-        self.share_amount = 0;
-        self.prize_amount = 0;
-        self.active = false;
+    prize_amount: Int as coins;
+    winning_number: Int as uint32;
+    prize_percentage: map<Int, Int>;
+    deadline: Int as uint64;
+    avail_prize_amount: Int as coins;
+    // ---------------------
+
+    init(pool: Address, period: Int) {
+        self.init_beacon(pool, period);
+        self.init_distributor();
     }
 
     receive(msg: TokenExcesses) {}
 
-    receive(msg: DeployDrawBeacon) {
-        require(sender() == self.pool, "invalid sender");
-
-        self.start = Twab {
-            timestamp: msg.timestamp,
-            amount: msg.amount
-        };
-    }
-
     receive(msg: TokenNotification) {
-        require(sender() == self.jetton_wallet, "invalid sender");
-
-        // any jetton received should be prize
-        self.prize_amount = self.prize_amount + msg.amount;
+        nativeThrowUnless(INVALID_SENDER, sender() == self.jetton_wallet);
 
         if (msg.from == self.pool) {
             self.on_jetton_from_pool(msg.amount, msg.forward_payload);
+        } else {
+            // any jetton received can be prize
+            self.avail_prize_amount = self.avail_prize_amount + msg.amount;
         }
     }
 
     fun on_jetton_from_pool(amount: Int, payload: Slice) {
-        // share amount + twab timestamp + twab amount
-        let share_amount: Int = payload.loadCoins();
+        // twab timestamp + twab amount
         let twab_timestamp: Int = payload.loadTimestamp();
         let twab_amount: Int = payload.loadUint(128);
         payload.endParse();
 
-        self.end = Twab {
+        let twab: Twab = Twab {
             timestamp: twab_timestamp,
             amount: twab_amount
         };
-        self.share_amount = share_amount;
+        let deadline: Int = now() + self.EXPIRATION_INTERVAL;
+        self.start(twab, amount, deadline);
+    }
+
+    inline fun start(twab: Twab, prize_amount: Int, deadline: Int) {
+        self.start_beacon(twab);
+        self.start_distributor(prize_amount, deadline);
         self.active = true;
     }
 }

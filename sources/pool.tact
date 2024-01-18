@@ -8,7 +8,7 @@ import "./messages.tact";
 import "./draw.tact";
 
 contract Pool with Deployable, OwnableTransferable {
-    override const storageReserve: Int = ton("0.5"); // from base trait
+    override const storageReserve: Int = ton("1.0"); // from base trait
 
     owner: Address; // from ownable
 
@@ -19,12 +19,12 @@ contract Pool with Deployable, OwnableTransferable {
     jetton_wallet: Address;
 
     twab: Twab;
-    share_amount: Int;
-    contribute_amount: Int;
-    spent_amount: Int;
-    unexpected_amount: Int;
+    share_amount: Int as coins;
+    contribute_amount: Int as coins;
+    spent_amount: Int as coins;
+    unexpected_amount: Int as coins;
 
-    next_period: Int;
+    next_period: Int as uint32;
 
     init(
         owner: Address,
@@ -54,7 +54,7 @@ contract Pool with Deployable, OwnableTransferable {
 
     receive(msg: TokenExcesses) {}
 
-    receive("clean unexpected jetton") {
+    receive("sweep unexpected jetton") {
         self.requireOwner();
 
         if (self.unexpected_amount > 0) {
@@ -69,7 +69,9 @@ contract Pool with Deployable, OwnableTransferable {
                     response_destination: myAddress(),
                     forward_ton_amount: 0,
                     forward_payload: emptySlice()
-                }.toCell()
+                }.toCell(),
+                false,
+                null
             );
         }
     }
@@ -172,12 +174,12 @@ contract Pool with Deployable, OwnableTransferable {
         );
     }
 
-    fun get_draw_beacon_address(period: Int): Address {
+    inline fun get_draw_beacon_address(period: Int): Address {
         let sinit: StateInit = self.get_draw_beacon_init(period);
         return contractAddress(sinit);
     }
 
-    fun get_user_account_address(user: Address) {
+    inline fun get_user_account_address(user: Address) {
         let sinit: StateInit = self.get_user_account_init(user);
         return contractAddress(sinit);
     }
@@ -404,14 +406,14 @@ contract UserAccount with Deployable, Ownable {
         }
     }
 
-    receive("clean unexpected jetton") {
+    receive("sweep unexpected jetton") {
         self.requireOwner();
 
         if (self.unexpected_amount > 0) {
             let amount: Int = self.unexpected_amount;
             self.unexpected_amount = 0;
             self.forward(
-                self.owner,
+                self.jetton_wallet,
                 TokenTransfer {
                     query_id: 0,
                     amount: amount,
@@ -419,13 +421,16 @@ contract UserAccount with Deployable, Ownable {
                     response_destination: myAddress(),
                     forward_ton_amount: 0,
                     forward_payload: emptySlice()
-                }.toCell()
+                }.toCell(),
+                true,
+                null
             );
         }
     }
 
-    receive("clean dust") {
+    receive("sweep dust") {
         self.requireOwner();
+
         let ctx: Context = context();
         let dust_value: Int = myBalance() - ctx.value - self.storageReserve;
 
@@ -437,6 +442,13 @@ contract UserAccount with Deployable, Ownable {
                 mode: SendIgnoreErrors,
                 body: "receive dust".asComment()
             });
+        }
+    }
+
+    bounced(src: bounced<TokenTransfer>) {
+        if (src.destination == self.owner) {
+            // unexpected jetton
+            self.unexpected_amount = self.unexpected_amount + src.amount;
         }
     }
 
