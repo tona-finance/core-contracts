@@ -1,21 +1,20 @@
-import "./draw/reserve";
-import "./tonstakers/wallet.tact";
+import "@stdlib/deploy";
+import "./trait/prize_reserve";
+import "./staker/wallet";
+import "./messages";
+import "./ticket";
 
-contract PrizeReserve with BasePrizeReserve {
+contract PrizeReserve with BasePrizeReserve, Deployable {
     override const storageReserve: Int = ton("0.05");
 
     // from base prize reserve
     // ------------------------
-    owner: Address; // from ownable
-
     jetton_wallet: Address;
-    debt_amount: Int;
     // ------------------------
 
     pool: Address;
 
     init(
-        owner: Address,
         pool: Address,
         jetton_master: Address,
         jetton_wallet_code: Cell
@@ -25,11 +24,12 @@ contract PrizeReserve with BasePrizeReserve {
             jetton_master,
             jetton_wallet_code
         );
-        self.init_prize_reserve(owner, jetton_wallet);
+        self.init_prize_reserve(jetton_wallet);
         self.pool = pool;
     }
 
-    override inline fun get_ticket_address(period: Int, user: Address): Address {
-        
+    override inline fun get_ticket_address(user: Address, draw: Address): Address {
+        let sinit: StateInit = initOf Ticket(user, draw);
+        return contractAddress(sinit);
     }
 }

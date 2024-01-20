@@ -1,19 +1,19 @@
 import "./library/twab";
-import "./tonstakers/wallet";
-import "./draw/beacon";
-import "./draw/distributor";
+import "./trait/prize_distributor";
 import "./messages";
+import "./ticket";
 
 const INVALID_SENDER: Int = 0x0;
 
 contract Draw with PrizeDistributor {
+    override const storageReserve: Int = ton("0.1");
 
     const EXPIRATION_INTERVAL: Int = 60 * 60 * 24 * 14; // 14 days
 
     // from prize distributor
     // ---------------------
     active: Bool;
-    pool: Address;
+    pool_master: Address;
     reserve: Address?;
     period: Int as uint32;
     jetton_wallet: Address?;
@@ -27,28 +27,27 @@ contract Draw with PrizeDistributor {
     avail_prize_amount: Int as coins;
     // ---------------------
 
-    init(pool: Address, period: Int) {
-        self.init_beacon(pool, period);
+    init(pool_master: Address, period: Int) {
+        self.init_beacon(pool_master, period);
         self.init_distributor();
     }
 
-    receive(msg: TokenExcesses) {}
-
     receive(msg: TokenNotification) {
-        nativeThrowUnless(INVALID_SENDER, sender() == self.jetton_wallet);
+        self.require_jetton_wallet();
 
-        if (msg.from == self.pool) {
-            self.on_jetton_from_pool(msg.amount, msg.forward_payload);
+        if (msg.from == self.pool_master) {
+            self.on_jetton_from_pool_master(msg.amount, msg.forward_payload);
         } else {
             // any jetton received can be prize
             self.avail_prize_amount = self.avail_prize_amount + msg.amount;
         }
     }
 
-    fun on_jetton_from_pool(amount: Int, payload: Slice) {
-        // twab timestamp + twab amount
+    fun on_jetton_from_pool_master(amount: Int, payload: Slice) {
+        // twab timestamp + twab amount + pool owner
         let twab_timestamp: Int = payload.loadTimestamp();
         let twab_amount: Int = payload.loadUint(128);
+        let owner: Address = payload.loadAddress();
         payload.endParse();
 
         let twab: Twab = Twab {
@@ -56,12 +55,20 @@ contract Draw with PrizeDistributor {
             amount: twab_amount
         };
         let deadline: Int = now() + self.EXPIRATION_INTERVAL;
-        self.start(twab, amount, deadline);
+        self.activate(twab, amount, deadline);
+
+        // refund to pool owner
+        self.forward(owner, null, false, null);
     }
 
-    inline fun start(twab: Twab, prize_amount: Int, deadline: Int) {
-        self.start_beacon(twab);
-        self.start_distributor(prize_amount, deadline);
+    inline fun activate(twab: Twab, prize_amount: Int, deadline: Int) {
+        self.activate_beacon(twab);
+        self.activate_distributor(prize_amount, deadline);
         self.active = true;
+    }
+
+    override inline fun get_ticket_address(user: Address): Address {
+        let sinit: StateInit = initOf Ticket(user, myAddress());
+        return contractAddress(sinit);
     }
 }

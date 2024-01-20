@@ -1,14 +1,14 @@
 import "../library/twab";
-import "../lirabry/math";
+import "../library/helper";
 import "../messages";
-import "./beacon";
+import "./draw_beacon";
 
 const INVALID_TIER: Int = 0xF001;
-const DRAW_OVERED: Int = 0xF002;
+const DRAW_OVER: Int = 0xF002;
 const DRAW_NOT_OVER: Int = 0xF003;
 const INVALID_SENDER: Int = 0xF003;
 
-trait PrizeDistributor with DrawBeacon {
+trait PrizeDistributor with DrawBeacon, MsgValueHelper {
 
     const CHOICES: Int = 16;
     const CARDINALITY: Int = 5;
@@ -18,7 +18,7 @@ trait PrizeDistributor with DrawBeacon {
     // from draw beacon
     // ---------------------
     active: Bool;
-    pool: Address;
+    pool_master: Address;
     reserve: Address?;
     period: Int;
     jetton_wallet: Address?;
@@ -34,34 +34,35 @@ trait PrizeDistributor with DrawBeacon {
 
     receive("send to reserve") {
         self.require_active();
-        nativeThrowWhen(DRAW_NOT_OVER, now() < self.deadline);
+        self.require_over();
         require(self.avail_prize_amount > 0, "invalid avail prize amount");
+
+        let rest_value: Int = self.msg_value(context(), ton("0.1"));
+        // token transfer value 0.1
+        require(rest_value >= 0, "insufficient value");
+        
         let amount: Int = self.avail_prize_amount;
         self.avail_prize_amount = 0;
 
-        send(SendParameters {
-            bounce: false,
-            to: self.jetton_wallet!!,
-            value: ton("0.05"),
-            mode: 0,
-            body: TokenTransfer {
+        self.forward(
+            self.jetton_wallet!!,
+            TokenTransfer {
                 query_id: 0,
                 amount: amount,
                 destination: self.reserve!!,
-                response_destination: myAddress(),
-                forward_ton_amount: ton("0.01"),
+                response_destination: sender(),
+                forward_ton_amount: 0, // no need to notify reserve
                 forward_payload: emptySlice()
-            }.toCell()
-        });
+            }.toCell(),
+            false,
+            null
+        );
     }
 
     receive(msg: ClaimPrizeInternal) {
         self.require_active();
-        nativeThrowWhen(DRAW_OVERED, now() >= self.deadline);
-        let sender: Address = sender();
-        nativeThrowUnless(INVALID_SENDER, sender == self.get_ticket_address(msg.user));
-
-        // TODO: check gas
+        self.require_not_over();
+        self.require_ticket(msg.user);
 
         let prize_amount: Int = self.compute_prize_amount(msg.pick_payload);
         if (prize_amount > 0) {
@@ -71,14 +72,14 @@ trait PrizeDistributor with DrawBeacon {
                 send(SendParameters {
                     bounce: false,
                     to: self.jetton_wallet!!,
-                    value: ton("0.05"),
-                    mode: 0,
+                    value: ton("0.1"), // transfer value 0.1
+                    mode: SendIgnoreErrors,
                     body: TokenTransfer {
                         query_id: msg.query_id,
                         amount: pay_amount,
                         destination: msg.user,
-                        response_destination: myAddress(),
-                        forward_ton_amount: ton("0.01"),
+                        response_destination: msg.user,
+                        forward_ton_amount: 0,
                         forward_payload: emptySlice()
                     }.toCell()
                 });
@@ -86,19 +87,13 @@ trait PrizeDistributor with DrawBeacon {
 
             let debt_amount: Int = prize_amount - pay_amount;
             if (debt_amount > 0) {
-                send(SendParameters {
-                    bounce: false,
-                    to: sender,
-                    value: ton("0.01"),
-                    mode: 0,
-                    body: PayPrizeDebtInternal {
-                        amount: debt_amount
-                    }.toCell()
-                });
-            } else {
-                // TODO: refund gas
+                self.notify(PayPrizeDebtInternal { amount: debt_amount }.toCell());
+                return;
             }
         }
+
+        // refund gas
+        self.forward(msg.user, null, false, null);
     }
 
     inline fun init_distributor() {
@@ -114,7 +109,7 @@ trait PrizeDistributor with DrawBeacon {
         self.avail_prize_amount = 0;
     }
 
-    inline fun start_distributor(prize_amount: Int, deadline: Int) {
+    inline fun activate_distributor(prize_amount: Int, deadline: Int) {
         self.prize_amount = prize_amount;
         self.winning_number = randomInt() % self.TOTAL_PICKS;
         self.deadline = deadline;
@@ -172,6 +167,18 @@ trait PrizeDistributor with DrawBeacon {
             prize_amount = prize_amount + amount;
         }
         return prize_amount;
+    }
+
+    inline fun require_ticket(user: Address) {
+        nativeThrowWhen(INVALID_SENDER, sender() != self.get_ticket_address(user));
+    }
+
+    inline fun require_over() {
+        nativeThrowWhen(DRAW_NOT_OVER, now() < self.deadline);
+    }
+
+    inline fun require_not_over() {
+        nativeThrowWhen(DRAW_OVER, now() >= self.deadline);
     }
 
     abstract inline fun get_ticket_address(user: Address): Address;

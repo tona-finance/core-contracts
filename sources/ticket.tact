@@ -1,23 +1,21 @@
-import "./draw/ticket";
-import "./messages";
+import "./trait/ticket";
 
-const INVALID_SENDER: Int = 0;
 
 contract Ticket with BaseTicket {
+    override const storageReserve: Int = ton("0.1");
 
     // from BaseTicket
     // ----------------
-    owner: Address; // from OwnableTransferable
+    owner: Address;
 
     active: Bool;
-    period: Int as uint32;
     draw: Address;
     picks: Int as uint32;
     used_indexes: map<Int, Bool>;
     debt_amount: Int as coins;
     // ----------------
 
-    init(owner: Address, draw: Address, period: Int) {
-        self.init_ticket(owner, draw, period);
+    init(owner: Address, draw: Address) {
+        self.init_ticket(owner, draw);
     }
 }

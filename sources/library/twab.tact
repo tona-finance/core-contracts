@@ -12,7 +12,7 @@ inline fun newTwab(): Twab {
     };
 }
 
-inline fun average_balance(start: Twab, end: Twab): Int {
+inline fun averageBalance(start: Twab, end: Twab): Int {
     require(start.timestamp < end.timestamp, "invalid timestamp");
     return (end.amount - start.amount) / (end.timestamp - start.timestamp);
 }

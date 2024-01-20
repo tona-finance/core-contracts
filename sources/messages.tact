@@ -47,6 +47,7 @@ message SetPrize {
 }
 
 message WithdrawInternal {
+    query_id: Int as uint64;
     user: Address;
     withdraw_amount: Int as coins;
     acc_contribute_amount: Int as coins;
@@ -54,9 +55,23 @@ message WithdrawInternal {
 }
 
 message WithdrawFinishInternal {
+    query_id: Int as uint64;
     user: Address;
     timestamp: Int as uint64;
     amount: Int as coins;
+}
+
+message DepositNotify {
+    query_id: Int as uint64;
+    timestamp: Int as uint64;
+    share_amount: Int as coins;
+    contribute_amount: Int as coins;
+}
+
+message WithdrawNotify {
+    query_id: Int as uint64;
+    timestamp: Int as uint64;
+    share_amount: Int as coins;
 }
 
 // === pool account messages ===
@@ -66,22 +81,34 @@ message InitPoolAccountInternal {
     jetton_wallet: Address;
 }
 
+message InitTicketInternal1 {
+    period: Int as uint32;
+    start: Int as uint64;
+    end: Int as uint64;
+    avg_balance: Int as coins;
+}
+
 message Deposit {
     query_id: Int as uint64;
 }
 
 message Withdraw {
+    query_id: Int as uint64;
     amount: Int as coins;
 }
 
 // === Draw messages ===
 
-message InitDraw {
+message InitDrawInternal {
     deployer: Address;
     reserve: Address;
     jetton_wallet: Address;
     twab_timestamp: Int as uint64;
     twab_amount: Int as uint128;
+}
+
+message InitTicket {
+    pool_account: Address;
 }
 
 message ClaimPrizeInternal {
@@ -90,24 +117,10 @@ message ClaimPrizeInternal {
     pick_payload: Slice as remaining;
 }
 
-// === Reserve messages ===
-
-message RepayToOwner {
-    query_id: Int as coins;
-    amount: Int as coins;
-}
-
-message ClaimPrizeDebtInternal {
-    query_id: Int as uint64;
-    period: Int as uint32;
-    user: Address;
-    amount: Int as coins;
-}
-
 // === Ticket messages ===
 
-message InitTicket {
-    beacon_avg_balance: Int as coins;
+message InitTicketInternal2 {
+    draw_avg_balance: Int as coins;
     user_avg_balance: Int as coins;
 }
 
@@ -124,4 +137,13 @@ message ClaimPrizeDebt {
     query_id: Int as uint64;
     amount: Int as coins;
     reserve: Address;
+}
+
+// === Reserve messages ===
+
+message ClaimPrizeDebtInternal {
+    query_id: Int as uint64;
+    draw: Address;
+    user: Address;
+    amount: Int as coins;
 }

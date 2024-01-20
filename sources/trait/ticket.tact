@@ -1,35 +1,43 @@
 import "@stdlib/ownable";
+import "../library/helper";
 import "../messages";
 
-const TICKET_INACTIVE: Int = 0xF000;
+const ALREADY_ACTIVE: Int = 0xF001;
+const INACTIVE: Int = 0xF000;
 
-trait BaseTicket with OwnableTransferable {
+trait BaseTicket with MsgValueHelper, Ownable {
 
     const PICK_BITS: Int = 4 * 5;
     const TOTAL_PICKS: Int = 1 << (4 * 5);
 
-    owner: Address; // from OwnableTransferable
+    owner: Address; // from Ownable
 
     active: Bool;
-    period: Int;
     draw: Address;
     picks: Int;
     used_indexes: map<Int, Bool>;
     debt_amount: Int;
 
-    receive(msg: InitTicket) {
-        nativeThrowUnless(INVALID_SENDER, sender() == self.draw);
+    receive(msg: InitTicketInternal2) {
+        self.require_inactive();
+        self.require_pool_account();
 
-        self.picks = self.TOTAL_PICKS * msg.user_avg_balance / msg.beacon_avg_balance;
+        self.active = true;
+        self.picks = self.TOTAL_PICKS * msg.user_avg_balance / msg.draw_avg_balance;
+
+        // refund gas
+        self.forward(self.owner, null, false, null);
     }
 
     receive(msg: ClaimPrize) {
-        nativeThrowUnless(TICKET_INACTIVE, self.active);
+        self.require_active();
         self.requireOwner();
 
-        // TODO: check gas
+        // claim prize gas fee 1.0
+        let rest_value: Int = self.msg_value(context(), ton("1.0"));
+        require(rest_value >= 0, "insufficient value");
 
-        let pick_payload: Slice = self.process_picks(msg.index_payload);
+        let pick_payload: Slice = self.compute_pick_payload(msg.index_payload);
         self.forward(
             self.draw,
             ClaimPrizeInternal {
@@ -42,22 +50,21 @@ trait BaseTicket with OwnableTransferable {
         );
     }
 
-    receive(msg: PayPrizeDebtInternal) {
-        require(sender() == self.draw, "invalid sender");
-
-        self.debt_amount = self.debt_amount + msg.amount;
-    }
-
     receive(msg: ClaimPrizeDebt) {
+        self.require_active();
         self.requireOwner();
         require(msg.amount <= self.debt_amount, "invalid amount");
+
+        // claim prize debt gas fee 0.1
+        let rest_value: Int = self.msg_value(context(), ton("0.1"));
+        require(rest_value >= 0, "insufficient value");
 
         self.debt_amount = self.debt_amount - msg.amount;
         self.forward(
             msg.reserve,
             ClaimPrizeDebtInternal {
                 query_id: msg.query_id,
-                period: msg.period,
+                draw: self.draw,
                 user: self.owner,
                 amount: msg.amount
             }.toCell(),
@@ -66,17 +73,25 @@ trait BaseTicket with OwnableTransferable {
         );
     }
 
-    inline fun init_ticket(owner: Address, draw: Address, period: Int) {
+    receive(msg: PayPrizeDebtInternal) {
+        self.require_draw();
+
+        self.debt_amount = self.debt_amount + msg.amount;
+
+        // refund gas
+        self.forward(self.owner, null, false, null);
+    }
+
+    inline fun init_ticket(owner: Address, draw: Address) {
         self.owner = owner;
         self.active = false;
-        self.period = period;
         self.draw = draw;
         self.picks = 0;
         self.used_indexes = emptyMap();
         self.debt_amount = 0;
     }
 
-    fun process_picks(index_payload: Slice): Slice {
+    fun compute_pick_payload(index_payload: Slice): Slice {
         let size: Int = index_payload.bits() / self.PICK_BITS;
         require(size > 0 && size < 256, "invalid size");
         require(self.picks >= size, "insufficient picks");
@@ -103,4 +118,22 @@ trait BaseTicket with OwnableTransferable {
             .endCell();
         return hash(preimage);
     }
+
+    inline fun require_draw() {
+        nativeThrowWhen(INVALID_SENDER, sender() != self.draw);
+    }
+
+    inline fun require_pool_account() {
+        nativeThrowWhen(INVALID_SENDER, sender() != self.get_pool_account_address());
+    }
+
+    inline fun require_active() {
+        nativeThrowUnless(INACTIVE, self.active);
+    }
+
+    inline fun require_inactive() {
+        nativeThrowWhen(ALREADY_ACTIVE, self.active);
+    }
+
+    abstract inline fun get_pool_account_address(): Address;
 }
