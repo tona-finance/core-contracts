@@ -1,7 +1,7 @@
 import "@stdlib/deploy";
-import "./trait/prize_reserve";
-import "./staker/wallet";
-import "./messages";
+import "./library/staker_wallet";
+import "./base_prize_reserve";
+import "./pool_account";
 import "./ticket";
 
 contract PrizeReserve with BasePrizeReserve, Deployable {
@@ -12,10 +12,12 @@ contract PrizeReserve with BasePrizeReserve, Deployable {
     jetton_wallet: Address;
     // ------------------------
 
-    pool: Address;
+    pool_master: Address;
+    staker: Address;
 
     init(
-        pool: Address,
+        pool_master: Address,
+        staker: Address,
         jetton_master: Address,
         jetton_wallet_code: Cell
     ) {
@@ -24,12 +26,19 @@ contract PrizeReserve with BasePrizeReserve, Deployable {
             jetton_master,
             jetton_wallet_code
         );
-        self.init_prize_reserve(jetton_wallet);
-        self.pool = pool;
+        self.jetton_wallet = jetton_wallet;
+        self.pool_master = pool_master;
+        self.staker = staker;
     }
 
-    override inline fun get_ticket_address(user: Address, draw: Address): Address {
-        let sinit: StateInit = initOf Ticket(user, draw);
+    inline fun get_pool_account_address(user: Address): Address {
+        let sinit: StateInit = initOf PoolAccount(user, self.pool_master, self.staker, myAddress());
+        return contractAddress(sinit);
+    }
+
+    override inline fun get_ticket_address(user: Address, draw: Address, period: Int): Address {
+        let pool_account: Address = self.get_pool_account_address(user);
+        let sinit: StateInit = initOf Ticket(user, pool_account, draw, period);
         return contractAddress(sinit);
     }
 }

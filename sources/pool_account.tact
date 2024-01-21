@@ -1,8 +1,9 @@
 import "./library/twab";
-import "./trait/ticket_initializer";
 import "./messages";
 import "./draw";
 import "./ticket";
+import "./ticket_initializer";
+
 
 contract PoolAccount with TicketInitializer {
     override const storageReserve: Int = ton("0.1"); // from base trait
@@ -12,21 +13,24 @@ contract PoolAccount with TicketInitializer {
     owner: Address;
 
     master: Address;
-    staker: Address?;
+    staker: Address;
     jetton_wallet: Address?;
     deposit_cache: map<Int, Int>;
     twab_store: TwabStore;
-    share_amount: Int as coins;
-    contribute_amount: Int as coins;
-    withdraw_amount: Int as coins;
+    share_amount: Int as coins = 0;
+    contribute_amount: Int as coins = 0;
+    withdraw_amount: Int as coins = 0;
     // ---------------------
 
-    init(owner: Address, master: Address) {
-        self.init_account(owner, master);
-    }
+    reserve: Address;
 
-    receive(msg: TokenExcesses) {
-        self.forward(self.owner, null, false, null);
+    init(owner: Address, master: Address, staker: Address, reserve: Address) {
+        self.owner = owner;
+        self.master = master;
+        self.staker = staker;
+        self.deposit_cache = emptyMap();
+        self.twab_store = newTwabStore();
+        self.reserve = reserve;
     }
 
     receive(msg: TokenNotification) {
@@ -44,11 +48,11 @@ contract PoolAccount with TicketInitializer {
     }
 
     override inline fun get_draw_address(period: Int): Address {
-        let sinit: StateInit = initOf Draw(self.master, period);
+        let sinit: StateInit = initOf Draw(self.master, self.reserve, period);
         return contractAddress(sinit);
     }
 
-    override inline fun get_ticket_init(draw: Address): StateInit {
-        return initOf Ticket(self.owner, draw);
+    override inline fun get_ticket_init(draw: Address, period: Int): StateInit {
+        return initOf Ticket(self.owner, myAddress(), draw, period);
     }
 }

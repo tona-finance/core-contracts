@@ -64,6 +64,5 @@
     "resolveJsonModule": true
   },
   "include": [
-    "sources/**/*"
-  ]
+    "sources/**/*", "output", "scripts/contract.spec.ts", "scripts/contract.read.ts", "scripts/contract.deploy.ts"  ]
 }

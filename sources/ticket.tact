@@ -1,4 +1,4 @@
-import "./trait/ticket";
+import "./base_ticket.tact";
 
 
 contract Ticket with BaseTicket {
@@ -8,14 +8,20 @@ contract Ticket with BaseTicket {
     // ----------------
     owner: Address;
 
-    active: Bool;
+    active: Bool = false;
+    pool_account: Address;
     draw: Address;
-    picks: Int as uint32;
+    period: Int as uint32;
+    picks: Int as uint32 = 0;
     used_indexes: map<Int, Bool>;
-    debt_amount: Int as coins;
+    debt_amount: Int as coins = 0;
     // ----------------
 
-    init(owner: Address, draw: Address) {
-        self.init_ticket(owner, draw);
+    init(owner: Address, pool_account: Address, draw: Address, period: Int) {
+        self.owner = owner;
+        self.pool_account = pool_account;
+        self.draw = draw;
+        self.period = period;
+        self.used_indexes = emptyMap();
     }
 }

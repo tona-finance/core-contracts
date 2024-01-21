@@ -1,0 +1,3509 @@
+PROGRAM{
+  DECLPROC recv_internal;
+  DECLPROC supported_interfaces;
+  DECLPROC lazy_deployment_completed;
+  DECLPROC get_abi_ipfs;
+  DECLPROC ?fun_ref_103af4d9e77d6eee;
+  DECLPROC ?fun_ref_47dc25d4d8fdd1f6;
+  DECLPROC ?fun_ref_614378f51d72b9f9;
+  DECLPROC ?fun_ref_715d0af56496be80;
+  DECLPROC ?fun_ref_8e9cbfaa9b3afdc1;
+  DECLPROC ?fun_ref_9fb51d8870945b49;
+  DECLPROC ?fun_ref_a54e0ec4ac630738;
+  DECLPROC ?fun_ref_b0f915375f078a37;
+  DECLPROC ?fun_ref_bc9b985613f8c43b;
+  DECLPROC ?fun_ref_d71d22c4bf848638;
+  recv_internal PROC:<{
+    s0 s1 XCHG
+    CTOS
+    4 LDU
+    s0 s1 XCHG
+    1 PUSHINT
+    AND
+    -1 MULCONST
+    s0 s1 XCHG
+    LDMSGADDR
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    s0 s6 s4 PUXCPU
+    s0 s3 XCHG
+    4 TUPLE
+    1 SETGLOBVAR
+    s0 s2 XCHG
+    2 SETGLOBVAR
+    ?fun_ref_614378f51d72b9f9 INLINECALLDICT
+    2 12 BLKSWAP
+    ?fun_ref_b0f915375f078a37 INLINECALLDICT
+    130 THROWIFNOT
+    NEWC
+    3 GETGLOBVAR
+    s0 s1 XCHG
+    STREF
+    -1 PUSHINT
+    s0 s1 XCHG
+    1 STI
+    12 1 BLKSWAP
+    ?fun_ref_d71d22c4bf848638 INLINECALLDICT
+    ENDC
+    c4 POP
+  }>
+  supported_interfaces PROC:<{
+    123515602279859691144772641439386770278 PUSHINT
+    209801025412363888721030803524359905849 PUSHINT
+    42980537499636128163026532310500881091 PUSHINT
+    36993126140238121407019133875791708966 PUSHINT
+    209474421377847335869795010607481022628 PUSHINT
+  }>
+  lazy_deployment_completed PROC:<{
+    c4 PUSH
+    CTOS
+    1 LDI
+    s0 s1 XCHG
+  }>
+  get_abi_ipfs PROC:<{
+    x{697066733A2F2F516D59676958383647416E614E5266634435724B3457536156564464616345343950663934716F4C553358426F5582_} PUSHSLICE
+  }>
+  ?fun_ref_103af4d9e77d6eee PROCREF:<{
+    1 LDI
+    LDMSGADDR
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    s0 s1 XCHG
+    32 LDU
+    LDMSGADDR
+    s1 PUSH
+    2 PLDU
+    0 NEQINT
+    <{
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+    }> PUSHCONT
+    <{
+      s1 POP
+      NULL
+    }> PUSHCONT
+    IFELSE
+    s0 s1 XCHG
+    1 LDI
+    s0 s1 XCHG
+    <{
+      64 LDU
+      128 LDU
+      ROTREV
+      2 TUPLE
+    }> PUSHCONT
+    <{
+      NULL
+    }> PUSHCONT
+    IFELSE
+    s0 s1 XCHG
+    1 LDI
+    s0 s1 XCHG
+    <{
+      64 LDU
+      128 LDU
+      ROTREV
+      2 TUPLE
+    }> PUSHCONT
+    <{
+      NULL
+    }> PUSHCONT
+    IFELSE
+    s0 s1 XCHG
+    LDREF
+    s0 s1 XCHG
+    CTOS
+    LDGRAMS
+    32 LDU
+    LDDICT
+    64 LDU
+    LDGRAMS
+    LDMSGADDR
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    s1 POP
+    s6 s12 XCHG
+    s6 s11 XCHG
+    s6 s10 XCHG
+    s6 s9 XCHG
+    s6 s8 XCHG
+    s6 s7 XCHG
+  }>
+  ?fun_ref_47dc25d4d8fdd1f6 PROCREF:<{
+    s0 s4 XCHG
+    CTOS
+    LDDICT
+    s0 POP
+    NULL
+    s0 s1 XCHG
+    42189 PUSHINT
+    s0 s1 XCHG
+    16 PUSHINT
+    DICTUGETREF
+    NULLSWAPIFNOT
+    135 THROWIFNOT
+    s0 s1 XCHG
+    42189 PUSHINT
+    s2 PUSH
+    s0 s2 XCHG
+    16 PUSHINT
+    DICTUSETREF
+    NEWC
+    s0 s1 XCHG
+    NEWC
+    STDICT
+    ENDC
+    s0 s1 XCHG
+    STREF
+    0 PUSHINT
+    s0 s1 XCHG
+    1 STI
+    4 1 BLKSWAP
+    s0 s5 XCHG
+    s4 s3 XCHG2
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    ROT
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s0 s1 XCHG
+    NEWC
+    257 PUSHINT
+    STIX
+    ENDC
+    s0 s1 XCHG
+    STREF
+    ENDC
+  }>
+  ?fun_ref_614378f51d72b9f9 PROCREF:<{
+    c4 PUSH
+    CTOS
+    LDREF
+    s0 s1 XCHG
+    3 SETGLOBVAR
+    1 LDI
+    s0 s1 XCHG
+    <{
+      ?fun_ref_103af4d9e77d6eee INLINECALLDICT
+      1 12 BLKDROP2
+    }> PUSHCONT
+    IFJMP
+    MYADDR
+    11 PLDU
+    10 PUSHPOW2
+    EQUAL
+    137 THROWIFNOT
+    LDMSGADDR
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    s0 s1 XCHG
+    LDMSGADDR
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    s0 s1 XCHG
+    257 PUSHINT
+    LDIX
+    3 1 BLKSWAP
+    s0 s3 XCHG
+    ENDS
+    ROT
+    ?fun_ref_9fb51d8870945b49 INLINECALLDICT
+  }>
+  ?fun_ref_715d0af56496be80 PROCREF:<{
+    260734629 PUSHINT
+    s0 s8 XCHG2
+    32 STU
+    s1 s6 XCHG
+    64 STU
+    s0 s4 XCHG2
+    STGRAMS
+    ROT
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s1 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      STREF
+    }> PUSHCONT
+    <{
+      0 PUSHINT
+      s2 POP
+      1 STI
+    }> PUSHCONT
+    IFELSE
+    s0 s1 XCHG
+    STGRAMS
+    s0 s1 XCHG
+    STSLICER
+  }>
+  ?fun_ref_8e9cbfaa9b3afdc1 PROCREF:<{
+    54665 PUSHINT
+    s12 PUSH
+    THROWANYIFNOT
+    6571 PUSHINT
+    NOW
+    s4 PUSH
+    GEQ
+    THROWANYIFNOT
+    27055 PUSHINT
+    s2 PUSH
+    0 GTINT
+    THROWANYIFNOT
+    1 GETGLOBVAR
+    4 UNTUPLE
+    100000000 PUSHINT
+    s1 POP
+    2 2 BLKDROP2
+    BALANCE
+    0 INDEX
+    s2 PUSH
+    SUB
+    100000000 PUSHINT
+    TUCK
+    MIN
+    SUB
+    s0 s1 XCHG
+    ADD
+    SUB
+    2805 PUSHINT
+    s0 s1 XCHG
+    -1 GTINT
+    THROWANYIFNOT
+    0 PUSHINT
+    s9 PUSH
+    s0 PUSH
+    ISNULL
+    128 THROWIF
+    s1 PUSH
+    2 GETGLOBVAR
+    NULL
+    s2 PUSH
+    NEWC
+    ENDC
+    CTOS
+    s7 PUSH
+    s5 s6 XCHG
+    s5 s9 XCHG
+    4 1 BLKSWAP
+    NEWC
+    7 1 BLKSWAP
+    ?fun_ref_715d0af56496be80 INLINECALLDICT
+    ENDC
+    s1 s3 XCHG
+    0 PUSHINT
+    NULL
+    NULL
+    NULL
+    s2 PUSH
+    ISNULL
+    NOT
+    <{
+      DROP2
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      2 UNTUPLE
+      s0 s1 XCHG
+    }> PUSHCONT
+    <{
+      s2 POP
+    }> PUSHCONT
+    IFELSE
+    1 GETGLOBVAR
+    4 UNTUPLE
+    s1 s3 XCHG
+    3 BLKDROP
+    BALANCE
+    0 INDEX
+    s0 s1 XCHG
+    SUB
+    100000000 PUSHINT
+    LESS
+    <{
+      100000000 PUSHINT
+      0 PUSHINT
+      RAWRESERVE
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      130 PUSHINT
+      s2 s3 XCHG2
+      NEWC
+      1 PUSHINT
+      s0 s1 XCHG
+      2 STI
+      s0 s7 XCHG2
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      3 STI
+      s0 s5 XCHG2
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      STSLICER
+      s0 s3 XCHG2
+      STGRAMS
+      0 PUSHINT
+      s0 s1 XCHG
+      105 STI
+      s3 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+      }> PUSHCONT
+      <{
+        s4 PUSH
+        ISNULL
+        NOT
+      }> PUSHCONT
+      IFELSE
+      <{
+        s3 POP
+        s3 POP
+        s0 s1 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        NEWC
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        ENDC
+        ROT
+        STREF
+      }> IFREFELSE
+      s1 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s1 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s1 XCHG
+        STREF
+      }> PUSHCONT
+      <{
+        s1 POP
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      ENDC
+      s0 s1 XCHG
+      SENDRAWMSG
+    }> IFREFELSEREF
+    s2 s4 XCHG
+    0 PUSHINT
+    s0 s3 XCHG
+    s0 s4 XCHG
+    66 PUSHINT
+    s2 s3 XCHG2
+    NEWC
+    1 PUSHINT
+    s0 s1 XCHG
+    2 STI
+    s0 s7 XCHG2
+    s0 s1 XCHG
+    1 STI
+    0 PUSHINT
+    s0 s1 XCHG
+    3 STI
+    s0 s5 XCHG2
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s0 s3 XCHG2
+    STGRAMS
+    0 PUSHINT
+    s0 s1 XCHG
+    105 STI
+    s3 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+    }> PUSHCONT
+    <{
+      s4 PUSH
+      ISNULL
+      NOT
+    }> PUSHCONT
+    IFELSE
+    <{
+      s3 POP
+      s3 POP
+      s0 s1 XCHG
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+    }> PUSHCONT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      NEWC
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s4 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s4 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s4 XCHG2
+        STREF
+      }> PUSHCONT
+      <{
+        s4 POP
+        s0 s3 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      s4 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s4 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s4 XCHG2
+        STREF
+      }> PUSHCONT
+      <{
+        s4 POP
+        s0 s3 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s2 XCHG
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s2 XCHG
+      ENDC
+      ROT
+      STREF
+    }> IFREFELSE
+    s1 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s1 XCHG
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      s0 s1 XCHG
+      STREF
+    }> PUSHCONT
+    <{
+      s1 POP
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+    }> PUSHCONT
+    IFELSE
+    ENDC
+    s0 s1 XCHG
+    SENDRAWMSG
+  }>
+  ?fun_ref_9fb51d8870945b49 PROCREF:<{
+    0 PUSHINT
+    NULL
+    NULL
+    NULL
+    0 PUSHINT
+    s0 s0 s0 PUSH3
+    NULL
+    257 PUSHINT
+    s2 PUSH
+    1 PUSHINT
+    s2 PUSH
+    s1 PUSH
+    ISNULL
+    <{
+      DROP2
+      ROTREV
+      DICTIDEL
+      s0 POP
+    }> PUSHCONT
+    <{
+      NEWC
+      s0 s1 XCHG
+      STIX
+      s1 s3 s3 XCHG3
+      DICTISETB
+    }> PUSHCONT
+    IFELSE
+    257 PUSHINT
+    1 PUSHINT
+    3 PUSHINT
+    s2 PUSH
+    s1 PUSH
+    ISNULL
+    <{
+      DROP2
+      ROTREV
+      DICTIDEL
+      s0 POP
+    }> PUSHCONT
+    <{
+      NEWC
+      s0 s1 XCHG
+      STIX
+      s1 s3 s3 XCHG3
+      DICTISETB
+    }> PUSHCONT
+    IFELSE
+    257 PUSHINT
+    2 PUSHINT
+    8 PUSHINT
+    s2 PUSH
+    s1 PUSH
+    ISNULL
+    <{
+      DROP2
+      ROTREV
+      DICTIDEL
+      s0 POP
+    }> PUSHCONT
+    <{
+      NEWC
+      s0 s1 XCHG
+      STIX
+      s1 s3 s3 XCHG3
+      DICTISETB
+    }> PUSHCONT
+    IFELSE
+    257 PUSHINT
+    3 PUSHINT
+    23 PUSHINT
+    s2 PUSH
+    s1 PUSH
+    ISNULL
+    <{
+      DROP2
+      ROTREV
+      DICTIDEL
+      s0 POP
+    }> PUSHCONT
+    <{
+      NEWC
+      s0 s1 XCHG
+      STIX
+      s1 s3 s3 XCHG3
+      DICTISETB
+    }> PUSHCONT
+    IFELSE
+    257 PUSHINT
+    4 PUSHINT
+    65 PUSHINT
+    s2 PUSH
+    s1 PUSH
+    ISNULL
+    <{
+      DROP2
+      ROTREV
+      DICTIDEL
+      s0 POP
+    }> PUSHCONT
+    <{
+      NEWC
+      s0 s1 XCHG
+      STIX
+      s1 s3 s3 XCHG3
+      DICTISETB
+    }> PUSHCONT
+    IFELSE
+    s8 s11 XCHG
+    s8 s10 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s0 s3 XCHG
+    s0 s4 XCHG
+  }>
+  ?fun_ref_a54e0ec4ac630738 PROCREF:<{
+    s0 PUSH
+    48 LDU
+    s0 POP
+    s0 s1 XCHG
+    128 LDU
+    LDMSGADDR
+    s0 s1 XCHG
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    s0 s1 XCHG
+    ENDS
+    ROTREV
+    NOW
+    1209600 PUSHINT
+    ADD
+    s0 s15 XCHG
+    s0 s16 XCHG
+    s0 s15 XCHG
+    s0 s14 XCHG
+    s0 s16 XCHG
+    s0 s14 XCHG
+    s0 s13 XCHG
+    s0 s16 XCHG
+    s0 s13 XCHG
+    s0 s12 XCHG
+    s0 s16 XCHG
+    s0 s12 XCHG
+    s0 s11 XCHG
+    s0 s16 XCHG
+    s0 s11 XCHG
+    s0 s10 XCHG
+    s0 s16 XCHG
+    s0 s10 XCHG
+    s0 s9 XCHG
+    s0 s16 XCHG
+    s0 s9 XCHG
+    s0 s8 XCHG
+    s0 s16 XCHG
+    s0 s8 XCHG
+    s0 s7 XCHG
+    s0 s16 XCHG
+    s0 s7 XCHG
+    s0 s6 XCHG
+    s0 s16 XCHG
+    s0 s6 XCHG
+    s0 s5 XCHG
+    s0 s16 XCHG
+    s0 s5 XCHG
+    s0 s4 XCHG
+    s0 s16 XCHG
+    s0 s4 XCHG
+    s1 s3 s0 XCHG3
+    s0 s1 XCHG
+    s0 s16 XCHG
+    s0 s1 XCHG
+    14 2 BLKSWAP
+    s8 POP
+    s0 s7 XCHG2
+    2 TUPLE
+    s0 s6 XCHG
+    2 12 BLKSWAP
+    s4 POP
+    s5 POP
+    s5 POP
+    s3 PUSH
+    4 GETGLOBVAR
+    ISNULL
+    <{
+      LTIME
+      ADDRAND
+      -1 PUSHINT
+      4 SETGLOBVAR
+    }> PUSHCONT
+    IF
+    RANDU256
+    false 1 true 2 0 DIV
+    s1 s3 XCHG
+    s2 s5 XCHG2
+    ADD
+    s0 s5 XCHG2
+    -1 PUSHINT
+    s12 POP
+    1 12 BLKSWAP
+    NULL
+    0 PUSHINT
+    NULL
+    NULL
+    NULL
+    s2 PUSH
+    ISNULL
+    NOT
+    <{
+      DROP2
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      2 UNTUPLE
+      s0 s1 XCHG
+    }> PUSHCONT
+    <{
+      s2 POP
+    }> PUSHCONT
+    IFELSE
+    1 GETGLOBVAR
+    4 UNTUPLE
+    s1 s3 XCHG
+    3 BLKDROP
+    BALANCE
+    0 INDEX
+    s0 s1 XCHG
+    SUB
+    100000000 PUSHINT
+    LESS
+    <{
+      100000000 PUSHINT
+      0 PUSHINT
+      RAWRESERVE
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      130 PUSHINT
+      s2 s3 XCHG2
+      NEWC
+      1 PUSHINT
+      s0 s1 XCHG
+      2 STI
+      s0 s7 XCHG2
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      3 STI
+      s0 s5 XCHG2
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      STSLICER
+      s0 s3 XCHG2
+      STGRAMS
+      0 PUSHINT
+      s0 s1 XCHG
+      105 STI
+      s3 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+      }> PUSHCONT
+      <{
+        s4 PUSH
+        ISNULL
+        NOT
+      }> PUSHCONT
+      IFELSE
+      <{
+        s3 POP
+        s3 POP
+        s0 s1 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        NEWC
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        ENDC
+        ROT
+        STREF
+      }> IFREFELSE
+      s1 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s1 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s1 XCHG
+        STREF
+      }> PUSHCONT
+      <{
+        s1 POP
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      ENDC
+      s0 s1 XCHG
+      SENDRAWMSG
+    }> IFREFELSEREF
+    s2 s4 XCHG
+    0 PUSHINT
+    s0 s3 XCHG
+    s0 s4 XCHG
+    66 PUSHINT
+    s2 s3 XCHG2
+    NEWC
+    1 PUSHINT
+    s0 s1 XCHG
+    2 STI
+    s0 s7 XCHG2
+    s0 s1 XCHG
+    1 STI
+    0 PUSHINT
+    s0 s1 XCHG
+    3 STI
+    s0 s5 XCHG2
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s0 s3 XCHG2
+    STGRAMS
+    0 PUSHINT
+    s0 s1 XCHG
+    105 STI
+    s3 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+    }> PUSHCONT
+    <{
+      s4 PUSH
+      ISNULL
+      NOT
+    }> PUSHCONT
+    IFELSE
+    <{
+      s3 POP
+      s3 POP
+      s0 s1 XCHG
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+    }> PUSHCONT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      NEWC
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s4 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s4 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s4 XCHG2
+        STREF
+      }> PUSHCONT
+      <{
+        s4 POP
+        s0 s3 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      s4 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s4 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s4 XCHG2
+        STREF
+      }> PUSHCONT
+      <{
+        s4 POP
+        s0 s3 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s2 XCHG
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s2 XCHG
+      ENDC
+      ROT
+      STREF
+    }> IFREFELSE
+    s1 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s1 XCHG
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      s0 s1 XCHG
+      STREF
+    }> PUSHCONT
+    <{
+      s1 POP
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+    }> PUSHCONT
+    IFELSE
+    ENDC
+    s0 s1 XCHG
+    SENDRAWMSG
+  }>
+  ?fun_ref_b0f915375f078a37 PROCREF:<{
+    2 SAVE
+    SAMEALTSAVE
+    s0 s1 XCHG
+    <{
+      s0 POP
+      -1 PUSHINT
+    }> PUSHCONT
+    IFJMP
+    0 PUSHINT
+    s1 PUSH
+    SBITS
+    31 GTINT
+    <{
+      s0 POP
+      s0 PUSH
+      32 PLDU
+    }> PUSHCONT
+    IF
+    s0 PUSH
+    1935855772 PUSHINT
+    EQUAL
+    <{
+      s0 POP
+      32 LDU
+      s0 s1 XCHG
+      1935855772 PUSHINT
+      EQUAL
+      129 THROWIFNOT
+      64 LDU
+      LDGRAMS
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      s3 s0 s3 XC2PU
+      s2 s3 XCHG
+      1 4 BLKDROP2
+      s3 POP
+      12 3 BLKSWAP
+      4429 PUSHINT
+      s9 PUSH
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      2 GETGLOBVAR
+      SDEQ
+      THROWANYIFNOT
+      s10 s14 PUXC
+      SDEQ
+      <{
+        s10 s13 XCHG
+        s9 s12 XCHG
+        s8 s11 XCHG
+        s7 s10 XCHG
+        s6 s9 XCHG
+        s5 s8 XCHG
+        s4 s7 XCHG
+        s3 s6 XCHG
+        s5 s3 s3 XCHG3
+        s0 s4 XCHG
+        ?fun_ref_a54e0ec4ac630738 INLINECALLDICT
+      }> PUSHCONT
+      <{
+        s13 POP
+        s12 s11 XCHG2
+        ADD
+        s8 s11 XCHG
+        s7 s10 XCHG
+        s6 s9 XCHG
+        s5 s8 XCHG
+        s4 s7 XCHG
+        s3 s6 XCHG
+        s5 s0 s4 XCHG3
+        s0 s1 s3 XCHG3
+      }> PUSHCONT
+      IFELSE
+      -1 PUSHINT
+    }> IFJMPREF
+    s0 PUSH
+    1469963099 PUSHINT
+    EQUAL
+    <{
+      s0 POP
+      32 LDU
+      s0 s1 XCHG
+      1469963099 PUSHINT
+      EQUAL
+      129 THROWIFNOT
+      64 LDU
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      s0 s1 XCHG
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      s3 s0 s3 XC2PU
+      s2 s3 XCHG
+      1 4 BLKDROP2
+      <{
+        2 SAVE
+        SAMEALTSAVE
+        12 4 BLKSWAP
+        54665 PUSHINT
+        s12 PUSH
+        THROWANYIFNOT
+        47849 PUSHINT
+        NOW
+        s4 PUSH
+        LESS
+        THROWANYIFNOT
+        1 12 BLKSWAP
+        s14 s15 PUXC
+        13 1 BLKSWAP
+        4429 PUSHINT
+        s0 s14 XCHG
+        3 GETGLOBVAR
+        MYADDR
+        s3 s3 s0 XCHG3
+        s13 PUSH
+        ?fun_ref_47dc25d4d8fdd1f6 INLINECALLDICT
+        0 PUSHINT
+        ROTREV
+        NEWC
+        0 PUSHINT
+        s0 s1 XCHG
+        2 STU
+        3 PUSHINT
+        s0 s1 XCHG
+        2 STU
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STU
+        s1 s2 XCHG
+        STREF
+        STREF
+        ENDC
+        HASHCU
+        NEWC
+        2 PUSHINT
+        s0 s1 XCHG
+        2 STU
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STU
+        s1 s2 XCHG
+        8 STI
+        256 STU
+        ENDC
+        CTOS
+        s0 PUSH
+        SBITS
+        267 PUSHINT
+        EQUAL
+        136 THROWIFNOT
+        s0 PUSH
+        11 PLDU
+        s0 PUSH
+        1279 PUSHINT
+        EQUAL
+        137 THROWIF
+        10 PUSHPOW2
+        EQUAL
+        136 THROWIFNOT
+        2 GETGLOBVAR
+        SDEQ
+        s1 s13 XCHG
+        THROWANYIFNOT
+        1 11 BLKSWAP
+        1 12 BLKSWAP
+        0 PUSHINT
+        s0 s1 XCHG
+        8 LDU
+        s0 s1 XCHG
+        <{
+          20 LDU
+          s12 s14 XCHG
+          5 10 REVERSE
+          s9 s13 XCHG
+          s8 s14 XCHG
+          s7 s13 XCHG
+          s6 s14 XCHG
+          s5 s13 XCHG
+          s4 s14 XCHG
+          s3 s13 XCHG
+          s14 s13 s13 XCHG3
+          s5 PUSH
+          5 PUSHINT
+          s2 PUSH
+          false 1 true 2 0 DIV
+          s0 s3 XCHG
+          s2 PUSH
+          false 1 true 2 0 DIV
+          s0 s3 XCHG
+          <{
+            NEQ
+            <{
+              s0 PUSH
+              0 GTINT
+            }> PUSHCONT
+            <{
+              0 PUSHINT
+            }> PUSHCONT
+            IFELSE
+          }> PUSHCONT
+          <{
+            -1 ADD
+            s0 s2 XCHG
+            4 RSHIFT
+            s0 s1 XCHG
+            4 RSHIFT
+            s1 PUSH
+            false 1 true 2 0 DIV
+            s0 s3 XCHG
+            s1 PUSH
+            false 1 true 2 0 DIV
+            s0 s3 XCHG
+            s3 s4 XCHG
+            s2 s3 XCHG
+          }> PUSHCONT
+          WHILE
+          2 1 BLKDROP2
+          257 PUSHINT
+          s5 s1 s1 PUXCPU
+          s3 s1 PUXC
+          s1 s3 s3 XCHG3
+          DICTIGET
+          NULLSWAPIFNOT
+          <{
+            s0 s1 XCHG
+            LDIX
+            s0 POP
+          }> PUSHCONT
+          <{
+            DROP2
+            NULL
+          }> PUSHCONT
+          IFELSE
+          s0 PUSH
+          ISNULL
+          NOT
+          <{
+            13 1 BLKSWAP
+            55483 PUSHINT
+            s1 PUSH
+            5 LESSINT
+            THROWANYIFNOT
+            s0 PUSH
+            0 EQINT
+            <{
+              s0 POP
+              1 PUSHINT
+            }> PUSHCONT
+            <{
+              s0 PUSH
+              1 EQINT
+              <{
+                s0 POP
+                15 PUSHINT
+              }> PUSHCONT
+              IFJMP
+              s0 PUSH
+              2 EQINT
+              <{
+                s0 POP
+                240 PUSHINT
+              }> PUSHCONT
+              IFJMP
+              3 EQINT
+              <{
+                3840 PUSHINT
+              }> PUSHCONT
+              IFJMP
+              61440 PUSHINT
+            }> PUSHCONT
+            IFELSE
+            s0 s13 XCHG
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            s6 s1 PUXC
+            MUL
+            100 PUSHINT
+            false 0 false 1 0 DIV
+            s0 s13 XCHG2
+            false 0 false 1 0 DIV
+            s11 s12 XCHG
+            s10 s11 XCHG
+            s9 s10 XCHG
+            s8 s9 XCHG
+            s7 s8 XCHG
+            s6 s7 XCHG
+            s5 s6 XCHG
+            s4 s5 XCHG
+            s3 s4 XCHG
+            s1 s3 s0 XCHG3
+          }> PUSHCONT
+          <{
+            DROP2
+            0 PUSHINT
+          }> PUSHCONT
+          IFELSE
+          s1 s14 XCHG
+          ADD
+          s11 s13 XCHG
+          s10 s12 XCHG
+          s9 s11 XCHG
+          s8 s10 XCHG
+          s7 s9 XCHG
+          s6 s8 XCHG
+          s5 s7 XCHG
+          s4 s6 XCHG
+          s3 s5 XCHG
+          s4 s0 s3 XCHG3
+          s0 s2 XCHG
+        }> PUSHCONT
+        REPEAT
+        s0 POP
+        s0 PUSH
+        0 GTINT
+        <{
+          s0 POP
+          s13 POP
+        }> PUSHCONT
+        <{
+          s0 s2 PUSH2
+          MIN
+          s0 PUSH
+          0 GTINT
+          <{
+            s3 s3 XCPU
+            SUB
+            0 PUSHINT
+            s11 PUSH
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            100000000 PUSHINT
+            2 PUSHINT
+            NULL
+            0 PUSHINT
+            NEWC
+            ENDC
+            CTOS
+            s0 s3 XCHG
+            s0 s22 XCHG
+            s0 s3 XCHG
+            s10 PUSH
+            s0 s3 XCHG
+            s22 PUSH
+            s0 s3 XCHG
+            s23 PUSH
+            s0 s3 XCHG
+            NEWC
+            7 1 BLKSWAP
+            ?fun_ref_715d0af56496be80 INLINECALLDICT
+            ENDC
+            s3 s4 XCHG
+            s1 s3 s0 XCHG3
+            s0 s1 XCHG
+            s0 s19 XCHG
+            s0 s1 XCHG
+            NULL
+            NULL
+            NEWC
+            1 PUSHINT
+            s0 s1 XCHG
+            2 STI
+            s0 s7 XCHG2
+            s0 s1 XCHG
+            1 STI
+            0 PUSHINT
+            s0 s1 XCHG
+            3 STI
+            s0 s5 XCHG2
+            s0 PUSH
+            SBITS
+            267 PUSHINT
+            EQUAL
+            136 THROWIFNOT
+            s0 PUSH
+            11 PLDU
+            s0 PUSH
+            1279 PUSHINT
+            EQUAL
+            137 THROWIF
+            10 PUSHPOW2
+            EQUAL
+            136 THROWIFNOT
+            STSLICER
+            s0 s3 XCHG2
+            STGRAMS
+            0 PUSHINT
+            s0 s1 XCHG
+            105 STI
+            s3 PUSH
+            ISNULL
+            NOT
+            <{
+              -1 PUSHINT
+            }> PUSHCONT
+            <{
+              s4 PUSH
+              ISNULL
+              NOT
+            }> PUSHCONT
+            IFELSE
+            <{
+              s3 POP
+              s3 POP
+              s0 s1 XCHG
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+            }> PUSHCONT
+            <{
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              NEWC
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s4 PUSH
+              ISNULL
+              NOT
+              <{
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s4 XCHG
+                s0 PUSH
+                ISNULL
+                128 THROWIF
+                s0 s4 XCHG2
+                STREF
+              }> PUSHCONT
+              <{
+                s4 POP
+                s0 s3 XCHG
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+              }> PUSHCONT
+              IFELSE
+              s4 PUSH
+              ISNULL
+              NOT
+              <{
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s4 XCHG
+                s0 PUSH
+                ISNULL
+                128 THROWIF
+                s0 s4 XCHG2
+                STREF
+              }> PUSHCONT
+              <{
+                s4 POP
+                s0 s3 XCHG
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+              }> PUSHCONT
+              IFELSE
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s2 XCHG
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s2 XCHG
+              ENDC
+              ROT
+              STREF
+            }> IFREFELSE
+            s1 PUSH
+            ISNULL
+            NOT
+            <{
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s1 XCHG
+              s0 PUSH
+              ISNULL
+              128 THROWIF
+              s0 s1 XCHG
+              STREF
+            }> PUSHCONT
+            <{
+              s1 POP
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+            }> PUSHCONT
+            IFELSE
+            ENDC
+            s0 s1 XCHG
+            SENDRAWMSG
+            s2 s14 XCHG
+          }> PUSHCONT
+          <{
+            s15 POP
+          }> PUSHCONT
+          IFELSE
+          s0 s14 XCHG2
+          SUB
+          s0 PUSH
+          0 GTINT
+          <{
+            s1 s12 XCHG
+            NEWC
+            ROTREV
+            1506985886 PUSHINT
+            s0 s3 XCHG2
+            32 STU
+            s0 s1 XCHG
+            s0 PUSH
+            SBITS
+            267 PUSHINT
+            EQUAL
+            136 THROWIFNOT
+            s0 PUSH
+            11 PLDU
+            s0 PUSH
+            1279 PUSHINT
+            EQUAL
+            137 THROWIF
+            10 PUSHPOW2
+            EQUAL
+            136 THROWIFNOT
+            STSLICER
+            s0 s1 XCHG
+            STGRAMS
+            ENDC
+            s10 s12 XCHG
+            s9 s11 XCHG
+            s8 s10 XCHG
+            s7 s9 XCHG
+            s6 s8 XCHG
+            s5 s7 XCHG
+            s4 s6 XCHG
+            s3 s5 XCHG
+            s4 s3 s0 XCHG3
+            s1 s2 XCHG
+            2 GETGLOBVAR
+            s0 s1 XCHG
+            0 PUSHINT
+            NULL
+            NULL
+            NULL
+            s2 PUSH
+            ISNULL
+            NOT
+            <{
+              DROP2
+              s0 PUSH
+              ISNULL
+              128 THROWIF
+              2 UNTUPLE
+              s0 s1 XCHG
+            }> PUSHCONT
+            <{
+              s2 POP
+            }> PUSHCONT
+            IFELSE
+            1 GETGLOBVAR
+            4 UNTUPLE
+            s1 s3 XCHG
+            3 BLKDROP
+            BALANCE
+            0 INDEX
+            s0 s1 XCHG
+            SUB
+            100000000 PUSHINT
+            LESS
+            <{
+              100000000 PUSHINT
+              0 PUSHINT
+              RAWRESERVE
+              s2 s4 XCHG
+              0 PUSHINT
+              s0 s3 XCHG
+              s0 s4 XCHG
+              130 PUSHINT
+              s2 s3 XCHG2
+              NEWC
+              1 PUSHINT
+              s0 s1 XCHG
+              2 STI
+              s0 s7 XCHG2
+              s0 s1 XCHG
+              1 STI
+              0 PUSHINT
+              s0 s1 XCHG
+              3 STI
+              s0 s5 XCHG2
+              s0 PUSH
+              SBITS
+              267 PUSHINT
+              EQUAL
+              136 THROWIFNOT
+              s0 PUSH
+              11 PLDU
+              s0 PUSH
+              1279 PUSHINT
+              EQUAL
+              137 THROWIF
+              10 PUSHPOW2
+              EQUAL
+              136 THROWIFNOT
+              STSLICER
+              s0 s3 XCHG2
+              STGRAMS
+              0 PUSHINT
+              s0 s1 XCHG
+              105 STI
+              s3 PUSH
+              ISNULL
+              NOT
+              <{
+                -1 PUSHINT
+              }> PUSHCONT
+              <{
+                s4 PUSH
+                ISNULL
+                NOT
+              }> PUSHCONT
+              IFELSE
+              <{
+                s3 POP
+                s3 POP
+                s0 s1 XCHG
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+              }> PUSHCONT
+              <{
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                NEWC
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s4 PUSH
+                ISNULL
+                NOT
+                <{
+                  -1 PUSHINT
+                  s0 s1 XCHG
+                  1 STI
+                  s0 s4 XCHG
+                  s0 PUSH
+                  ISNULL
+                  128 THROWIF
+                  s0 s4 XCHG2
+                  STREF
+                }> PUSHCONT
+                <{
+                  s4 POP
+                  s0 s3 XCHG
+                  0 PUSHINT
+                  s0 s1 XCHG
+                  1 STI
+                }> PUSHCONT
+                IFELSE
+                s4 PUSH
+                ISNULL
+                NOT
+                <{
+                  -1 PUSHINT
+                  s0 s1 XCHG
+                  1 STI
+                  s0 s4 XCHG
+                  s0 PUSH
+                  ISNULL
+                  128 THROWIF
+                  s0 s4 XCHG2
+                  STREF
+                }> PUSHCONT
+                <{
+                  s4 POP
+                  s0 s3 XCHG
+                  0 PUSHINT
+                  s0 s1 XCHG
+                  1 STI
+                }> PUSHCONT
+                IFELSE
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s2 XCHG
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s2 XCHG
+                ENDC
+                ROT
+                STREF
+              }> IFREFELSE
+              s1 PUSH
+              ISNULL
+              NOT
+              <{
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s1 XCHG
+                s0 PUSH
+                ISNULL
+                128 THROWIF
+                s0 s1 XCHG
+                STREF
+              }> PUSHCONT
+              <{
+                s1 POP
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+              }> PUSHCONT
+              IFELSE
+              ENDC
+              s0 s1 XCHG
+              SENDRAWMSG
+            }> IFREFELSEREF
+            RETFALSE
+            s2 s4 XCHG
+            0 PUSHINT
+            s0 s3 XCHG
+            s0 s4 XCHG
+            66 PUSHINT
+            s2 s3 XCHG2
+            NEWC
+            1 PUSHINT
+            s0 s1 XCHG
+            2 STI
+            s0 s7 XCHG2
+            s0 s1 XCHG
+            1 STI
+            0 PUSHINT
+            s0 s1 XCHG
+            3 STI
+            s0 s5 XCHG2
+            s0 PUSH
+            SBITS
+            267 PUSHINT
+            EQUAL
+            136 THROWIFNOT
+            s0 PUSH
+            11 PLDU
+            s0 PUSH
+            1279 PUSHINT
+            EQUAL
+            137 THROWIF
+            10 PUSHPOW2
+            EQUAL
+            136 THROWIFNOT
+            STSLICER
+            s0 s3 XCHG2
+            STGRAMS
+            0 PUSHINT
+            s0 s1 XCHG
+            105 STI
+            s3 PUSH
+            ISNULL
+            NOT
+            <{
+              -1 PUSHINT
+            }> PUSHCONT
+            <{
+              s4 PUSH
+              ISNULL
+              NOT
+            }> PUSHCONT
+            IFELSE
+            <{
+              s3 POP
+              s3 POP
+              s0 s1 XCHG
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+            }> PUSHCONT
+            <{
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              NEWC
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s4 PUSH
+              ISNULL
+              NOT
+              <{
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s4 XCHG
+                s0 PUSH
+                ISNULL
+                128 THROWIF
+                s0 s4 XCHG2
+                STREF
+              }> PUSHCONT
+              <{
+                s4 POP
+                s0 s3 XCHG
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+              }> PUSHCONT
+              IFELSE
+              s4 PUSH
+              ISNULL
+              NOT
+              <{
+                -1 PUSHINT
+                s0 s1 XCHG
+                1 STI
+                s0 s4 XCHG
+                s0 PUSH
+                ISNULL
+                128 THROWIF
+                s0 s4 XCHG2
+                STREF
+              }> PUSHCONT
+              <{
+                s4 POP
+                s0 s3 XCHG
+                0 PUSHINT
+                s0 s1 XCHG
+                1 STI
+              }> PUSHCONT
+              IFELSE
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s2 XCHG
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s2 XCHG
+              ENDC
+              ROT
+              STREF
+            }> IFREFELSE
+            s1 PUSH
+            ISNULL
+            NOT
+            <{
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s1 XCHG
+              s0 PUSH
+              ISNULL
+              128 THROWIF
+              s0 s1 XCHG
+              STREF
+            }> PUSHCONT
+            <{
+              s1 POP
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+            }> PUSHCONT
+            IFELSE
+            ENDC
+            s0 s1 XCHG
+            SENDRAWMSG
+          }> IFJMPREF
+          s0 POP
+        }> IFREFELSE
+        2 11 BLKSWAP
+        NULL
+        0 PUSHINT
+        NULL
+        NULL
+        NULL
+        s2 PUSH
+        ISNULL
+        NOT
+        <{
+          DROP2
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          2 UNTUPLE
+          s0 s1 XCHG
+        }> PUSHCONT
+        <{
+          s2 POP
+        }> PUSHCONT
+        IFELSE
+        1 GETGLOBVAR
+        4 UNTUPLE
+        s1 s3 XCHG
+        3 BLKDROP
+        BALANCE
+        0 INDEX
+        s0 s1 XCHG
+        SUB
+        100000000 PUSHINT
+        LESS
+        <{
+          100000000 PUSHINT
+          0 PUSHINT
+          RAWRESERVE
+          s2 s4 XCHG
+          0 PUSHINT
+          s0 s3 XCHG
+          s0 s4 XCHG
+          130 PUSHINT
+          s2 s3 XCHG2
+          NEWC
+          1 PUSHINT
+          s0 s1 XCHG
+          2 STI
+          s0 s7 XCHG2
+          s0 s1 XCHG
+          1 STI
+          0 PUSHINT
+          s0 s1 XCHG
+          3 STI
+          s0 s5 XCHG2
+          s0 PUSH
+          SBITS
+          267 PUSHINT
+          EQUAL
+          136 THROWIFNOT
+          s0 PUSH
+          11 PLDU
+          s0 PUSH
+          1279 PUSHINT
+          EQUAL
+          137 THROWIF
+          10 PUSHPOW2
+          EQUAL
+          136 THROWIFNOT
+          STSLICER
+          s0 s3 XCHG2
+          STGRAMS
+          0 PUSHINT
+          s0 s1 XCHG
+          105 STI
+          s3 PUSH
+          ISNULL
+          NOT
+          <{
+            -1 PUSHINT
+          }> PUSHCONT
+          <{
+            s4 PUSH
+            ISNULL
+            NOT
+          }> PUSHCONT
+          IFELSE
+          <{
+            s3 POP
+            s3 POP
+            s0 s1 XCHG
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+          }> PUSHCONT
+          <{
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            NEWC
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s4 PUSH
+            ISNULL
+            NOT
+            <{
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s4 XCHG
+              s0 PUSH
+              ISNULL
+              128 THROWIF
+              s0 s4 XCHG2
+              STREF
+            }> PUSHCONT
+            <{
+              s4 POP
+              s0 s3 XCHG
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+            }> PUSHCONT
+            IFELSE
+            s4 PUSH
+            ISNULL
+            NOT
+            <{
+              -1 PUSHINT
+              s0 s1 XCHG
+              1 STI
+              s0 s4 XCHG
+              s0 PUSH
+              ISNULL
+              128 THROWIF
+              s0 s4 XCHG2
+              STREF
+            }> PUSHCONT
+            <{
+              s4 POP
+              s0 s3 XCHG
+              0 PUSHINT
+              s0 s1 XCHG
+              1 STI
+            }> PUSHCONT
+            IFELSE
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s2 XCHG
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s2 XCHG
+            ENDC
+            ROT
+            STREF
+          }> IFREFELSE
+          s1 PUSH
+          ISNULL
+          NOT
+          <{
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s1 XCHG
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            s0 s1 XCHG
+            STREF
+          }> PUSHCONT
+          <{
+            s1 POP
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+          }> PUSHCONT
+          IFELSE
+          ENDC
+          s0 s1 XCHG
+          SENDRAWMSG
+        }> IFREFELSEREF
+        s2 s4 XCHG
+        0 PUSHINT
+        s0 s3 XCHG
+        s0 s4 XCHG
+        66 PUSHINT
+        s2 s3 XCHG2
+        NEWC
+        1 PUSHINT
+        s0 s1 XCHG
+        2 STI
+        s0 s7 XCHG2
+        s0 s1 XCHG
+        1 STI
+        0 PUSHINT
+        s0 s1 XCHG
+        3 STI
+        s0 s5 XCHG2
+        s0 PUSH
+        SBITS
+        267 PUSHINT
+        EQUAL
+        136 THROWIFNOT
+        s0 PUSH
+        11 PLDU
+        s0 PUSH
+        1279 PUSHINT
+        EQUAL
+        137 THROWIF
+        10 PUSHPOW2
+        EQUAL
+        136 THROWIFNOT
+        STSLICER
+        s0 s3 XCHG2
+        STGRAMS
+        0 PUSHINT
+        s0 s1 XCHG
+        105 STI
+        s3 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+        }> PUSHCONT
+        <{
+          s4 PUSH
+          ISNULL
+          NOT
+        }> PUSHCONT
+        IFELSE
+        <{
+          s3 POP
+          s3 POP
+          s0 s1 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          NEWC
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s4 PUSH
+          ISNULL
+          NOT
+          <{
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s4 XCHG
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            s0 s4 XCHG2
+            STREF
+          }> PUSHCONT
+          <{
+            s4 POP
+            s0 s3 XCHG
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+          }> PUSHCONT
+          IFELSE
+          s4 PUSH
+          ISNULL
+          NOT
+          <{
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s4 XCHG
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            s0 s4 XCHG2
+            STREF
+          }> PUSHCONT
+          <{
+            s4 POP
+            s0 s3 XCHG
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+          }> PUSHCONT
+          IFELSE
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s2 XCHG
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s2 XCHG
+          ENDC
+          ROT
+          STREF
+        }> IFREFELSE
+        s1 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s1 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s1 XCHG
+          STREF
+        }> PUSHCONT
+        <{
+          s1 POP
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        ENDC
+        s0 s1 XCHG
+        SENDRAWMSG
+      }> PUSHCONT
+      EXECUTE
+      -1 PUSHINT
+    }> IFJMPREF
+    s0 PUSH
+    1013334560 PUSHINT
+    EQUAL
+    <{
+      s0 POP
+      32 LDU
+      s0 s1 XCHG
+      1013334560 PUSHINT
+      EQUAL
+      129 THROWIFNOT
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      s0 s1 XCHG
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      s0 s1 XCHG
+      64 LDU
+      128 LDU
+      4 1 BLKSWAP
+      1 4 BLKDROP2
+      12 4 BLKSWAP
+      4429 PUSHINT
+      2 GETGLOBVAR
+      s12 s1 PUXC
+      SDEQ
+      THROWANYIFNOT
+      s7 POP
+      s7 POP
+      s11 s10 XCHG2
+      2 TUPLE
+      s8 s12 XCHG
+      s7 s11 XCHG
+      5 6 REVERSE
+      s0 s8 XCHG
+      s3 s7 XCHG
+      s6 s5 s0 XCHG3
+      s1 s4 s0 XCHG3
+      NULL
+      0 PUSHINT
+      NULL
+      NULL
+      NULL
+      s2 PUSH
+      ISNULL
+      NOT
+      <{
+        DROP2
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        2 UNTUPLE
+        s0 s1 XCHG
+      }> PUSHCONT
+      <{
+        s2 POP
+      }> PUSHCONT
+      IFELSE
+      1 GETGLOBVAR
+      4 UNTUPLE
+      s1 s3 XCHG
+      3 BLKDROP
+      BALANCE
+      0 INDEX
+      s0 s1 XCHG
+      SUB
+      100000000 PUSHINT
+      LESS
+      <{
+        100000000 PUSHINT
+        0 PUSHINT
+        RAWRESERVE
+        s2 s4 XCHG
+        0 PUSHINT
+        s0 s3 XCHG
+        s0 s4 XCHG
+        130 PUSHINT
+        s2 s3 XCHG2
+        NEWC
+        1 PUSHINT
+        s0 s1 XCHG
+        2 STI
+        s0 s7 XCHG2
+        s0 s1 XCHG
+        1 STI
+        0 PUSHINT
+        s0 s1 XCHG
+        3 STI
+        s0 s5 XCHG2
+        s0 PUSH
+        SBITS
+        267 PUSHINT
+        EQUAL
+        136 THROWIFNOT
+        s0 PUSH
+        11 PLDU
+        s0 PUSH
+        1279 PUSHINT
+        EQUAL
+        137 THROWIF
+        10 PUSHPOW2
+        EQUAL
+        136 THROWIFNOT
+        STSLICER
+        s0 s3 XCHG2
+        STGRAMS
+        0 PUSHINT
+        s0 s1 XCHG
+        105 STI
+        s3 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+        }> PUSHCONT
+        <{
+          s4 PUSH
+          ISNULL
+          NOT
+        }> PUSHCONT
+        IFELSE
+        <{
+          s3 POP
+          s3 POP
+          s0 s1 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          NEWC
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s4 PUSH
+          ISNULL
+          NOT
+          <{
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s4 XCHG
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            s0 s4 XCHG2
+            STREF
+          }> PUSHCONT
+          <{
+            s4 POP
+            s0 s3 XCHG
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+          }> PUSHCONT
+          IFELSE
+          s4 PUSH
+          ISNULL
+          NOT
+          <{
+            -1 PUSHINT
+            s0 s1 XCHG
+            1 STI
+            s0 s4 XCHG
+            s0 PUSH
+            ISNULL
+            128 THROWIF
+            s0 s4 XCHG2
+            STREF
+          }> PUSHCONT
+          <{
+            s4 POP
+            s0 s3 XCHG
+            0 PUSHINT
+            s0 s1 XCHG
+            1 STI
+          }> PUSHCONT
+          IFELSE
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s2 XCHG
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s2 XCHG
+          ENDC
+          ROT
+          STREF
+        }> IFREFELSE
+        s1 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s1 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s1 XCHG
+          STREF
+        }> PUSHCONT
+        <{
+          s1 POP
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        ENDC
+        s0 s1 XCHG
+        SENDRAWMSG
+      }> IFREFELSEREF
+      -1 PUSHINT
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      66 PUSHINT
+      s2 s3 XCHG2
+      NEWC
+      1 PUSHINT
+      s0 s1 XCHG
+      2 STI
+      s0 s7 XCHG2
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      3 STI
+      s0 s5 XCHG2
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      STSLICER
+      s0 s3 XCHG2
+      STGRAMS
+      0 PUSHINT
+      s0 s1 XCHG
+      105 STI
+      s3 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+      }> PUSHCONT
+      <{
+        s4 PUSH
+        ISNULL
+        NOT
+      }> PUSHCONT
+      IFELSE
+      <{
+        s3 POP
+        s3 POP
+        s0 s1 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        NEWC
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        ENDC
+        ROT
+        STREF
+      }> IFREFELSE
+      s1 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s1 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s1 XCHG
+        STREF
+      }> PUSHCONT
+      <{
+        s1 POP
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      ENDC
+      s0 s1 XCHG
+      SENDRAWMSG
+    }> IFJMPREF
+    s0 PUSH
+    2494876497 PUSHINT
+    EQUAL
+    <{
+      s0 POP
+      32 LDU
+      s0 s1 XCHG
+      2494876497 PUSHINT
+      EQUAL
+      129 THROWIFNOT
+      LDMSGADDR
+      s0 s1 XCHG
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      s1 POP
+      ?fun_ref_bc9b985613f8c43b INLINECALLDICT
+      -1 PUSHINT
+    }> PUSHCONT
+    IFJMP
+    0 EQINT
+    <{
+      HASHSU
+      15793184851686212492695825928214045234117996283955656189009333050686867260400 PUSHINT
+      EQUAL
+      <{
+        ?fun_ref_8e9cbfaa9b3afdc1 INLINECALLDICT
+        -1 PUSHINT
+        RETFALSE
+      }> PUSHCONT
+      IFJMP
+    }> PUSHCONT
+    <{
+      s0 POP
+    }> PUSHCONT
+    IFELSE
+    0 PUSHINT
+  }>
+  ?fun_ref_bc9b985613f8c43b PROCREF:<{
+    12 1 BLKSWAP
+    54665 PUSHINT
+    s12 PUSH
+    THROWANYIFNOT
+    s7 PUSH
+    s0 PUSH
+    ISNULL
+    128 THROWIF
+    2 UNTUPLE
+    s8 PUSH
+    s0 PUSH
+    ISNULL
+    128 THROWIF
+    2 UNTUPLE
+    s3 s4 s1 PUXC2
+    s0 s5 PUXC
+    31206 PUSHINT
+    s4 s2 PUSH2
+    LESS
+    THROWANYIFNOT
+    ROT
+    SUB
+    s0 s2 XCHG
+    SUB
+    false 0 false 1 0 DIV
+    s12 PUSH
+    3 1 BLKSWAP
+    NEWC
+    4 1 BLKSWAP
+    3056927071 PUSHINT
+    s0 s5 XCHG2
+    32 STU
+    s1 s3 XCHG
+    32 STU
+    64 STU
+    64 STU
+    s0 s1 XCHG
+    STGRAMS
+    ENDC
+    s12 s13 XCHG
+    s11 s12 XCHG
+    s10 s11 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+    0 PUSHINT
+    NULL
+    NULL
+    NULL
+    s2 PUSH
+    ISNULL
+    NOT
+    <{
+      DROP2
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      2 UNTUPLE
+      s0 s1 XCHG
+    }> PUSHCONT
+    <{
+      s2 POP
+    }> PUSHCONT
+    IFELSE
+    1 GETGLOBVAR
+    4 UNTUPLE
+    s1 s3 XCHG
+    3 BLKDROP
+    BALANCE
+    0 INDEX
+    s0 s1 XCHG
+    SUB
+    100000000 PUSHINT
+    LESS
+    <{
+      100000000 PUSHINT
+      0 PUSHINT
+      RAWRESERVE
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      130 PUSHINT
+      s2 s3 XCHG2
+      NEWC
+      1 PUSHINT
+      s0 s1 XCHG
+      2 STI
+      s0 s7 XCHG2
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      3 STI
+      s0 s5 XCHG2
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      STSLICER
+      s0 s3 XCHG2
+      STGRAMS
+      0 PUSHINT
+      s0 s1 XCHG
+      105 STI
+      s3 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+      }> PUSHCONT
+      <{
+        s4 PUSH
+        ISNULL
+        NOT
+      }> PUSHCONT
+      IFELSE
+      <{
+        s3 POP
+        s3 POP
+        s0 s1 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        NEWC
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        s4 PUSH
+        ISNULL
+        NOT
+        <{
+          -1 PUSHINT
+          s0 s1 XCHG
+          1 STI
+          s0 s4 XCHG
+          s0 PUSH
+          ISNULL
+          128 THROWIF
+          s0 s4 XCHG2
+          STREF
+        }> PUSHCONT
+        <{
+          s4 POP
+          s0 s3 XCHG
+          0 PUSHINT
+          s0 s1 XCHG
+          1 STI
+        }> PUSHCONT
+        IFELSE
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s2 XCHG
+        ENDC
+        ROT
+        STREF
+      }> IFREFELSE
+      s1 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s1 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s1 XCHG
+        STREF
+      }> PUSHCONT
+      <{
+        s1 POP
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      ENDC
+      s0 s1 XCHG
+      SENDRAWMSG
+    }> IFREFELSEREF
+    s2 s4 XCHG
+    0 PUSHINT
+    s0 s3 XCHG
+    s0 s4 XCHG
+    66 PUSHINT
+    s2 s3 XCHG2
+    NEWC
+    1 PUSHINT
+    s0 s1 XCHG
+    2 STI
+    s0 s7 XCHG2
+    s0 s1 XCHG
+    1 STI
+    0 PUSHINT
+    s0 s1 XCHG
+    3 STI
+    s0 s5 XCHG2
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s0 s3 XCHG2
+    STGRAMS
+    0 PUSHINT
+    s0 s1 XCHG
+    105 STI
+    s3 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+    }> PUSHCONT
+    <{
+      s4 PUSH
+      ISNULL
+      NOT
+    }> PUSHCONT
+    IFELSE
+    <{
+      s3 POP
+      s3 POP
+      s0 s1 XCHG
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+    }> PUSHCONT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      NEWC
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s4 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s4 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s4 XCHG2
+        STREF
+      }> PUSHCONT
+      <{
+        s4 POP
+        s0 s3 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      s4 PUSH
+      ISNULL
+      NOT
+      <{
+        -1 PUSHINT
+        s0 s1 XCHG
+        1 STI
+        s0 s4 XCHG
+        s0 PUSH
+        ISNULL
+        128 THROWIF
+        s0 s4 XCHG2
+        STREF
+      }> PUSHCONT
+      <{
+        s4 POP
+        s0 s3 XCHG
+        0 PUSHINT
+        s0 s1 XCHG
+        1 STI
+      }> PUSHCONT
+      IFELSE
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s2 XCHG
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s2 XCHG
+      ENDC
+      ROT
+      STREF
+    }> IFREFELSE
+    s1 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s1 XCHG
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      s0 s1 XCHG
+      STREF
+    }> PUSHCONT
+    <{
+      s1 POP
+      0 PUSHINT
+      s0 s1 XCHG
+      1 STI
+    }> PUSHCONT
+    IFELSE
+    ENDC
+    s0 s1 XCHG
+    SENDRAWMSG
+  }>
+  ?fun_ref_d71d22c4bf848638 PROCREF:<{
+    s11 s12 XCHG2
+    1 STI
+    s0 s9 XCHG2
+    s0 PUSH
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    s0 PUSH
+    11 PLDU
+    s0 PUSH
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+    STSLICER
+    s1 s7 XCHG
+    32 STU
+    s0 s5 XCHG2
+    s0 PUSH
+    ISNULL
+    <{
+      s0 POP
+      0 PUSHINT
+      s0 s1 XCHG
+      2 STU
+    }> PUSHCONT
+    <{
+      s0 PUSH
+      SBITS
+      267 PUSHINT
+      EQUAL
+      136 THROWIFNOT
+      s0 PUSH
+      11 PLDU
+      s0 PUSH
+      1279 PUSHINT
+      EQUAL
+      137 THROWIF
+      10 PUSHPOW2
+      EQUAL
+      136 THROWIFNOT
+      STSLICER
+    }> PUSHCONT
+    IFELSE
+    s3 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s3 XCHG
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      2 UNTUPLE
+      s2 s4 XCHG
+      s0 s2 XCHG
+      64 STU
+      128 STU
+    }> PUSHCONT
+    <{
+      s3 POP
+      0 PUSHINT
+      s0 s3 XCHG2
+      1 STI
+    }> PUSHCONT
+    IFELSE
+    s1 PUSH
+    ISNULL
+    NOT
+    <{
+      -1 PUSHINT
+      s0 s1 XCHG
+      1 STI
+      s0 s1 XCHG
+      s0 PUSH
+      ISNULL
+      128 THROWIF
+      2 UNTUPLE
+      s0 s2 XCHG
+      64 STU
+      128 STU
+    }> IFREFELSEREF
+    NEWC
+    ROT
+    STGRAMS
+    0 PUSHINT
+    s2 POP
+    1 STI
+  }>
+}END>c

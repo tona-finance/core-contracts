@@ -3,8 +3,57 @@
         {
             "name": "ticket",
             "path": "./sources/ticket.tact",
-            "output": "./sources/output",
-            "options":{}
+            "output": "./output/ticket",
+            "options":{
+                "debug": true,
+                "experimental": {
+                  "inline": true
+                }
+            }
+        },
+        {
+            "name": "draw",
+            "path": "./sources/draw.tact",
+            "output": "./output/draw",
+            "options":{
+                "debug": true,
+                "experimental": {
+                  "inline": true
+                }
+            }
+        },
+        {
+            "name": "pool_account",
+            "path": "./sources/pool_account.tact",
+            "output": "./output/pool_account",
+            "options":{
+                "debug": true,
+                "experimental": {
+                  "inline": true
+                }
+            }
+        },
+        {
+            "name": "prize_reserve",
+            "path": "./sources/prize_reserve.tact",
+            "output": "./output/prize_reserve",
+            "options":{
+                "debug": true,
+                "experimental": {
+                  "inline": true
+                }
+            }
+        },
+        {
+            "name": "pool_master",
+            "path": "./sources/pool_master.tact",
+            "output": "./output/pool_master",
+            "options":{
+                "debug": true,
+                "experimental": {
+                  "inline": true
+                }
+            }
         }
     ]
 }

@@ -77,7 +77,6 @@ message WithdrawNotify {
 // === pool account messages ===
 
 message InitPoolAccountInternal {
-    staker: Address;
     jetton_wallet: Address;
 }
 
@@ -101,7 +100,6 @@ message Withdraw {
 
 message InitDrawInternal {
     deployer: Address;
-    reserve: Address;
     jetton_wallet: Address;
     twab_timestamp: Int as uint64;
     twab_amount: Int as uint128;
@@ -114,6 +112,7 @@ message InitTicket {
 message ClaimPrizeInternal {
     query_id: Int as uint64;
     user: Address;
+    pool_account: Address;
     pick_payload: Slice as remaining;
 }
 
@@ -125,6 +124,7 @@ message InitTicketInternal2 {
 }
 
 message PayPrizeDebtInternal {
+    user: Address;
     amount: Int as coins;
 }
 
@@ -143,7 +143,8 @@ message ClaimPrizeDebt {
 
 message ClaimPrizeDebtInternal {
     query_id: Int as uint64;
-    draw: Address;
     user: Address;
+    draw: Address;
+    period: Int as uint32;
     amount: Int as coins;
 }

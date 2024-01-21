@@ -13,12 +13,12 @@ inline fun newTwab(): Twab {
 }
 
 inline fun averageBalance(start: Twab, end: Twab): Int {
-    require(start.timestamp < end.timestamp, "invalid timestamp");
+    require(start.timestamp < end.timestamp, "Start time >= End time");
     return (end.amount - start.amount) / (end.timestamp - start.timestamp);
 }
 
 inline extends fun nextTwab(self: Twab, balance: Int, timestamp: Int): Twab {
-    require(timestamp >= self.timestamp, "invalid timestamp");
+    require(timestamp >= self.timestamp, "Invalid timestamp");
     return Twab {
         timestamp: timestamp,
         amount: self.amount + (timestamp - self.timestamp) * balance
@@ -57,12 +57,12 @@ extends fun binarySearchTwab(self: TwabStore, timestamp: Int): Twab {
 }
 
 inline extends fun firstTwab(self: TwabStore): Twab {
-    require(self.size > 0, "empty store");
+    require(self.size > 0, "Empty twab store");
     return self.store.get(0)!!;
 }
 
 inline extends fun lastTwab(self: TwabStore): Twab {
-    require(self.size > 0, "empty store");
+    require(self.size > 0, "Empty twab store");
     return self.store.get(self.size - 1)!!;
 }
 
