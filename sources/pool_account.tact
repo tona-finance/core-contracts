@@ -1,11 +1,22 @@
+import "@stdlib/deploy";
 import "./library/twab";
 import "./messages";
 import "./draw";
 import "./ticket";
 import "./ticket_initializer";
 
+struct PoolAccountData {
+    owner: Address;
+    master: Address;
+    staker: Address;
+    reserve: Address;
+    jetton_wallet: Address;
+    share_amount: Int as coins;
+    contribute_amount: Int as coins;
+    withdraw_amount: Int as coins;
+}
 
-contract PoolAccount with TicketInitializer {
+contract PoolAccount with TicketInitializer, Deployable {
     override const storageReserve: Int = ton("0.1"); // from base trait
 
     // from TicketInitializer
@@ -29,7 +40,7 @@ contract PoolAccount with TicketInitializer {
         self.master = master;
         self.staker = staker;
         self.deposit_cache = emptyMap();
-        self.twab_store = newTwabStore();
+        self.twab_store = new_twab_store();
         self.reserve = reserve;
     }
 
@@ -47,12 +58,47 @@ contract PoolAccount with TicketInitializer {
         }
     }
 
-    override inline fun get_draw_address(period: Int): Address {
-        let sinit: StateInit = initOf Draw(self.master, self.reserve, period);
-        return contractAddress(sinit);
+    override inline fun _get_draw_init(period: Int): StateInit {
+        return initOf Draw(self.master, self.reserve, period);
     }
 
-    override inline fun get_ticket_init(draw: Address, period: Int): StateInit {
+    override inline fun _get_ticket_init(period: Int): StateInit {
+        let draw: Address = self._get_draw_address(period);
         return initOf Ticket(self.owner, myAddress(), draw, period);
+    }
+
+    // === get functions ===
+
+    get fun get_core_data(): PoolAccountData {
+        return PoolAccountData {
+            owner: self.owner,
+            master: self.master,
+            staker: self.staker,
+            reserve: self.reserve,
+            jetton_wallet: self.jetton_wallet!!,
+            share_amount: self.share_amount,
+            contribute_amount: self.contribute_amount,
+            withdraw_amount: self.withdraw_amount
+        };
+    }
+
+    get fun get_ticket_address(period: Int): Address {
+        return self._get_ticket_address(period);
+    }
+
+    get fun get_deposit_cache(query_id: Int): Int? {
+        return self.deposit_cache.get(query_id);
+    }
+
+    get fun get_first_twab(): Twab {
+        return self.twab_store.first_twab();
+    }
+
+    get fun get_last_twab(): Twab {
+        return self.twab_store.last_twab();
+    }
+
+    get fun binary_search_twab(timestamp: Int): Twab {
+        return self.twab_store.binary_search_twab(timestamp);
     }
 }

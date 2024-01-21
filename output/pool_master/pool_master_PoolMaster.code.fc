@@ -15,17 +15,17 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     return store_uint($self, $timestamp, 48);
 }
 
-(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
+(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
     cell $data = end_cell($Builder$_fun_storeTimestamp(store_coins(store_ref(__tact_store_address(__tact_store_address(store_coins(begin_cell(), 0), $owner), $master), $code), 0), 0));
     return $StateInit$_constructor_code_data($code, $data);
 }
 
 slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code) impure inline {
-    var ($sinit'code, $sinit'data) = $global_get_staker_jetton_wallet_init($owner, $master, $code);
+    var ($sinit'code, $sinit'data) = $global__get_staker_jetton_wallet_init($owner, $master, $code);
     return $global_contractAddress(($sinit'code, $sinit'data));
 }
 
-(int, int) $global_newTwab() impure inline {
+(int, int) $global_new_twab() impure inline {
     return $Twab$_constructor_timestamp_amount(now(), 0);
 }
 
@@ -35,7 +35,7 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code)
     $self'jetton_master = $jetton_master;
     $self'jetton_wallet_code = $jetton_wallet_code;
     $self'jetton_wallet = $global_get_jetton_wallet_address(my_address(), $jetton_master, $jetton_wallet_code);
-    ($self'twab'timestamp, $self'twab'amount) = $global_newTwab();
+    ($self'twab'timestamp, $self'twab'amount) = $global_new_twab();
     $self'share_amount = 0;
     $self'contribute_amount = 0;
     $self'spent_amount = 0;
@@ -49,42 +49,68 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     return $self~load_uint(48);
 }
 
-(int, int) $Twab$_fun_nextTwab((int, int) $self, int $balance, int $timestamp) impure inline {
+(int, int) $Twab$_fun_next_twab((int, int) $self, int $balance, int $timestamp) impure inline {
     var (($self'timestamp, $self'amount)) = $self;
     var (($self'timestamp, $self'amount)) = $self;
     throw_unless(19317, ($timestamp >= $self'timestamp));
     return $Twab$_constructor_timestamp_amount($timestamp, ($self'amount + (($timestamp - $self'timestamp) * $balance)));
 }
 
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_prize_reserve_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_prize_reserve_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
     var ($sinit'code, $sinit'data) = $PrizeReserve$_init_child(__tact_context_sys, my_address(), $self'staker, $self'jetton_master, $self'jetton_wallet_code);
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun_get_account_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline {
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun__get_account_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
-    slice $reserve = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_prize_reserve_address();
+    slice $reserve = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_prize_reserve_address();
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $PoolAccount$_init_child(__tact_context_sys, $user, my_address(), $self'staker, $reserve));
 }
 
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun_get_draw_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline {
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun__get_draw_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
-    slice $reserve = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_prize_reserve_address();
+    slice $reserve = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_prize_reserve_address();
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $Draw$_init_child(__tact_context_sys, my_address(), $reserve, $period));
+}
+
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (slice, slice, slice, (int, int), int, int, int, int)) $PoolMaster$_fun_get_core_data((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
+    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period($self'owner, $self'staker, ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_prize_reserve_address(), ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period));
+}
+
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), cell) $PoolMaster$_fun_get_account_code((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
+    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $StateInit$_get_code(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_init($self'owner)));
+}
+
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline {
+    var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_init($user);
+    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
+}
+
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline {
+    var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
+    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_address($user));
+}
+
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_draw_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_draw_init($period);
+    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_draw_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_draw_init($period);
-    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
+    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_draw_address($period));
 }
 
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_send_prize_to_draw((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $value, (int, int) $twab, int $amount) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
     var (($twab'timestamp, $twab'amount)) = $twab;
     slice $payload = $Builder$_fun_asSlice(__tact_store_address(store_uint($Builder$_fun_storeTimestamp(begin_cell(), $twab'timestamp), $twab'amount, 128), $self'owner));
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, $self'jetton_wallet, $value, 2, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(0, $amount, ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_draw_address(($self'next_period - 1)), $self'owner, null(), 100000000, $payload))));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, $self'jetton_wallet, $value, 2, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(0, $amount, ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_draw_address(($self'next_period - 1)), $self'owner, null(), 100000000, $payload))));
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
 }
 
@@ -93,17 +119,11 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     var (($twab'timestamp, $twab'amount)) = $twab;
     int $period = $self'next_period;
     $self'next_period = ($self'next_period + 1);
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_draw_init($period);
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_draw_init($period);
     slice $draw = $global_contractAddress(($sinit'code, $sinit'data));
     slice $draw_jetton_wallet = $global_get_jetton_wallet_address($draw, $self'jetton_master, $self'jetton_wallet_code);
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_forward($draw, $InitDrawInternal$_store_cell($InitDrawInternal$_constructor_deployer_jetton_wallet_twab_timestamp_twab_amount($deployer, $draw_jetton_wallet, $twab'timestamp, $twab'amount)), false, $StateInit$_as_optional(($sinit'code, $sinit'data)));
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
-}
-
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline {
-    var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_account_init($user);
-    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_on_jetton_received_from_account((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $query_id, slice $from, int $amount, slice $payload) impure inline {
@@ -112,8 +132,8 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     slice $user = $payload~__tact_load_address();
     int $deposit_amount = $payload~load_coins();
     end_parse($payload);
-    throw_unless(27196, ( __tact_slice_eq_bits(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_account_address($user), $from) ));
-    ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_nextTwab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $timestamp);
+    throw_unless(27196, ( __tact_slice_eq_bits(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_address($user), $from) ));
+    ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount + $deposit_amount);
     $self'contribute_amount = ($self'contribute_amount + $amount);
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_forward($user, $DepositNotify$_store_cell($DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount($query_id, $timestamp, $deposit_amount, $amount)), false, null());
@@ -128,7 +148,7 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
 
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_require_account((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
-    throw_unless(41207, ( __tact_slice_eq_bits(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_account_address($user), __tact_context_get_sender()) ));
+    throw_unless(41207, ( __tact_slice_eq_bits(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_address($user), __tact_context_get_sender()) ));
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
 }
 
@@ -170,14 +190,14 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     int $rest_value = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_msg_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), 10000000);
     throw_unless(2805, ($rest_value >= 200000000));
-    var ($twab'timestamp, $twab'amount) = $Twab$_fun_nextTwab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
+    var ($twab'timestamp, $twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_init_draw(__tact_context_get_sender(), ($twab'timestamp, $twab'amount));
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
 }
 
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_internal_text_cc6af9da0449068a05d5f478d36201caad0c689ed788da96090ff3cccdea88cc((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
     var ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker) = $self;
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_get_account_init(__tact_context_get_sender());
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_init(__tact_context_get_sender());
     slice $account = $global_contractAddress(($sinit'code, $sinit'data));
     slice $jetton_wallet = $global_get_jetton_wallet_address($account, $self'jetton_master, $self'jetton_wallet_code);
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_forward($account, $InitPoolAccountInternal$_store_cell($InitPoolAccountInternal$_constructor_jetton_wallet($jetton_wallet)), false, $StateInit$_as_optional(($sinit'code, $sinit'data)));
@@ -195,7 +215,7 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     int $deploy_value = 100000000;
     throw_unless(2805, ($rest_value >= ($transfer_value + $deploy_value)));
     $self'spent_amount = ($self'spent_amount + $msg'amount);
-    var ($twab'timestamp, $twab'amount) = $Twab$_fun_nextTwab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
+    var ($twab'timestamp, $twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_send_prize_to_draw($transfer_value, ($twab'timestamp, $twab'amount), $msg'amount);
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_init_draw(__tact_context_get_sender(), ($twab'timestamp, $twab'amount));
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
@@ -215,7 +235,7 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     var ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker) = $self;
     var ($msg'query_id, $msg'user, $msg'timestamp, $msg'amount) = $msg;
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_require_account($msg'user);
-    ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_nextTwab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $msg'timestamp);
+    ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $msg'timestamp);
     $self'share_amount = ($self'share_amount - $msg'amount);
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_forward($msg'user, $WithdrawNotify$_store_cell($WithdrawNotify$_constructor_query_id_timestamp_share_amount($msg'query_id, $msg'timestamp, $msg'amount)), false, null());
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
@@ -241,6 +261,32 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
 ;; Get methods of a Contract PoolMaster
 ;;
 
+_ %get_core_data() method_id(119856) {
+    var self = $PoolMaster$_contract_load();
+    var res = self~$PoolMaster$_fun_get_core_data();
+    return $PoolMasterData$_to_external(res);
+}
+
+_ %get_account_code() method_id(88290) {
+    var self = $PoolMaster$_contract_load();
+    var res = self~$PoolMaster$_fun_get_account_code();
+    return res;
+}
+
+_ %get_account_address(slice $$user) method_id(68369) {
+    slice $user = __tact_verify_address($$user);
+    var self = $PoolMaster$_contract_load();
+    var res = self~$PoolMaster$_fun_get_account_address($user);
+    return res;
+}
+
+_ %get_draw_address(int $$period) method_id(108309) {
+    int $period = $$period;
+    var self = $PoolMaster$_contract_load();
+    var res = self~$PoolMaster$_fun_get_draw_address($period);
+    return res;
+}
+
 _ %owner() method_id(83229) {
     var self = $PoolMaster$_contract_load();
     var res = self~$PoolMaster$_fun_owner();
@@ -260,7 +306,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmcZDyLcgQqUr2JRmXvMwnsnd9yNq5bszDwfvbzypV18RA";
+    return "ipfs://QmSfXEfMnD6SydWpt82MU7iH1ZRF7X39axjSjAJ2xk9Vj1";
 }
 
 _ lazy_deployment_completed() method_id {

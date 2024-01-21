@@ -3,6 +3,11 @@
 ;; TLB: _ code:^cell data:^cell = StateInit
 ;;
 
+_ $StateInit$_get_code((cell, cell) v) inline {
+    var (v'code, v'data) = v;
+    return v'code;
+}
+
 ((cell, cell)) $StateInit$_not_null(tuple v) inline {
     throw_if(128, null?(v));
     var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
@@ -80,6 +85,11 @@ builder $Twab$_store(builder build_0, (int, int) v) inline {
     var v'timestamp = sc_0~load_uint(64);
     var v'amount = sc_0~load_uint(128);
     return (sc_0, (v'timestamp, v'amount));
+}
+
+tuple $Twab$_to_tuple(((int, int)) v) inline {
+    var (v'timestamp, v'amount) = v;
+    return __tact_tuple_create_2(v'timestamp, v'amount);
 }
 
 ((int, int)) $Twab$_constructor_timestamp_amount(int timestamp, int amount) inline {
@@ -299,6 +309,20 @@ cell $ChangeOwnerOk$_store_cell((int, slice) v) inline {
 }
 
 ;;
+;; Type: PoolMasterData
+;; TLB: _ owner:address staker:address reserve:address twab:Twab{timestamp:uint64,amount:uint128} share_amount:coins contribute_amount:coins spent_amount:coins next_period:uint32 = PoolMasterData
+;;
+
+(slice, slice, slice, tuple, int, int, int, int) $PoolMasterData$_to_external(((slice, slice, slice, (int, int), int, int, int, int)) v) inline {
+    var (v'owner, v'staker, v'reserve, v'twab, v'share_amount, v'contribute_amount, v'spent_amount, v'next_period) = v; 
+    return (v'owner, v'staker, v'reserve, $Twab$_to_tuple(v'twab), v'share_amount, v'contribute_amount, v'spent_amount, v'next_period);
+}
+
+((slice, slice, slice, (int, int), int, int, int, int)) $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period(slice owner, slice staker, slice reserve, (int, int) twab, int share_amount, int contribute_amount, int spent_amount, int next_period) inline {
+    return (owner, staker, reserve, twab, share_amount, contribute_amount, spent_amount, next_period);
+}
+
+;;
 ;; Type: Draw
 ;;
 
@@ -428,7 +452,7 @@ builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, in
     build_1 = build_1.store_coins(v'share_amount);
     build_1 = build_1.store_coins(v'contribute_amount);
     build_1 = build_1.store_coins(v'spent_amount);
-    build_1 = build_1.store_coins(v'next_period);
+    build_1 = build_1.store_uint(v'next_period, 32);
     build_1 = __tact_store_address(build_1, v'staker);
     build_0 = store_ref(build_0, build_1.end_cell());
     return build_0;
@@ -444,7 +468,7 @@ builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, in
     var v'share_amount = sc_1~load_coins();
     var v'contribute_amount = sc_1~load_coins();
     var v'spent_amount = sc_1~load_coins();
-    var v'next_period = sc_1~load_coins();
+    var v'next_period = sc_1~load_uint(32);
     var v'staker = sc_1~__tact_load_address();
     return (sc_0, (v'owner, v'jetton_master, v'jetton_wallet_code, v'jetton_wallet, v'twab, v'share_amount, v'contribute_amount, v'spent_amount, v'next_period, v'staker));
 }

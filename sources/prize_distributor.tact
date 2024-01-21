@@ -144,12 +144,17 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
     }
 
     inline fun require_ticket(user: Address, pool_account: Address) {
-        require(sender() == self.get_ticket_address(user, pool_account), "Invalid sender");
+        require(sender() == self._get_ticket_address(user, pool_account), "Invalid sender");
     }
 
     inline fun require_not_over() {
         require(now() < self.deadline, "Draw is over");
     }
 
-    abstract inline fun get_ticket_address(user: Address, pool_account: Address): Address;
+    inline fun _get_ticket_address(user: Address, pool_account: Address): Address {
+        let sinit: StateInit = self._get_ticket_init(user, pool_account);
+        return contractAddress(sinit);
+    }
+
+    abstract inline fun _get_ticket_init(user: Address, pool_account: Address): StateInit;
 }

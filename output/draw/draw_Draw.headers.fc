@@ -108,6 +108,12 @@ tuple $Twab$_as_optional((int, int) v) inline;
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
+;; $Twab$_to_tuple
+tuple $Twab$_to_tuple(((int, int)) v) inline;
+
+;; $DrawData$_to_external
+(int, slice, slice, slice, int, tuple, tuple, int, int, int, int) $DrawData$_to_external(((int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) v) inline;
+
 ;; $Ticket$init$_store
 builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inline;
 
@@ -144,8 +150,8 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $Twab$_constructor_timestamp_amount
 ((int, int)) $Twab$_constructor_timestamp_amount(int timestamp, int amount) inline;
 
-;; $global_averageBalance
-int $global_averageBalance((int, int) $start, (int, int) $end) impure inline;
+;; $global_average_balance
+int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 
 ;; $Slice$_fun_loadTimestamp
 int $Slice$_fun_loadTimestamp(slice $self) impure inline;
@@ -174,8 +180,17 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 ;; $Draw$_fun_require_over
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_over((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
 
-;; $Draw$_fun_get_ticket_address
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun_get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+;; $Draw$_fun__get_ticket_init
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), (cell, cell)) $Draw$_fun__get_ticket_init((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+
+;; $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount
+((int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount(int active, slice pool_master, slice prize_reserve, slice jetton_wallet, int period, (int, int) start, (int, int) end, int prize_amount, int winning_number, int deadline, int avail_prize_amount) inline;
+
+;; $Draw$_fun_get_core_data
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), (int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) $Draw$_fun_get_core_data((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
+
+;; $Draw$_fun_get_prize_percentage
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_get_prize_percentage((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline;
 
 ;; $Draw$_fun_notify
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_notify((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, cell $body) impure inline;
@@ -191,6 +206,9 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
 ;; $Draw$_fun_compute_prize_amount
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_compute_prize_amount((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $pick_payload) impure inline;
+
+;; $Draw$_fun__get_ticket_address
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun__get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
 
 ;; $Draw$_fun_require_ticket
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_ticket((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;

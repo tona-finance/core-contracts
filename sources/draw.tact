@@ -4,6 +4,20 @@ import "./messages";
 import "./prize_distributor";
 import "./ticket";
 
+struct DrawData {
+    active: Bool;
+    pool_master: Address;
+    prize_reserve: Address;
+    jetton_wallet: Address;
+    period: Int as uint32;
+    start: Twab;
+    end: Twab;
+    prize_amount: Int as coins;
+    winning_number: Int as uint32;
+    deadline: Int as uint64;
+    avail_prize_amount: Int as coins;
+}
+
 contract Draw with PrizeDistributor {
     override const storageReserve: Int = ton("0.1");
 
@@ -108,8 +122,29 @@ contract Draw with PrizeDistributor {
         require(now() >= self.deadline, "Draw is not over");
     }
 
-    override inline fun get_ticket_address(user: Address, pool_account: Address): Address {
-        let sinit: StateInit = initOf Ticket(user, pool_account, myAddress(), self.period);
-        return contractAddress(sinit);
+    override inline fun _get_ticket_init(user: Address, pool_account: Address): StateInit {
+        return initOf Ticket(user, pool_account, myAddress(), self.period);
+    }
+
+    // === get functions ===
+
+    get fun get_core_data(): DrawData {
+        return DrawData {
+            active: self.active,
+            pool_master: self.pool_master,
+            prize_reserve: self.reserve,
+            jetton_wallet: self.jetton_wallet!!,
+            period: self.period,
+            start: self.start!!,
+            end: self.end!!,
+            prize_amount: self.prize_amount,
+            winning_number: self.winning_number,
+            deadline: self.deadline,
+            avail_prize_amount: self.avail_prize_amount
+        };
+    }
+
+    get fun get_prize_percentage(tier: Int): Int? {
+        return self.prize_percentage.get(tier);
     }
 }

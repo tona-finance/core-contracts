@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Ticket
-BOC Size: 1967 bytes
+BOC Size: 2027 bytes
 
 # Types
-Total Types: 30
+Total Types: 32
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -117,6 +117,10 @@ Signature: `ClaimPrizeDebt{query_id:uint64,amount:coins,reserve:address}`
 TLB: `claim_prize_debt_internal#e00fdea0 query_id:uint64 user:address draw:address period:uint32 amount:coins = ClaimPrizeDebtInternal`
 Signature: `ClaimPrizeDebtInternal{query_id:uint64,user:address,draw:address,period:uint32,amount:coins}`
 
+## TicketData
+TLB: `_ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData`
+Signature: `TicketData{active:bool,owner:address,pool_account:address,draw:address,period:uint32,picks:uint32,debt_amount:coins}`
+
 ## ChangeOwner
 TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
 Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
@@ -125,8 +129,17 @@ Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
 TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
 
+## DrawData
+TLB: `_ active:bool pool_master:address prize_reserve:address jetton_wallet:address period:uint32 start:Twab{timestamp:uint64,amount:uint128} end:Twab{timestamp:uint64,amount:uint128} prize_amount:coins winning_number:uint32 deadline:uint64 avail_prize_amount:coins = DrawData`
+Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,jetton_wallet:address,period:uint32,start:Twab{timestamp:uint64,amount:uint128},end:Twab{timestamp:uint64,amount:uint128},prize_amount:coins,winning_number:uint32,deadline:uint64,avail_prize_amount:coins}`
+
 # Get Methods
-Total Get Methods: 1
+Total Get Methods: 3
+
+## get_core_data
+
+## get_index_status
+Argument: index
 
 ## owner
 

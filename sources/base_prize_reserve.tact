@@ -25,13 +25,14 @@ trait BasePrizeReserve with MsgValueHelper {
         );
     }
 
-    inline fun require_jetton_wallet() {
-        require(sender() == self.jetton_wallet, "Invalid sender");
-    }
-
     inline fun require_ticket(user: Address, draw: Address, period: Int) {
-        require(sender() == self.get_ticket_address(user, draw, period), "Invalid sender");
+        require(sender() == self._get_ticket_address(user, draw, period), "Invalid sender");
     }
 
-    abstract inline fun get_ticket_address(user: Address, draw: Address, period: Int): Address;
+    inline fun _get_ticket_address(user: Address, draw: Address, period: Int): Address {
+        let sinit: StateInit = self._get_ticket_init(user, draw, period);
+        return contractAddress(sinit);
+    }
+
+    abstract inline fun _get_ticket_init(user: Address, draw: Address, period: Int): StateInit;
 }

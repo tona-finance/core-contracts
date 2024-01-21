@@ -69,6 +69,9 @@ builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, int, cel
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
+;; $TicketData$_to_external
+(int, slice, slice, slice, int, int, int) $TicketData$_to_external(((int, slice, slice, slice, int, int, int)) v) inline;
+
 ;; $Ticket$init$_load
 (slice, ((slice, slice, slice, int))) $Ticket$init$_load(slice sc_0) inline;
 
@@ -86,6 +89,15 @@ builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, int, cel
 
 ;; $Builder$_fun_asSlice
 slice $Builder$_fun_asSlice(builder $self) impure inline;
+
+;; $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount
+((int, slice, slice, slice, int, int, int)) $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount(int active, slice owner, slice pool_account, slice draw, int period, int picks, int debt_amount) inline;
+
+;; $Ticket$_fun_get_core_data
+((slice, int, slice, slice, int, int, cell, int), (int, slice, slice, slice, int, int, int)) $Ticket$_fun_get_core_data((slice, int, slice, slice, int, int, cell, int) $self) impure inline;
+
+;; $Ticket$_fun_get_index_status
+((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_get_index_status((slice, int, slice, slice, int, int, cell, int) $self, int $index) impure inline;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;

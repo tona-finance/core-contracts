@@ -26,7 +26,7 @@ PROGRAM{
   DECLPROC $PrizeReserve$init$_load
   DECLPROC $Builder$_fun_storeTimestamp
   DECLPROC $StateInit$_constructor_code_data
-  DECLPROC $global_get_staker_jetton_wallet_init
+  DECLPROC $global__get_staker_jetton_wallet_init
   DECLPROC $global_contractAddress
   DECLPROC $global_get_jetton_wallet_address
   DECLPROC $PrizeReserve$_contract_init
@@ -40,10 +40,11 @@ PROGRAM{
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
   DECLPROC $Ticket$_init_child
-  DECLPROC $PrizeReserve$_fun_get_pool_account_address
-  DECLPROC $PrizeReserve$_fun_get_ticket_address
+  DECLPROC $PrizeReserve$_fun__get_pool_account_address
+  DECLPROC $PrizeReserve$_fun__get_ticket_init
   DECLPROC $PrizeReserve$_fun_forward
   DECLPROC $PrizeReserve$_fun_notify
+  DECLPROC $PrizeReserve$_fun__get_ticket_address
   DECLPROC $PrizeReserve$_fun_require_ticket
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $PrizeReserve$_internal_binary_ClaimPrizeDebtInternal
@@ -289,7 +290,7 @@ PROGRAM{
   }>
   $StateInit$_constructor_code_data PROCINLINE:<{
   }>
-  $global_get_staker_jetton_wallet_init PROCINLINE:<{
+  $global__get_staker_jetton_wallet_init PROCINLINE:<{
     NEWC
     0 PUSHINT
     STGRAMS
@@ -312,7 +313,7 @@ PROGRAM{
     __tact_compute_contract_address INLINECALLDICT
   }>
   $global_get_jetton_wallet_address PROCINLINE:<{
-    $global_get_staker_jetton_wallet_init INLINECALLDICT
+    $global__get_staker_jetton_wallet_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
   $PrizeReserve$_contract_init PROCREF:<{
@@ -543,7 +544,7 @@ PROGRAM{
     $Ticket$init$_store INLINECALLDICT
     ENDC
   }>
-  $PrizeReserve$_fun_get_pool_account_address PROCINLINE:<{
+  $PrizeReserve$_fun__get_pool_account_address PROCINLINE:<{
     __tact_context_sys GETGLOB
     MYADDR
     s2 s4 s(-1) XCPUXC
@@ -551,17 +552,17 @@ PROGRAM{
     $PoolAccount$_init_child INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
-  $PrizeReserve$_fun_get_ticket_address PROCINLINE:<{
+  $PrizeReserve$_fun__get_ticket_init PROCINLINE:<{
     3 3 BLKSWAP
     s5 PUSH
-    $PrizeReserve$_fun_get_pool_account_address INLINECALLDICT
+    $PrizeReserve$_fun__get_pool_account_address INLINECALLDICT
     __tact_context_sys GETGLOB
     s0 s4 XCHG
     s3 s7 XCHG
     s1 s6 s5 XCHG3
     $Ticket$_init_child INLINECALLDICT
-    $global_contractAddress INLINECALLDICT
-    s3 s3 s0 XCHG3
+    s2 s4 XCHG
+    s2 s3 XCHG
   }>
   $PrizeReserve$_fun_forward PROCINLINE:<{
     PUSHNULL
@@ -614,11 +615,15 @@ PROGRAM{
     PUSHNULL
     $PrizeReserve$_fun_forward INLINECALLDICT
   }>
+  $PrizeReserve$_fun__get_ticket_address PROCINLINE:<{
+    $PrizeReserve$_fun__get_ticket_init INLINECALLDICT
+    $global_contractAddress INLINECALLDICT
+  }>
   $PrizeReserve$_fun_require_ticket PROCINLINE:<{
     5 -ROLL
     4429 PUSHINT
     s0 s6 XCHG
-    $PrizeReserve$_fun_get_ticket_address INLINECALLDICT
+    $PrizeReserve$_fun__get_ticket_address INLINECALLDICT
     __tact_context_get_sender INLINECALLDICT
     __tact_slice_eq_bits INLINECALLDICT
     s1 s4 XCHG
@@ -663,7 +668,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d626553624e4c38755676724371716d684571636263535875373548514b4753706a72567873674c416b505632} PUSHSLICE
+    x{697066733a2f2f516d626344593531647850714e53344a3136376b465a776e41714d707338436138324b664b4c7456464b4d783938} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

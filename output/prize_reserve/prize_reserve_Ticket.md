@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Ticket
-BOC Size: 1967 bytes
+BOC Size: 2027 bytes
 
 # Types
-Total Types: 33
+Total Types: 36
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -28,6 +28,14 @@ Signature: `DeployOk{queryId:uint64}`
 ## FactoryDeploy
 TLB: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
 Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
+
+## PoolAccountData
+TLB: `_ owner:address master:address staker:address reserve:address jetton_wallet:address share_amount:coins contribute_amount:coins withdraw_amount:coins = PoolAccountData`
+Signature: `PoolAccountData{owner:address,master:address,staker:address,reserve:address,jetton_wallet:address,share_amount:coins,contribute_amount:coins,withdraw_amount:coins}`
+
+## TicketData
+TLB: `_ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData`
+Signature: `TicketData{active:bool,owner:address,pool_account:address,draw:address,period:uint32,picks:uint32,debt_amount:coins}`
 
 ## DepositInStaker
 TLB: `deposit_in_staker#47d54391 query_id:uint64 = DepositInStaker`
@@ -129,6 +137,10 @@ Signature: `Twab{timestamp:uint64,amount:uint128}`
 TLB: `_ store:dict<int, ^Twab{timestamp:uint64,amount:uint128}> size:uint64 = TwabStore`
 Signature: `TwabStore{store:dict<int, ^Twab{timestamp:uint64,amount:uint128}>,size:uint64}`
 
+## DrawData
+TLB: `_ active:bool pool_master:address prize_reserve:address jetton_wallet:address period:uint32 start:Twab{timestamp:uint64,amount:uint128} end:Twab{timestamp:uint64,amount:uint128} prize_amount:coins winning_number:uint32 deadline:uint64 avail_prize_amount:coins = DrawData`
+Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,jetton_wallet:address,period:uint32,start:Twab{timestamp:uint64,amount:uint128},end:Twab{timestamp:uint64,amount:uint128},prize_amount:coins,winning_number:uint32,deadline:uint64,avail_prize_amount:coins}`
+
 ## ChangeOwner
 TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
 Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
@@ -138,7 +150,12 @@ TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
 
 # Get Methods
-Total Get Methods: 1
+Total Get Methods: 3
+
+## get_core_data
+
+## get_index_status
+Argument: index
 
 ## owner
 

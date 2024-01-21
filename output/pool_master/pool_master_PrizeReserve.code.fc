@@ -15,13 +15,13 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     return store_uint($self, $timestamp, 48);
 }
 
-(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
+(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
     cell $data = end_cell($Builder$_fun_storeTimestamp(store_coins(store_ref(__tact_store_address(__tact_store_address(store_coins(begin_cell(), 0), $owner), $master), $code), 0), 0));
     return $StateInit$_constructor_code_data($code, $data);
 }
 
 slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code) impure inline {
-    var ($sinit'code, $sinit'data) = $global_get_staker_jetton_wallet_init($owner, $master, $code);
+    var ($sinit'code, $sinit'data) = $global__get_staker_jetton_wallet_init($owner, $master, $code);
     return $global_contractAddress(($sinit'code, $sinit'data));
 }
 
@@ -34,22 +34,27 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code)
     return ($self'jetton_wallet, $self'pool_master, $self'staker);
 }
 
-((slice, slice, slice), slice) $PrizeReserve$_fun_get_pool_account_address((slice, slice, slice) $self, slice $user) impure inline {
+((slice, slice, slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice, slice, slice) $self, slice $user) impure inline {
     var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
     var ($sinit'code, $sinit'data) = $PoolAccount$_init_child(__tact_context_sys, $user, $self'pool_master, $self'staker, my_address());
     return (($self'jetton_wallet, $self'pool_master, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
-((slice, slice, slice), slice) $PrizeReserve$_fun_get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
+((slice, slice, slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
     var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
-    slice $pool_account = ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_get_pool_account_address($user);
-    var ($sinit'code, $sinit'data) = $Ticket$_init_child(__tact_context_sys, $user, $pool_account, $draw, $period);
+    slice $pool_account = ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_pool_account_address($user);
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), $Ticket$_init_child(__tact_context_sys, $user, $pool_account, $draw, $period));
+}
+
+((slice, slice, slice), slice) $PrizeReserve$_fun__get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_ticket_init($user, $draw, $period);
     return (($self'jetton_wallet, $self'pool_master, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
 ((slice, slice, slice), ()) $PrizeReserve$_fun_require_ticket((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
     var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
-    throw_unless(4429, ( __tact_slice_eq_bits(($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_get_ticket_address($user, $draw, $period), __tact_context_get_sender()) ));
+    throw_unless(4429, ( __tact_slice_eq_bits(($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_ticket_address($user, $draw, $period), __tact_context_get_sender()) ));
     return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
 }
 
@@ -87,7 +92,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmYzggzzFZjW94DJtkE4k8S6rx2vtAsjW9UToitsavRhsv";
+    return "ipfs://QmbH2hekM5Zbc2SFCS7QnCkBrKKQxLRZDdq3t9r6qUkvfA";
 }
 
 _ lazy_deployment_completed() method_id {

@@ -28,6 +28,53 @@ tuple $StateInit$_as_optional((cell, cell) v) inline {
 }
 
 ;;
+;; Type: Deploy
+;; Header: 0x946a98b6
+;; TLB: deploy#946a98b6 queryId:uint64 = Deploy
+;;
+
+(slice, ((int))) $Deploy$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v) inline {
+    return $DeployOk$_store(begin_cell(), v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int queryId) inline {
+    return (queryId);
+}
+
+;;
+;; Type: PoolAccountData
+;; TLB: _ owner:address master:address staker:address reserve:address jetton_wallet:address share_amount:coins contribute_amount:coins withdraw_amount:coins = PoolAccountData
+;;
+
+(slice, slice, slice, slice, slice, int, int, int) $PoolAccountData$_to_external(((slice, slice, slice, slice, slice, int, int, int)) v) inline {
+    var (v'owner, v'master, v'staker, v'reserve, v'jetton_wallet, v'share_amount, v'contribute_amount, v'withdraw_amount) = v; 
+    return (v'owner, v'master, v'staker, v'reserve, v'jetton_wallet, v'share_amount, v'contribute_amount, v'withdraw_amount);
+}
+
+((slice, slice, slice, slice, slice, int, int, int)) $PoolAccountData$_constructor_owner_master_staker_reserve_jetton_wallet_share_amount_contribute_amount_withdraw_amount(slice owner, slice master, slice staker, slice reserve, slice jetton_wallet, int share_amount, int contribute_amount, int withdraw_amount) inline {
+    return (owner, master, staker, reserve, jetton_wallet, share_amount, contribute_amount, withdraw_amount);
+}
+
+;;
 ;; Type: DepositInStaker
 ;; Header: 0x47d54391
 ;; TLB: deposit_in_staker#47d54391 query_id:uint64 = DepositInStaker
@@ -294,6 +341,11 @@ tuple $Twab$_load_opt(cell cl) inline {
     throw_if(128, null?(v));
     var (int vvv'timestamp, int vvv'amount) = __tact_tuple_destroy_2(v);
     return (vvv'timestamp, vvv'amount);
+}
+
+(int, int) $Twab$_to_external(((int, int)) v) inline {
+    var (v'timestamp, v'amount) = v; 
+    return (v'timestamp, v'amount);
 }
 
 ((int, int)) $Twab$_constructor_timestamp_amount(int timestamp, int amount) inline {

@@ -114,11 +114,20 @@ builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, in
 ;; $PoolMaster$_load
 (slice, ((slice, slice, cell, slice, (int, int), int, int, int, int, slice))) $PoolMaster$_load(slice sc_0) inline;
 
+;; $StateInit$_get_code
+_ $StateInit$_get_code((cell, cell) v) inline;
+
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
 ;; $StateInit$_as_optional
 tuple $StateInit$_as_optional((cell, cell) v) inline;
+
+;; $Twab$_to_tuple
+tuple $Twab$_to_tuple(((int, int)) v) inline;
+
+;; $PoolMasterData$_to_external
+(slice, slice, slice, tuple, int, int, int, int) $PoolMasterData$_to_external(((slice, slice, slice, (int, int), int, int, int, int)) v) inline;
 
 ;; $Draw$init$_store
 builder $Draw$init$_store(builder build_0, (slice, slice, int) v) inline;
@@ -138,8 +147,8 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ;; $StateInit$_constructor_code_data
 ((cell, cell)) $StateInit$_constructor_code_data(cell code, cell data) inline;
 
-;; $global_get_staker_jetton_wallet_init
-(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
+;; $global__get_staker_jetton_wallet_init
+(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
@@ -150,8 +159,8 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code)
 ;; $Twab$_constructor_timestamp_amount
 ((int, int)) $Twab$_constructor_timestamp_amount(int timestamp, int amount) inline;
 
-;; $global_newTwab
-(int, int) $global_newTwab() impure inline;
+;; $global_new_twab
+(int, int) $global_new_twab() impure inline;
 
 ;; $PoolMaster$_contract_init
 (slice, slice, cell, slice, (int, int), int, int, int, int, slice) $PoolMaster$_contract_init(slice $owner, slice $staker, slice $jetton_master, cell $jetton_wallet_code) impure inline_ref;
@@ -180,8 +189,8 @@ slice $Builder$_fun_asSlice(builder $self) impure inline;
 ;; $Slice$_fun_loadTimestamp
 int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
-;; $Twab$_fun_nextTwab
-(int, int) $Twab$_fun_nextTwab((int, int) $self, int $balance, int $timestamp) impure inline;
+;; $Twab$_fun_next_twab
+(int, int) $Twab$_fun_next_twab((int, int) $self, int $balance, int $timestamp) impure inline;
 
 ;; $Draw$_init_child
 (cell, cell) $Draw$_init_child(cell sys', slice $pool_master, slice $reserve, int $period) inline;
@@ -201,14 +210,35 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 ;; $PrizeReserve$_init_child
 (cell, cell) $PrizeReserve$_init_child(cell sys', slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code) inline;
 
-;; $PoolMaster$_fun_get_prize_reserve_address
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_prize_reserve_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
+;; $PoolMaster$_fun__get_prize_reserve_address
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_prize_reserve_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
 
-;; $PoolMaster$_fun_get_account_init
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun_get_account_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline;
+;; $PoolMaster$_fun__get_account_init
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun__get_account_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline;
 
-;; $PoolMaster$_fun_get_draw_init
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun_get_draw_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
+;; $PoolMaster$_fun__get_draw_init
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun__get_draw_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
+
+;; $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period
+((slice, slice, slice, (int, int), int, int, int, int)) $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period(slice owner, slice staker, slice reserve, (int, int) twab, int share_amount, int contribute_amount, int spent_amount, int next_period) inline;
+
+;; $PoolMaster$_fun_get_core_data
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (slice, slice, slice, (int, int), int, int, int, int)) $PoolMaster$_fun_get_core_data((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
+
+;; $PoolMaster$_fun_get_account_code
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), cell) $PoolMaster$_fun_get_account_code((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
+
+;; $PoolMaster$_fun__get_account_address
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline;
+
+;; $PoolMaster$_fun_get_account_address
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline;
+
+;; $PoolMaster$_fun__get_draw_address
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_draw_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
+
+;; $PoolMaster$_fun_get_draw_address
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_draw_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
 
 ;; $PoolMaster$_fun_forward
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_forward((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
@@ -218,9 +248,6 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
 ;; $PoolMaster$_fun_notify
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_notify((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, cell $body) impure inline;
-
-;; $PoolMaster$_fun_get_draw_address
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_draw_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
 
 ;; $PoolMaster$_fun_send_prize_to_draw
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_send_prize_to_draw((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $value, (int, int) $twab, int $amount) impure inline;
@@ -233,9 +260,6 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
 ;; $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount
 ((int, int, int, int)) $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount(int query_id, int timestamp, int share_amount, int contribute_amount) inline;
-
-;; $PoolMaster$_fun_get_account_address
-((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline;
 
 ;; $PoolMaster$_fun_on_jetton_received_from_account
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_on_jetton_received_from_account((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $query_id, slice $from, int $amount, slice $payload) impure inline;

@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Draw
-BOC Size: 3151 bytes
+BOC Size: 3267 bytes
 
 # Types
-Total Types: 30
+Total Types: 36
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -16,6 +16,18 @@ Signature: `Context{bounced:bool,sender:address,value:int257,raw:^slice}`
 ## SendParameters
 TLB: `_ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters`
 Signature: `SendParameters{bounce:bool,to:address,value:int257,mode:int257,body:Maybe ^cell,code:Maybe ^cell,data:Maybe ^cell}`
+
+## Deploy
+TLB: `deploy#946a98b6 queryId:uint64 = Deploy`
+Signature: `Deploy{queryId:uint64}`
+
+## DeployOk
+TLB: `deploy_ok#aff90f57 queryId:uint64 = DeployOk`
+Signature: `DeployOk{queryId:uint64}`
+
+## FactoryDeploy
+TLB: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
+Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
 
 ## Twab
 TLB: `_ timestamp:uint64 amount:uint128 = Twab`
@@ -117,6 +129,14 @@ Signature: `ClaimPrizeDebt{query_id:uint64,amount:coins,reserve:address}`
 TLB: `claim_prize_debt_internal#e00fdea0 query_id:uint64 user:address draw:address period:uint32 amount:coins = ClaimPrizeDebtInternal`
 Signature: `ClaimPrizeDebtInternal{query_id:uint64,user:address,draw:address,period:uint32,amount:coins}`
 
+## DrawData
+TLB: `_ active:bool pool_master:address prize_reserve:address jetton_wallet:address period:uint32 start:Twab{timestamp:uint64,amount:uint128} end:Twab{timestamp:uint64,amount:uint128} prize_amount:coins winning_number:uint32 deadline:uint64 avail_prize_amount:coins = DrawData`
+Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,jetton_wallet:address,period:uint32,start:Twab{timestamp:uint64,amount:uint128},end:Twab{timestamp:uint64,amount:uint128},prize_amount:coins,winning_number:uint32,deadline:uint64,avail_prize_amount:coins}`
+
+## TicketData
+TLB: `_ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData`
+Signature: `TicketData{active:bool,owner:address,pool_account:address,draw:address,period:uint32,picks:uint32,debt_amount:coins}`
+
 ## ChangeOwner
 TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
 Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
@@ -125,8 +145,17 @@ Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
 TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
 
+## PoolAccountData
+TLB: `_ owner:address master:address staker:address reserve:address jetton_wallet:address share_amount:coins contribute_amount:coins withdraw_amount:coins = PoolAccountData`
+Signature: `PoolAccountData{owner:address,master:address,staker:address,reserve:address,jetton_wallet:address,share_amount:coins,contribute_amount:coins,withdraw_amount:coins}`
+
 # Get Methods
-Total Get Methods: 0
+Total Get Methods: 2
+
+## get_core_data
+
+## get_prize_percentage
+Argument: tier
 
 # Error Codes
 2: Stack undeflow

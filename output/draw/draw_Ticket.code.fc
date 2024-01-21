@@ -20,6 +20,16 @@
     return ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount);
 }
 
+((slice, int, slice, slice, int, int, cell, int), (int, slice, slice, slice, int, int, int)) $Ticket$_fun_get_core_data((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount($self'active, $self'owner, $self'pool_account, $self'draw, $self'period, $self'picks, $self'debt_amount));
+}
+
+((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_get_index_status((slice, int, slice, slice, int, int, cell, int) $self, int $index) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), __tact_dict_get_int_int($self'used_indexes, 257, $index, 1));
+}
+
 ((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_compute_pick_number((slice, int, slice, slice, int, int, cell, int) $self, int $index) impure inline {
     var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), cell_hash(end_cell(store_uint(__tact_store_address(begin_cell(), my_address()), $index, 20))));
@@ -140,6 +150,19 @@
 ;; Get methods of a Contract Ticket
 ;;
 
+_ %get_core_data() method_id(119856) {
+    var self = $Ticket$_contract_load();
+    var res = self~$Ticket$_fun_get_core_data();
+    return $TicketData$_to_external(res);
+}
+
+_ %get_index_status(int $$index) method_id(72805) {
+    int $index = $$index;
+    var self = $Ticket$_contract_load();
+    var res = self~$Ticket$_fun_get_index_status($index);
+    return res;
+}
+
 _ %owner() method_id(83229) {
     var self = $Ticket$_contract_load();
     var res = self~$Ticket$_fun_owner();
@@ -158,7 +181,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmRpa1XgNBsVe3gGwhtugM1GdYy5wtA2eehr5KxQDeUj87";
+    return "ipfs://Qmc5oVDysR1TMPujUEooRDfw5h61KXhNzF6vQPQTHYGbMP";
 }
 
 _ lazy_deployment_completed() method_id {

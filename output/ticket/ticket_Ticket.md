@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Ticket
-BOC Size: 1967 bytes
+BOC Size: 2027 bytes
 
 # Types
-Total Types: 28
+Total Types: 29
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -117,8 +117,17 @@ Signature: `ClaimPrizeDebt{query_id:uint64,amount:coins,reserve:address}`
 TLB: `claim_prize_debt_internal#e00fdea0 query_id:uint64 user:address draw:address period:uint32 amount:coins = ClaimPrizeDebtInternal`
 Signature: `ClaimPrizeDebtInternal{query_id:uint64,user:address,draw:address,period:uint32,amount:coins}`
 
+## TicketData
+TLB: `_ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData`
+Signature: `TicketData{active:bool,owner:address,pool_account:address,draw:address,period:uint32,picks:uint32,debt_amount:coins}`
+
 # Get Methods
-Total Get Methods: 1
+Total Get Methods: 3
+
+## get_core_data
+
+## get_index_status
+Argument: index
 
 ## owner
 

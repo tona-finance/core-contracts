@@ -84,8 +84,8 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ;; $StateInit$_constructor_code_data
 ((cell, cell)) $StateInit$_constructor_code_data(cell code, cell data) inline;
 
-;; $global_get_staker_jetton_wallet_init
-(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
+;; $global__get_staker_jetton_wallet_init
+(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
@@ -126,17 +126,20 @@ slice $global_emptySlice() impure inline;
 ;; $Ticket$_init_child
 (cell, cell) $Ticket$_init_child(cell sys', slice $owner, slice $pool_account, slice $draw, int $period) inline;
 
-;; $PrizeReserve$_fun_get_pool_account_address
-((slice, slice, slice), slice) $PrizeReserve$_fun_get_pool_account_address((slice, slice, slice) $self, slice $user) impure inline;
+;; $PrizeReserve$_fun__get_pool_account_address
+((slice, slice, slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice, slice, slice) $self, slice $user) impure inline;
 
-;; $PrizeReserve$_fun_get_ticket_address
-((slice, slice, slice), slice) $PrizeReserve$_fun_get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
+;; $PrizeReserve$_fun__get_ticket_init
+((slice, slice, slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
 
 ;; $PrizeReserve$_fun_forward
 ((slice, slice, slice), ()) $PrizeReserve$_fun_forward((slice, slice, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $PrizeReserve$_fun_notify
 ((slice, slice, slice), ()) $PrizeReserve$_fun_notify((slice, slice, slice) $self, cell $body) impure inline;
+
+;; $PrizeReserve$_fun__get_ticket_address
+((slice, slice, slice), slice) $PrizeReserve$_fun__get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
 
 ;; $PrizeReserve$_fun_require_ticket
 ((slice, slice, slice), ()) $PrizeReserve$_fun_require_ticket((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;

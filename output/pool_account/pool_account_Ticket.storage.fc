@@ -121,6 +121,20 @@ cell $ClaimPrizeDebtInternal$_store_cell((int, slice, slice, int, int) v) inline
 }
 
 ;;
+;; Type: TicketData
+;; TLB: _ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData
+;;
+
+(int, slice, slice, slice, int, int, int) $TicketData$_to_external(((int, slice, slice, slice, int, int, int)) v) inline {
+    var (v'active, v'owner, v'pool_account, v'draw, v'period, v'picks, v'debt_amount) = v; 
+    return (v'active, v'owner, v'pool_account, v'draw, v'period, v'picks, v'debt_amount);
+}
+
+((int, slice, slice, slice, int, int, int)) $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount(int active, slice owner, slice pool_account, slice draw, int period, int picks, int debt_amount) inline {
+    return (active, owner, pool_account, draw, period, picks, debt_amount);
+}
+
+;;
 ;; Type: Ticket
 ;;
 

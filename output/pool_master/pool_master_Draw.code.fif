@@ -34,6 +34,8 @@ PROGRAM{
   DECLPROC $Twab$_as_optional
   DECLPROC $Draw$_load
   DECLPROC $StateInit$_not_null
+  DECLPROC $Twab$_to_tuple
+  DECLPROC $DrawData$_to_external
   DECLPROC $Draw$init$_load
   DECLPROC $Ticket$init$_store
   DECLPROC $Draw$_contract_init
@@ -46,7 +48,7 @@ PROGRAM{
   DECLPROC $global_contractAddress
   DECLPROC $global_send
   DECLPROC $Twab$_constructor_timestamp_amount
-  DECLPROC $global_averageBalance
+  DECLPROC $global_average_balance
   DECLPROC $Slice$_fun_loadTimestamp
   DECLPROC $Draw$_fun_activate_beacon
   DECLPROC $Draw$_fun_activate_distributor
@@ -56,12 +58,16 @@ PROGRAM{
   DECLPROC $Draw$_fun_on_jetton_from_pool_master
   DECLPROC $Draw$_fun_require_over
   DECLPROC $Ticket$_init_child
-  DECLPROC $Draw$_fun_get_ticket_address
+  DECLPROC $Draw$_fun__get_ticket_init
+  DECLPROC $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount
+  DECLPROC $Draw$_fun_get_core_data
+  DECLPROC $Draw$_fun_get_prize_percentage
   DECLPROC $Draw$_fun_notify
   DECLPROC $Draw$_fun_prizes_per_tier
   DECLPROC $Draw$_fun_prize_amount_per_pick
   DECLPROC $Draw$_fun_compute_tier
   DECLPROC $Draw$_fun_compute_prize_amount
+  DECLPROC $Draw$_fun__get_ticket_address
   DECLPROC $Draw$_fun_require_ticket
   DECLPROC $Draw$_fun_require_not_over
   DECLPROC $Draw$_fun_require_active
@@ -77,6 +83,8 @@ PROGRAM{
   DECLPROC $Draw$_internal_binary_ClaimPrizeInternal
   DECLPROC $Draw$_internal_binary_InitDrawInternal
   DECLPROC $Draw$_internal_binary_InitTicket
+  119856 DECLMETHOD %get_core_data
+  111585 DECLMETHOD %get_prize_percentage
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
@@ -483,6 +491,17 @@ PROGRAM{
     128 THROWIF
     2 UNTUPLE
   }>
+  $Twab$_to_tuple PROCINLINE:<{
+    2 TUPLE
+  }>
+  $DrawData$_to_external PROCINLINE:<{
+    s7 s6 XCHG2
+    $Twab$_to_tuple INLINECALLDICT
+    s4 s3 XCHG2
+    $Twab$_to_tuple INLINECALLDICT
+    s5 s3 s4 XCHG3
+    s1 s2 XCHG
+  }>
   $Draw$init$_load PROCINLINE:<{
     __tact_load_address INLINECALLDICT
     SWAP
@@ -709,7 +728,7 @@ PROGRAM{
   }>
   $Twab$_constructor_timestamp_amount PROCINLINE:<{
   }>
-  $global_averageBalance PROCINLINE:<{
+  $global_average_balance PROCINLINE:<{
     31206 PUSHINT
     s4 s2 PUSH2
     LESS
@@ -864,13 +883,38 @@ PROGRAM{
     $Ticket$init$_store INLINECALLDICT
     ENDC
   }>
-  $Draw$_fun_get_ticket_address PROCINLINE:<{
+  $Draw$_fun__get_ticket_init PROCINLINE:<{
     __tact_context_sys GETGLOB
     MYADDR
     s3 s3 s0 XCHG3
     s13 PUSH
     $Ticket$_init_child INLINECALLDICT
-    $global_contractAddress INLINECALLDICT
+  }>
+  $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount PROCINLINE:<{
+  }>
+  $Draw$_fun_get_core_data PROCINLINE:<{
+    s8 PUSH
+    __tact_not_null INLINECALLDICT
+    s8 PUSH
+    $Twab$_not_null INLINECALLDICT
+    s9 PUSH
+    $Twab$_not_null INLINECALLDICT
+    16 s() PUSH
+    s0 s5 XCHG
+    16 s() PUSH
+    s5 s7 XCPU
+    s4 s1 s5 XCHG3
+    17 s() PUSH
+    s1 s3 s4 XCHG3
+    s14 s13 s11 PUSH3
+    s13 PUSH
+    $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount INLINECALLDICT
+  }>
+  $Draw$_fun_get_prize_percentage PROCINLINE:<{
+    257 PUSHINT
+    s0 s5 PUSH2
+    s3 s3 XCHG2
+    __tact_dict_get_int_int INLINECALLDICT
   }>
   $Draw$_fun_notify PROCINLINE:<{
     __tact_context_get_sender INLINECALLDICT
@@ -1008,11 +1052,15 @@ PROGRAM{
     }>
     DROP
   }>
+  $Draw$_fun__get_ticket_address PROCINLINE:<{
+    $Draw$_fun__get_ticket_init INLINECALLDICT
+    $global_contractAddress INLINECALLDICT
+  }>
   $Draw$_fun_require_ticket PROCINLINE:<{
     13 -ROLL
     4429 PUSHINT
     s0 s14 XCHG
-    $Draw$_fun_get_ticket_address INLINECALLDICT
+    $Draw$_fun__get_ticket_address INLINECALLDICT
     __tact_context_get_sender INLINECALLDICT
     __tact_slice_eq_bits INLINECALLDICT
     s1 s13 XCHG
@@ -1246,7 +1294,7 @@ PROGRAM{
     $Twab$_not_null INLINECALLDICT
     s3 s2 s(-1) PUXC2
     s0 s3 PUXC
-    $global_averageBalance INLINECALLDICT
+    $global_average_balance INLINECALLDICT
     s12 PUSH
     3 -ROLL
     $InitTicketInternal1$_constructor_period_start_end_avg_balance INLINECALLDICT
@@ -1266,6 +1314,30 @@ PROGRAM{
     PUSHNULL
     $Draw$_fun_forward INLINECALLDICT
   }>
+  %get_core_data PROC:<{
+    $Draw$_contract_load INLINECALLDICT
+    $Draw$_fun_get_core_data INLINECALLDICT
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    s13 POP
+    12 -ROLL
+    $DrawData$_to_external INLINECALLDICT
+  }>
+  %get_prize_percentage PROC:<{
+    $Draw$_contract_load INLINECALLDICT
+    12 ROLL
+    $Draw$_fun_get_prize_percentage INLINECALLDICT
+    12 1 BLKDROP2
+  }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
@@ -1274,7 +1346,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d6136743265324435746a364c414653733542563253453535465751466258566d6e6a6b766b6f45597a463369} PUSHSLICE
+    x{697066733a2f2f516d4e643834506a706b566f7637714e4667615846473753746368725637794738316a4b4b575947664c76396e32} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

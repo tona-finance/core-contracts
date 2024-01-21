@@ -20,12 +20,10 @@ trait TicketInitializer with BasePoolAccount {
     // ---------------------
 
     receive(msg: InitTicketInternal1) {
-        self.require_draw(msg.period);
-
-        let start: Twab = self.twab_store.binarySearchTwab(msg.start);
-        let end: Twab = self.twab_store.binarySearchTwab(msg.end);
-        let avg_balance: Int = averageBalance(start, end);
-        let sinit: StateInit = self.get_ticket_init(sender(), msg.period);
+        let start: Twab = self.twab_store.binary_search_twab(msg.start);
+        let end: Twab = self.twab_store.binary_search_twab(msg.end);
+        let avg_balance: Int = average_balance(start, end);
+        let sinit: StateInit = self._get_ticket_init(msg.period);
         let ticket: Address = contractAddress(sinit);
         // deploy and init ticket
         self.forward(
@@ -39,11 +37,17 @@ trait TicketInitializer with BasePoolAccount {
         );
     }
 
-    inline fun require_draw(period: Int) {
-        require(sender() == self.get_draw_address(period), "Invalid sender");
+    inline fun _get_draw_address(period: Int): Address {
+        let sinit: StateInit = self._get_draw_init(period);
+        return contractAddress(sinit);
     }
 
-    abstract fun get_draw_address(period: Int): Address;
+    inline fun _get_ticket_address(period: Int): Address {
+        let sinit: StateInit = self._get_ticket_init(period);
+        return contractAddress(sinit);
+    }
 
-    abstract fun get_ticket_init(draw: Address, period: Int): StateInit;
+    abstract fun _get_draw_init(period: Int): StateInit;
+
+    abstract fun _get_ticket_init(period: Int): StateInit;
 }

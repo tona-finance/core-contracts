@@ -31,14 +31,13 @@ contract PrizeReserve with BasePrizeReserve, Deployable {
         self.staker = staker;
     }
 
-    inline fun get_pool_account_address(user: Address): Address {
+    inline fun _get_pool_account_address(user: Address): Address {
         let sinit: StateInit = initOf PoolAccount(user, self.pool_master, self.staker, myAddress());
         return contractAddress(sinit);
     }
 
-    override inline fun get_ticket_address(user: Address, draw: Address, period: Int): Address {
-        let pool_account: Address = self.get_pool_account_address(user);
-        let sinit: StateInit = initOf Ticket(user, pool_account, draw, period);
-        return contractAddress(sinit);
+    override inline fun _get_ticket_init(user: Address, draw: Address, period: Int): StateInit {
+        let pool_account: Address = self._get_pool_account_address(user);
+        return initOf Ticket(user, pool_account, draw, period);
     }
 }

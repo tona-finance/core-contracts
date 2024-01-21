@@ -30,7 +30,7 @@ trait DrawBeacon {
 
         let start: Twab = self.start!!;
         let end: Twab = self.end!!;
-        let avg_balance: Int = averageBalance(start, end);
+        let avg_balance: Int = average_balance(start, end);
 
         self.forward(
             msg.pool_account,

@@ -220,3 +220,9 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline {
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
     return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
 }
+
+((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_notify((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, cell $body) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+}

@@ -28,12 +28,12 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         // deploy value 0.2
         require(rest_value >= ton("0.2"), "Insufficient value");
 
-        let twab: Twab = self.twab.nextTwab(self.share_amount, now());
+        let twab: Twab = self.twab.next_twab(self.share_amount, now());
         self.init_draw(sender(), twab);
     }
 
     receive("init account") {
-        let sinit: StateInit = self.get_account_init(sender());
+        let sinit: StateInit = self._get_account_init(sender());
         let account: Address = contractAddress(sinit);
         let jetton_wallet: Address = get_jetton_wallet_address(
             account,
@@ -65,7 +65,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
         self.spent_amount = self.spent_amount + msg.amount;
 
-        let twab: Twab = self.twab.nextTwab(self.share_amount, now());
+        let twab: Twab = self.twab.next_twab(self.share_amount, now());
         self.send_prize_to_draw(transfer_value, twab, msg.amount);
 
         // deploy next draw
@@ -101,7 +101,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     receive(msg: WithdrawFinishInternal) {
         self.require_account(msg.user);
 
-        self.twab = self.twab.nextTwab(self.share_amount, msg.timestamp);
+        self.twab = self.twab.next_twab(self.share_amount, msg.timestamp);
         self.share_amount = self.share_amount - msg.amount;
 
         // notify to user
@@ -132,7 +132,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
             body: TokenTransfer {
                 query_id: 0,
                 amount: amount,
-                destination: self.get_draw_address(self.next_period - 1),
+                destination: self._get_draw_address(self.next_period - 1),
                 response_destination: self.owner,
                 custom_payload: null,
                 forward_ton_amount: ton("0.1"), // handle jetton notification of draw
@@ -145,7 +145,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         let period: Int = self.next_period;
         self.next_period = self.next_period + 1;
 
-        let sinit: StateInit = self.get_draw_init(period);
+        let sinit: StateInit = self._get_draw_init(period);
         let draw: Address = contractAddress(sinit);
         let draw_jetton_wallet: Address = get_jetton_wallet_address(
             draw,
@@ -172,8 +172,8 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         let deposit_amount: Int = payload.loadCoins();
         payload.endParse();
 
-        require(from == self.get_account_address(user), "Invalid pool account");
-        self.twab = self.twab.nextTwab(self.share_amount, timestamp);
+        require(from == self._get_account_address(user), "Invalid pool account");
+        self.twab = self.twab.next_twab(self.share_amount, timestamp);
         self.share_amount = self.share_amount + deposit_amount;
         self.contribute_amount = self.contribute_amount + amount;
 
@@ -196,20 +196,20 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     }
 
     inline fun require_account(user: Address) {
-        require(sender() == self.get_account_address(user), "invalid sender");
+        require(sender() == self._get_account_address(user), "invalid sender");
     }
 
-    inline fun get_account_address(user: Address): Address {
-        let sinit: StateInit = self.get_account_init(user);
+    inline fun _get_account_address(user: Address): Address {
+        let sinit: StateInit = self._get_account_init(user);
         return contractAddress(sinit);
     }
 
-    inline fun get_draw_address(period: Int): Address {
-        let sinit: StateInit = self.get_draw_init(period);
+    inline fun _get_draw_address(period: Int): Address {
+        let sinit: StateInit = self._get_draw_init(period);
         return contractAddress(sinit);
     }
 
-    abstract inline fun get_account_init(user: Address): StateInit;
+    abstract inline fun _get_account_init(user: Address): StateInit;
 
-    abstract inline fun get_draw_init(period: Int): StateInit;
+    abstract inline fun _get_draw_init(period: Int): StateInit;
 }

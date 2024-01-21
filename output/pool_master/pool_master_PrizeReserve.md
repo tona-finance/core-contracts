@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: PrizeReserve
-BOC Size: 1983 bytes
+BOC Size: 1985 bytes
 
 # Types
-Total Types: 33
+Total Types: 37
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -129,6 +129,14 @@ Signature: `ClaimPrizeDebt{query_id:uint64,amount:coins,reserve:address}`
 TLB: `claim_prize_debt_internal#e00fdea0 query_id:uint64 user:address draw:address period:uint32 amount:coins = ClaimPrizeDebtInternal`
 Signature: `ClaimPrizeDebtInternal{query_id:uint64,user:address,draw:address,period:uint32,amount:coins}`
 
+## DrawData
+TLB: `_ active:bool pool_master:address prize_reserve:address jetton_wallet:address period:uint32 start:Twab{timestamp:uint64,amount:uint128} end:Twab{timestamp:uint64,amount:uint128} prize_amount:coins winning_number:uint32 deadline:uint64 avail_prize_amount:coins = DrawData`
+Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,jetton_wallet:address,period:uint32,start:Twab{timestamp:uint64,amount:uint128},end:Twab{timestamp:uint64,amount:uint128},prize_amount:coins,winning_number:uint32,deadline:uint64,avail_prize_amount:coins}`
+
+## PoolAccountData
+TLB: `_ owner:address master:address staker:address reserve:address jetton_wallet:address share_amount:coins contribute_amount:coins withdraw_amount:coins = PoolAccountData`
+Signature: `PoolAccountData{owner:address,master:address,staker:address,reserve:address,jetton_wallet:address,share_amount:coins,contribute_amount:coins,withdraw_amount:coins}`
+
 ## ChangeOwner
 TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
 Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
@@ -136,6 +144,14 @@ Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
 ## ChangeOwnerOk
 TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
+
+## TicketData
+TLB: `_ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData`
+Signature: `TicketData{active:bool,owner:address,pool_account:address,draw:address,period:uint32,picks:uint32,debt_amount:coins}`
+
+## PoolMasterData
+TLB: `_ owner:address staker:address reserve:address twab:Twab{timestamp:uint64,amount:uint128} share_amount:coins contribute_amount:coins spent_amount:coins next_period:uint32 = PoolMasterData`
+Signature: `PoolMasterData{owner:address,staker:address,reserve:address,twab:Twab{timestamp:uint64,amount:uint128},share_amount:coins,contribute_amount:coins,spent_amount:coins,next_period:uint32}`
 
 # Get Methods
 Total Get Methods: 0

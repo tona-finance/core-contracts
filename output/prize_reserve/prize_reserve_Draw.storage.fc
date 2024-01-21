@@ -183,8 +183,27 @@ tuple $Twab$_as_optional((int, int) v) inline {
 
 ((int, int)) $Twab$_tensor_cast((int, int) v) asm "NOP";
 
+tuple $Twab$_to_tuple(((int, int)) v) inline {
+    var (v'timestamp, v'amount) = v;
+    return __tact_tuple_create_2(v'timestamp, v'amount);
+}
+
 ((int, int)) $Twab$_constructor_timestamp_amount(int timestamp, int amount) inline {
     return (timestamp, amount);
+}
+
+;;
+;; Type: DrawData
+;; TLB: _ active:bool pool_master:address prize_reserve:address jetton_wallet:address period:uint32 start:Twab{timestamp:uint64,amount:uint128} end:Twab{timestamp:uint64,amount:uint128} prize_amount:coins winning_number:uint32 deadline:uint64 avail_prize_amount:coins = DrawData
+;;
+
+(int, slice, slice, slice, int, tuple, tuple, int, int, int, int) $DrawData$_to_external(((int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) v) inline {
+    var (v'active, v'pool_master, v'prize_reserve, v'jetton_wallet, v'period, v'start, v'end, v'prize_amount, v'winning_number, v'deadline, v'avail_prize_amount) = v; 
+    return (v'active, v'pool_master, v'prize_reserve, v'jetton_wallet, v'period, $Twab$_to_tuple(v'start), $Twab$_to_tuple(v'end), v'prize_amount, v'winning_number, v'deadline, v'avail_prize_amount);
+}
+
+((int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount(int active, slice pool_master, slice prize_reserve, slice jetton_wallet, int period, (int, int) start, (int, int) end, int prize_amount, int winning_number, int deadline, int avail_prize_amount) inline {
+    return (active, pool_master, prize_reserve, jetton_wallet, period, start, end, prize_amount, winning_number, deadline, avail_prize_amount);
 }
 
 ;;

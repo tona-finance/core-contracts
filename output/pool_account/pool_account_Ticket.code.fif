@@ -21,6 +21,7 @@ PROGRAM{
   DECLPROC $Ticket$_store
   DECLPROC $Ticket$_load
   DECLPROC $StateInit$_not_null
+  DECLPROC $TicketData$_to_external
   DECLPROC $Ticket$init$_load
   DECLPROC $Ticket$_contract_init
   DECLPROC $Ticket$_contract_load
@@ -28,6 +29,9 @@ PROGRAM{
   DECLPROC $global_send
   DECLPROC $Builder$_fun_asSlice
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
+  DECLPROC $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount
+  DECLPROC $Ticket$_fun_get_core_data
+  DECLPROC $Ticket$_fun_get_index_status
   DECLPROC $Ticket$_fun_forward
   DECLPROC $Ticket$_fun_compute_pick_number
   DECLPROC $Ticket$_fun_compute_pick_payload
@@ -44,6 +48,8 @@ PROGRAM{
   DECLPROC $Ticket$_internal_binary_ClaimPrize
   DECLPROC $Ticket$_internal_binary_ClaimPrizeDebt
   DECLPROC $Ticket$_internal_binary_PayPrizeDebtInternal
+  119856 DECLMETHOD %get_core_data
+  72805 DECLMETHOD %get_index_status
   83229 DECLMETHOD %owner
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
@@ -247,6 +253,8 @@ PROGRAM{
     128 THROWIF
     2 UNTUPLE
   }>
+  $TicketData$_to_external PROCINLINE:<{
+  }>
   $Ticket$init$_load PROCINLINE:<{
     __tact_load_address INLINECALLDICT
     SWAP
@@ -415,6 +423,21 @@ PROGRAM{
     CTOS
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
+  }>
+  $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount PROCINLINE:<{
+  }>
+  $Ticket$_fun_get_core_data PROCINLINE:<{
+    s6 s7 s5 PUSH3
+    s7 s6 s5 PUSH3
+    s6 PUSH
+    $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount INLINECALLDICT
+  }>
+  $Ticket$_fun_get_index_status PROCINLINE:<{
+    257 PUSHINT
+    s3 PUSH
+    s0 s2 XCHG
+    1 PUSHINT
+    __tact_dict_get_int_int INLINECALLDICT
   }>
   $Ticket$_fun_forward PROCINLINE:<{
     PUSHNULL
@@ -686,6 +709,18 @@ PROGRAM{
     PUSHNULL
     $Ticket$_fun_forward INLINECALLDICT
   }>
+  %get_core_data PROC:<{
+    $Ticket$_contract_load INLINECALLDICT
+    $Ticket$_fun_get_core_data INLINECALLDICT
+    8 7 BLKDROP2
+    $TicketData$_to_external INLINECALLDICT
+  }>
+  %get_index_status PROC:<{
+    $Ticket$_contract_load INLINECALLDICT
+    8 ROLL
+    $Ticket$_fun_get_index_status INLINECALLDICT
+    8 1 BLKDROP2
+  }>
   %owner PROC:<{
     $Ticket$_contract_load INLINECALLDICT
     $Ticket$_fun_owner INLINECALLDICT
@@ -700,7 +735,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d6431365a4455586553636b74464c66504c325546567938614135554d48457077326a75383535645462797556} PUSHSLICE
+    x{697066733a2f2f516d53674d4d434557683964674a4d50635463745869785946664673474b796f3752433551706f686f3248567348} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
