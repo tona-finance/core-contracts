@@ -1,0 +1,168 @@
+#pragma version =0.4.3;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "contract_PrizeReserve.headers.fc";
+#include "contract_PrizeReserve.stdlib.fc";
+#include "contract_PrizeReserve.storage.fc";
+
+;;
+;; Contract PrizeReserve functions
+;;
+
+builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inline {
+    var ($self) = $self;
+    return store_uint($self, $timestamp, 48);
+}
+
+(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
+    cell $data = end_cell($Builder$_fun_storeTimestamp(store_coins(store_ref(__tact_store_address(__tact_store_address(store_coins(begin_cell(), 0), $owner), $master), $code), 0), 0));
+    return $StateInit$_constructor_code_data($code, $data);
+}
+
+slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code) impure inline {
+    var ($sinit'code, $sinit'data) = $global__get_staker_jetton_wallet_init($owner, $master, $code);
+    return $global_contractAddress(($sinit'code, $sinit'data));
+}
+
+(slice, slice, slice) $PrizeReserve$_contract_init(slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code) impure inline_ref {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = (null(), null(), null());
+    slice $jetton_wallet = $global_get_jetton_wallet_address(my_address(), $jetton_master, $jetton_wallet_code);
+    $self'jetton_wallet = $jetton_wallet;
+    $self'pool_master = $pool_master;
+    $self'staker = $staker;
+    return ($self'jetton_wallet, $self'pool_master, $self'staker);
+}
+
+((slice, slice, slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice, slice, slice) $self, slice $user) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    var ($sinit'code, $sinit'data) = $PoolAccount$_init_child(__tact_context_sys, $user, $self'pool_master, $self'staker, my_address());
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
+}
+
+((slice, slice, slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    slice $pool_account = ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_pool_account_address($user);
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), $Ticket$_init_child(__tact_context_sys, $user, $pool_account, $draw, $period));
+}
+
+((slice, slice, slice), (slice, slice, slice)) $PrizeReserve$_fun_get_core_data((slice, slice, slice) $self) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker($self'jetton_wallet, $self'pool_master, $self'staker));
+}
+
+((slice, slice, slice), slice) $PrizeReserve$_fun__get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_ticket_init($user, $draw, $period);
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), $global_contractAddress(($sinit'code, $sinit'data)));
+}
+
+((slice, slice, slice), ()) $PrizeReserve$_fun_require_ticket((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    throw_unless(4429, ( __tact_slice_eq_bits(($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_ticket_address($user, $draw, $period), __tact_context_get_sender()) ));
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
+}
+
+;;
+;; Receivers of a Contract PrizeReserve
+;;
+
+(((slice, slice, slice)), ()) $PrizeReserve$_internal_binary_ClaimPrizeDebtInternal((slice, slice, slice) $self, (int, slice, slice, int, int) $msg) impure inline {
+    var ($self'jetton_wallet, $self'pool_master, $self'staker) = $self;
+    var ($msg'query_id, $msg'user, $msg'draw, $msg'period, $msg'amount) = $msg;
+    ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_require_ticket($msg'user, $msg'draw, $msg'period);
+    ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_forward($self'jetton_wallet, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $msg'user, $msg'user, null(), 0, $global_emptySlice())), false, null());
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
+}
+
+(((slice, slice, slice)), ()) $PrizeReserve$_internal_binary_Deploy((slice, slice, slice) $self, (int) $deploy) impure inline {
+    var ($self'jetton_wallet, $self'pool_master, $self'staker) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
+}
+
+;;
+;; Get methods of a Contract PrizeReserve
+;;
+
+_ %get_core_data() method_id(119856) {
+    var self = $PrizeReserve$_contract_load();
+    var res = self~$PrizeReserve$_fun_get_core_data();
+    return $PrizeReserveData$_to_external(res);
+}
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmRj1v6yiBnvpuWBaT9u6Edhw5zza1hX1EH2dnDX4ERoeY";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract PrizeReserve
+;;
+
+((slice, slice, slice), int) $PrizeReserve$_contract_router_internal((slice, slice, slice) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive ClaimPrizeDebtInternal message
+    if (op == 3759136416) {
+        var msg = in_msg~$ClaimPrizeDebtInternal$_load();
+        self~$PrizeReserve$_internal_binary_ClaimPrizeDebtInternal(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$PrizeReserve$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $PrizeReserve$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$PrizeReserve$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $PrizeReserve$_contract_store(self);
+}

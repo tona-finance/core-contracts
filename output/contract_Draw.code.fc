@@ -1,0 +1,412 @@
+#pragma version =0.4.3;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "contract_Draw.headers.fc";
+#include "contract_Draw.stdlib.fc";
+#include "contract_Draw.storage.fc";
+
+;;
+;; Contract Draw functions
+;;
+
+(int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $Draw$_contract_init(slice $pool_master, slice $reserve, int $period) impure inline_ref {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = (false, null(), null(), null(), null(), null(), 0, 0, null(), 0, 0, null());
+    $self'pool_master = $pool_master;
+    $self'period = $period;
+    $self'prize_percentage = null();
+    $self'prize_percentage~__tact_dict_set_int_int(257, 0, 1, 257);
+    $self'prize_percentage~__tact_dict_set_int_int(257, 1, 3, 257);
+    $self'prize_percentage~__tact_dict_set_int_int(257, 2, 8, 257);
+    $self'prize_percentage~__tact_dict_set_int_int(257, 3, 23, 257);
+    $self'prize_percentage~__tact_dict_set_int_int(257, 4, 65, 257);
+    $self'reserve = $reserve;
+    return ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve);
+}
+
+int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
+    var (($start'timestamp, $start'amount)) = $start;
+    var (($end'timestamp, $end'amount)) = $end;
+    throw_unless(31206, ($start'timestamp < $end'timestamp));
+    return (($end'amount - $start'amount) / ($end'timestamp - $start'timestamp));
+}
+
+int $Slice$_fun_loadTimestamp(slice $self) impure inline {
+    var ($self) = $self;
+    return $self~load_uint(48);
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_beacon((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    var (($twab'timestamp, $twab'amount)) = $twab;
+    $self'end = $Twab$_as_optional(($twab'timestamp, $twab'amount));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_distributor((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $prize_amount, int $deadline) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    $self'prize_amount = $prize_amount;
+    $self'winning_number = ($global_randomInt() % 1048576);
+    $self'deadline = $deadline;
+    $self'avail_prize_amount = ($self'avail_prize_amount + $prize_amount);
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab, int $prize_amount, int $deadline) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    var (($twab'timestamp, $twab'amount)) = $twab;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_activate_beacon($Twab$_tensor_cast(($twab'timestamp, $twab'amount)));
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_activate_distributor($prize_amount, $deadline);
+    $self'active = true;
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, slice $payload) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    int $twab_timestamp = $Slice$_fun_loadTimestamp($payload);
+    int $twab_amount = $payload~load_uint(128);
+    slice $owner = $payload~__tact_load_address();
+    end_parse($payload);
+    var ($twab'timestamp, $twab'amount) = $Twab$_constructor_timestamp_amount($twab_timestamp, $twab_amount);
+    int $deadline = (now() + 1209600);
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_activate(($twab'timestamp, $twab'amount), $amount, $deadline);
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward($owner, null(), false, null());
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_over((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(6571, (now() >= $self'deadline));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), (cell, cell)) $Draw$_fun__get_ticket_init((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), $Ticket$_init_child(__tact_context_sys, $user, $pool_account, my_address(), $self'period));
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), (int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) $Draw$_fun_get_core_data((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount($self'active, $self'pool_master, $self'reserve, __tact_not_null($self'jetton_wallet), $self'period, $Twab$_not_null($self'start), $Twab$_not_null($self'end), $self'prize_amount, $self'winning_number, $self'deadline, $self'avail_prize_amount));
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_get_prize_percentage((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), __tact_dict_get_int_int($self'prize_percentage, 257, $tier, 257));
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), cell) $Draw$_fun_get_ticket_code((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), $StateInit$_get_code(($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun__get_ticket_init($user, $pool_account)));
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun__get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun__get_ticket_init($user, $pool_account);
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), $global_contractAddress(($sinit'code, $sinit'data)));
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun_get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun__get_ticket_address($user, $pool_account));
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_prizes_per_tier((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(55483, ($tier < 5));
+    if (($tier == 0)) {
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), 1);
+    } elseif (($tier == 1)) {
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), 15);
+    } elseif (($tier == 2)) {
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), 240);
+    } elseif (($tier == 3)) {
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), 3840);
+    } else {
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), 61440);
+    }
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_prize_amount_per_pick((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    int $percentage = __tact_dict_get_int_int($self'prize_percentage, 257, $tier, 257);
+    if ((~ null?($percentage))) {
+        int $prizes = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_prizes_per_tier($tier);
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ((($self'prize_amount * __tact_not_null($percentage)) / 100) / $prizes));
+    } else {
+        return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), 0);
+    }
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_compute_tier((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $pick_number) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    int $winning_number = $self'winning_number;
+    int $tier = 5;
+    int $user_num = ($pick_number % 16);
+    int $win_num = ($winning_number % 16);
+    while (( (($user_num != $win_num)) ? (($tier > 0)) : (false) )) {
+        $tier = ($tier - 1);
+        $pick_number = ($pick_number / 16);
+        $winning_number = ($winning_number / 16);
+        $user_num = ($pick_number % 16);
+        $win_num = ($winning_number % 16);
+    }
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), $tier);
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_compute_prize_amount((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $pick_payload) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    int $prize_amount = 0;
+    int $size = $pick_payload~load_uint(8);
+    repeat ($size) {
+        int $pick_number = $pick_payload~load_uint(20);
+        int $tier = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_compute_tier($pick_number);
+        int $amount = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_prize_amount_per_pick($tier);
+        $prize_amount = ($prize_amount + $amount);
+    }
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), $prize_amount);
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_ticket((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(4429, ( __tact_slice_eq_bits(($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun__get_ticket_address($user, $pool_account), __tact_context_get_sender()) ));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_not_over((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(47849, (now() < $self'deadline));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_active((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(54665, $self'active);
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(4429, ( __tact_slice_eq_bits($self'pool_master, __tact_context_get_sender()) ));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_jetton_wallet((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    throw_unless(4429, ( __tact_slice_eq_bits(__tact_not_null($self'jetton_wallet), __tact_context_get_sender()) ));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_msg_value((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline {
+    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+    var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
+    int $balance_before_msg = (__tact_my_balance() - $ctx'value);
+    int $storage_fee = (100000000 - min($balance_before_msg, 100000000));
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ($ctx'value - ($storage_fee + $gas_consumption)));
+}
+
+;;
+;; Receivers of a Contract Draw
+;;
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_internal_text_22eaa037e87e6cf8bf9be7426929531aaa3cb9eedd0b22580427438ad19043f0((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline {
+    var ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve) = $self;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_active();
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_over();
+    throw_unless(27055, ($self'avail_prize_amount > 0));
+    int $rest_value = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_msg_value(__tact_context_get(), 100000000);
+    throw_unless(2805, ($rest_value >= 0));
+    int $amount = $self'avail_prize_amount;
+    $self'avail_prize_amount = 0;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward(__tact_not_null($self'jetton_wallet), $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(0, $amount, $self'reserve, __tact_context_get_sender(), null(), 0, $global_emptySlice())), false, null());
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+(((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice)), ()) $Draw$_internal_binary_TokenNotification((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int, slice, slice) $msg) impure inline {
+    var ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve) = $self;
+    var ($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload) = $msg;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_jetton_wallet();
+    if (( __tact_slice_eq_bits($self'pool_master, $msg'from) )) {
+        ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_on_jetton_from_pool_master($msg'amount, $msg'forward_payload);
+    } else {
+        $self'avail_prize_amount = ($self'avail_prize_amount + $msg'amount);
+    }
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+(((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice)), ()) $Draw$_internal_binary_ClaimPrizeInternal((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, slice, slice, slice) $msg) impure inline {
+    var ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve) = $self;
+    var ($msg'query_id, $msg'user, $msg'pool_account, $msg'pick_payload) = $msg;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_active();
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_not_over();
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_ticket($msg'user, $msg'pool_account);
+    int $prize_amount = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_compute_prize_amount($msg'pick_payload);
+    if (($prize_amount > 0)) {
+        int $pay_amount = min($prize_amount, $self'avail_prize_amount);
+        if (($pay_amount > 0)) {
+            $self'avail_prize_amount = ($self'avail_prize_amount - $pay_amount);
+            $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_not_null($self'jetton_wallet), 100000000, 2, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $pay_amount, $msg'user, $msg'user, null(), 0, $global_emptySlice()))));
+        }
+        int $debt_amount = ($prize_amount - $pay_amount);
+        if (($debt_amount > 0)) {
+            ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_notify($PayPrizeDebtInternal$_store_cell($PayPrizeDebtInternal$_constructor_user_amount($msg'user, $debt_amount)));
+            return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+        }
+    }
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward($msg'user, null(), false, null());
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+(((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice)), ()) $Draw$_internal_binary_InitDrawInternal((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (slice, slice, int, int) $msg) impure inline {
+    var ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve) = $self;
+    var ($msg'deployer, $msg'jetton_wallet, $msg'twab_timestamp, $msg'twab_amount) = $msg;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_pool_master();
+    $self'jetton_wallet = $msg'jetton_wallet;
+    $self'start = $Twab$_as_optional($Twab$_constructor_timestamp_amount($msg'twab_timestamp, $msg'twab_amount));
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward($msg'deployer, null(), false, null());
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+(((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice)), ()) $Draw$_internal_binary_InitTicket((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (slice) $msg) impure inline {
+    var ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve) = $self;
+    var ($msg'pool_account) = $msg;
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_active();
+    var ($start'timestamp, $start'amount) = $Twab$_not_null($self'start);
+    var ($end'timestamp, $end'amount) = $Twab$_not_null($self'end);
+    int $avg_balance = $global_average_balance(($start'timestamp, $start'amount), ($end'timestamp, $end'amount));
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward($msg'pool_account, $InitTicketInternal1$_store_cell($InitTicketInternal1$_constructor_period_start_end_avg_balance($self'period, $start'timestamp, $end'timestamp, $avg_balance)), false, null());
+    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+}
+
+;;
+;; Get methods of a Contract Draw
+;;
+
+_ %get_core_data() method_id(119856) {
+    var self = $Draw$_contract_load();
+    var res = self~$Draw$_fun_get_core_data();
+    return $DrawData$_to_external(res);
+}
+
+_ %get_prize_percentage(int $$tier) method_id(111585) {
+    int $tier = $$tier;
+    var self = $Draw$_contract_load();
+    var res = self~$Draw$_fun_get_prize_percentage($tier);
+    return res;
+}
+
+_ %get_ticket_code(slice $$user, slice $$pool_account) method_id(73508) {
+    slice $user = __tact_verify_address($$user);
+    slice $pool_account = __tact_verify_address($$pool_account);
+    var self = $Draw$_contract_load();
+    var res = self~$Draw$_fun_get_ticket_code($user, $pool_account);
+    return res;
+}
+
+_ %get_ticket_address(slice $$user, slice $$pool_account) method_id(77790) {
+    slice $user = __tact_verify_address($$user);
+    slice $pool_account = __tact_verify_address($$pool_account);
+    var self = $Draw$_contract_load();
+    var res = self~$Draw$_fun_get_ticket_address($user, $pool_account);
+    return res;
+}
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmULfsigrQUbfBJGQGWVWxDr4KA4QsAZUBzMrrETcwjyVP";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract Draw
+;;
+
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_contract_router_internal((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive TokenNotification message
+    if (op == 1935855772) {
+        var msg = in_msg~$TokenNotification$_load();
+        self~$Draw$_internal_binary_TokenNotification(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ClaimPrizeInternal message
+    if (op == 1469963099) {
+        var msg = in_msg~$ClaimPrizeInternal$_load();
+        self~$Draw$_internal_binary_ClaimPrizeInternal(msg);
+        return (self, true);
+    }
+    
+    ;; Receive InitDrawInternal message
+    if (op == 1013334560) {
+        var msg = in_msg~$InitDrawInternal$_load();
+        self~$Draw$_internal_binary_InitDrawInternal(msg);
+        return (self, true);
+    }
+    
+    ;; Receive InitTicket message
+    if (op == 2494876497) {
+        var msg = in_msg~$InitTicket$_load();
+        self~$Draw$_internal_binary_InitTicket(msg);
+        return (self, true);
+    }
+    
+    ;; Text Receivers
+    if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "send to reserve" message
+        if (text_op == 0x22eaa037e87e6cf8bf9be7426929531aaa3cb9eedd0b22580427438ad19043f0) {
+            self~$Draw$_internal_text_22eaa037e87e6cf8bf9be7426929531aaa3cb9eedd0b22580427438ad19043f0();
+            return (self, true);
+        }
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $Draw$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$Draw$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $Draw$_contract_store(self);
+}
