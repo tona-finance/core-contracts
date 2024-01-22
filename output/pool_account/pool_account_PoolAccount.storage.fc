@@ -3,6 +3,11 @@
 ;; TLB: _ code:^cell data:^cell = StateInit
 ;;
 
+_ $StateInit$_get_code((cell, cell) v) inline {
+    var (v'code, v'data) = v;
+    return v'code;
+}
+
 ((cell, cell)) $StateInit$_not_null(tuple v) inline {
     throw_if(128, null?(v));
     var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);

@@ -310,16 +310,16 @@ cell $ChangeOwnerOk$_store_cell((int, slice) v) inline {
 
 ;;
 ;; Type: PoolMasterData
-;; TLB: _ owner:address staker:address reserve:address twab:Twab{timestamp:uint64,amount:uint128} share_amount:coins contribute_amount:coins spent_amount:coins next_period:uint32 = PoolMasterData
+;; TLB: _ owner:address staker:address prize_reserve:address twab:Twab{timestamp:uint64,amount:uint128} share_amount:coins contribute_amount:coins spent_amount:coins next_period:uint32 = PoolMasterData
 ;;
 
 (slice, slice, slice, tuple, int, int, int, int) $PoolMasterData$_to_external(((slice, slice, slice, (int, int), int, int, int, int)) v) inline {
-    var (v'owner, v'staker, v'reserve, v'twab, v'share_amount, v'contribute_amount, v'spent_amount, v'next_period) = v; 
-    return (v'owner, v'staker, v'reserve, $Twab$_to_tuple(v'twab), v'share_amount, v'contribute_amount, v'spent_amount, v'next_period);
+    var (v'owner, v'staker, v'prize_reserve, v'twab, v'share_amount, v'contribute_amount, v'spent_amount, v'next_period) = v; 
+    return (v'owner, v'staker, v'prize_reserve, $Twab$_to_tuple(v'twab), v'share_amount, v'contribute_amount, v'spent_amount, v'next_period);
 }
 
-((slice, slice, slice, (int, int), int, int, int, int)) $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period(slice owner, slice staker, slice reserve, (int, int) twab, int share_amount, int contribute_amount, int spent_amount, int next_period) inline {
-    return (owner, staker, reserve, twab, share_amount, contribute_amount, spent_amount, next_period);
+((slice, slice, slice, (int, int), int, int, int, int)) $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period(slice owner, slice staker, slice prize_reserve, (int, int) twab, int share_amount, int contribute_amount, int spent_amount, int next_period) inline {
+    return (owner, staker, prize_reserve, twab, share_amount, contribute_amount, spent_amount, next_period);
 }
 
 ;;

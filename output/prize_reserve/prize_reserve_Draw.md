@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Draw
-BOC Size: 3267 bytes
+BOC Size: 3678 bytes
 
 # Types
-Total Types: 36
+Total Types: 37
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -149,13 +149,25 @@ Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
 TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
 
+## PrizeReserveData
+TLB: `_ jetton_wallet:address pool_master:address staker:address = PrizeReserveData`
+Signature: `PrizeReserveData{jetton_wallet:address,pool_master:address,staker:address}`
+
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 4
 
 ## get_core_data
 
 ## get_prize_percentage
 Argument: tier
+
+## get_ticket_code
+Argument: user
+Argument: pool_account
+
+## get_ticket_address
+Argument: user
+Argument: pool_account
 
 # Error Codes
 2: Stack undeflow

@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: Draw
-BOC Size: 3267 bytes
+BOC Size: 3678 bytes
 
 # Types
 Total Types: 32
@@ -134,12 +134,20 @@ TLB: `_ active:bool pool_master:address prize_reserve:address jetton_wallet:addr
 Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,jetton_wallet:address,period:uint32,start:Twab{timestamp:uint64,amount:uint128},end:Twab{timestamp:uint64,amount:uint128},prize_amount:coins,winning_number:uint32,deadline:uint64,avail_prize_amount:coins}`
 
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 4
 
 ## get_core_data
 
 ## get_prize_percentage
 Argument: tier
+
+## get_ticket_code
+Argument: user
+Argument: pool_account
+
+## get_ticket_address
+Argument: user
+Argument: pool_account
 
 # Error Codes
 2: Stack undeflow

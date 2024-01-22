@@ -82,6 +82,18 @@ contract PoolAccount with TicketInitializer, Deployable {
         };
     }
 
+    get fun get_draw_code(period: Int): Cell {
+        return self._get_draw_init(period).code;
+    }
+
+    get fun get_ticket_code(period: Int): Cell {
+        return self._get_ticket_init(period).code;
+    }
+
+    get fun get_draw_address(period: Int): Address {
+        return self._get_draw_address(period);
+    }
+
     get fun get_ticket_address(period: Int): Address {
         return self._get_ticket_address(period);
     }
@@ -90,12 +102,8 @@ contract PoolAccount with TicketInitializer, Deployable {
         return self.deposit_cache.get(query_id);
     }
 
-    get fun get_first_twab(): Twab {
-        return self.twab_store.first_twab();
-    }
-
-    get fun get_last_twab(): Twab {
-        return self.twab_store.last_twab();
+    get fun get_twab_size(): Int {
+        return self.twab_store.size;
     }
 
     get fun binary_search_twab(timestamp: Int): Twab {

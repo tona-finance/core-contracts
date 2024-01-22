@@ -9,7 +9,7 @@ import "./prize_reserve";
 struct PoolMasterData {
     owner: Address;
     staker: Address;
-    reserve: Address;
+    prize_reserve: Address;
     twab: Twab;
     share_amount: Int as coins;
     contribute_amount: Int as coins;
@@ -95,7 +95,7 @@ contract PoolMaster with BasePoolMaster, Deployable {
         return PoolMasterData {
             owner: self.owner,
             staker: self.staker,
-            reserve: self._get_prize_reserve_address(),
+            prize_reserve: self._get_prize_reserve_address(),
             twab: self.twab,
             share_amount: self.share_amount,
             contribute_amount: self.contribute_amount,
@@ -106,6 +106,10 @@ contract PoolMaster with BasePoolMaster, Deployable {
 
     get fun get_account_code(): Cell {
         return self._get_account_init(self.owner).code;
+    }
+
+    get fun get_draw_code(period: Int): Cell {
+        return self._get_draw_init(period).code;
     }
 
     get fun get_account_address(user: Address): Address {

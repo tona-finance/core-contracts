@@ -21,6 +21,7 @@ PROGRAM{
   DECLPROC $PrizeReserve$_store
   DECLPROC $PrizeReserve$_load
   DECLPROC $StateInit$_not_null
+  DECLPROC $PrizeReserveData$_to_external
   DECLPROC $PoolAccount$init$_store
   DECLPROC $Ticket$init$_store
   DECLPROC $PrizeReserve$init$_load
@@ -42,6 +43,8 @@ PROGRAM{
   DECLPROC $Ticket$_init_child
   DECLPROC $PrizeReserve$_fun__get_pool_account_address
   DECLPROC $PrizeReserve$_fun__get_ticket_init
+  DECLPROC $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker
+  DECLPROC $PrizeReserve$_fun_get_core_data
   DECLPROC $PrizeReserve$_fun_forward
   DECLPROC $PrizeReserve$_fun_notify
   DECLPROC $PrizeReserve$_fun__get_ticket_address
@@ -49,6 +52,7 @@ PROGRAM{
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $PrizeReserve$_internal_binary_ClaimPrizeDebtInternal
   DECLPROC $PrizeReserve$_internal_binary_Deploy
+  119856 DECLMETHOD %get_core_data
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
@@ -244,6 +248,8 @@ PROGRAM{
     ISNULL
     128 THROWIF
     2 UNTUPLE
+  }>
+  $PrizeReserveData$_to_external PROCINLINE:<{
   }>
   $PoolAccount$init$_store PROCINLINE:<{
     s4 s3 XCHG2
@@ -564,6 +570,12 @@ PROGRAM{
     s2 s4 XCHG
     s2 s3 XCHG
   }>
+  $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker PROCINLINE:<{
+  }>
+  $PrizeReserve$_fun_get_core_data PROCINLINE:<{
+    s2 s1 s0 PUSH3
+    $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker INLINECALLDICT
+  }>
   $PrizeReserve$_fun_forward PROCINLINE:<{
     PUSHNULL
     PUSHNULL
@@ -660,6 +672,12 @@ PROGRAM{
     $DeployOk$_store_cell INLINECALLDICT
     $PrizeReserve$_fun_notify INLINECALLDICT
   }>
+  %get_core_data PROC:<{
+    $PrizeReserve$_contract_load INLINECALLDICT
+    $PrizeReserve$_fun_get_core_data INLINECALLDICT
+    3 3 BLKDROP2
+    $PrizeReserveData$_to_external INLINECALLDICT
+  }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
@@ -668,7 +686,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d626344593531647850714e53344a3136376b465a776e41714d707338436138324b664b4c7456464b4d783938} PUSHSLICE
+    x{697066733a2f2f516d644d534753575059325462466931346a593446443137346565684a354556423950754678614b4c7471676e52} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

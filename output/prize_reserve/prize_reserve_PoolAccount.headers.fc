@@ -153,6 +153,9 @@ builder $PoolAccount$_store(builder build_0, (slice, slice, slice, slice, cell, 
 ;; $PoolAccount$_load
 (slice, ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice))) $PoolAccount$_load(slice sc_0) inline;
 
+;; $StateInit$_get_code
+_ $StateInit$_get_code((cell, cell) v) inline;
+
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
@@ -219,12 +222,6 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $TwabStore$_fun_binary_search_twab
 (int, int) $TwabStore$_fun_binary_search_twab((cell, int) $self, int $timestamp) impure inline;
 
-;; $TwabStore$_fun_first_twab
-(int, int) $TwabStore$_fun_first_twab((cell, int) $self) impure inline;
-
-;; $TwabStore$_fun_last_twab
-(int, int) $TwabStore$_fun_last_twab((cell, int) $self) impure inline;
-
 ;; $TwabStore$_fun_insert
 ((cell, int), ()) $TwabStore$_fun_insert((cell, int) $self, int $balance, int $timestamp) impure inline;
 
@@ -249,6 +246,15 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $PoolAccount$_fun_get_core_data
 ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (slice, slice, slice, slice, slice, int, int, int)) $PoolAccount$_fun_get_core_data((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline;
 
+;; $PoolAccount$_fun_get_draw_code
+((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), cell) $PoolAccount$_fun_get_draw_code((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline;
+
+;; $PoolAccount$_fun_get_ticket_code
+((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), cell) $PoolAccount$_fun_get_ticket_code((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline;
+
+;; $PoolAccount$_fun_get_draw_address
+((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun_get_draw_address((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline;
+
 ;; $PoolAccount$_fun__get_ticket_address
 ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun__get_ticket_address((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline;
 
@@ -258,11 +264,8 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $PoolAccount$_fun_get_deposit_cache
 ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), int) $PoolAccount$_fun_get_deposit_cache((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $query_id) impure inline;
 
-;; $PoolAccount$_fun_get_first_twab
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (int, int)) $PoolAccount$_fun_get_first_twab((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline;
-
-;; $PoolAccount$_fun_get_last_twab
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (int, int)) $PoolAccount$_fun_get_last_twab((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline;
+;; $PoolAccount$_fun_get_twab_size
+((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), int) $PoolAccount$_fun_get_twab_size((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline;
 
 ;; $PoolAccount$_fun_binary_search_twab
 ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (int, int)) $PoolAccount$_fun_binary_search_twab((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $timestamp) impure inline;

@@ -99,6 +99,20 @@ cell $TokenTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) in
 }
 
 ;;
+;; Type: PrizeReserveData
+;; TLB: _ jetton_wallet:address pool_master:address staker:address = PrizeReserveData
+;;
+
+(slice, slice, slice) $PrizeReserveData$_to_external(((slice, slice, slice)) v) inline {
+    var (v'jetton_wallet, v'pool_master, v'staker) = v; 
+    return (v'jetton_wallet, v'pool_master, v'staker);
+}
+
+((slice, slice, slice)) $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker(slice jetton_wallet, slice pool_master, slice staker) inline {
+    return (jetton_wallet, pool_master, staker);
+}
+
+;;
 ;; Type: PoolAccount
 ;;
 

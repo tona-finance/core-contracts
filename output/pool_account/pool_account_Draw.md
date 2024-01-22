@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: Draw
-BOC Size: 3267 bytes
+BOC Size: 3678 bytes
 
 # Types
 Total Types: 36
@@ -150,12 +150,20 @@ TLB: `_ owner:address master:address staker:address reserve:address jetton_walle
 Signature: `PoolAccountData{owner:address,master:address,staker:address,reserve:address,jetton_wallet:address,share_amount:coins,contribute_amount:coins,withdraw_amount:coins}`
 
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 4
 
 ## get_core_data
 
 ## get_prize_percentage
 Argument: tier
+
+## get_ticket_code
+Argument: user
+Argument: pool_account
+
+## get_ticket_address
+Argument: user
+Argument: pool_account
 
 # Error Codes
 2: Stack undeflow

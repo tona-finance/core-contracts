@@ -4,6 +4,12 @@ import "./base_prize_reserve";
 import "./pool_account";
 import "./ticket";
 
+struct PrizeReserveData {
+    jetton_wallet: Address;
+    pool_master: Address;
+    staker: Address;
+}
+
 contract PrizeReserve with BasePrizeReserve, Deployable {
     override const storageReserve: Int = ton("0.05");
 
@@ -39,5 +45,15 @@ contract PrizeReserve with BasePrizeReserve, Deployable {
     override inline fun _get_ticket_init(user: Address, draw: Address, period: Int): StateInit {
         let pool_account: Address = self._get_pool_account_address(user);
         return initOf Ticket(user, pool_account, draw, period);
+    }
+
+    // === get functions ===
+
+    get fun get_core_data(): PrizeReserveData {
+        return PrizeReserveData {
+            jetton_wallet: self.jetton_wallet,
+            pool_master: self.pool_master,
+            staker: self.staker
+        };
     }
 }

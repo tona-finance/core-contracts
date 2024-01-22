@@ -49,6 +49,7 @@ PROGRAM{
   DECLPROC $InitTicketInternal2$_store_cell
   DECLPROC $PoolAccount$_store
   DECLPROC $PoolAccount$_load
+  DECLPROC $StateInit$_get_code
   DECLPROC $StateInit$_not_null
   DECLPROC $StateInit$_as_optional
   DECLPROC $Twab$_not_null
@@ -71,8 +72,6 @@ PROGRAM{
   DECLPROC $Context$_fun_readForwardFee
   DECLPROC $Twab$_fun_next_twab
   DECLPROC $TwabStore$_fun_binary_search_twab
-  DECLPROC $TwabStore$_fun_first_twab
-  DECLPROC $TwabStore$_fun_last_twab
   DECLPROC $TwabStore$_fun_insert
   DECLPROC $Draw$_init_child
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
@@ -82,11 +81,13 @@ PROGRAM{
   DECLPROC $PoolAccount$_fun__get_ticket_init
   DECLPROC $PoolAccountData$_constructor_owner_master_staker_reserve_jetton_wallet_share_amount_contribute_amount_withdraw_amount
   DECLPROC $PoolAccount$_fun_get_core_data
+  DECLPROC $PoolAccount$_fun_get_draw_code
+  DECLPROC $PoolAccount$_fun_get_ticket_code
+  DECLPROC $PoolAccount$_fun_get_draw_address
   DECLPROC $PoolAccount$_fun__get_ticket_address
   DECLPROC $PoolAccount$_fun_get_ticket_address
   DECLPROC $PoolAccount$_fun_get_deposit_cache
-  DECLPROC $PoolAccount$_fun_get_first_twab
-  DECLPROC $PoolAccount$_fun_get_last_twab
+  DECLPROC $PoolAccount$_fun_get_twab_size
   DECLPROC $PoolAccount$_fun_binary_search_twab
   DECLPROC $PoolAccount$_fun_forward
   DECLPROC $PoolAccount$_fun_notify
@@ -115,10 +116,12 @@ PROGRAM{
   DECLPROC $PoolAccount$_receive_binary_bounce_DepositInStaker
   DECLPROC $PoolAccount$_internal_binary_Deploy
   119856 DECLMETHOD %get_core_data
+  96685 DECLMETHOD %get_draw_code
+  73508 DECLMETHOD %get_ticket_code
+  108309 DECLMETHOD %get_draw_address
   77790 DECLMETHOD %get_ticket_address
   110543 DECLMETHOD %get_deposit_cache
-  70066 DECLMETHOD %get_first_twab
-  70577 DECLMETHOD %get_last_twab
+  111123 DECLMETHOD %get_twab_size
   127454 DECLMETHOD %binary_search_twab
   83229 DECLMETHOD %owner
   113617 DECLMETHOD supported_interfaces
@@ -615,6 +618,9 @@ PROGRAM{
     s8 s9 XCHG
     s4 s5 XCHG
   }>
+  $StateInit$_get_code PROCINLINE:<{
+    DROP
+  }>
   $StateInit$_not_null PROCINLINE:<{
     DUP
     ISNULL
@@ -930,29 +936,6 @@ PROGRAM{
     }>
     EXECUTE
   }>
-  $TwabStore$_fun_first_twab PROCINLINE:<{
-    19074 PUSHINT
-    SWAP
-    0 GTINT
-    THROWANYIFNOT
-    257 PUSHINT
-    0 PUSHINT
-    __tact_dict_get_int_cell INLINECALLDICT
-    $Twab$_load_opt INLINECALLDICT
-    $Twab$_not_null INLINECALLDICT
-  }>
-  $TwabStore$_fun_last_twab PROCINLINE:<{
-    19074 PUSHINT
-    OVER
-    0 GTINT
-    THROWANYIFNOT
-    257 PUSHINT
-    SWAP
-    DEC
-    __tact_dict_get_int_cell INLINECALLDICT
-    $Twab$_load_opt INLINECALLDICT
-    $Twab$_not_null INLINECALLDICT
-  }>
   $TwabStore$_fun_insert PROCINLINE:<{
     s2 PUSH
     0 EQINT
@@ -1094,6 +1077,95 @@ PROGRAM{
     s8 s7 s6 PUSH3
     $PoolAccountData$_constructor_owner_master_staker_reserve_jetton_wallet_share_amount_contribute_amount_withdraw_amount INLINECALLDICT
   }>
+  $PoolAccount$_fun_get_draw_code PROCINLINE:<{
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 PUSH2
+    s11 22 s() XCHG
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s2 s13 XCHG
+    s0 22 s() XCHG
+    s1 s12 XCHG
+    $PoolAccount$_fun__get_draw_init INLINECALLDICT
+    11 2 BLKDROP2
+    $StateInit$_get_code INLINECALLDICT
+    s10 s11 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+  }>
+  $PoolAccount$_fun_get_ticket_code PROCINLINE:<{
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 PUSH2
+    s11 22 s() XCHG
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s2 s13 XCHG
+    s0 22 s() XCHG
+    s1 s12 XCHG
+    $PoolAccount$_fun__get_ticket_init INLINECALLDICT
+    11 2 BLKDROP2
+    $StateInit$_get_code INLINECALLDICT
+    s10 s11 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+  }>
+  $PoolAccount$_fun_get_draw_address PROCINLINE:<{
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 PUSH2
+    s11 22 s() XCHG
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s2 s13 XCHG
+    s0 22 s() XCHG
+    s1 s12 XCHG
+    $PoolAccount$_fun__get_draw_address INLINECALLDICT
+    11 1 BLKDROP2
+    s10 s11 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+  }>
   $PoolAccount$_fun__get_ticket_address PROCINLINE:<{
     $PoolAccount$_fun__get_ticket_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
@@ -1133,13 +1205,8 @@ PROGRAM{
     s3 s3 XCHG2
     __tact_dict_get_int_int INLINECALLDICT
   }>
-  $PoolAccount$_fun_get_first_twab PROCINLINE:<{
-    s5 s4 PUSH2
-    $TwabStore$_fun_first_twab INLINECALLDICT
-  }>
-  $PoolAccount$_fun_get_last_twab PROCINLINE:<{
-    s5 s4 PUSH2
-    $TwabStore$_fun_last_twab INLINECALLDICT
+  $PoolAccount$_fun_get_twab_size PROCINLINE:<{
+    s4 PUSH
   }>
   $PoolAccount$_fun_binary_search_twab PROCINLINE:<{
     s6 s5 s(-2) PU2XC
@@ -1591,6 +1658,24 @@ PROGRAM{
     11 8 BLKDROP2
     $PoolAccountData$_to_external INLINECALLDICT
   }>
+  %get_draw_code PROC:<{
+    $PoolAccount$_contract_load INLINECALLDICT
+    11 ROLL
+    $PoolAccount$_fun_get_draw_code INLINECALLDICT
+    11 1 BLKDROP2
+  }>
+  %get_ticket_code PROC:<{
+    $PoolAccount$_contract_load INLINECALLDICT
+    11 ROLL
+    $PoolAccount$_fun_get_ticket_code INLINECALLDICT
+    11 1 BLKDROP2
+  }>
+  %get_draw_address PROC:<{
+    $PoolAccount$_contract_load INLINECALLDICT
+    11 ROLL
+    $PoolAccount$_fun_get_draw_address INLINECALLDICT
+    11 1 BLKDROP2
+  }>
   %get_ticket_address PROC:<{
     $PoolAccount$_contract_load INLINECALLDICT
     11 ROLL
@@ -1603,17 +1688,10 @@ PROGRAM{
     $PoolAccount$_fun_get_deposit_cache INLINECALLDICT
     11 1 BLKDROP2
   }>
-  %get_first_twab PROC:<{
+  %get_twab_size PROC:<{
     $PoolAccount$_contract_load INLINECALLDICT
-    $PoolAccount$_fun_get_first_twab INLINECALLDICT
-    11 2 BLKDROP2
-    $Twab$_to_external INLINECALLDICT
-  }>
-  %get_last_twab PROC:<{
-    $PoolAccount$_contract_load INLINECALLDICT
-    $PoolAccount$_fun_get_last_twab INLINECALLDICT
-    11 2 BLKDROP2
-    $Twab$_to_external INLINECALLDICT
+    $PoolAccount$_fun_get_twab_size INLINECALLDICT
+    11 1 BLKDROP2
   }>
   %binary_search_twab PROC:<{
     $PoolAccount$_contract_load INLINECALLDICT
@@ -1636,7 +1714,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d664747386f667944546f4a546f354e505261335551413950533967714d7736394a664b7372754e564a4d3843} PUSHSLICE
+    x{697066733a2f2f516d6473767448754c536d47344b36665941354c756e574a4b617a5368704b777059486835566f6f665548734647} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

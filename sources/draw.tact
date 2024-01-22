@@ -147,4 +147,12 @@ contract Draw with PrizeDistributor {
     get fun get_prize_percentage(tier: Int): Int? {
         return self.prize_percentage.get(tier);
     }
+
+    get fun get_ticket_code(user: Address, pool_account: Address): Cell {
+        return self._get_ticket_init(user, pool_account).code;
+    }
+
+    get fun get_ticket_address(user: Address, pool_account: Address): Address {
+        return self._get_ticket_address(user, pool_account);
+    }
 }

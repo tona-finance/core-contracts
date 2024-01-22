@@ -3,7 +3,7 @@ Contract: Ticket
 BOC Size: 2027 bytes
 
 # Types
-Total Types: 36
+Total Types: 37
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -148,6 +148,10 @@ Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
 ## ChangeOwnerOk
 TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
+
+## PrizeReserveData
+TLB: `_ jetton_wallet:address pool_master:address staker:address = PrizeReserveData`
+Signature: `PrizeReserveData{jetton_wallet:address,pool_master:address,staker:address}`
 
 # Get Methods
 Total Get Methods: 3

@@ -71,9 +71,10 @@ PROGRAM{
   DECLPROC $PoolMaster$_fun__get_prize_reserve_address
   DECLPROC $PoolMaster$_fun__get_account_init
   DECLPROC $PoolMaster$_fun__get_draw_init
-  DECLPROC $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period
+  DECLPROC $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period
   DECLPROC $PoolMaster$_fun_get_core_data
   DECLPROC $PoolMaster$_fun_get_account_code
+  DECLPROC $PoolMaster$_fun_get_draw_code
   DECLPROC $PoolMaster$_fun__get_account_address
   DECLPROC $PoolMaster$_fun_get_account_address
   DECLPROC $PoolMaster$_fun__get_draw_address
@@ -105,6 +106,7 @@ PROGRAM{
   DECLPROC $PoolMaster$_internal_binary_Deploy
   119856 DECLMETHOD %get_core_data
   88290 DECLMETHOD %get_account_code
+  96685 DECLMETHOD %get_draw_code
   68369 DECLMETHOD %get_account_address
   108309 DECLMETHOD %get_draw_address
   83229 DECLMETHOD %owner
@@ -921,7 +923,7 @@ PROGRAM{
     s3 s4 XCHG
     s2 s3 XCHG
   }>
-  $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period PROCINLINE:<{
+  $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period PROCINLINE:<{
   }>
   $PoolMaster$_fun_get_core_data PROCINLINE:<{
     s10 s9 s8 PUSH3
@@ -948,7 +950,7 @@ PROGRAM{
     s8 s10 XCHG
     s7 s9 XCHG
     3 4 BLKSWAP
-    $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period INLINECALLDICT
+    $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period INLINECALLDICT
     s10 19 s() XCHG
     s9 18 s() XCHG
     s10 17 s() XCHG
@@ -980,6 +982,36 @@ PROGRAM{
     $PoolMaster$_fun__get_account_init INLINECALLDICT
     11 2 BLKDROP2
     $StateInit$_get_code INLINECALLDICT
+  }>
+  $PoolMaster$_fun_get_draw_code PROCINLINE:<{
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 PUSH2
+    s11 22 s() XCHG
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s2 s13 XCHG
+    s0 22 s() XCHG
+    s1 s12 XCHG
+    $PoolMaster$_fun__get_draw_init INLINECALLDICT
+    11 2 BLKDROP2
+    $StateInit$_get_code INLINECALLDICT
+    s10 s11 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
   }>
   $PoolMaster$_fun__get_account_address PROCINLINE:<{
     $PoolMaster$_fun__get_account_init INLINECALLDICT
@@ -1510,6 +1542,12 @@ PROGRAM{
     $PoolMaster$_fun_get_account_code INLINECALLDICT
     11 1 BLKDROP2
   }>
+  %get_draw_code PROC:<{
+    $PoolMaster$_contract_load INLINECALLDICT
+    11 ROLL
+    $PoolMaster$_fun_get_draw_code INLINECALLDICT
+    11 1 BLKDROP2
+  }>
   %get_account_address PROC:<{
     __tact_verify_address INLINECALLDICT
     $PoolMaster$_contract_load INLINECALLDICT
@@ -1538,7 +1576,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d53665845664d6e443653796457707438324d55376948315a52463758333961786a536a414a32786b39566a31} PUSHSLICE
+    x{697066733a2f2f516d5639457a7254464c4a4c7a64415a4d6876623450444d626d476a327931745058334e594550725956467a7139} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

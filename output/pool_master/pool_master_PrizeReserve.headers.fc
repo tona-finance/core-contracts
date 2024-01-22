@@ -69,6 +69,9 @@ builder $PrizeReserve$_store(builder build_0, (slice, slice, slice) v) inline;
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
+;; $PrizeReserveData$_to_external
+(slice, slice, slice) $PrizeReserveData$_to_external(((slice, slice, slice)) v) inline;
+
 ;; $PoolAccount$init$_store
 builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice, slice) v) inline;
 
@@ -131,6 +134,12 @@ slice $global_emptySlice() impure inline;
 
 ;; $PrizeReserve$_fun__get_ticket_init
 ((slice, slice, slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
+
+;; $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker
+((slice, slice, slice)) $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker(slice jetton_wallet, slice pool_master, slice staker) inline;
+
+;; $PrizeReserve$_fun_get_core_data
+((slice, slice, slice), (slice, slice, slice)) $PrizeReserve$_fun_get_core_data((slice, slice, slice) $self) impure inline;
 
 ;; $PrizeReserve$_fun_forward
 ((slice, slice, slice), ()) $PrizeReserve$_fun_forward((slice, slice, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;

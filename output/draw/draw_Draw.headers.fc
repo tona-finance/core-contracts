@@ -105,6 +105,9 @@ tuple $Twab$_as_optional((int, int) v) inline;
 ;; $Draw$_load
 (slice, ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice))) $Draw$_load(slice sc_0) inline;
 
+;; $StateInit$_get_code
+_ $StateInit$_get_code((cell, cell) v) inline;
+
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
@@ -192,6 +195,15 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 ;; $Draw$_fun_get_prize_percentage
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_get_prize_percentage((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline;
 
+;; $Draw$_fun_get_ticket_code
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), cell) $Draw$_fun_get_ticket_code((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+
+;; $Draw$_fun__get_ticket_address
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun__get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+
+;; $Draw$_fun_get_ticket_address
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun_get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+
 ;; $Draw$_fun_notify
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_notify((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, cell $body) impure inline;
 
@@ -206,9 +218,6 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
 ;; $Draw$_fun_compute_prize_amount
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_compute_prize_amount((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $pick_payload) impure inline;
-
-;; $Draw$_fun__get_ticket_address
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun__get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
 
 ;; $Draw$_fun_require_ticket
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_ticket((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;

@@ -219,14 +219,17 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 ;; $PoolMaster$_fun__get_draw_init
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (cell, cell)) $PoolMaster$_fun__get_draw_init((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
 
-;; $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period
-((slice, slice, slice, (int, int), int, int, int, int)) $PoolMasterData$_constructor_owner_staker_reserve_twab_share_amount_contribute_amount_spent_amount_next_period(slice owner, slice staker, slice reserve, (int, int) twab, int share_amount, int contribute_amount, int spent_amount, int next_period) inline;
+;; $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period
+((slice, slice, slice, (int, int), int, int, int, int)) $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period(slice owner, slice staker, slice prize_reserve, (int, int) twab, int share_amount, int contribute_amount, int spent_amount, int next_period) inline;
 
 ;; $PoolMaster$_fun_get_core_data
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), (slice, slice, slice, (int, int), int, int, int, int)) $PoolMaster$_fun_get_core_data((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
 
 ;; $PoolMaster$_fun_get_account_code
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), cell) $PoolMaster$_fun_get_account_code((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
+
+;; $PoolMaster$_fun_get_draw_code
+((slice, slice, cell, slice, (int, int), int, int, int, int, slice), cell) $PoolMaster$_fun_get_draw_code((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, int $period) impure inline;
 
 ;; $PoolMaster$_fun__get_account_address
 ((slice, slice, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun__get_account_address((slice, slice, cell, slice, (int, int), int, int, int, int, slice) $self, slice $user) impure inline;

@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PoolAccount
-BOC Size: 4815 bytes
+BOC Size: 5174 bytes
 
 # Types
 Total Types: 36
@@ -150,9 +150,18 @@ TLB: `_ owner:address master:address staker:address reserve:address jetton_walle
 Signature: `PoolAccountData{owner:address,master:address,staker:address,reserve:address,jetton_wallet:address,share_amount:coins,contribute_amount:coins,withdraw_amount:coins}`
 
 # Get Methods
-Total Get Methods: 7
+Total Get Methods: 9
 
 ## get_core_data
+
+## get_draw_code
+Argument: period
+
+## get_ticket_code
+Argument: period
+
+## get_draw_address
+Argument: period
 
 ## get_ticket_address
 Argument: period
@@ -160,9 +169,7 @@ Argument: period
 ## get_deposit_cache
 Argument: query_id
 
-## get_first_twab
-
-## get_last_twab
+## get_twab_size
 
 ## binary_search_twab
 Argument: timestamp

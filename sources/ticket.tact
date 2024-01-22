@@ -35,8 +35,10 @@ contract Ticket with BaseTicket {
         self.used_indexes = emptyMap();
     }
 
+    // === get functions ===
+
     get fun get_core_data(): TicketData {
-        return TicketData{
+        return TicketData {
             active: self.active,
             owner: self.owner,
             pool_account: self.pool_account,

@@ -46,6 +46,11 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code)
     return (($self'jetton_wallet, $self'pool_master, $self'staker), $Ticket$_init_child(__tact_context_sys, $user, $pool_account, $draw, $period));
 }
 
+((slice, slice, slice), (slice, slice, slice)) $PrizeReserve$_fun_get_core_data((slice, slice, slice) $self) impure inline {
+    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+    return (($self'jetton_wallet, $self'pool_master, $self'staker), $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker($self'jetton_wallet, $self'pool_master, $self'staker));
+}
+
 ((slice, slice, slice), slice) $PrizeReserve$_fun__get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline {
     var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
     var ($sinit'code, $sinit'data) = ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun__get_ticket_init($user, $draw, $period);
@@ -81,6 +86,12 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code)
 ;; Get methods of a Contract PrizeReserve
 ;;
 
+_ %get_core_data() method_id(119856) {
+    var self = $PrizeReserve$_contract_load();
+    var res = self~$PrizeReserve$_fun_get_core_data();
+    return $PrizeReserveData$_to_external(res);
+}
+
 _ supported_interfaces() method_id {
     return (
         "org.ton.introspection.v0"H >> 128,
@@ -92,7 +103,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmbH2hekM5Zbc2SFCS7QnCkBrKKQxLRZDdq3t9r6qUkvfA";
+    return "ipfs://QmNYb9UnFrHAZvo3b6KEdSiiQBFyU9j7U7Brnxm9MYvn9Q";
 }
 
 _ lazy_deployment_completed() method_id {

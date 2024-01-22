@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: PrizeReserve
-BOC Size: 1985 bytes
+BOC Size: 2003 bytes
 
 # Types
-Total Types: 37
+Total Types: 38
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -137,6 +137,10 @@ Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,jetto
 TLB: `_ owner:address master:address staker:address reserve:address jetton_wallet:address share_amount:coins contribute_amount:coins withdraw_amount:coins = PoolAccountData`
 Signature: `PoolAccountData{owner:address,master:address,staker:address,reserve:address,jetton_wallet:address,share_amount:coins,contribute_amount:coins,withdraw_amount:coins}`
 
+## PrizeReserveData
+TLB: `_ jetton_wallet:address pool_master:address staker:address = PrizeReserveData`
+Signature: `PrizeReserveData{jetton_wallet:address,pool_master:address,staker:address}`
+
 ## ChangeOwner
 TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
 Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
@@ -150,11 +154,13 @@ TLB: `_ active:bool owner:address pool_account:address draw:address period:uint3
 Signature: `TicketData{active:bool,owner:address,pool_account:address,draw:address,period:uint32,picks:uint32,debt_amount:coins}`
 
 ## PoolMasterData
-TLB: `_ owner:address staker:address reserve:address twab:Twab{timestamp:uint64,amount:uint128} share_amount:coins contribute_amount:coins spent_amount:coins next_period:uint32 = PoolMasterData`
-Signature: `PoolMasterData{owner:address,staker:address,reserve:address,twab:Twab{timestamp:uint64,amount:uint128},share_amount:coins,contribute_amount:coins,spent_amount:coins,next_period:uint32}`
+TLB: `_ owner:address staker:address prize_reserve:address twab:Twab{timestamp:uint64,amount:uint128} share_amount:coins contribute_amount:coins spent_amount:coins next_period:uint32 = PoolMasterData`
+Signature: `PoolMasterData{owner:address,staker:address,prize_reserve:address,twab:Twab{timestamp:uint64,amount:uint128},share_amount:coins,contribute_amount:coins,spent_amount:coins,next_period:uint32}`
 
 # Get Methods
-Total Get Methods: 0
+Total Get Methods: 1
+
+## get_core_data
 
 # Error Codes
 2: Stack undeflow
