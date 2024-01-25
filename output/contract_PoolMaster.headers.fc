@@ -147,8 +147,8 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ;; $StateInit$_constructor_code_data
 ((cell, cell)) $StateInit$_constructor_code_data(cell code, cell data) inline;
 
-;; $global__get_staker_jetton_wallet_init
-(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
+;; $global_get_staker_jetton_wallet_init
+(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;

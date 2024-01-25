@@ -47,7 +47,7 @@ PROGRAM{
   DECLPROC $PrizeReserve$init$_store
   DECLPROC $Builder$_fun_storeTimestamp
   DECLPROC $StateInit$_constructor_code_data
-  DECLPROC $global__get_staker_jetton_wallet_init
+  DECLPROC $global_get_staker_jetton_wallet_init
   DECLPROC $global_contractAddress
   DECLPROC $global_get_jetton_wallet_address
   DECLPROC $Twab$_constructor_timestamp_amount
@@ -534,7 +534,7 @@ PROGRAM{
   }>
   $StateInit$_constructor_code_data PROCINLINE:<{
   }>
-  $global__get_staker_jetton_wallet_init PROCINLINE:<{
+  $global_get_staker_jetton_wallet_init PROCINLINE:<{
     NEWC
     0 PUSHINT
     STGRAMS
@@ -557,7 +557,7 @@ PROGRAM{
     __tact_compute_contract_address INLINECALLDICT
   }>
   $global_get_jetton_wallet_address PROCINLINE:<{
-    $global__get_staker_jetton_wallet_init INLINECALLDICT
+    $global_get_staker_jetton_wallet_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
   $Twab$_constructor_timestamp_amount PROCINLINE:<{

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Address, contractAddress, Cell, TonClient4 } from "ton";
-import { PoolMaster } from "../output/pool_master/pool_master_PoolMaster";
+import { PoolMaster } from "../output/contract_PoolMaster";
 import { prepareTactDeployment } from "@tact-lang/deployer";
 
 (async () => {

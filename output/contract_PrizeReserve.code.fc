@@ -15,13 +15,13 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     return store_uint($self, $timestamp, 48);
 }
 
-(cell, cell) $global__get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
+(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
     cell $data = end_cell($Builder$_fun_storeTimestamp(store_coins(store_ref(__tact_store_address(__tact_store_address(store_coins(begin_cell(), 0), $owner), $master), $code), 0), 0));
     return $StateInit$_constructor_code_data($code, $data);
 }
 
 slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code) impure inline {
-    var ($sinit'code, $sinit'data) = $global__get_staker_jetton_wallet_init($owner, $master, $code);
+    var ($sinit'code, $sinit'data) = $global_get_staker_jetton_wallet_init($owner, $master, $code);
     return $global_contractAddress(($sinit'code, $sinit'data));
 }
 

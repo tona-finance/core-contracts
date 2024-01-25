@@ -24,3 +24,10 @@ To add new test files to contract you should create `*.spec.ts` files similar to
 ## Licence
 
 MIT
+
+## Tontogether Deployments
+
+||testnet|mainnet|
+|-|-|-|
+|Pool Master|EQBXepQVtavYp-PqgIhez_ZzsVxOrQTQVAJiyWG0zWIUPBTj|-|
+|Prize Reserve|kQA_jn7vuH8YSLNRHzvHMcjB4zhHWj4hsOts1mKVzjc0SUrz|-|

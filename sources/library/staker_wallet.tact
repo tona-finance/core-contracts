@@ -1,6 +1,6 @@
 import "./timestamp.tact";
 
-fun _get_staker_jetton_wallet_init(
+fun get_staker_jetton_wallet_init(
     owner: Address,
     master: Address,
     code: Cell
@@ -24,6 +24,6 @@ fun get_jetton_wallet_address(
     master: Address,
     code: Cell
 ): Address {
-    let sinit: StateInit = _get_staker_jetton_wallet_init(owner, master, code);
+    let sinit: StateInit = get_staker_jetton_wallet_init(owner, master, code);
     return contractAddress(sinit);
 }
