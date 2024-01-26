@@ -42,7 +42,7 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
                     to: self.jetton_wallet!!,
                     value: ton("0.1"), // transfer value 0.1
                     mode: SendIgnoreErrors,
-                    body: TokenTransfer {
+                    body: JettonTransfer {
                         query_id: msg.query_id,
                         amount: pay_amount,
                         destination: msg.user,

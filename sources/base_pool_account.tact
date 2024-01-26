@@ -134,7 +134,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
             .asSlice();
         self.forward(
             self.jetton_wallet!!,
-            TokenTransfer {
+            JettonTransfer {
                 query_id: query_id,
                 amount: amount,
                 destination: self.master,
@@ -158,11 +158,11 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
             bounce: false,
             to: self.jetton_wallet!!,
             value: ton("1.05"), // jetton burn fee in staker
-            mode: SendPayGasSeparately,
-            body: TokenBurn {
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: JettonBurn {
                 query_id: query_id,
                 amount: amount,
-                response_destination: myAddress(),
+                response_destination: self.owner,
                 custom_payload: payload
             }.toCell()
         });

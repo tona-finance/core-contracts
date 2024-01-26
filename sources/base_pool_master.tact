@@ -29,7 +29,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         require(rest_value >= ton("0.2"), "Insufficient value");
 
         let twab: Twab = self.twab.next_twab(self.share_amount, now());
-        self.init_draw(sender(), twab);
+        self.init_draw(ctx.sender, twab);
     }
 
     receive("init account") {
@@ -69,7 +69,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         self.send_prize_to_draw(transfer_value, twab, msg.amount);
 
         // deploy next draw
-        self.init_draw(sender(), twab);
+        self.init_draw(ctx.sender, twab);
     }
 
     receive(msg: WithdrawInternal) {
@@ -84,7 +84,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
         self.forward(
             self.jetton_wallet,
-            TokenTransfer {
+            JettonTransfer {
                 query_id: msg.query_id,
                 amount: msg.withdraw_amount,
                 destination: sender(),
@@ -129,7 +129,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
             to: self.jetton_wallet,
             value: value,
             mode: SendIgnoreErrors,
-            body: TokenTransfer {
+            body: JettonTransfer {
                 query_id: 0,
                 amount: amount,
                 destination: self._get_draw_address(self.next_period - 1),

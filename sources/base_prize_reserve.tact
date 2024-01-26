@@ -11,7 +11,7 @@ trait BasePrizeReserve with MsgValueHelper {
 
         self.forward(
             self.jetton_wallet,
-            TokenTransfer {
+            JettonTransfer {
                 query_id: msg.query_id,
                 amount: msg.amount,
                 destination: msg.user,

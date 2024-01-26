@@ -1,6 +1,6 @@
 
 
-// === ton staker messages ===
+// === Tonstaker messages ===
 
 message(0x47d54391) DepositInStaker {
     query_id: Int as uint64;
@@ -10,20 +10,20 @@ message(0x0a77535c) StakerWithdrawal {
     query_id: Int as uint64;
 }
 
-// === Jetton wallet messages ===
+// === Jetton messages ===
 
-message(0x7362d09c) TokenNotification {
+message(0x7362d09c) JettonNotification {
     query_id: Int as uint64;
     amount: Int as coins;
     from: Address;
     forward_payload: Slice as remaining;
 }
 
-message(0xd53276db) TokenExcesses {
+message(0xd53276db) JettonExcesses {
     query_id: Int as uint64;
 }
 
-message(0xf8a7ea5) TokenTransfer {
+message(0xf8a7ea5) JettonTransfer {
     query_id: Int as uint64;
     amount: Int as coins;
     destination: Address;
@@ -33,7 +33,7 @@ message(0xf8a7ea5) TokenTransfer {
     forward_payload: Slice as remaining;
 }
 
-message(0x595f07bc) TokenBurn {
+message(0x595f07bc) JettonBurn {
     query_id: Int as uint64;
     amount: Int as coins;
     response_destination: Address;

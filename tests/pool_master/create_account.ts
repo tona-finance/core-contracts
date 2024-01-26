@@ -1,8 +1,12 @@
 import { Address, toNano, TonClient4, WalletContractV4 } from "@ton/ton";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import { PoolMaster } from "../../output/contract_PoolMaster";
+import { PoolAccount } from "../../output/contract_PoolAccount";
+import { Ticket } from "../../output/contract_Ticket";
+import { Draw } from "../../output/contract_Draw";
 
 import * as dotenv from "dotenv";
+import { randomInt } from "crypto";
 dotenv.config();
 
 async function main() {
@@ -20,11 +24,66 @@ async function main() {
     const sender = client.open(wallet).sender(keyPair.secretKey);
 
     const pool_master = PoolMaster.fromAddress(pool_master_addr);
+    // Pool account initialize
     await client.open(pool_master).send(
         sender,
         { value: toNano("0.5") },
         "init account",
     );
+
+    // Deposit
+    const pool_account_address = Address.parse("");
+    const pool_wallet = PoolAccount.fromAddress(pool_account_address);
+    // Pool account deposit
+    await client.open(pool_wallet).send(
+        sender,
+        { value: toNano("1.1") }, // > 1 ton
+        {
+            $$type: 'Deposit',
+            query_id: BigInt(100),
+        },
+    );
+
+    // Pool account withdraw
+    await client.open(pool_wallet).send(
+        sender,
+        { value: toNano("0.1") }, // > 1 ton
+        {
+            $$type: 'Withdraw',
+            query_id: BigInt(0),
+            amount: toNano("1.01"), // tston amount
+        },
+    );
+
+    // Draw initialize ticket
+    const draw_address = Address.parse("");
+    const draw = Draw.fromAddress(draw_address);
+    await client.open(draw).send(
+        sender,
+        { value: toNano("0.1") }, // > 1 ton
+        {
+            $$type: 'InitTicket',
+            pool_account: pool_account_address,
+        },
+    );
+
+    // // Claim Prize
+    // const ticket_address = Address.parse("");
+    // const ticket = Ticket.fromAddress(ticket_address);
+    // // size (8 bit) + 
+
+    // await client.open(ticket).send(
+    //     sender,
+    //     { value: toNano("0.1") }, // > 1 ton
+    //     {
+    //         $$type: 'ClaimPrize',
+    //         query_id: BigInt(0),
+    //         index_payload:
+    //     },
+    // );
+
+    // Claim Prize Debt
+    // // TODO
 }
 
 main().catch((error) => {

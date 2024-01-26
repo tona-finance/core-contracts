@@ -10,6 +10,17 @@
                   "inline": true
                 }
             }
+        },
+        {
+            "name": "tonstaker-mock",
+            "path": "./mock/sources/contract.tact",
+            "output": "./mock/output",
+            "options": {
+                "debug": true,
+                "experimental": {
+                  "inline": true
+                }
+            }
         }
     ]
 }

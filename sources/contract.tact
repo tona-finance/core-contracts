@@ -52,7 +52,7 @@ contract PoolMaster with BasePoolMaster, Deployable {
         self.staker = staker;
     }
 
-    receive(msg: TokenNotification) {
+    receive(msg: JettonNotification) {
         self.require_jetton_wallet();
 
         self.on_jetton_received_from_account(
@@ -144,7 +144,7 @@ contract PoolAccount with TicketInitializer, Deployable {
         self.reserve = reserve;
     }
 
-    receive(msg: TokenNotification) {
+    receive(msg: JettonNotification) {
         self.require_jetton_wallet();
 
         if (msg.from == newAddress(0, 0)) {
@@ -254,7 +254,8 @@ contract Draw with PrizeDistributor {
         self.require_over();
         require(self.avail_prize_amount > 0, "No available prize");
 
-        let rest_value: Int = self.msg_value(context(), ton("0.1"));
+        let ctx: Context = context();
+        let rest_value: Int = self.msg_value(ctx, ton("0.1"));
         // token transfer value 0.1
         require(rest_value >= 0, "Insufficient value");
         
@@ -263,11 +264,11 @@ contract Draw with PrizeDistributor {
 
         self.forward(
             self.jetton_wallet!!,
-            TokenTransfer {
+            JettonTransfer {
                 query_id: 0,
                 amount: amount,
                 destination: self.reserve,
-                response_destination: sender(),
+                response_destination: ctx.sender,
                 custom_payload: null,
                 forward_ton_amount: 0, // no need to notify reserve
                 forward_payload: emptySlice()
@@ -277,7 +278,7 @@ contract Draw with PrizeDistributor {
         );
     }
 
-    receive(msg: TokenNotification) {
+    receive(msg: JettonNotification) {
         self.require_jetton_wallet();
 
         if (msg.from == self.pool_master) {
