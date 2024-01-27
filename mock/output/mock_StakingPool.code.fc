@@ -27,6 +27,11 @@
     return (($self'jetton_content), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
+((cell), slice) $StakingPool$_fun_jetton_master((cell) $self) impure inline {
+    var (($self'jetton_content)) = $self;
+    return (($self'jetton_content), ($self'jetton_content)~$StakingPool$_fun_jetton_master_address());
+}
+
 ;;
 ;; Receivers of a Contract StakingPool
 ;;
@@ -48,7 +53,7 @@
     var ($msg'query_id) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     int $balance_before = ((__tact_my_balance() - 50000000) - $ctx'value);
-    throw_unless(19364, ($balance_before > 0));
+    throw_unless(19364, ($balance_before >= 0));
     int $deposit_amount = ($ctx'value - 1000000000);
     throw_unless(13586, ($deposit_amount > 0));
     raw_reserve(($balance_before + $deposit_amount), 0);
@@ -80,6 +85,12 @@
 ;; Get methods of a Contract StakingPool
 ;;
 
+_ %jetton_master() method_id(70943) {
+    var self = $StakingPool$_contract_load();
+    var res = self~$StakingPool$_fun_jetton_master();
+    return res;
+}
+
 _ supported_interfaces() method_id {
     return (
         "org.ton.introspection.v0"H >> 128,
@@ -91,7 +102,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmbK6JME7EKBNeWkS6M3wriowpojdHySk9fWxcuCDBEUEr";
+    return "ipfs://QmVPCKKmJXWgT8CAQYy6XuQYZbdg2z6GaEXqbZx5JGaEH3";
 }
 
 _ lazy_deployment_completed() method_id {

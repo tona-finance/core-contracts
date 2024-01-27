@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: StakingPool
-BOC Size: 1774 bytes
+BOC Size: 1793 bytes
 
 # Types
 Total Types: 18
@@ -78,7 +78,9 @@ TLB: `_ balance:coins owner:address jetton:address jetton_wallet_code:^cell = Wa
 Signature: `WalletData{balance:coins,owner:address,jetton:address,jetton_wallet_code:^cell}`
 
 # Get Methods
-Total Get Methods: 0
+Total Get Methods: 1
+
+## jetton_master
 
 # Error Codes
 2: Stack undeflow

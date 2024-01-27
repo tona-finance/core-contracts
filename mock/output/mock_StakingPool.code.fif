@@ -36,6 +36,7 @@ PROGRAM{
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $StakingPool$_fun_jetton_master_init
   DECLPROC $StakingPool$_fun_jetton_master_address
+  DECLPROC $StakingPool$_fun_jetton_master
   DECLPROC $StakingPool$_fun_forward
   DECLPROC $StakingPool$_fun_notify
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
@@ -48,6 +49,7 @@ PROGRAM{
   DECLPROC $StakingPool$_internal_binary_PoolDeposit
   DECLPROC $StakingPool$_internal_binary_PoolWithdraw
   DECLPROC $StakingPool$_internal_binary_Deploy
+  70943 DECLMETHOD %jetton_master
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
@@ -443,6 +445,11 @@ PROGRAM{
     $StakingPool$_fun_jetton_master_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
+  $StakingPool$_fun_jetton_master PROCINLINE:<{
+    DUP
+    $StakingPool$_fun_jetton_master_address INLINECALLDICT
+    NIP
+  }>
   $StakingPool$_fun_forward PROCINLINE:<{
     PUSHNULL
     PUSHNULL
@@ -535,7 +542,7 @@ PROGRAM{
     SUB
     19364 PUSHINT
     OVER
-    0 GTINT
+    -1 GTINT
     THROWANYIFNOT
     s0 s2 XCHG
     1000000000 PUSHINT
@@ -609,6 +616,11 @@ PROGRAM{
     $DeployOk$_store_cell INLINECALLDICT
     $StakingPool$_fun_notify INLINECALLDICT
   }>
+  %jetton_master PROC:<{
+    $StakingPool$_contract_load INLINECALLDICT
+    $StakingPool$_fun_jetton_master INLINECALLDICT
+    NIP
+  }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
@@ -617,7 +629,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d624b364a4d4537454b424e65576b53364d337772696f77706f6a644879536b39665778637543444245554572} PUSHSLICE
+    x{697066733a2f2f516d5650434b4b6d4a5857675438434151597936587551595a626467327a364761455871625a78354a4761454833} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

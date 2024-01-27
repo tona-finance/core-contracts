@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: JettonMaster
-BOC Size: 2014 bytes
+BOC Size: 2027 bytes
 
 # Types
 Total Types: 18

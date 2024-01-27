@@ -114,6 +114,9 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $StakingPool$_fun_jetton_master_address
 ((cell), slice) $StakingPool$_fun_jetton_master_address((cell) $self) impure inline;
 
+;; $StakingPool$_fun_jetton_master
+((cell), slice) $StakingPool$_fun_jetton_master((cell) $self) impure inline;
+
 ;; $StakingPool$_fun_forward
 ((cell), ()) $StakingPool$_fun_forward((cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 

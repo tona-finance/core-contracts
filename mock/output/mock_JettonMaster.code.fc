@@ -85,6 +85,11 @@
 ;; Receivers of a Contract JettonMaster
 ;;
 
+(((int, slice, cell)), ()) %$JettonMaster$_internal_empty((int, slice, cell) $self) impure inline {
+    var ($self'total_supply, $self'owner, $self'jetton_content) = $self;
+    return (($self'total_supply, $self'owner, $self'jetton_content), ());
+}
+
 (((int, slice, cell)), ()) $JettonMaster$_internal_binary_JettonBurnNotification((int, slice, cell) $self, (int, int, slice, slice) $msg) impure inline {
     var ($self'total_supply, $self'owner, $self'jetton_content) = $self;
     var ($msg'query_id, $msg'amount, $msg'sender, $msg'response_destination) = $msg;
@@ -131,7 +136,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://Qmeet9ueTtBv2JXxpjJAgu3y2Z8ZjAujywQ2dB2MSouDJH";
+    return "ipfs://QmcLJvpQFsuUMaxzhAqMecM7d9DwWobZ973oBZyyJsgEdn";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -154,6 +159,12 @@ _ lazy_deployment_completed() method_id {
         op = in_msg.preload_uint(32);
     }
     
+    
+    ;; Receive empty message
+    if ((op == 0) & (slice_bits(in_msg) <= 32)) {
+        self~%$JettonMaster$_internal_empty();
+        return (self, true);
+    }
     
     ;; Receive JettonBurnNotification message
     if (op == 2078119902) {

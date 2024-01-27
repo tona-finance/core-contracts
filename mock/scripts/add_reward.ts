@@ -1,8 +1,7 @@
-import { toNano } from "@ton/core";
+import { Address, toNano } from "@ton/core";
 import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import { StakingPool } from "../output/mock_StakingPool";
-import { JettonMaster } from "../output/mock_JettonMaster";
 import { buildOnchainMetadata } from "./jetton_helper";
 
 async function main() {
@@ -18,23 +17,24 @@ async function main() {
     const wallet = WalletContractV4.create({ workchain, publicKey: keyPair.publicKey });
     const sender = client.open(wallet).sender(keyPair.secretKey);
 
+    const pool = Address.parse("");
+
+
     // deploy
     const jetton_params = {
         name: "Tontogether",
-        description: "TonTogether Jetton on Testnet",
+        description: "This is description of TonTogether Jetton on Testnet",
         symbol: "TNT",
     };
     const jetton_content = buildOnchainMetadata(jetton_params);
     const pool = await StakingPool.fromInit(jetton_content);
-    const pool_contract = client.open(pool);
-    await pool_contract.send(
+    await client.open(pool).send(
         sender,
         { value: toNano("0.2") },
         "init jetton master",
     );
-    const jetton_master_address = await pool_contract.getJettonMaster();
-    console.log('Staking Pool address: ', pool.address.toString({ testOnly: testnet }));
-    console.log("Jetton master address: ", jetton_master_address.toString({ testOnly: testnet }));
+    // Present a deployment link and contract address
+    console.log('Staking Pool address: ' + pool.address.toString({ testOnly: testnet }));
 }
 
 main().catch((error) => {

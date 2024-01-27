@@ -24,8 +24,8 @@ contract StakingPool with Deployable {
     receive(msg: PoolDeposit) {
         let ctx: Context = context();
         let balance_before: Int = myBalance() - self.storageReserve - ctx.value;
-        require(balance_before > 0, "insufficient balance");
-        
+        require(balance_before >= 0, "insufficient balance");
+
         // deposit fee 1.0
         let deposit_amount: Int = ctx.value - ton("1.0");
         require(deposit_amount > 0, "invalid deposit amount");
@@ -76,5 +76,10 @@ contract StakingPool with Deployable {
     inline fun jetton_master_address(): Address {
         let sinit: StateInit = self.jetton_master_init();
         return contractAddress(sinit);
+    }
+
+    // === Get methods ===
+    get fun jetton_master(): Address {
+        return self.jetton_master_address();
     }
 }
