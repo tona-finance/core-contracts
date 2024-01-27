@@ -33,6 +33,7 @@ PROGRAM{
   DECLPROC $DepositInStaker$_load
   DECLPROC $StakerWithdrawal$_load
   DECLPROC $JettonNotification$_load
+  DECLPROC $JettonExcesses$_load
   DECLPROC $JettonTransfer$_store
   DECLPROC $JettonTransfer$_store_cell
   DECLPROC $JettonBurn$_store
@@ -109,6 +110,7 @@ PROGRAM{
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $PoolAccount$_internal_binary_JettonNotification
   DECLPROC $PoolAccount$_internal_binary_InitTicketInternal1
+  DECLPROC $PoolAccount$_internal_binary_JettonExcesses
   DECLPROC $PoolAccount$_internal_binary_StakerWithdrawal
   DECLPROC $PoolAccount$_internal_binary_InitPoolAccountInternal
   DECLPROC $PoolAccount$_internal_binary_Deposit
@@ -407,6 +409,15 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     s3 s0 s3 XC2PU
     s2 s3 XCHG
+  }>
+  $JettonExcesses$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3576854235 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
   }>
   $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
@@ -1309,7 +1320,7 @@ PROGRAM{
     __tact_not_null INLINECALLDICT
     s3 s3 s0 XCHG3
     PUSHNULL
-    20000000 PUSHINT
+    50000000 PUSHINT
     s15 PUSH
     s0 s3 XCHG
     17 s() PUSH
@@ -1483,6 +1494,14 @@ PROGRAM{
     s1 s4 s0 XCHG3
     $PoolAccount$_fun_forward INLINECALLDICT
   }>
+  $PoolAccount$_internal_binary_JettonExcesses PROCINLINE:<{
+    DROP
+    s10 PUSH
+    PUSHNULL
+    FALSE
+    PUSHNULL
+    $PoolAccount$_fun_forward INLINECALLDICT
+  }>
   $PoolAccount$_internal_binary_StakerWithdrawal PROCINLINE:<{
     11 -ROLL
     $PoolAccount$_fun_require_staker INLINECALLDICT
@@ -1557,7 +1576,7 @@ PROGRAM{
     s14 s13 s12 XCHG3
     s11 s14 s13 PUSH3
     s15 PUSH
-    20000000 PUSHINT
+    10000000 PUSHINT
     $PoolAccount$_fun_msg_value INLINECALLDICT
     s3 s12 XCHG
     s15 s14 s13 XCHG3
@@ -1714,7 +1733,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d593152335a4d4553466e5a5a47323877614742644e4a68676b7737546664706f546f5856526f4b4b62706271} PUSHSLICE
+    x{697066733a2f2f516d6359567a46323359714768707757577076355257697936694a477073544d704b396d45635750447759776771} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1774,6 +1793,16 @@ PROGRAM{
       $InitTicketInternal1$_load INLINECALLDICT
       1 4 BLKDROP2
       $PoolAccount$_internal_binary_InitTicketInternal1 INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3576854235 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $JettonExcesses$_load INLINECALLDICT
+      NIP
+      $PoolAccount$_internal_binary_JettonExcesses INLINECALLDICT
       TRUE
     }>
     DUP

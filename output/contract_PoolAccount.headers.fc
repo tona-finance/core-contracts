@@ -105,6 +105,9 @@ cell $DepositInStaker$_store_cell((int) v) inline;
 ;; $JettonNotification$_load
 (slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline;
 
+;; $JettonExcesses$_load
+(slice, ((int))) $JettonExcesses$_load(slice sc_0) inline;
+
 ;; $JettonTransfer$_store
 builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
 

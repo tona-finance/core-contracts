@@ -488,7 +488,8 @@ PROGRAM{
     0 PUSHINT
     TRUE
     64 PUSHINT
-    MYADDR
+    s2 s2 PUSH2
+    __tact_create_address INLINECALLDICT
     100000000 PUSHINT
     $global_emptySlice INLINECALLDICT
     s5 s11 XCHG

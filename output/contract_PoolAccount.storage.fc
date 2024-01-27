@@ -192,6 +192,18 @@ cell $DepositInStaker$_store_cell((int) v) inline {
 }
 
 ;;
+;; Type: JettonExcesses
+;; Header: 0xd53276db
+;; TLB: jetton_excesses#d53276db query_id:uint64 = JettonExcesses
+;;
+
+(slice, ((int))) $JettonExcesses$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3576854235);
+    var v'query_id = sc_0~load_uint(64);
+    return (sc_0, (v'query_id));
+}
+
+;;
 ;; Type: JettonTransfer
 ;; Header: 0x0f8a7ea5
 ;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer

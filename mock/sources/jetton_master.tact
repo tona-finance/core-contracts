@@ -70,7 +70,7 @@ contract JettonMaster {
                 query_id: msg.query_id,
                 amount: mint_amount,
                 response_address: msg.receiver,
-                from: myAddress(),
+                from: newAddress(0, 0),
                 forward_ton_amount: ton("0.1"),
                 forward_payload: emptySlice()
             }.toCell(),

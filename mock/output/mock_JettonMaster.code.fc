@@ -47,7 +47,7 @@
     var ($initCode'code, $initCode'data) = ($self'total_supply, $self'owner, $self'jetton_content)~$JettonMaster$_fun_calculate_jetton_wallet_init($msg'receiver);
     int $mint_amount = ($self'total_supply, $self'owner, $self'jetton_content)~$JettonMaster$_fun__compute_mint_amount($JettonMint$_tensor_cast(($msg'query_id, $msg'total_balance, $msg'deposit_amount, $msg'receiver)));
     $self'total_supply = ($self'total_supply + $mint_amount);
-    $global_send($SendParameters$_constructor_to_value_bounce_mode_body_code_data($global_contractAddress(($initCode'code, $initCode'data)), 0, true, 64, $JettonInternalTransfer$_store_cell($JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload($msg'query_id, $mint_amount, $msg'receiver, my_address(), 100000000, $global_emptySlice())), $initCode'code, $initCode'data));
+    $global_send($SendParameters$_constructor_to_value_bounce_mode_body_code_data($global_contractAddress(($initCode'code, $initCode'data)), 0, true, 64, $JettonInternalTransfer$_store_cell($JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload($msg'query_id, $mint_amount, $msg'receiver, __tact_create_address(0, 0), 100000000, $global_emptySlice())), $initCode'code, $initCode'data));
     return (($self'total_supply, $self'owner, $self'jetton_content), ());
 }
 

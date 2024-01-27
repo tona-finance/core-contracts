@@ -112,7 +112,7 @@ contract JettonWallet {
                 value: msg.forward_ton_amount,
                 mode: SendPayGasSeparately,
                 bounce: false,
-                body: JettonTransferNotification{
+                body: JettonTransferNotification {
                     query_id: msg.query_id,
                     amount: msg.amount,
                     sender: msg.from,

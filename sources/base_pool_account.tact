@@ -18,6 +18,10 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     contribute_amount: Int;
     withdraw_amount: Int;
 
+    receive(msg: JettonExcesses) {
+        self.forward(self.owner, null, false, null);
+    }
+
     // === contract messages ===
 
     receive(msg: StakerWithdrawal) {
@@ -57,8 +61,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         require(self.deposit_cache.get(msg.query_id) == null, "Query id used");
 
         let ctx: Context = context();
-        // deposit gas fee 0.02
-        let rest_value: Int = self.msg_value(ctx, ton("0.02"));
+        // deposit gas fee 0.01
+        let rest_value: Int = self.msg_value(ctx, ton("0.01"));
         let fwd_fee: Int = ctx.readForwardFee();
         // staker fee 1.0
         let staker_fee: Int = ton("1.0");
@@ -114,7 +118,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     // }
 
     fun on_jetton_minted(query_id: Int, amount: Int) {
-        // ctx value is 1.0 from staker
+        // ctx value is 0.1 from staker
 
         // get ton amount from cache
         let deposit_amount: Int? = self.deposit_cache.get(query_id);
@@ -140,7 +144,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
                 destination: self.master,
                 response_destination: self.owner,
                 custom_payload: null,
-                forward_ton_amount: ton("0.02"), // handle jetton notification of master
+                forward_ton_amount: ton("0.05"), // handle jetton notification of master
                 forward_payload: payload
             }.toCell(),
             false,
