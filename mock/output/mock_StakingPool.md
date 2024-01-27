@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: StakingPool
-BOC Size: 1793 bytes
+BOC Size: 1789 bytes
 
 # Types
 Total Types: 18

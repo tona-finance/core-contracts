@@ -27,7 +27,7 @@ contract StakingPool with Deployable {
         let deposit_amount: Int = ctx.value - ton("1.0");
         require(deposit_amount > 0, "invalid deposit amount");
 
-        let balance_before: Int = min(myBalance() - self.storageReserve - ctx.value, self.storageReserve);
+        let balance_before: Int = max(myBalance() - self.storageReserve - ctx.value, 0);
         nativeReserve(balance_before + deposit_amount, 0);
 
         send(SendParameters {

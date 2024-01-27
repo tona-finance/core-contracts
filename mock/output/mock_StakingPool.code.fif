@@ -547,8 +547,8 @@ PROGRAM{
     SUB
     s0 s3 XCHG2
     SUB
-    50000000 PUSHINT
-    MIN
+    0 PUSHINT
+    MAX
     s0 s2 PUSH2
     ADD
     0 PUSHINT

@@ -1,7 +1,5 @@
 import * as fs from "fs";
-import { contractAddress, toNano } from "@ton/core";
-import { TonClient4, WalletContractV4 } from "@ton/ton";
-import { mnemonicToPrivateKey } from "@ton/crypto";
+import { contractAddress } from "@ton/core";
 import { StakingPool } from "../output/mock_StakingPool";
 import { JettonMaster } from "../output/mock_JettonMaster";
 import { buildOnchainMetadata } from "./jetton_helper";
@@ -12,7 +10,7 @@ async function main() {
     // Parameters
     const testnet = true;
     const jetton_params = {
-        name: "Tontogether1",
+        name: "Tontogether",
         description: "TonTogether Jetton on Testnet",
         symbol: "TNT",
     };

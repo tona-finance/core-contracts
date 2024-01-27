@@ -6,10 +6,10 @@ PROGRAM{
   DECLPROC get_abi_ipfs;
   DECLPROC ?fun_ref_06d236713ef807dc;
   DECLPROC ?fun_ref_20d95194b2d9efb7;
-  DECLPROC ?fun_ref_3894fd2587090a4d;
+  DECLPROC ?fun_ref_5f468f5dcf65325c;
   DECLPROC ?fun_ref_6356b17006c32e23;
+  DECLPROC ?fun_ref_7a5c7448d41881af;
   DECLPROC ?fun_ref_96ec0bfcc8cec65c;
-  DECLPROC ?fun_ref_9949ff2c506a45aa;
   recv_internal PROC:<{
     s0 s1 XCHG
     CTOS
@@ -43,7 +43,7 @@ PROGRAM{
     2 SETGLOBVAR
     ?fun_ref_96ec0bfcc8cec65c INLINECALLDICT
     ROTREV
-    ?fun_ref_3894fd2587090a4d INLINECALLDICT
+    ?fun_ref_5f468f5dcf65325c INLINECALLDICT
     130 THROWIFNOT
     NEWC
     3 GETGLOBVAR
@@ -857,7 +857,7 @@ PROGRAM{
     s0 s1 XCHG
     SENDRAWMSG
   }>
-  ?fun_ref_3894fd2587090a4d PROCREF:<{
+  ?fun_ref_5f468f5dcf65325c PROCREF:<{
     2 SAVE
     SAMEALTSAVE
     s0 s1 XCHG
@@ -900,7 +900,7 @@ PROGRAM{
       64 LDU
       s0 s1 XCHG
       s1 POP
-      ?fun_ref_9949ff2c506a45aa INLINECALLDICT
+      ?fun_ref_7a5c7448d41881af INLINECALLDICT
       -1 PUSHINT
     }> PUSHCONT
     IFJMP
@@ -1437,31 +1437,7 @@ PROGRAM{
     EQUAL
     136 THROWIFNOT
   }>
-  ?fun_ref_96ec0bfcc8cec65c PROCREF:<{
-    c4 PUSH
-    CTOS
-    LDREF
-    s0 s1 XCHG
-    3 SETGLOBVAR
-    1 LDI
-    s0 s1 XCHG
-    <{
-      LDREF
-      s0 s1 XCHG
-      s1 POP
-    }> PUSHCONT
-    IFJMP
-    MYADDR
-    11 PLDU
-    10 PUSHPOW2
-    EQUAL
-    137 THROWIFNOT
-    LDREF
-    s0 s1 XCHG
-    s0 s1 XCHG
-    ENDS
-  }>
-  ?fun_ref_9949ff2c506a45aa PROCREF:<{
+  ?fun_ref_7a5c7448d41881af PROCREF:<{
     1 GETGLOBVAR
     4 UNTUPLE
     s0 POP
@@ -1479,8 +1455,8 @@ PROGRAM{
     SUB
     s0 s3 XCHG2
     SUB
-    50000000 PUSHINT
-    MIN
+    0 PUSHINT
+    MAX
     s0 s2 PUSH2
     ADD
     0 PUSHINT
@@ -1668,5 +1644,29 @@ PROGRAM{
     ENDC
     s0 s1 XCHG
     SENDRAWMSG
+  }>
+  ?fun_ref_96ec0bfcc8cec65c PROCREF:<{
+    c4 PUSH
+    CTOS
+    LDREF
+    s0 s1 XCHG
+    3 SETGLOBVAR
+    1 LDI
+    s0 s1 XCHG
+    <{
+      LDREF
+      s0 s1 XCHG
+      s1 POP
+    }> PUSHCONT
+    IFJMP
+    MYADDR
+    11 PLDU
+    10 PUSHPOW2
+    EQUAL
+    137 THROWIFNOT
+    LDREF
+    s0 s1 XCHG
+    s0 s1 XCHG
+    ENDS
   }>
 }END>c
