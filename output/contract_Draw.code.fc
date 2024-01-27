@@ -214,15 +214,16 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
     ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_active();
     ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_over();
     throw_unless(27055, ($self'avail_prize_amount > 0));
-    int $rest_value = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_msg_value(__tact_context_get(), 100000000);
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    int $rest_value = ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_msg_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), 100000000);
     throw_unless(2805, ($rest_value >= 0));
     int $amount = $self'avail_prize_amount;
     $self'avail_prize_amount = 0;
-    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward(__tact_not_null($self'jetton_wallet), $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(0, $amount, $self'reserve, __tact_context_get_sender(), null(), 0, $global_emptySlice())), false, null());
+    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward(__tact_not_null($self'jetton_wallet), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(0, $amount, $self'reserve, $ctx'sender, null(), 0, $global_emptySlice())), false, null());
     return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
 }
 
-(((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice)), ()) $Draw$_internal_binary_TokenNotification((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int, slice, slice) $msg) impure inline {
+(((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice)), ()) $Draw$_internal_binary_JettonNotification((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int, slice, slice) $msg) impure inline {
     var ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve) = $self;
     var ($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload) = $msg;
     ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_require_jetton_wallet();
@@ -245,7 +246,7 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
         int $pay_amount = min($prize_amount, $self'avail_prize_amount);
         if (($pay_amount > 0)) {
             $self'avail_prize_amount = ($self'avail_prize_amount - $pay_amount);
-            $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_not_null($self'jetton_wallet), 100000000, 2, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $pay_amount, $msg'user, $msg'user, null(), 0, $global_emptySlice()))));
+            $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_not_null($self'jetton_wallet), 100000000, 2, $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $pay_amount, $msg'user, $msg'user, null(), 0, $global_emptySlice()))));
         }
         int $debt_amount = ($prize_amount - $pay_amount);
         if (($debt_amount > 0)) {
@@ -322,7 +323,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmULfsigrQUbfBJGQGWVWxDr4KA4QsAZUBzMrrETcwjyVP";
+    return "ipfs://QmNkbXfr9Ec3hrmXETvj6zb64BLEdUPWcG5yCBz34qXx3X";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -346,10 +347,10 @@ _ lazy_deployment_completed() method_id {
     }
     
     
-    ;; Receive TokenNotification message
+    ;; Receive JettonNotification message
     if (op == 1935855772) {
-        var msg = in_msg~$TokenNotification$_load();
-        self~$Draw$_internal_binary_TokenNotification(msg);
+        var msg = in_msg~$JettonNotification$_load();
+        self~$Draw$_internal_binary_JettonNotification(msg);
         return (self, true);
     }
     

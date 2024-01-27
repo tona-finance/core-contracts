@@ -1,0 +1,180 @@
+#pragma version =0.4.3;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "mock_StakingPool.headers.fc";
+#include "mock_StakingPool.stdlib.fc";
+#include "mock_StakingPool.storage.fc";
+
+;;
+;; Contract StakingPool functions
+;;
+
+(cell) $StakingPool$_contract_init(cell $jetton_content) impure inline_ref {
+    var (($self'jetton_content)) = (null());
+    $self'jetton_content = $jetton_content;
+    return ($self'jetton_content);
+}
+
+((cell), (cell, cell)) $StakingPool$_fun_jetton_master_init((cell) $self) impure inline {
+    var (($self'jetton_content)) = $self;
+    return (($self'jetton_content), $JettonMaster$_init_child(__tact_context_sys, my_address(), $self'jetton_content));
+}
+
+((cell), slice) $StakingPool$_fun_jetton_master_address((cell) $self) impure inline {
+    var (($self'jetton_content)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'jetton_content)~$StakingPool$_fun_jetton_master_init();
+    return (($self'jetton_content), $global_contractAddress(($sinit'code, $sinit'data)));
+}
+
+;;
+;; Receivers of a Contract StakingPool
+;;
+
+(((cell)), ()) %$StakingPool$_internal_empty((cell) $self) impure inline {
+    var ($self'jetton_content) = $self;
+    return (($self'jetton_content), ());
+}
+
+((cell), ()) $StakingPool$_internal_text_7a5d1b7532b9bfce626345c83ed8fdfedc82cc400bc360d7c5586ba4042f22b9((cell) $self) impure inline {
+    var ($self'jetton_content) = $self;
+    var ($sinit'code, $sinit'data) = ($self'jetton_content)~$StakingPool$_fun_jetton_master_init();
+    ($self'jetton_content)~$StakingPool$_fun_forward($global_contractAddress(($sinit'code, $sinit'data)), null(), false, $StateInit$_as_optional(($sinit'code, $sinit'data)));
+    return (($self'jetton_content), ());
+}
+
+(((cell)), ()) $StakingPool$_internal_binary_PoolDeposit((cell) $self, (int) $msg) impure inline {
+    var ($self'jetton_content) = $self;
+    var ($msg'query_id) = $msg;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    int $balance_before = ((__tact_my_balance() - 50000000) - $ctx'value);
+    throw_unless(19364, ($balance_before > 0));
+    int $deposit_amount = ($ctx'value - 1000000000);
+    throw_unless(13586, ($deposit_amount > 0));
+    raw_reserve(($balance_before + $deposit_amount), 0);
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, ($self'jetton_content)~$StakingPool$_fun_jetton_master_address(), 0, 128, $JettonMint$_store_cell($JettonMint$_constructor_query_id_receiver_total_balance_deposit_amount($msg'query_id, $ctx'sender, $balance_before, $deposit_amount))));
+    return (($self'jetton_content), ());
+}
+
+(((cell)), ()) $StakingPool$_internal_binary_PoolWithdraw((cell) $self, (int, int, int, slice, slice) $msg) impure inline {
+    var ($self'jetton_content) = $self;
+    var ($msg'query_id, $msg'total_supply, $msg'jetton_amount, $msg'from_address, $msg'response_address) = $msg;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    throw_unless(19420, ( __tact_slice_eq_bits(($self'jetton_content)~$StakingPool$_fun_jetton_master_address(), $ctx'sender) ));
+    int $balance_before = ((__tact_my_balance() - 50000000) - $ctx'value);
+    throw_unless(19364, ($balance_before > 0));
+    int $withdraw_amount = (($balance_before * $msg'jetton_amount) / $msg'total_supply);
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, $msg'from_address, $withdraw_amount, 2, $PoolWithdrawal$_store_cell($PoolWithdrawal$_constructor_query_id($msg'query_id))));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, $msg'response_address, 0, (64 + 2)));
+    return (($self'jetton_content), ());
+}
+
+(((cell)), ()) $StakingPool$_internal_binary_Deploy((cell) $self, (int) $deploy) impure inline {
+    var ($self'jetton_content) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'jetton_content)~$StakingPool$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'jetton_content), ());
+}
+
+;;
+;; Get methods of a Contract StakingPool
+;;
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmbK6JME7EKBNeWkS6M3wriowpojdHySk9fWxcuCDBEUEr";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract StakingPool
+;;
+
+((cell), int) $StakingPool$_contract_router_internal((cell) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive empty message
+    if ((op == 0) & (slice_bits(in_msg) <= 32)) {
+        self~%$StakingPool$_internal_empty();
+        return (self, true);
+    }
+    
+    ;; Receive PoolDeposit message
+    if (op == 1205158801) {
+        var msg = in_msg~$PoolDeposit$_load();
+        self~$StakingPool$_internal_binary_PoolDeposit(msg);
+        return (self, true);
+    }
+    
+    ;; Receive PoolWithdraw message
+    if (op == 832244956) {
+        var msg = in_msg~$PoolWithdraw$_load();
+        self~$StakingPool$_internal_binary_PoolWithdraw(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$StakingPool$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    ;; Text Receivers
+    if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "init jetton master" message
+        if (text_op == 0x7a5d1b7532b9bfce626345c83ed8fdfedc82cc400bc360d7c5586ba4042f22b9) {
+            self~$StakingPool$_internal_text_7a5d1b7532b9bfce626345c83ed8fdfedc82cc400bc360d7c5586ba4042f22b9();
+            return (self, true);
+        }
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $StakingPool$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$StakingPool$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $StakingPool$_contract_store(self);
+}

@@ -49,9 +49,9 @@ message(0x7bdd97de) JettonBurnNotification {
 
 message(0x1674b0a0) JettonMint {
     query_id: Int as uint64;
-    receiver: Address;
     total_balance: Int as coins;
     deposit_amount: Int as coins;
+    receiver: Address;
 }
 
 message(0x47d54391) PoolDeposit {
@@ -60,6 +60,7 @@ message(0x47d54391) PoolDeposit {
 
 message(0x319b0cdc) PoolWithdraw {
     query_id: Int as uint64;
+    total_supply: Int as coins;
     jetton_amount: Int as coins;
     from_address: Address;
     response_address: Address;

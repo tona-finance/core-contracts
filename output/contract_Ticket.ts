@@ -495,15 +495,15 @@ function dictValueParserStakerWithdrawal(): DictionaryValue<StakerWithdrawal> {
     }
 }
 
-export type TokenNotification = {
-    $$type: 'TokenNotification';
+export type JettonNotification = {
+    $$type: 'JettonNotification';
     query_id: bigint;
     amount: bigint;
     from: Address;
     forward_payload: Cell;
 }
 
-export function storeTokenNotification(src: TokenNotification) {
+export function storeJettonNotification(src: JettonNotification) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeUint(1935855772, 32);
@@ -514,25 +514,25 @@ export function storeTokenNotification(src: TokenNotification) {
     };
 }
 
-export function loadTokenNotification(slice: Slice) {
+export function loadJettonNotification(slice: Slice) {
     let sc_0 = slice;
     if (sc_0.loadUint(32) !== 1935855772) { throw Error('Invalid prefix'); }
     let _query_id = sc_0.loadUintBig(64);
     let _amount = sc_0.loadCoins();
     let _from = sc_0.loadAddress();
     let _forward_payload = sc_0.asCell();
-    return { $$type: 'TokenNotification' as const, query_id: _query_id, amount: _amount, from: _from, forward_payload: _forward_payload };
+    return { $$type: 'JettonNotification' as const, query_id: _query_id, amount: _amount, from: _from, forward_payload: _forward_payload };
 }
 
-function loadTupleTokenNotification(source: TupleReader) {
+function loadTupleJettonNotification(source: TupleReader) {
     let _query_id = source.readBigNumber();
     let _amount = source.readBigNumber();
     let _from = source.readAddress();
     let _forward_payload = source.readCell();
-    return { $$type: 'TokenNotification' as const, query_id: _query_id, amount: _amount, from: _from, forward_payload: _forward_payload };
+    return { $$type: 'JettonNotification' as const, query_id: _query_id, amount: _amount, from: _from, forward_payload: _forward_payload };
 }
 
-function storeTupleTokenNotification(source: TokenNotification) {
+function storeTupleJettonNotification(source: JettonNotification) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.query_id);
     builder.writeNumber(source.amount);
@@ -541,23 +541,23 @@ function storeTupleTokenNotification(source: TokenNotification) {
     return builder.build();
 }
 
-function dictValueParserTokenNotification(): DictionaryValue<TokenNotification> {
+function dictValueParserJettonNotification(): DictionaryValue<JettonNotification> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeTokenNotification(src)).endCell());
+            buidler.storeRef(beginCell().store(storeJettonNotification(src)).endCell());
         },
         parse: (src) => {
-            return loadTokenNotification(src.loadRef().beginParse());
+            return loadJettonNotification(src.loadRef().beginParse());
         }
     }
 }
 
-export type TokenExcesses = {
-    $$type: 'TokenExcesses';
+export type JettonExcesses = {
+    $$type: 'JettonExcesses';
     query_id: bigint;
 }
 
-export function storeTokenExcesses(src: TokenExcesses) {
+export function storeJettonExcesses(src: JettonExcesses) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeUint(3576854235, 32);
@@ -565,37 +565,37 @@ export function storeTokenExcesses(src: TokenExcesses) {
     };
 }
 
-export function loadTokenExcesses(slice: Slice) {
+export function loadJettonExcesses(slice: Slice) {
     let sc_0 = slice;
     if (sc_0.loadUint(32) !== 3576854235) { throw Error('Invalid prefix'); }
     let _query_id = sc_0.loadUintBig(64);
-    return { $$type: 'TokenExcesses' as const, query_id: _query_id };
+    return { $$type: 'JettonExcesses' as const, query_id: _query_id };
 }
 
-function loadTupleTokenExcesses(source: TupleReader) {
+function loadTupleJettonExcesses(source: TupleReader) {
     let _query_id = source.readBigNumber();
-    return { $$type: 'TokenExcesses' as const, query_id: _query_id };
+    return { $$type: 'JettonExcesses' as const, query_id: _query_id };
 }
 
-function storeTupleTokenExcesses(source: TokenExcesses) {
+function storeTupleJettonExcesses(source: JettonExcesses) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.query_id);
     return builder.build();
 }
 
-function dictValueParserTokenExcesses(): DictionaryValue<TokenExcesses> {
+function dictValueParserJettonExcesses(): DictionaryValue<JettonExcesses> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeTokenExcesses(src)).endCell());
+            buidler.storeRef(beginCell().store(storeJettonExcesses(src)).endCell());
         },
         parse: (src) => {
-            return loadTokenExcesses(src.loadRef().beginParse());
+            return loadJettonExcesses(src.loadRef().beginParse());
         }
     }
 }
 
-export type TokenTransfer = {
-    $$type: 'TokenTransfer';
+export type JettonTransfer = {
+    $$type: 'JettonTransfer';
     query_id: bigint;
     amount: bigint;
     destination: Address;
@@ -605,7 +605,7 @@ export type TokenTransfer = {
     forward_payload: Cell;
 }
 
-export function storeTokenTransfer(src: TokenTransfer) {
+export function storeJettonTransfer(src: JettonTransfer) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeUint(260734629, 32);
@@ -619,7 +619,7 @@ export function storeTokenTransfer(src: TokenTransfer) {
     };
 }
 
-export function loadTokenTransfer(slice: Slice) {
+export function loadJettonTransfer(slice: Slice) {
     let sc_0 = slice;
     if (sc_0.loadUint(32) !== 260734629) { throw Error('Invalid prefix'); }
     let _query_id = sc_0.loadUintBig(64);
@@ -629,10 +629,10 @@ export function loadTokenTransfer(slice: Slice) {
     let _custom_payload = sc_0.loadBit() ? sc_0.loadRef() : null;
     let _forward_ton_amount = sc_0.loadCoins();
     let _forward_payload = sc_0.asCell();
-    return { $$type: 'TokenTransfer' as const, query_id: _query_id, amount: _amount, destination: _destination, response_destination: _response_destination, custom_payload: _custom_payload, forward_ton_amount: _forward_ton_amount, forward_payload: _forward_payload };
+    return { $$type: 'JettonTransfer' as const, query_id: _query_id, amount: _amount, destination: _destination, response_destination: _response_destination, custom_payload: _custom_payload, forward_ton_amount: _forward_ton_amount, forward_payload: _forward_payload };
 }
 
-function loadTupleTokenTransfer(source: TupleReader) {
+function loadTupleJettonTransfer(source: TupleReader) {
     let _query_id = source.readBigNumber();
     let _amount = source.readBigNumber();
     let _destination = source.readAddress();
@@ -640,10 +640,10 @@ function loadTupleTokenTransfer(source: TupleReader) {
     let _custom_payload = source.readCellOpt();
     let _forward_ton_amount = source.readBigNumber();
     let _forward_payload = source.readCell();
-    return { $$type: 'TokenTransfer' as const, query_id: _query_id, amount: _amount, destination: _destination, response_destination: _response_destination, custom_payload: _custom_payload, forward_ton_amount: _forward_ton_amount, forward_payload: _forward_payload };
+    return { $$type: 'JettonTransfer' as const, query_id: _query_id, amount: _amount, destination: _destination, response_destination: _response_destination, custom_payload: _custom_payload, forward_ton_amount: _forward_ton_amount, forward_payload: _forward_payload };
 }
 
-function storeTupleTokenTransfer(source: TokenTransfer) {
+function storeTupleJettonTransfer(source: JettonTransfer) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.query_id);
     builder.writeNumber(source.amount);
@@ -655,26 +655,26 @@ function storeTupleTokenTransfer(source: TokenTransfer) {
     return builder.build();
 }
 
-function dictValueParserTokenTransfer(): DictionaryValue<TokenTransfer> {
+function dictValueParserJettonTransfer(): DictionaryValue<JettonTransfer> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeTokenTransfer(src)).endCell());
+            buidler.storeRef(beginCell().store(storeJettonTransfer(src)).endCell());
         },
         parse: (src) => {
-            return loadTokenTransfer(src.loadRef().beginParse());
+            return loadJettonTransfer(src.loadRef().beginParse());
         }
     }
 }
 
-export type TokenBurn = {
-    $$type: 'TokenBurn';
+export type JettonBurn = {
+    $$type: 'JettonBurn';
     query_id: bigint;
     amount: bigint;
     response_destination: Address;
     custom_payload: Cell | null;
 }
 
-export function storeTokenBurn(src: TokenBurn) {
+export function storeJettonBurn(src: JettonBurn) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeUint(1499400124, 32);
@@ -685,25 +685,25 @@ export function storeTokenBurn(src: TokenBurn) {
     };
 }
 
-export function loadTokenBurn(slice: Slice) {
+export function loadJettonBurn(slice: Slice) {
     let sc_0 = slice;
     if (sc_0.loadUint(32) !== 1499400124) { throw Error('Invalid prefix'); }
     let _query_id = sc_0.loadUintBig(64);
     let _amount = sc_0.loadCoins();
     let _response_destination = sc_0.loadAddress();
     let _custom_payload = sc_0.loadBit() ? sc_0.loadRef() : null;
-    return { $$type: 'TokenBurn' as const, query_id: _query_id, amount: _amount, response_destination: _response_destination, custom_payload: _custom_payload };
+    return { $$type: 'JettonBurn' as const, query_id: _query_id, amount: _amount, response_destination: _response_destination, custom_payload: _custom_payload };
 }
 
-function loadTupleTokenBurn(source: TupleReader) {
+function loadTupleJettonBurn(source: TupleReader) {
     let _query_id = source.readBigNumber();
     let _amount = source.readBigNumber();
     let _response_destination = source.readAddress();
     let _custom_payload = source.readCellOpt();
-    return { $$type: 'TokenBurn' as const, query_id: _query_id, amount: _amount, response_destination: _response_destination, custom_payload: _custom_payload };
+    return { $$type: 'JettonBurn' as const, query_id: _query_id, amount: _amount, response_destination: _response_destination, custom_payload: _custom_payload };
 }
 
-function storeTupleTokenBurn(source: TokenBurn) {
+function storeTupleJettonBurn(source: JettonBurn) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.query_id);
     builder.writeNumber(source.amount);
@@ -712,13 +712,13 @@ function storeTupleTokenBurn(source: TokenBurn) {
     return builder.build();
 }
 
-function dictValueParserTokenBurn(): DictionaryValue<TokenBurn> {
+function dictValueParserJettonBurn(): DictionaryValue<JettonBurn> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeTokenBurn(src)).endCell());
+            buidler.storeRef(beginCell().store(storeJettonBurn(src)).endCell());
         },
         parse: (src) => {
-            return loadTokenBurn(src.loadRef().beginParse());
+            return loadJettonBurn(src.loadRef().beginParse());
         }
     }
 }
@@ -2076,8 +2076,8 @@ function initTicket_init_args(src: Ticket_init_args) {
 }
 
 async function Ticket_init(owner: Address, pool_account: Address, draw: Address, period: bigint) {
-    const __code = Cell.fromBase64('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');
-    const __system = Cell.fromBase64('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');
+    const __code = Cell.fromBase64('te6ccgECIQEAB98AART/APSkE/S88sgLAQIBYgIDA3rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVF9s88uCCHgQFAgEgFBUEmAGSMH/gcCHXScIflTAg1wsf3iCCEDWN7VK64wIggghPiNi6jpUw0x8BgghPiNi68uCB0z9mbBLbPH/gIIIQ5h23q7rjAoIQWdLHnroGBwgJAPTI+EMBzH8BygBVcFCHINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WFcoAUAMg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wyx/LHxL0AAH6AsntVALQMNMfAYIQNY3tUrry4IH6APoAWWwSVXGBeMcns/L0gRFN+EJScMcF8vQyNX8HqhNQCKkEJQgQRhA1RAMCbXBtbW0ibrOZWyBu8tCAbyIBkTLi+EFvJBNfA/gnbxABoYIQBfXhALnjD38QEQLcVXGCAMFsJ/L0+EJSgMcF8uCE+EFvJIIQO5rKADFsIvgnbxAioYIQBfXhAGa2CKEBoKGBCvUBwv/y9FUHINdJgBSpBIE13CHCAJQhgwe5kXDi8vSBPpZTUb7y9FFEoSTIywcFiuQxA8nQVCmAUnAKCwFwMNMfAYIQ5h23q7ry4IHTP/oA+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiEMwbBPbPH8MAQjjAjBwDwDoAdMTJIEBASNxQTP0DG+hlAHXADCSW23iggDuAwFu8vQEgQEBIn9xIW6VW1n0WjCYyAHPAEEz9ELiEIpeNhBZEEpAM8j4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssTyfkAMBB5EGgQVxBGWhUBwshVMIIQV53bW1AFyx8Tyz8BINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgHPFskkEIkQeAYHEEUQNEAzcG0OAagQehBpEFgQShA5SKmCAMFsJ/L0+EJSgMcF8uCEgUJAU7G78vT4QW8kghAF9eEAMWwi+CdvECKhghAF9eEAZrYIoQGgoYEK9QHC//L0KqFUKHBUZV0NAcTIVUCCEOAP3qBQBssfFMs/WCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbLHwH6AskQaRBYEEcQNkVAQzBwbQ4CUG1tIm6zmVsgbvLQgG8iAZEy4vhBbyQTXwP4J28QAaGCEAX14QC54w8QEQP+0x8BghBZ0seeuvLggfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+gBZbBJVcYIAwWwn8vSBEU34QlJgxwXy9FAIoBBoEFcQRhA1RAMCbXBtbW0ibrOZWyBu8tCAbyIBkTLi+EFvJBNfA/gnbxABoYIQBfXhALnjDxAREgHwghAF9eEAcPsCECRwAwSBAIJQI8hxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAEwHcECRwAwSAQlAjyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wATAAJ/AJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAgEgFhcCASAYGQE7ucZds8VQeBAQEjAnFBM/QMb6GUAdcAMJJbbeJsgYHgEPuFHds8J2yBgeAN27vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnAb1J3vlUWW8cdT094FWcMmgnCdl05as07LczoOlm2UZuikgnBAznVp5xX50lCwHWFuJkeygCAUgaGwARsK+7UTQ0gABgAgEgHB0BG64YbZ4qOzqqO7KTNkPAHgB1rN3Ghq0uDM5nReXqLapoRkwoRwkNyacpzCYsqi9GiwZNzebMZs3tTQcGLshJa02sSghJqo3sicxI8EAB9u1E0NQB+GPSAAGObvpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0gD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0x/TH/QE+gBVcGwY4B8B+vgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB1AHQgQEB1wAwFEMwBNFVAts8IAAWcHBUFAAQJBAjbQE=');
+    const __system = Cell.fromBase64('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');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -2149,10 +2149,10 @@ const Ticket_types: ABIType[] = [
     {"name":"TwabStore","header":null,"fields":[{"name":"store","type":{"kind":"dict","key":"int","value":"Twab","valueFormat":"ref"}},{"name":"size","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"DepositInStaker","header":1205158801,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"StakerWithdrawal","header":175592284,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
-    {"name":"TokenNotification","header":1935855772,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"from","type":{"kind":"simple","type":"address","optional":false}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
-    {"name":"TokenExcesses","header":3576854235,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
-    {"name":"TokenTransfer","header":260734629,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}},{"name":"forward_ton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
-    {"name":"TokenBurn","header":1499400124,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}}]},
+    {"name":"JettonNotification","header":1935855772,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"from","type":{"kind":"simple","type":"address","optional":false}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
+    {"name":"JettonExcesses","header":3576854235,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
+    {"name":"JettonTransfer","header":260734629,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}},{"name":"forward_ton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
+    {"name":"JettonBurn","header":1499400124,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}}]},
     {"name":"SetPrize","header":3546560533,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"WithdrawInternal","header":2498498580,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}},{"name":"withdraw_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"acc_contribute_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"acc_withdraw_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"WithdrawFinishInternal","header":2966263530,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}},{"name":"timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},

@@ -16,13 +16,18 @@ struct WalletData {
     jetton_wallet_code: Cell;   // with code of this wallet
 }
 
-
-trait JettonWallet {
-    balance: Int;
+contract JettonWallet {
+    balance: Int as coins = 0;
     owner: Address;
     jetton_master: Address;
-    virtual const gasConsumption: Int = ton("0.05");
-    virtual const minTonsForStorage: Int = ton("0.05");
+    
+    const gasConsumption: Int = ton("0.05");
+    const minTonsForStorage: Int = ton("0.05");
+
+    init(owner: Address, jetton_master: Address) {
+        self.owner = owner;
+        self.jetton_master = jetton_master;
+    }
 
     //********************************************//
     //                  Messages                  //
@@ -75,19 +80,21 @@ trait JettonWallet {
 
     // @dev  calculate_jetton_wallet_init will get init code of a jetton wallet by provided it's owner address
     // @note one MUST override this function and return state init of the inherited jetton wallet implementation
-    abstract inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit;
+    inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit {
+        return initOf JettonWallet(owner_address, self.jetton_master);
+    }
 
     // @dev  _internal_tranfer_validate will validate internal transfer message, usually it will check that sender is a jetton master or jetton wallet
     // @note this function will triggered on receiving JettonTransfer message
-    virtual inline fun _internal_transfer_validate(ctx: Context, msg: JettonInternalTransfer) {
+    inline fun _internal_transfer_validate(ctx: Context, msg: JettonInternalTransfer) {
         if(ctx.sender != self.jetton_master){
-            let init: StateInit = self.calculate_jetton_wallet_init(msg.from);
-            require(ctx.sender == contractAddress(init), "JettonWallet: Only Jetton master or Jetton wallet can call this function");
+            let sinit: StateInit = self.calculate_jetton_wallet_init(msg.from);
+            require(ctx.sender == contractAddress(sinit), "JettonWallet: Only Jetton master or Jetton wallet can call this function");
         }
     }
 
     // @dev  _internal_transfer_estimate_remain_value will estimate remain value after deducting storage fee, forward fee and gas consumption
-    virtual inline fun _internal_transfer_estimate_remain_value(ctx: Context, msg: JettonInternalTransfer): Int {
+    inline fun _internal_transfer_estimate_remain_value(ctx: Context, msg: JettonInternalTransfer): Int {
         let tonBalanceBeforeMsg: Int = myBalance() - ctx.value;
         let storage_fee: Int =  self.minTonsForStorage - min(tonBalanceBeforeMsg, self.minTonsForStorage);
         let remain: Int = ctx.value - (storage_fee + self.gasConsumption);
@@ -98,7 +105,7 @@ trait JettonWallet {
     }
 
     // @dev  _internal_transfer_notification will send notification to the owner of the jetton wallet
-    virtual inline fun _internal_transfer_notification(ctx: Context, msg: JettonInternalTransfer) {
+    inline fun _internal_transfer_notification(ctx: Context, msg: JettonInternalTransfer) {
         if (msg.forward_ton_amount > 0) {
             send(SendParameters{
                 to: self.owner,
@@ -116,7 +123,7 @@ trait JettonWallet {
     }
 
     // @dev  _internal_transfer_excesses will send excesses message back after transfer action completed
-    virtual inline fun _internal_transfer_excesses(ctx: Context, msg: JettonInternalTransfer, remain: Int){
+    inline fun _internal_transfer_excesses(ctx: Context, msg: JettonInternalTransfer, remain: Int){
         if((msg.response_address != newAddress(0, 0)) && remain > 0){
             send(SendParameters{
                 to: msg.response_address,
@@ -131,14 +138,15 @@ trait JettonWallet {
     }
     
     // @dev  _burn_validate will conduct custom checking when receiving JettonBurn message
-    virtual inline fun _burn_validate(ctx: Context, msg: JettonBurn) {
+    inline fun _burn_validate(ctx: Context, msg: JettonBurn) {
         require(ctx.sender == self.owner, "JettonWallet: Only owner can burn tokens");
+        require(ctx.value > ton("1.0"), "JettonWallet: Insufficient value");
     }
 
     // @dev  _burn_tokens will burn tokens and send JettonBurnNotification back to the jetton master
     // @note this message is bounceable, if burn action failed, the message will be bounced back, you should increase the balance of the wallet
-    virtual inline fun _burn_tokens(ctx: Context, msg: JettonBurn) {
-        send(SendParameters{
+    inline fun _burn_tokens(ctx: Context, msg: JettonBurn) {
+        send(SendParameters {
             to: self.jetton_master,
             value: 0,
             mode: SendRemainingValue,
@@ -153,13 +161,13 @@ trait JettonWallet {
     }
 
     // @dev  _transfer_validate will conduct custom checking when receiving JettonTransfer message
-    virtual inline fun _transfer_validate(ctx: Context, msg: JettonTransfer) {
+    inline fun _transfer_validate(ctx: Context, msg: JettonTransfer) {
         require(ctx.sender == self.owner, "Only owner can call this function");
         
     }
 
     // @dev  _transfer_estimate_remain_value will estimate remain value after deducting storage fee, forward fee and gas consumption
-    virtual inline fun _transfer_estimate_remain_value(ctx: Context, msg: JettonTransfer) {
+    inline fun _transfer_estimate_remain_value(ctx: Context, msg: JettonTransfer) {
         let fwd_count: Int = 1;
         if (msg.forward_ton_amount > 0) {
             fwd_count = 2;
@@ -169,9 +177,9 @@ trait JettonWallet {
 
     // @dev  _transfer_jetton will transfer jettons to the jetton wallet of the destination address (owner of jetton wallet)
     // @note  this message is bounceable, if transfer action failed, the message will be bounced back, you should increase the balance of the wallet
-    virtual inline fun _transfer_jetton(ctx: Context, msg: JettonTransfer) {
-        let init: StateInit = self.calculate_jetton_wallet_init(msg.destination);
-        let receiver: Address = contractAddress(init);
+    inline fun _transfer_jetton(ctx: Context, msg: JettonTransfer) {
+        let sinit: StateInit = self.calculate_jetton_wallet_init(msg.destination);
+        let receiver: Address = contractAddress(sinit);
         send(SendParameters{
             to: receiver,
             value: 0,
@@ -185,8 +193,8 @@ trait JettonWallet {
                 forward_ton_amount: msg.forward_ton_amount,
                 forward_payload: msg.forward_payload
             }.toCell(),
-            code: init.code,
-            data: init.data
+            code: sinit.code,
+            data: sinit.data
         });
     }
 

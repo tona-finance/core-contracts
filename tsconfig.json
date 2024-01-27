@@ -66,10 +66,9 @@
   "include": [
     "sources/**/*",
     "output",
+    "scripts/**/*",
     "mock/sources/**/*",
     "mock/output",
-    "scripts/spec.ts",
-    "scripts/read.ts",
-    "scripts/deploy.ts",
+    "mock/scripts/**/*"
   ]
 }

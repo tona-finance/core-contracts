@@ -102,20 +102,20 @@ cell $DepositInStaker$_store_cell((int) v) inline;
 ;; $StakerWithdrawal$_load
 (slice, ((int))) $StakerWithdrawal$_load(slice sc_0) inline;
 
-;; $TokenNotification$_load
-(slice, ((int, int, slice, slice))) $TokenNotification$_load(slice sc_0) inline;
+;; $JettonNotification$_load
+(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline;
 
-;; $TokenTransfer$_store
-builder $TokenTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
+;; $JettonTransfer$_store
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
 
-;; $TokenTransfer$_store_cell
-cell $TokenTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
+;; $JettonTransfer$_store_cell
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
 
-;; $TokenBurn$_store
-builder $TokenBurn$_store(builder build_0, (int, int, slice, cell) v) inline;
+;; $JettonBurn$_store
+builder $JettonBurn$_store(builder build_0, (int, int, slice, cell) v) inline;
 
-;; $TokenBurn$_store_cell
-cell $TokenBurn$_store_cell((int, int, slice, cell) v) inline;
+;; $JettonBurn$_store_cell
+cell $JettonBurn$_store_cell((int, int, slice, cell) v) inline;
 
 ;; $WithdrawInternal$_store
 builder $WithdrawInternal$_store(builder build_0, (int, slice, int, int, int) v) inline;
@@ -231,8 +231,8 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $SendParameters$_constructor_bounce_to_value_mode_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
-;; $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, slice)) $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
+;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
 
 ;; $Draw$_init_child
 (cell, cell) $Draw$_init_child(cell sys', slice $pool_master, slice $reserve, int $period) inline;
@@ -288,8 +288,8 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $PoolAccount$_fun_on_jetton_minted
 ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_on_jetton_minted((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $query_id, int $amount) impure inline;
 
-;; $TokenBurn$_constructor_query_id_amount_response_destination_custom_payload
-((int, int, slice, cell)) $TokenBurn$_constructor_query_id_amount_response_destination_custom_payload(int query_id, int amount, slice response_destination, cell custom_payload) inline;
+;; $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload
+((int, int, slice, cell)) $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload(int query_id, int amount, slice response_destination, cell custom_payload) inline;
 
 ;; $PoolAccount$_fun_on_jetton_received_from_master
 ((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_on_jetton_received_from_master((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $query_id, int $amount) impure inline;

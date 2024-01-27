@@ -17,9 +17,9 @@ PROGRAM{
   DECLPROC $DeployOk$_store_cell
   DECLPROC $Twab$_store
   DECLPROC $Twab$_load
-  DECLPROC $TokenNotification$_load
-  DECLPROC $TokenTransfer$_store
-  DECLPROC $TokenTransfer$_store_cell
+  DECLPROC $JettonNotification$_load
+  DECLPROC $JettonTransfer$_store
+  DECLPROC $JettonTransfer$_store_cell
   DECLPROC $SetPrize$_load
   DECLPROC $WithdrawInternal$_load
   DECLPROC $WithdrawFinishInternal$_load
@@ -81,7 +81,7 @@ PROGRAM{
   DECLPROC $PoolMaster$_fun_reply
   DECLPROC $PoolMaster$_fun_notify
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
-  DECLPROC $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+  DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
   DECLPROC $PoolMaster$_fun_send_prize_to_draw
   DECLPROC $InitDrawInternal$_constructor_deployer_jetton_wallet_twab_timestamp_twab_amount
   DECLPROC $PoolMaster$_fun_init_draw
@@ -96,7 +96,7 @@ PROGRAM{
   DECLPROC $WithdrawNotify$_constructor_query_id_timestamp_share_amount
   DECLPROC $ChangeOwnerOk$_constructor_queryId_newOwner
   DECLPROC $DeployOk$_constructor_queryId
-  DECLPROC $PoolMaster$_internal_binary_TokenNotification
+  DECLPROC $PoolMaster$_internal_binary_JettonNotification
   DECLPROC $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2
   DECLPROC $PoolMaster$_internal_text_cc6af9da0449068a05d5f478d36201caad0c689ed788da96090ff3cccdea88cc
   DECLPROC $PoolMaster$_internal_binary_SetPrize
@@ -243,7 +243,7 @@ PROGRAM{
     128 LDU
     -ROT
   }>
-  $TokenNotification$_load PROCINLINE:<{
+  $JettonNotification$_load PROCINLINE:<{
     32 LDU
     SWAP
     1935855772 PUSHINT
@@ -255,7 +255,7 @@ PROGRAM{
     s3 s0 s3 XC2PU
     s2 s3 XCHG
   }>
-  $TokenTransfer$_store PROCREF:<{
+  $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
     s0 s8 XCHG2
     32 STU
@@ -285,10 +285,10 @@ PROGRAM{
     SWAP
     STSLICER
   }>
-  $TokenTransfer$_store_cell PROCINLINE:<{
+  $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
     7 -ROLL
-    $TokenTransfer$_store INLINECALLDICT
+    $JettonTransfer$_store INLINECALLDICT
     ENDC
   }>
   $SetPrize$_load PROCINLINE:<{
@@ -1135,7 +1135,7 @@ PROGRAM{
     PUSHNULL
     PUSHNULL
   }>
-  $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
+  $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
   }>
   $PoolMaster$_fun_send_prize_to_draw PROCINLINE:<{
     NEWC
@@ -1170,8 +1170,8 @@ PROGRAM{
     s13 PUSH
     s0 s3 XCHG
     s0 s15 XCHG
-    $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
-    $TokenTransfer$_store_cell INLINECALLDICT
+    $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+    $JettonTransfer$_store_cell INLINECALLDICT
     s4 s15 XCHG
     s3 s14 XCHG
     s11 s13 s0 XCHG3
@@ -1328,7 +1328,7 @@ PROGRAM{
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
-  $PoolMaster$_internal_binary_TokenNotification PROCINLINE:<{
+  $PoolMaster$_internal_binary_JettonNotification PROCINLINE:<{
     s10 s14 XCHG
     s9 s13 XCHG
     s8 s12 XCHG
@@ -1353,6 +1353,20 @@ PROGRAM{
     0 EQINT
     THROWANYIFNOT
     __tact_context_get INLINECALLDICT
+    s13 s14 XCHG
+    s12 s14 XCHG
+    s11 s14 XCHG
+    s10 s14 XCHG
+    s9 s14 XCHG
+    s8 s14 XCHG
+    s7 s14 XCHG
+    s6 s14 XCHG
+    s2 PUSH
+    s6 s15 XCHG
+    s5 s15 XCHG
+    s4 s15 XCHG
+    s3 s15 XCHG
+    -ROT
     10000000 PUSHINT
     $PoolMaster$_fun_msg_value INLINECALLDICT
     2805 PUSHINT
@@ -1363,8 +1377,17 @@ PROGRAM{
     s6 s5 s4 PUSH3
     NOW
     $Twab$_fun_next_twab INLINECALLDICT
-    __tact_context_get_sender INLINECALLDICT
-    -ROT
+    s12 s13 XCHG
+    s11 s12 XCHG
+    s10 s11 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
+    s7 s8 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s2 s3 XCHG
     $PoolMaster$_fun_init_draw INLINECALLDICT
   }>
   $PoolMaster$_internal_text_cc6af9da0449068a05d5f478d36201caad0c689ed788da96090ff3cccdea88cc PROCINLINE:<{
@@ -1391,6 +1414,20 @@ PROGRAM{
     0 GTINT
     THROWANYIFNOT
     __tact_context_get INLINECALLDICT
+    s13 s14 XCHG
+    s12 s14 XCHG
+    s11 s14 XCHG
+    s10 s14 XCHG
+    s9 s14 XCHG
+    s8 s14 XCHG
+    s7 s14 XCHG
+    s6 s14 XCHG
+    s2 PUSH
+    s6 s15 XCHG
+    s5 s15 XCHG
+    s4 s15 XCHG
+    s3 s15 XCHG
+    -ROT
     20000000 PUSHINT
     $PoolMaster$_fun_msg_value INLINECALLDICT
     50000000 PUSHINT
@@ -1400,7 +1437,7 @@ PROGRAM{
     GEQ
     s1 s2 XCHG
     THROWANYIFNOT
-    s3 s12 XCPU
+    s3 s13 XCPU
     ADD
     s7 s6 s5 PUSH3
     NOW
@@ -1416,11 +1453,10 @@ PROGRAM{
     s2 s4 XCHG
     s3 s13 s0 XCHG3
     s13 s(-1) s(-1) PUXCPU
-    s0 16 s() XCHG
+    s0 17 s() XCHG
     $PoolMaster$_fun_send_prize_to_draw INLINECALLDICT
-    __tact_context_get_sender INLINECALLDICT
-    s11 s13 XCHG
-    2 11 BLKSWAP
+    s10 s13 XCHG
+    3 10 BLKSWAP
     $PoolMaster$_fun_init_draw INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_WithdrawInternal PROCINLINE:<{
@@ -1457,8 +1493,8 @@ PROGRAM{
     s5 s14 XCHG
     s3 s4 XCHG
     s3 s15 XCHG
-    $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
-    $TokenTransfer$_store_cell INLINECALLDICT
+    $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+    $JettonTransfer$_store_cell INLINECALLDICT
     s3 PUSH
     s7 s12 XCHG
     s6 s11 XCHG
@@ -1576,7 +1612,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5548345639635235777546356a7453764363566166654650567459797375765148696232455357376641634b} PUSHSLICE
+    x{697066733a2f2f516d564a584653664a614171396b78515333397971537348636d4b5337694641334231433474596956384c34646a} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1606,9 +1642,9 @@ PROGRAM{
     EQUAL
     IFJMP:<{
       DROP
-      $TokenNotification$_load INLINECALLDICT
+      $JettonNotification$_load INLINECALLDICT
       1 4 BLKDROP2
-      $PoolMaster$_internal_binary_TokenNotification INLINECALLDICT
+      $PoolMaster$_internal_binary_JettonNotification INLINECALLDICT
       TRUE
     }>
     DUP

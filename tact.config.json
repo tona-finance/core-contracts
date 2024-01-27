@@ -12,8 +12,8 @@
             }
         },
         {
-            "name": "tonstaker-mock",
-            "path": "./mock/sources/contract.tact",
+            "name": "mock",
+            "path": "./mock/sources/pool.tact",
             "output": "./mock/output",
             "options": {
                 "debug": true,

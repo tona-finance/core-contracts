@@ -15,8 +15,8 @@ PROGRAM{
   DECLPROC $Deploy$_load
   DECLPROC $DeployOk$_store
   DECLPROC $DeployOk$_store_cell
-  DECLPROC $TokenTransfer$_store
-  DECLPROC $TokenTransfer$_store_cell
+  DECLPROC $JettonTransfer$_store
+  DECLPROC $JettonTransfer$_store_cell
   DECLPROC $ClaimPrizeDebtInternal$_load
   DECLPROC $PrizeReserve$_store
   DECLPROC $PrizeReserve$_load
@@ -38,7 +38,7 @@ PROGRAM{
   DECLPROC $global_emptySlice
   DECLPROC $global_send
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
-  DECLPROC $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+  DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
   DECLPROC $PoolAccount$_init_child
   DECLPROC $Ticket$_init_child
   DECLPROC $PrizeReserve$_fun__get_pool_account_address
@@ -176,7 +176,7 @@ PROGRAM{
     $DeployOk$_store INLINECALLDICT
     ENDC
   }>
-  $TokenTransfer$_store PROCREF:<{
+  $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
     s0 s8 XCHG2
     32 STU
@@ -206,10 +206,10 @@ PROGRAM{
     SWAP
     STSLICER
   }>
-  $TokenTransfer$_store_cell PROCINLINE:<{
+  $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
     7 -ROLL
-    $TokenTransfer$_store INLINECALLDICT
+    $JettonTransfer$_store INLINECALLDICT
     ENDC
   }>
   $ClaimPrizeDebtInternal$_load PROCINLINE:<{
@@ -479,7 +479,7 @@ PROGRAM{
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
-  $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
+  $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
   }>
   $PoolAccount$_init_child PROCINLINE:<{
     s0 s4 XCHG
@@ -660,8 +660,8 @@ PROGRAM{
     s0 s4 XCHG
     s0 s8 XCHG
     3 -ROLL
-    $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
-    $TokenTransfer$_store_cell INLINECALLDICT
+    $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+    $JettonTransfer$_store_cell INLINECALLDICT
     s2 s3 s(-1) XCPUXC
     FALSE
     PUSHNULL
@@ -686,7 +686,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d526a3176367969426e7670755742615439753645646877357a7a6131685831454832646e44583445526f6559} PUSHSLICE
+    x{697066733a2f2f516d5a55523151704b6d73704e4263766959546f5750466f6a337368473951636f34696f754642523176774e7634} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

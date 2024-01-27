@@ -51,11 +51,11 @@ builder $DeployOk$_store(builder build_0, (int) v) inline;
 ;; $DeployOk$_store_cell
 cell $DeployOk$_store_cell((int) v) inline;
 
-;; $TokenTransfer$_store
-builder $TokenTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
+;; $JettonTransfer$_store
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
 
-;; $TokenTransfer$_store_cell
-cell $TokenTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
+;; $JettonTransfer$_store_cell
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
 
 ;; $ClaimPrizeDebtInternal$_load
 (slice, ((int, slice, slice, int, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline;
@@ -120,8 +120,8 @@ slice $global_emptySlice() impure inline;
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
-;; $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, slice)) $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
+;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
 
 ;; $PoolAccount$_init_child
 (cell, cell) $PoolAccount$_init_child(cell sys', slice $owner, slice $master, slice $staker, slice $reserve) inline;

@@ -63,14 +63,14 @@ builder $Twab$_store(builder build_0, (int, int) v) inline;
 ;; $Twab$_load
 (slice, ((int, int))) $Twab$_load(slice sc_0) inline;
 
-;; $TokenNotification$_load
-(slice, ((int, int, slice, slice))) $TokenNotification$_load(slice sc_0) inline;
+;; $JettonNotification$_load
+(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline;
 
-;; $TokenTransfer$_store
-builder $TokenTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
+;; $JettonTransfer$_store
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
 
-;; $TokenTransfer$_store_cell
-cell $TokenTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
+;; $JettonTransfer$_store_cell
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
 
 ;; $InitTicketInternal1$_store
 builder $InitTicketInternal1$_store(builder build_0, (int, int, int, int) v) inline;
@@ -165,8 +165,8 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline;
 ;; $SendParameters$_constructor_bounce_to_value_mode_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
-;; $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, slice)) $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
+;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
 
 ;; $Draw$_fun_activate_beacon
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_beacon((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab) impure inline;

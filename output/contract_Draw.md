@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: Draw
-BOC Size: 3678 bytes
+BOC Size: 3771 bytes
 
 # Types
 Total Types: 38
@@ -45,21 +45,21 @@ Signature: `DepositInStaker{query_id:uint64}`
 TLB: `staker_withdrawal#0a77535c query_id:uint64 = StakerWithdrawal`
 Signature: `StakerWithdrawal{query_id:uint64}`
 
-## TokenNotification
-TLB: `token_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = TokenNotification`
-Signature: `TokenNotification{query_id:uint64,amount:coins,from:address,forward_payload:remainder<slice>}`
+## JettonNotification
+TLB: `jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = JettonNotification`
+Signature: `JettonNotification{query_id:uint64,amount:coins,from:address,forward_payload:remainder<slice>}`
 
-## TokenExcesses
-TLB: `token_excesses#d53276db query_id:uint64 = TokenExcesses`
-Signature: `TokenExcesses{query_id:uint64}`
+## JettonExcesses
+TLB: `jetton_excesses#d53276db query_id:uint64 = JettonExcesses`
+Signature: `JettonExcesses{query_id:uint64}`
 
-## TokenTransfer
-TLB: `token_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = TokenTransfer`
-Signature: `TokenTransfer{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
+## JettonTransfer
+TLB: `jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer`
+Signature: `JettonTransfer{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
 
-## TokenBurn
-TLB: `token_burn#595f07bc query_id:uint64 amount:coins response_destination:address custom_payload:Maybe ^cell = TokenBurn`
-Signature: `TokenBurn{query_id:uint64,amount:coins,response_destination:address,custom_payload:Maybe ^cell}`
+## JettonBurn
+TLB: `jetton_burn#595f07bc query_id:uint64 amount:coins response_destination:address custom_payload:Maybe ^cell = JettonBurn`
+Signature: `JettonBurn{query_id:uint64,amount:coins,response_destination:address,custom_payload:Maybe ^cell}`
 
 ## SetPrize
 TLB: `set_prize#d3643815 amount:coins = SetPrize`

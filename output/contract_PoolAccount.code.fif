@@ -32,11 +32,11 @@ PROGRAM{
   DECLPROC $DepositInStaker$_store_cell
   DECLPROC $DepositInStaker$_load
   DECLPROC $StakerWithdrawal$_load
-  DECLPROC $TokenNotification$_load
-  DECLPROC $TokenTransfer$_store
-  DECLPROC $TokenTransfer$_store_cell
-  DECLPROC $TokenBurn$_store
-  DECLPROC $TokenBurn$_store_cell
+  DECLPROC $JettonNotification$_load
+  DECLPROC $JettonTransfer$_store
+  DECLPROC $JettonTransfer$_store_cell
+  DECLPROC $JettonBurn$_store
+  DECLPROC $JettonBurn$_store_cell
   DECLPROC $WithdrawInternal$_store
   DECLPROC $WithdrawInternal$_store_cell
   DECLPROC $WithdrawFinishInternal$_store
@@ -75,7 +75,7 @@ PROGRAM{
   DECLPROC $TwabStore$_fun_insert
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
-  DECLPROC $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+  DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
   DECLPROC $Draw$_init_child
   DECLPROC $PoolAccount$_fun__get_draw_init
   DECLPROC $PoolAccount$_fun__get_draw_address
@@ -94,7 +94,7 @@ PROGRAM{
   DECLPROC $PoolAccount$_fun_forward
   DECLPROC $PoolAccount$_fun_notify
   DECLPROC $PoolAccount$_fun_on_jetton_minted
-  DECLPROC $TokenBurn$_constructor_query_id_amount_response_destination_custom_payload
+  DECLPROC $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload
   DECLPROC $PoolAccount$_fun_on_jetton_received_from_master
   DECLPROC $PoolAccount$_fun_require_master
   DECLPROC $PoolAccount$_fun_require_jetton_wallet
@@ -107,7 +107,7 @@ PROGRAM{
   DECLPROC $DepositInStaker$_constructor_query_id
   DECLPROC $WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount
   DECLPROC $DeployOk$_constructor_queryId
-  DECLPROC $PoolAccount$_internal_binary_TokenNotification
+  DECLPROC $PoolAccount$_internal_binary_JettonNotification
   DECLPROC $PoolAccount$_internal_binary_InitTicketInternal1
   DECLPROC $PoolAccount$_internal_binary_StakerWithdrawal
   DECLPROC $PoolAccount$_internal_binary_InitPoolAccountInternal
@@ -396,7 +396,7 @@ PROGRAM{
     64 LDU
     SWAP
   }>
-  $TokenNotification$_load PROCINLINE:<{
+  $JettonNotification$_load PROCINLINE:<{
     32 LDU
     SWAP
     1935855772 PUSHINT
@@ -408,7 +408,7 @@ PROGRAM{
     s3 s0 s3 XC2PU
     s2 s3 XCHG
   }>
-  $TokenTransfer$_store PROCREF:<{
+  $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
     s0 s8 XCHG2
     32 STU
@@ -438,13 +438,13 @@ PROGRAM{
     SWAP
     STSLICER
   }>
-  $TokenTransfer$_store_cell PROCINLINE:<{
+  $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
     7 -ROLL
-    $TokenTransfer$_store INLINECALLDICT
+    $JettonTransfer$_store INLINECALLDICT
     ENDC
   }>
-  $TokenBurn$_store PROCINLINE:<{
+  $JettonBurn$_store PROCINLINE:<{
     1499400124 PUSHINT
     s0 s5 XCHG2
     32 STU
@@ -468,10 +468,10 @@ PROGRAM{
       1 STI
     }>
   }>
-  $TokenBurn$_store_cell PROCINLINE:<{
+  $JettonBurn$_store_cell PROCINLINE:<{
     NEWC
     4 -ROLL
-    $TokenBurn$_store INLINECALLDICT
+    $JettonBurn$_store INLINECALLDICT
     ENDC
   }>
   $WithdrawInternal$_store PROCINLINE:<{
@@ -978,7 +978,7 @@ PROGRAM{
     PUSHNULL
     PUSHNULL
   }>
-  $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
+  $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
   }>
   $Draw$_init_child PROCINLINE:<{
     s0 s3 XCHG
@@ -1315,8 +1315,8 @@ PROGRAM{
     17 s() PUSH
     3 -ROLL
     s0 s7 XCHG
-    $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
-    $TokenTransfer$_store_cell INLINECALLDICT
+    $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+    $JettonTransfer$_store_cell INLINECALLDICT
     s7 s8 XCHG
     s5 s6 XCHG
     s4 s5 XCHG
@@ -1324,7 +1324,7 @@ PROGRAM{
     PUSHNULL
     $PoolAccount$_fun_forward INLINECALLDICT
   }>
-  $TokenBurn$_constructor_query_id_amount_response_destination_custom_payload PROCINLINE:<{
+  $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload PROCINLINE:<{
   }>
   $PoolAccount$_fun_on_jetton_received_from_master PROCINLINE:<{
     NEWC
@@ -1339,12 +1339,12 @@ PROGRAM{
     s11 PUSH
     __tact_not_null INLINECALLDICT
     1050000000 PUSHINT
-    1 PUSHINT
-    MYADDR
-    s3 s7 XCHG
-    s6 s0 s5 XCHG3
-    $TokenBurn$_constructor_query_id_amount_response_destination_custom_payload INLINECALLDICT
-    $TokenBurn$_store_cell INLINECALLDICT
+    s5 s4 XCHG2
+    16 s() PUSH
+    3 PUSHINT
+    s0 s5 XCHG
+    $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload INLINECALLDICT
+    $JettonBurn$_store_cell INLINECALLDICT
     s1 s4 XCHG
     s3 s3 s0 XCHG3
     $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
@@ -1410,7 +1410,7 @@ PROGRAM{
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
-  $PoolAccount$_internal_binary_TokenNotification PROCINLINE:<{
+  $PoolAccount$_internal_binary_JettonNotification PROCINLINE:<{
     DROP
     s10 s13 XCHG
     s9 s12 XCHG
@@ -1714,7 +1714,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d576f7946333341544e79413656314d6e6663703853655631634243506758795044694b7632487152754b4e57} PUSHSLICE
+    x{697066733a2f2f516d593152335a4d4553466e5a5a47323877614742644e4a68676b7737546664706f546f5856526f4b4b62706271} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1761,9 +1761,9 @@ PROGRAM{
     EQUAL
     IFJMP:<{
       DROP
-      $TokenNotification$_load INLINECALLDICT
+      $JettonNotification$_load INLINECALLDICT
       1 4 BLKDROP2
-      $PoolAccount$_internal_binary_TokenNotification INLINECALLDICT
+      $PoolAccount$_internal_binary_JettonNotification INLINECALLDICT
       TRUE
     }>
     DUP

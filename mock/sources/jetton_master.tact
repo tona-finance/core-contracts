@@ -1,13 +1,7 @@
-/*
-    This file provides traits for TEP-0074, TEP-0064 jetton standard
-
-    [TEP0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
-    [Official FunC implementation](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
-    [Ton Minter Contract](https://github.com/ton-blockchain/minter-contract)
-    [Tact Template](https://github.com/howardpen9/jetton-implementation-in-tact/blob/main/sources/contract.tact)
-*/
+import "@stdlib/deploy";
 import "./messages";
 import "./jetton_wallet";
+
 
 struct JettonData {
     total_supply: Int as coins; // the total number of issues jettons
@@ -17,14 +11,21 @@ struct JettonData {
     jetton_wallet_code: Cell;   // code of wallet for that jetton
 }
 
-trait JettonMaster {
-    total_supply: Int;      // the total number of issued jettons
+contract JettonMaster {
+    total_supply: Int as coins = 0;      // the total number of issued jettons
     owner: Address;         // owner of this jetton
     jetton_content: Cell;   // data in accordance to Token Data Standard #64
+
+    init(owner: Address, jetton_content: Cell) {
+        self.owner = owner;
+        self.jetton_content = jetton_content;
+    }
 
     //********************************************//
     //                  Messages                  //
     //********************************************//
+
+    receive() {}
 
     // @dev  JettonBurnNotification is sent from Jetton wallet after burning jettons
     receive(msg: JettonBurnNotification) {
@@ -46,29 +47,32 @@ trait JettonMaster {
 
     // @dev  calculate_jetton_wallet_init retrieve init code of a jetton wallet
     // @note one MUST override this function in inherited contract
-    abstract inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit;
+    inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit {
+        return initOf JettonWallet(owner_address, myAddress());
+    }
 
     // @dev  _mint_validate conduct some custom validating before mint
-    virtual inline fun _mint_validate(ctx: Context, msg: JettonMint) {
+    inline fun _mint_validate(ctx: Context, msg: JettonMint) {
         require(ctx.sender == self.owner, "JettonMaster: Sender is not a Jetton owner");
     }
 
     // @dev  _mint mint jettons
-    virtual inline fun _mint(ctx: Context, msg: JettonMint) {
+    inline fun _mint(ctx: Context, msg: JettonMint) {
         let initCode: StateInit = self.calculate_jetton_wallet_init(msg.receiver);
-        self.total_supply = self.total_supply + msg.amount;
-        send(SendParameters{
+        let mint_amount: Int = self._compute_mint_amount(msg);
+        self.total_supply = self.total_supply + mint_amount;
+        send(SendParameters {
             to: contractAddress(initCode),
             value: 0,
             bounce: true,
             mode: SendRemainingValue,
             body: JettonInternalTransfer {
-                query_id: 0,
-                amount: msg.amount,
-                response_address: msg.origin,
+                query_id: msg.query_id,
+                amount: mint_amount,
+                response_address: msg.receiver,
                 from: myAddress(),
-                forward_ton_amount: msg.forward_ton_amount,
-                forward_payload: msg.forward_payload
+                forward_ton_amount: ton("0.1"),
+                forward_payload: emptySlice()
             }.toCell(),
             code: initCode.code,
             data: initCode.data
@@ -76,26 +80,36 @@ trait JettonMaster {
     }
 
     // @dev  _burn_notification_validate perform some custom validation after receiving JettonBurnNotification sent from Jetton wallet
-    virtual inline fun _burn_notification_validate(ctx: Context, msg: JettonBurnNotification) {
+    inline fun _burn_notification_validate(ctx: Context, msg: JettonBurnNotification) {
         let initCode: StateInit = self.calculate_jetton_wallet_init(msg.sender);
         require(ctx.sender == contractAddress(initCode), "Sender is not a Jetton wallet");
     } 
 
+    inline fun _compute_mint_amount(msg: JettonMint): Int {
+        if (self.total_supply == 0 || msg.total_balance == 0) {
+            return msg.deposit_amount;
+        } else {
+            return self.total_supply * msg.deposit_amount / msg.total_balance;
+        }
+    }
+
     // @dev  _burn_notification dwindles total_supply and send notification to wallet after receiving JettonBurnNotification
     inline fun _burn_notification(ctx: Context, msg: JettonBurnNotification) {
-        self.total_supply = self.total_supply - msg.amount;
+        let total_supply: Int = self.total_supply;
+        self.total_supply = total_supply - msg.amount;
         // pool withdraw
         send(SendParameters {
             to: self.owner,
             value: 0,
             bounce: false,
-            mode: SendRemainingValue + SendIgnoreErrors,
+            mode: SendRemainingValue,
             body: PoolWithdraw {
                 query_id: msg.query_id,
+                total_supply: total_supply,
                 jetton_amount: msg.amount,
                 from_address: msg.sender,
                 response_address: msg.response_destination
-            }
+            }.toCell()
         });
     }
 

@@ -56,12 +56,12 @@ cell $DeployOk$_store_cell((int) v) inline {
 }
 
 ;;
-;; Type: TokenTransfer
+;; Type: JettonTransfer
 ;; Header: 0x0f8a7ea5
-;; TLB: token_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = TokenTransfer
+;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer
 ;;
 
-builder $TokenTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref {
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref {
     var (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload) = v;
     build_0 = store_uint(build_0, 260734629, 32);
     build_0 = build_0.store_uint(v'query_id, 64);
@@ -74,11 +74,11 @@ builder $TokenTransfer$_store(builder build_0, (int, int, slice, slice, cell, in
     return build_0;
 }
 
-cell $TokenTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline {
-    return $TokenTransfer$_store(begin_cell(), v).end_cell();
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline {
+    return $JettonTransfer$_store(begin_cell(), v).end_cell();
 }
 
-((int, int, slice, slice, cell, int, slice)) $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline {
+((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline {
     return (query_id, amount, destination, response_destination, custom_payload, forward_ton_amount, forward_payload);
 }
 
