@@ -54,7 +54,7 @@
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     int $deposit_amount = ($ctx'value - 1000000000);
     throw_unless(13586, ($deposit_amount > 0));
-    int $balance_before = min(((__tact_my_balance() - 50000000) - $ctx'value), 0);
+    int $balance_before = min(((__tact_my_balance() - 50000000) - $ctx'value), 50000000);
     raw_reserve(($balance_before + $deposit_amount), 0);
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, ($self'jetton_content)~$StakingPool$_fun_jetton_master_address(), 0, 128, $JettonMint$_store_cell($JettonMint$_constructor_query_id_receiver_total_balance_deposit_amount($msg'query_id, $ctx'sender, $balance_before, $deposit_amount))));
     return (($self'jetton_content), ());

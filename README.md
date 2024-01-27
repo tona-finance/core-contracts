@@ -29,7 +29,7 @@ MIT
 
 ||testnet|mainnet|
 |-|-|-|
-|TonStakers|kQDE1ySK_ZX-GPPTFh42Onl-4eLpSkGdFETdHznMisuCkpb4|-|
-|TsTon Jetton Master|kQAEfzRwbfnWIwPBYvrriWt_6vm4Fouz8eycIHd3kBXEt8NS|-|
-|Pool Master|EQBHdCkqjArRiWmUo9flxQuq8frRvosMk1HY3_TvavDdlGvb|-|
-|Prize Reserve|EQDs6tJruySeL7EQ86C1Ggu3jw1V08Lc8IOwl05E5a_X0aja|-|
+|TonStakers|kQDNdqTH1gw-IOj1ngwWZwvssejx_WiER1BXNyr8lq_4-dM3|-|
+|TsTon Jetton Master|kQDO-ev_nzyy2vzwcGUjvhLSvi_fbsS90dlt9mJA2qxSEP6b|-|
+|Pool Master|EQBHYyaWv9yQ7QY6asAK0ku0QoX_Ofa4etGieJeNV821Gcm2|-|
+|Prize Reserve|kQAyPfSJdZ6Smou_5rwMoI_cVyTrORT-KIZIhlMscDVXhzP2|-|

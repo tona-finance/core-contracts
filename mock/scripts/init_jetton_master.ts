@@ -14,7 +14,7 @@ async function main() {
     const keyPair = await mnemonicToPrivateKey(mnemonics.split(" "));
     const wallet = WalletContractV4.create({ workchain, publicKey: keyPair.publicKey });
     const sender = client.open(wallet).sender(keyPair.secretKey);
-    const pool_address = Address.parse("kQDE1ySK_ZX-GPPTFh42Onl-4eLpSkGdFETdHznMisuCkpb4");
+    const pool_address = Address.parse("kQDNdqTH1gw-IOj1ngwWZwvssejx_WiER1BXNyr8lq_4-dM3");
     const pool = StakingPool.fromAddress(pool_address);
     await client.open(pool).send(
         sender,
