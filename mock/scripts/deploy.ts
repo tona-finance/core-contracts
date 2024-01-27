@@ -11,17 +11,6 @@ import { prepareTactDeployment } from "@tact-lang/deployer";
 async function main() {
     // Parameters
     const testnet = true;
-    const workchain = 0; //we are working in basechain.
-    //create client for testnet sandboxv4 API - alternative endpoint
-    const client = new TonClient4({
-        endpoint: "https://sandbox-v4.tonhubapi.com",
-    });
-    const mnemonics = (process.env.MNEMONICS || "").toString();
-    const keyPair = await mnemonicToPrivateKey(mnemonics.split(" "));
-    const wallet = WalletContractV4.create({ workchain, publicKey: keyPair.publicKey });
-    const sender = client.open(wallet).sender(keyPair.secretKey);
-
-    // deploy
     const jetton_params = {
         name: "Tontogether1",
         description: "TonTogether Jetton on Testnet",
@@ -38,8 +27,8 @@ async function main() {
         testnet: testnet,
     });
     // Present a deployment link and contract address
-    console.log("Pool Master address: " + pool_address.toString({ testOnly: testnet }));
-    console.log("Pool Master Deploy link: " + pool_link);
+    console.log("Staking Pool address: " + pool_address.toString({ testOnly: testnet }));
+    console.log("Staking Pool Deploy link: " + pool_link);
 
     const jetton_master_init = await JettonMaster.init(pool_address, jetton_content);
     const jetton_master_address = contractAddress(0, jetton_master_init);
