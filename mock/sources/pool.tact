@@ -23,14 +23,13 @@ contract StakingPool with Deployable {
 
     receive(msg: PoolDeposit) {
         let ctx: Context = context();
-        let balance_before: Int = myBalance() - self.storageReserve - ctx.value;
-        require(balance_before >= 0, "insufficient balance");
-
         // deposit fee 1.0
         let deposit_amount: Int = ctx.value - ton("1.0");
         require(deposit_amount > 0, "invalid deposit amount");
-        
+
+        let balance_before: Int = min(myBalance() - self.storageReserve - ctx.value, 0);
         nativeReserve(balance_before + deposit_amount, 0);
+
         send(SendParameters {
             bounce: false,
             to: self.jetton_master_address(),

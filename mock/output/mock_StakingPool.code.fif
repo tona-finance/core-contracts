@@ -535,23 +535,21 @@ PROGRAM{
     __tact_context_get INLINECALLDICT
     DROP
     s2 POP
-    __tact_my_balance INLINECALLDICT
-    50000000 PUSHINT
-    SUB
-    s2 PUSH
-    SUB
-    19364 PUSHINT
     OVER
-    -1 GTINT
-    THROWANYIFNOT
-    s0 s2 XCHG
     1000000000 PUSHINT
     SUB
     13586 PUSHINT
     OVER
     0 GTINT
     THROWANYIFNOT
-    s2 s0 PUSH2
+    __tact_my_balance INLINECALLDICT
+    50000000 PUSHINT
+    SUB
+    s0 s3 XCHG2
+    SUB
+    0 PUSHINT
+    MIN
+    s0 s2 PUSH2
     ADD
     0 PUSHINT
     RAWRESERVE
@@ -560,13 +558,13 @@ PROGRAM{
     $StakingPool$_fun_jetton_master_address INLINECALLDICT
     s1 s5 XCHG
     0 PUSHINT
-    s4 s5 XCHG2
+    s4 s3 XCHG2
     7 PUSHPOW2
-    s0 s4 XCHG
+    s0 s6 XCHG
     $JettonMint$_constructor_query_id_receiver_total_balance_deposit_amount INLINECALLDICT
     $JettonMint$_store_cell INLINECALLDICT
     s4 s5 XCHG
-    s2 s3 XCHG
+    s1 s3 s0 XCHG3
     $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
     $global_send INLINECALLDICT
   }>
