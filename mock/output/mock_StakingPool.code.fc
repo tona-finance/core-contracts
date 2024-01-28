@@ -68,8 +68,8 @@
     int $balance_before = ((__tact_my_balance() - 50000000) - $ctx'value);
     throw_unless(19364, ($balance_before > 0));
     int $withdraw_amount = (($balance_before * $msg'jetton_amount) / $msg'total_supply);
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, $msg'from_address, $withdraw_amount, 2, $PoolWithdrawal$_store_cell($PoolWithdrawal$_constructor_query_id($msg'query_id))));
-    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, $msg'response_address, 0, (64 + 2)));
+    raw_reserve((($balance_before + 50000000) - $withdraw_amount), 0);
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, $msg'from_address, $withdraw_amount, 128, $PoolWithdrawal$_store_cell($PoolWithdrawal$_constructor_query_id($msg'query_id))));
     return (($self'jetton_content), ());
 }
 

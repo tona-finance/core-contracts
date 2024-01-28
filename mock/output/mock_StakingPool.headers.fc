@@ -132,8 +132,5 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $PoolWithdrawal$_constructor_query_id
 ((int)) $PoolWithdrawal$_constructor_query_id(int query_id) inline;
 
-;; $SendParameters$_constructor_bounce_to_value_mode
-((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline;
-
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int queryId) inline;

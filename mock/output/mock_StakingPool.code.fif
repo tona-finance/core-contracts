@@ -42,7 +42,6 @@ PROGRAM{
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
   DECLPROC $JettonMint$_constructor_query_id_receiver_total_balance_deposit_amount
   DECLPROC $PoolWithdrawal$_constructor_query_id
-  DECLPROC $SendParameters$_constructor_bounce_to_value_mode
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC %$StakingPool$_internal_empty
   DECLPROC $StakingPool$_internal_text_7a5d1b7532b9bfce626345c83ed8fdfedc82cc400bc360d7c5586ba4042f22b9
@@ -510,11 +509,6 @@ PROGRAM{
   }>
   $PoolWithdrawal$_constructor_query_id PROCINLINE:<{
   }>
-  $SendParameters$_constructor_bounce_to_value_mode PROCINLINE:<{
-    PUSHNULL
-    PUSHNULL
-    PUSHNULL
-  }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
   %$StakingPool$_internal_empty PROCINLINE:<{
@@ -569,15 +563,16 @@ PROGRAM{
     $global_send INLINECALLDICT
   }>
   $StakingPool$_internal_binary_PoolWithdraw PROCINLINE:<{
+    DROP
     __tact_context_get INLINECALLDICT
     DROP
     s2 POP
     19420 PUSHINT
-    s0 s8 XCHG
+    s0 s7 XCHG
     $StakingPool$_fun_jetton_master_address INLINECALLDICT
     ROT
     __tact_slice_eq_bits INLINECALLDICT
-    s1 s8 XCHG
+    s1 s7 XCHG
     THROWANYIFNOT
     __tact_my_balance INLINECALLDICT
     50000000 PUSHINT
@@ -588,25 +583,24 @@ PROGRAM{
     OVER
     0 GTINT
     THROWANYIFNOT
-    s0 s3 XCHG2
+    s0 s2 PUXC
     MUL
     s0 s3 XCHG2
     DIV
+    SWAP
+    50000000 PUSHINT
+    ADD
+    OVER
+    SUB
+    0 PUSHINT
+    RAWRESERVE
     FALSE
-    2 PUSHINT
-    s0 s5 XCHG
+    7 PUSHPOW2
+    s0 s4 XCHG
     $PoolWithdrawal$_constructor_query_id INLINECALLDICT
     $PoolWithdrawal$_store_cell INLINECALLDICT
     s1 s4 XCHG
-    s1 s3 XCHG
-    s1 s5 XCHG
     $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
-    $global_send INLINECALLDICT
-    FALSE
-    SWAP
-    0 PUSHINT
-    66 PUSHINT
-    $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
     $global_send INLINECALLDICT
   }>
   $StakingPool$_internal_binary_Deploy PROCINLINE:<{

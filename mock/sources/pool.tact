@@ -51,20 +51,16 @@ contract StakingPool with Deployable {
         let balance_before: Int = myBalance() - self.storageReserve - ctx.value;
         require(balance_before > 0, "insufficient balance");
         let withdraw_amount: Int = balance_before * msg.jetton_amount / msg.total_supply;
+        nativeReserve(balance_before + self.storageReserve - withdraw_amount, 0);
 
         send(SendParameters {
             bounce: false,
             to: msg.from_address,
             value: withdraw_amount,
-            mode: SendIgnoreErrors,
-            body: PoolWithdrawal { query_id: msg.query_id }.toCell()
-        });
-
-        send(SendParameters {
-            bounce: false,
-            to: msg.response_address,
-            value: 0,
-            mode: SendRemainingValue + SendIgnoreErrors
+            mode: SendRemainingBalance,
+            body: PoolWithdrawal {
+                query_id: msg.query_id
+            }.toCell()
         });
     }
 
