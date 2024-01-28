@@ -490,7 +490,7 @@ PROGRAM{
     64 PUSHINT
     s2 s2 PUSH2
     __tact_create_address INLINECALLDICT
-    100000000 PUSHINT
+    500000000 PUSHINT
     $global_emptySlice INLINECALLDICT
     s5 s11 XCHG
     s4 s10 XCHG

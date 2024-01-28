@@ -1323,7 +1323,7 @@ PROGRAM{
     __tact_not_null INLINECALLDICT
     s3 s3 s0 XCHG3
     PUSHNULL
-    35000000 PUSHINT
+    50000000 PUSHINT
     s15 PUSH
     s0 s3 XCHG
     17 s() PUSH

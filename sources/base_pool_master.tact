@@ -19,6 +19,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     spent_amount: Int;
     next_period: Int;
 
+    // Note: optional
     receive("init jetton wallet") {
         let sinit: StateInit = get_jetton_wallet_init(
             myAddress(),
@@ -64,7 +65,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         );
         let jetton_wallet: Address = contractAddress(sinit_2);
 
-        // init jetton wallet account
+        // Note: optional, init jetton wallet account
         send(SendParameters {
             bounce: false,
             to: jetton_wallet,
