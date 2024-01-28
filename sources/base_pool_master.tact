@@ -206,8 +206,8 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         let data: Slice = payload.loadRef().beginParse();
         payload.endParse();
         // timestamp + user + deposit_amount
-        let timestamp: Int = data.loadTimestamp();
         let user: Address = data.loadAddress();
+        let timestamp: Int = data.loadTimestamp();
         let deposit_amount: Int = data.loadCoins();
         data.endParse();
 

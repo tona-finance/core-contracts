@@ -1259,9 +1259,9 @@ PROGRAM{
     CTOS
     SWAP
     ENDS
-    $Slice$_fun_loadTimestamp INLINECALLDICT
-    SWAP
     __tact_load_address INLINECALLDICT
+    SWAP
+    $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
     LDGRAMS
     ENDS
@@ -1277,14 +1277,14 @@ PROGRAM{
     s15 s14 XCHG2
     27196 PUSHINT
     s0 s14 XCHG
-    16 s() PUSH
+    17 s() PUSH
     $PoolMaster$_fun__get_account_address INLINECALLDICT
     s0 s13 XCHG2
     __tact_slice_eq_bits INLINECALLDICT
     s1 s14 XCHG
     THROWANYIFNOT
     s4 s3 s2 XC2PU
-    16 s() PUSH
+    s15 PUSH
     $Twab$_fun_next_twab INLINECALLDICT
     s2 s13 XCPU
     ADD
@@ -1292,7 +1292,7 @@ PROGRAM{
     16 s() PUSH
     ADD
     s3 s11 XCHG
-    s2 s15 XCHG
+    s2 s14 XCHG
     s0 16 s() XCHG
     s1 s13 XCHG
     $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount INLINECALLDICT
@@ -1303,11 +1303,11 @@ PROGRAM{
     s3 s10 XCHG
     s2 s9 XCHG
     s3 s8 XCHG
-    s5 s7 XCHG
+    s4 s7 XCHG
     s1 s6 XCHG
     s1 s5 XCHG
     s3 s4 XCHG
-    s1 s3 s0 XCHG3
+    s2 s3 XCHG
     FALSE
     PUSHNULL
     $PoolMaster$_fun_forward INLINECALLDICT

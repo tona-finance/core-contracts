@@ -149,7 +149,7 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     ($self'twab_store'store, $self'twab_store'size)~$TwabStore$_fun_insert($self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount + __tact_not_null($deposit_amount));
     $self'contribute_amount = ($self'contribute_amount + $amount);
-    cell $data = end_cell(store_coins(__tact_store_address($Builder$_fun_storeTimestamp(begin_cell(), $timestamp), $self'owner), __tact_not_null($deposit_amount)));
+    cell $data = end_cell(store_coins($Builder$_fun_storeTimestamp(__tact_store_address(begin_cell(), $self'owner), $timestamp), __tact_not_null($deposit_amount)));
     slice $payload = $Builder$_fun_asSlice(store_ref(begin_cell(), $data));
     ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward(__tact_not_null($self'jetton_wallet), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($query_id, $amount, $self'master, $self'owner, null(), 50000000, $payload)), false, null());
     return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());

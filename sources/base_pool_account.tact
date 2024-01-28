@@ -132,8 +132,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
 
         // timestamp + user + deposit_amount
         let data: Cell = beginCell()
-            .storeTimestamp(timestamp)
             .storeAddress(self.owner)
+            .storeTimestamp(timestamp)
             .storeCoins(deposit_amount!!)
             .endCell();
         let payload: Slice = beginCell().storeRef(data).asSlice();

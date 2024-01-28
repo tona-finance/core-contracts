@@ -1307,10 +1307,10 @@ PROGRAM{
     s6 s2 XCPU
     ADD
     NEWC
+    s15 PUSH
+    __tact_store_address INLINECALLDICT
     s0 s9 XCHG2
     $Builder$_fun_storeTimestamp INLINECALLDICT
-    s14 PUSH
-    __tact_store_address INLINECALLDICT
     s0 s10 XCHG
     __tact_not_null INLINECALLDICT
     s1 s10 XCHG

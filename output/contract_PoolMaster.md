@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PoolMaster
-BOC Size: 5563 bytes
+BOC Size: 5562 bytes
 
 # Types
 Total Types: 38
