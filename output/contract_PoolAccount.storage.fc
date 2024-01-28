@@ -414,7 +414,7 @@ builder $PoolAccount$_store(builder build_0, (slice, slice, slice, slice, (cell,
     build_1 = build_1.store_coins(v'contribute_amount);
     build_1 = build_1.store_coins(v'withdraw_amount);
     build_1 = build_1.store_int(v'lock, 1);
-    build_1 = build_1.store_int(v'deposit_amount, 257);
+    build_1 = build_1.store_coins(v'deposit_amount);
     var build_2 = begin_cell();
     build_2 = __tact_store_address(build_2, v'reserve);
     build_1 = store_ref(build_1, build_2.end_cell());
@@ -433,7 +433,7 @@ builder $PoolAccount$_store(builder build_0, (slice, slice, slice, slice, (cell,
     var v'contribute_amount = sc_1~load_coins();
     var v'withdraw_amount = sc_1~load_coins();
     var v'lock = sc_1~load_int(1);
-    var v'deposit_amount = sc_1~load_int(257);
+    var v'deposit_amount = sc_1~load_coins();
     slice sc_2 = sc_1~load_ref().begin_parse();
     var v'reserve = sc_2~__tact_load_address();
     return (sc_0, (v'owner, v'master, v'staker, v'jetton_wallet, v'twab_store, v'share_amount, v'contribute_amount, v'withdraw_amount, v'lock, v'deposit_amount, v'reserve));

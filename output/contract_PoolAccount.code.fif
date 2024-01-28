@@ -581,9 +581,8 @@ PROGRAM{
     STGRAMS
     s1 s2 XCHG
     1 STI
-    s1 s3 XCHG
-    257 PUSHINT
-    STIX
+    s0 s3 XCHG2
+    STGRAMS
     NEWC
     ROT
     __tact_store_address INLINECALLDICT
@@ -612,8 +611,7 @@ PROGRAM{
     LDGRAMS
     LDGRAMS
     1 LDI
-    257 PUSHINT
-    LDIX
+    LDGRAMS
     LDREF
     DROP
     CTOS

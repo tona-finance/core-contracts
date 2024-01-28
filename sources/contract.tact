@@ -137,7 +137,7 @@ contract PoolAccount with TicketInitializer, Deployable {
     withdraw_amount: Int as coins = 0;
 
     lock: Bool = false;
-    deposit_amount: Int = 0;
+    deposit_amount: Int as coins = 0;
     // ---------------------
 
     reserve: Address;
