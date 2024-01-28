@@ -157,7 +157,7 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 
 ;; $Slice$_fun_loadTimestamp
-int $Slice$_fun_loadTimestamp(slice $self) impure inline;
+(slice, int) $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;

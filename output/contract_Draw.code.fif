@@ -748,6 +748,7 @@ PROGRAM{
     DIV
   }>
   $Slice$_fun_loadTimestamp PROCINLINE:<{
+    DUP
     48 LDU
     DROP
   }>
@@ -829,7 +830,6 @@ PROGRAM{
     }>
   }>
   $Draw$_fun_on_jetton_from_pool_master PROCINLINE:<{
-    DUP
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
     128 LDU

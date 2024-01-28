@@ -736,6 +736,7 @@ PROGRAM{
     48 STU
   }>
   $Slice$_fun_loadTimestamp PROCINLINE:<{
+    DUP
     48 LDU
     DROP
   }>
@@ -1254,6 +1255,10 @@ PROGRAM{
   }>
   $PoolMaster$_fun_on_jetton_received_from_account PROCINLINE:<{
     DUP
+    PLDREF
+    CTOS
+    SWAP
+    ENDS
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
     __tact_load_address INLINECALLDICT

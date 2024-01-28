@@ -31,9 +31,9 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     return (($end'amount - $start'amount) / ($end'timestamp - $start'timestamp));
 }
 
-int $Slice$_fun_loadTimestamp(slice $self) impure inline {
+(slice, int) $Slice$_fun_loadTimestamp(slice $self) impure inline {
     var ($self) = $self;
-    return $self~load_uint(48);
+    return ($self, $self~load_uint(48));
 }
 
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_beacon((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab) impure inline {
@@ -63,7 +63,7 @@ int $Slice$_fun_loadTimestamp(slice $self) impure inline {
 
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, slice $payload) impure inline {
     var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
-    int $twab_timestamp = $Slice$_fun_loadTimestamp($payload);
+    int $twab_timestamp = $payload~$Slice$_fun_loadTimestamp();
     int $twab_amount = $payload~load_uint(128);
     slice $owner = $payload~__tact_load_address();
     end_parse($payload);

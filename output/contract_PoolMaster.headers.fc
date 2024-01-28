@@ -187,7 +187,7 @@ slice $Builder$_fun_asSlice(builder $self) impure inline;
 builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inline;
 
 ;; $Slice$_fun_loadTimestamp
-int $Slice$_fun_loadTimestamp(slice $self) impure inline;
+(slice, int) $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
 ;; $Twab$_fun_next_twab
 (int, int) $Twab$_fun_next_twab((int, int) $self, int $balance, int $timestamp) impure inline;

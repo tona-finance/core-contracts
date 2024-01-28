@@ -131,11 +131,12 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         self.contribute_amount = self.contribute_amount + amount;
 
         // timestamp + user + deposit_amount
-        let payload: Cell = beginCell()
+        let data: Cell = beginCell()
             .storeTimestamp(timestamp)
             .storeAddress(self.owner)
             .storeCoins(deposit_amount!!)
             .endCell();
+        let payload: Slice = beginCell().storeRef(data).asSlice();
         self.forward(
             self.jetton_wallet!!,
             JettonTransfer {
@@ -145,7 +146,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
                 response_destination: self.owner,
                 custom_payload: null,
                 forward_ton_amount: ton("0.05"), // handle jetton notification of master
-                forward_payload: beginCell().storeRef(payload).asSlice()
+                forward_payload: payload
             }.toCell(),
             false,
             null
