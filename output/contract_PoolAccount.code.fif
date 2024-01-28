@@ -1315,17 +1315,21 @@ PROGRAM{
     __tact_not_null INLINECALLDICT
     s1 s10 XCHG
     STGRAMS
-    $Builder$_fun_asSlice INLINECALLDICT
+    ENDC
     s10 PUSH
     __tact_not_null INLINECALLDICT
-    s3 s3 s0 XCHG3
     PUSHNULL
     50000000 PUSHINT
+    s0 s3 XCHG
+    NEWC
+    STREF
+    $Builder$_fun_asSlice INLINECALLDICT
     s15 PUSH
+    s5 s6 XCHG
+    s4 s6 XCHG
     s0 s3 XCHG
     17 s() PUSH
-    3 -ROLL
-    s0 s7 XCHG
+    s3 s7 s3 XCHG3
     $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
     $JettonTransfer$_store_cell INLINECALLDICT
     s7 s8 XCHG
