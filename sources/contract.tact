@@ -131,11 +131,13 @@ contract PoolAccount with TicketInitializer, Deployable {
     master: Address;
     staker: Address;
     jetton_wallet: Address?;
-    deposit_cache: map<Int, Int>;
     twab_store: TwabStore;
     share_amount: Int as coins = 0;
     contribute_amount: Int as coins = 0;
     withdraw_amount: Int as coins = 0;
+
+    lock: Bool = false;
+    deposit_amount: Int = 0;
     // ---------------------
 
     reserve: Address;
@@ -144,7 +146,6 @@ contract PoolAccount with TicketInitializer, Deployable {
         self.owner = owner;
         self.master = master;
         self.staker = staker;
-        self.deposit_cache = emptyMap();
         self.twab_store = new_twab_store();
         self.reserve = reserve;
     }
@@ -201,10 +202,6 @@ contract PoolAccount with TicketInitializer, Deployable {
 
     get fun get_ticket_address(period: Int): Address {
         return self._get_ticket_address(period);
-    }
-
-    get fun get_deposit_cache(query_id: Int): Int? {
-        return self.deposit_cache.get(query_id);
     }
 
     get fun get_twab_size(): Int {
@@ -276,7 +273,7 @@ contract Draw with PrizeDistributor {
                 response_destination: ctx.sender,
                 custom_payload: null,
                 forward_ton_amount: 0, // no need to notify reserve
-                forward_payload: emptySlice()
+                forward_payload: emptyCell()
             }.toCell(),
             false,
             null
@@ -294,12 +291,13 @@ contract Draw with PrizeDistributor {
         }
     }
 
-    fun on_jetton_from_pool_master(amount: Int, payload: Slice) {
+    fun on_jetton_from_pool_master(amount: Int, payload: Cell) {
         // twab timestamp + twab amount + pool owner
-        let twab_timestamp: Int = payload.loadTimestamp();
-        let twab_amount: Int = payload.loadUint(128);
-        let owner: Address = payload.loadAddress();
-        payload.endParse();
+        let data: Slice = payload.beginParse();
+        let twab_timestamp: Int = data.loadTimestamp();
+        let twab_amount: Int = data.loadUint(128);
+        let owner: Address = data.loadAddress();
+        data.endParse();
 
         let twab: Twab = Twab {
             timestamp: twab_timestamp,

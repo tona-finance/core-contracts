@@ -55,10 +55,7 @@ PROGRAM{
   DECLPROC $PoolMaster$_contract_load
   DECLPROC $PoolMaster$_contract_store
   DECLPROC $global_emptyCell
-  DECLPROC $Cell$_fun_asSlice
-  DECLPROC $global_emptySlice
   DECLPROC $global_send
-  DECLPROC $Builder$_fun_asSlice
   DECLPROC $Builder$_fun_storeTimestamp
   DECLPROC $Slice$_fun_loadTimestamp
   DECLPROC $Twab$_fun_next_twab
@@ -252,8 +249,9 @@ PROGRAM{
     64 LDU
     LDGRAMS
     __tact_load_address INLINECALLDICT
-    s3 s0 s3 XC2PU
-    s2 s3 XCHG
+    SWAP
+    LDREF
+    4 -ROLL
   }>
   $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
@@ -282,8 +280,7 @@ PROGRAM{
     }>
     SWAP
     STGRAMS
-    SWAP
-    STSLICER
+    STREF
   }>
   $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
@@ -618,13 +615,6 @@ PROGRAM{
     NEWC
     ENDC
   }>
-  $Cell$_fun_asSlice PROCINLINE:<{
-    CTOS
-  }>
-  $global_emptySlice PROCINLINE:<{
-    $global_emptyCell INLINECALLDICT
-    $Cell$_fun_asSlice INLINECALLDICT
-  }>
   $global_send PROCINLINE:<{
     NEWC
     1 PUSHINT
@@ -726,10 +716,6 @@ PROGRAM{
     ENDC
     SWAP
     SENDRAWMSG
-  }>
-  $Builder$_fun_asSlice PROCINLINE:<{
-    ENDC
-    CTOS
   }>
   $Builder$_fun_storeTimestamp PROCINLINE:<{
     SWAP
@@ -1163,7 +1149,7 @@ PROGRAM{
     128 STU
     s14 PUSH
     __tact_store_address INLINECALLDICT
-    $Builder$_fun_asSlice INLINECALLDICT
+    ENDC
     FALSE
     s11 PUSH
     2 PUSHINT
@@ -1254,11 +1240,7 @@ PROGRAM{
   $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount PROCINLINE:<{
   }>
   $PoolMaster$_fun_on_jetton_received_from_account PROCINLINE:<{
-    LDREF
-    SWAP
     CTOS
-    SWAP
-    ENDS
     __tact_load_address INLINECALLDICT
     SWAP
     $Slice$_fun_loadTimestamp INLINECALLDICT
@@ -1421,8 +1403,7 @@ PROGRAM{
     $global_contractAddress INLINECALLDICT
     s0 s13 s12 PUSH3
     s14 PUSH
-    $global_get_jetton_wallet_init INLINECALLDICT
-    $global_contractAddress INLINECALLDICT
+    $global_get_jetton_wallet_address INLINECALLDICT
     $InitPoolAccountInternal$_constructor_jetton_wallet INLINECALLDICT
     $InitPoolAccountInternal$_store_cell INLINECALLDICT
     s0 s3 XCHG
@@ -1520,7 +1501,7 @@ PROGRAM{
     __tact_context_get_sender INLINECALLDICT
     PUSHNULL
     1100000000 PUSHINT
-    $global_emptySlice INLINECALLDICT
+    $global_emptyCell INLINECALLDICT
     s6 16 s() XCHG
     s5 s14 XCHG
     s3 s4 XCHG
@@ -1634,7 +1615,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d564a584653664a614171396b78515333397971537348636d4b5337694641334231433474596956384c34646a} PUSHSLICE
+    x{697066733a2f2f516d64424d394e6832367757707465535970783547696a544c6d50796659784a734b6d4b785a47485a7361386d61} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

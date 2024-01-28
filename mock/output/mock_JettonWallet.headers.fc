@@ -40,13 +40,13 @@ cell __tact_dict_set_code(cell dict, int id, cell code) inline;
 cell __tact_dict_get_code(cell dict, int id) inline;
 
 ;; $JettonTransfer$_load
-(slice, ((int, int, slice, slice, cell, int, slice))) $JettonTransfer$_load(slice sc_0) inline_ref;
+(slice, ((int, int, slice, slice, cell, int, cell))) $JettonTransfer$_load(slice sc_0) inline_ref;
 
 ;; $JettonTransferNotification$_store
-builder $JettonTransferNotification$_store(builder build_0, (int, int, slice, slice) v) inline;
+builder $JettonTransferNotification$_store(builder build_0, (int, int, slice, cell) v) inline;
 
 ;; $JettonTransferNotification$_store_cell
-cell $JettonTransferNotification$_store_cell((int, int, slice, slice) v) inline;
+cell $JettonTransferNotification$_store_cell((int, int, slice, cell) v) inline;
 
 ;; $JettonBurn$_load
 (slice, ((int, int, slice, cell))) $JettonBurn$_load(slice sc_0) inline;
@@ -58,13 +58,13 @@ builder $JettonExcesses$_store(builder build_0, (int) v) inline;
 cell $JettonExcesses$_store_cell((int) v) inline;
 
 ;; $JettonInternalTransfer$_store
-builder $JettonInternalTransfer$_store(builder build_0, (int, int, slice, slice, int, slice) v) inline_ref;
+builder $JettonInternalTransfer$_store(builder build_0, (int, int, slice, slice, int, cell) v) inline_ref;
 
 ;; $JettonInternalTransfer$_store_cell
-cell $JettonInternalTransfer$_store_cell((int, int, slice, slice, int, slice) v) inline;
+cell $JettonInternalTransfer$_store_cell((int, int, slice, slice, int, cell) v) inline;
 
 ;; $JettonInternalTransfer$_load
-(slice, ((int, int, slice, slice, int, slice))) $JettonInternalTransfer$_load(slice sc_0) inline_ref;
+(slice, ((int, int, slice, slice, int, cell))) $JettonInternalTransfer$_load(slice sc_0) inline_ref;
 
 ;; $JettonInternalTransfer$_load_bounced
 (slice, ((int, int))) $JettonInternalTransfer$_load_bounced(slice sc_0) inline;
@@ -118,7 +118,7 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_bounce_mode_body_code_data(slice to, int value, int bounce, int mode, cell body, cell code, cell data) inline;
 
 ;; $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload
-((int, int, slice, slice, int, slice)) $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, slice forward_payload) inline;
+((int, int, slice, slice, int, cell)) $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, cell forward_payload) inline;
 
 ;; $SendParameters$_constructor_to_value_bounce_mode_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_bounce_mode_body(slice to, int value, int bounce, int mode, cell body) inline;
@@ -130,25 +130,25 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ((int, slice, slice), (cell, cell)) $JettonWallet$_fun_calculate_jetton_wallet_init((int, slice, slice) $self, slice $owner_address) impure inline;
 
 ;; $JettonWallet$_fun__internal_transfer_validate
-((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg) impure inline;
+((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg) impure inline;
 
 ;; $JettonWallet$_fun__internal_transfer_estimate_remain_value
-((int, slice, slice), int) $JettonWallet$_fun__internal_transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg) impure inline;
+((int, slice, slice), int) $JettonWallet$_fun__internal_transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg) impure inline;
 
 ;; $SendParameters$_constructor_to_value_mode_bounce_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_bounce_body(slice to, int value, int mode, int bounce, cell body) inline;
 
 ;; $JettonTransferNotification$_constructor_query_id_amount_sender_forward_payload
-((int, int, slice, slice)) $JettonTransferNotification$_constructor_query_id_amount_sender_forward_payload(int query_id, int amount, slice sender, slice forward_payload) inline;
+((int, int, slice, cell)) $JettonTransferNotification$_constructor_query_id_amount_sender_forward_payload(int query_id, int amount, slice sender, cell forward_payload) inline;
 
 ;; $JettonWallet$_fun__internal_transfer_notification
-((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_notification((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg) impure inline;
+((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_notification((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg) impure inline;
 
 ;; $JettonExcesses$_constructor_query_id
 ((int)) $JettonExcesses$_constructor_query_id(int query_id) inline;
 
 ;; $JettonWallet$_fun__internal_transfer_excesses
-((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_excesses((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg, int $remain) impure inline;
+((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_excesses((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg, int $remain) impure inline;
 
 ;; $JettonWallet$_fun__burn_validate
 ((int, slice, slice), ()) $JettonWallet$_fun__burn_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, cell) $msg) impure inline;
@@ -160,13 +160,13 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ((int, slice, slice), ()) $JettonWallet$_fun__burn_tokens((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, cell) $msg) impure inline;
 
 ;; $JettonWallet$_fun__transfer_validate
-((int, slice, slice), ()) $JettonWallet$_fun__transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, slice) $msg) impure inline;
+((int, slice, slice), ()) $JettonWallet$_fun__transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, cell) $msg) impure inline;
 
 ;; $JettonWallet$_fun__transfer_estimate_remain_value
-((int, slice, slice), ()) $JettonWallet$_fun__transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, slice) $msg) impure inline;
+((int, slice, slice), ()) $JettonWallet$_fun__transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, cell) $msg) impure inline;
 
 ;; $JettonWallet$_fun__transfer_jetton
-((int, slice, slice), ()) $JettonWallet$_fun__transfer_jetton((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, slice) $msg) impure inline;
+((int, slice, slice), ()) $JettonWallet$_fun__transfer_jetton((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, cell) $msg) impure inline;
 
 ;; $WalletData$_constructor_balance_owner_jetton_jetton_wallet_code
 ((int, slice, slice, cell)) $WalletData$_constructor_balance_owner_jetton_jetton_wallet_code(int balance, slice owner, slice jetton, cell jetton_wallet_code) inline;

@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PrizeReserve
-BOC Size: 1997 bytes
+BOC Size: 1994 bytes
 
 # Types
 Total Types: 38
@@ -46,16 +46,16 @@ TLB: `staker_withdrawal#0a77535c query_id:uint64 = StakerWithdrawal`
 Signature: `StakerWithdrawal{query_id:uint64}`
 
 ## JettonNotification
-TLB: `jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = JettonNotification`
-Signature: `JettonNotification{query_id:uint64,amount:coins,from:address,forward_payload:remainder<slice>}`
+TLB: `jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:^cell = JettonNotification`
+Signature: `JettonNotification{query_id:uint64,amount:coins,from:address,forward_payload:^cell}`
 
 ## JettonExcesses
 TLB: `jetton_excesses#d53276db query_id:uint64 = JettonExcesses`
 Signature: `JettonExcesses{query_id:uint64}`
 
 ## JettonTransfer
-TLB: `jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer`
-Signature: `JettonTransfer{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
+TLB: `jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:^cell = JettonTransfer`
+Signature: `JettonTransfer{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:^cell}`
 
 ## JettonBurn
 TLB: `jetton_burn#595f07bc query_id:uint64 amount:coins response_destination:address custom_payload:Maybe ^cell = JettonBurn`
@@ -192,15 +192,16 @@ Total Get Methods: 1
 3556: Draw not initialized
 4429: Invalid sender
 6571: Draw is not over
-6682: Query id not exists
 7189: Zero amount
 13788: Invalid pick size
 16022: Insufficient picks
 16960: Invalid claim amount
 19074: Empty twab store
+19102: Account locked
 19317: Invalid timestamp
 27055: No available prize
 27196: Invalid pool account
+29266: Account unlocked
 30919: Ticket is active
 31206: Start time >= End time
 41207: invalid sender
@@ -210,5 +211,4 @@ Total Get Methods: 1
 53347: Draw is initialized
 54665: Draw is inactive
 55483: Invalid tier
-58059: Query id used
 60931: Pick is used

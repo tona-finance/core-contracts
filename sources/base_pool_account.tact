@@ -12,11 +12,13 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     master: Address;
     staker: Address;
     jetton_wallet: Address?;
-    deposit_cache: map<Int, Int>;
     twab_store: TwabStore;
     share_amount: Int;
     contribute_amount: Int;
     withdraw_amount: Int;
+
+    lock: Bool;
+    deposit_amount: Int;
 
     receive(msg: JettonExcesses) {
         self.forward(self.owner, null, false, null);
@@ -57,8 +59,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     // === user messages ===
 
     receive(msg: Deposit) {
+        self.require_unlocked();
         self.requireOwner();
-        require(self.deposit_cache.get(msg.query_id) == null, "Query id used");
 
         let ctx: Context = context();
         // deposit gas fee 0.01
@@ -68,8 +70,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         let staker_fee: Int = ton("1.0");
         let deposit_amount: Int = rest_value - fwd_fee - staker_fee;
         require(deposit_amount > 0, "Invalid deposit amount");
-        // record in cache
-        self.deposit_cache.set(msg.query_id, deposit_amount);
+        self.set_deposit(deposit_amount);
 
         // deposit in the staker pool
         send(SendParameters {
@@ -109,7 +110,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     }
 
     bounced(src: DepositInStaker) {
-        self.deposit_cache.set(src.query_id, null);
+        self.reset_deposit();
     }
 
     // TODO: this causes an compile error
@@ -118,25 +119,24 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     // }
 
     fun on_jetton_minted(query_id: Int, amount: Int) {
+        self.require_locked();
         // ctx value is 0.1 from staker
 
         // get ton amount from cache
-        let deposit_amount: Int? = self.deposit_cache.get(query_id);
-        require(deposit_amount != null, "Query id not exists");
-        self.deposit_cache.set(query_id, null);
+        let deposit_amount: Int = self.deposit_amount;
+        self.reset_deposit();
 
         let timestamp: Int = now();
         self.twab_store.insert(self.share_amount, timestamp);
-        self.share_amount = self.share_amount + deposit_amount!!;
+        self.share_amount = self.share_amount + deposit_amount;
         self.contribute_amount = self.contribute_amount + amount;
 
-        // timestamp + user + deposit_amount
-        let data: Cell = beginCell()
+        // user + timestamp + deposit_amount
+        let payload: Cell = beginCell()
             .storeAddress(self.owner)
             .storeTimestamp(timestamp)
-            .storeCoins(deposit_amount!!)
+            .storeCoins(deposit_amount)
             .endCell();
-        let payload: Slice = beginCell().storeRef(data).asSlice();
         self.forward(
             self.jetton_wallet!!,
             JettonTransfer {
@@ -145,7 +145,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
                 destination: self.master,
                 response_destination: self.owner,
                 custom_payload: null,
-                forward_ton_amount: ton("0.05"), // handle jetton notification of master
+                forward_ton_amount: ton("0.1"), // handle jetton notification of master
                 forward_payload: payload
             }.toCell(),
             false,
@@ -174,6 +174,24 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
 
         // refund gas
         self.forward(self.owner, null, false, null);
+    }
+
+    inline fun set_deposit(amount: Int) {
+        self.lock = true;
+        self.deposit_amount = amount;
+    }
+
+    inline fun reset_deposit() {
+        self.lock = false;
+        self.deposit_amount = 0;
+    }
+
+    inline fun require_unlocked() {
+        require(!self.lock, "Account locked");
+    }
+
+    inline fun require_locked() {
+        require(self.lock, "Account unlocked");
     }
 
     inline fun require_master() {

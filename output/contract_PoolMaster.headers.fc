@@ -58,13 +58,13 @@ builder $Twab$_store(builder build_0, (int, int) v) inline;
 (slice, ((int, int))) $Twab$_load(slice sc_0) inline;
 
 ;; $JettonNotification$_load
-(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline;
+(slice, ((int, int, slice, cell))) $JettonNotification$_load(slice sc_0) inline;
 
 ;; $JettonTransfer$_store
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, cell) v) inline_ref;
 
 ;; $JettonTransfer$_store_cell
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, cell) v) inline;
 
 ;; $SetPrize$_load
 (slice, ((int))) $SetPrize$_load(slice sc_0) inline;
@@ -171,17 +171,8 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code,
 ;; $global_emptyCell
 cell $global_emptyCell() impure inline;
 
-;; $Cell$_fun_asSlice
-slice $Cell$_fun_asSlice(cell $self) impure inline;
-
-;; $global_emptySlice
-slice $global_emptySlice() impure inline;
-
 ;; $global_send
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline;
-
-;; $Builder$_fun_asSlice
-slice $Builder$_fun_asSlice(builder $self) impure inline;
 
 ;; $Builder$_fun_storeTimestamp
 builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inline;
@@ -250,7 +241,7 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
 ;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
+((int, int, slice, slice, cell, int, cell)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, cell forward_payload) inline;
 
 ;; $PoolMaster$_fun_send_prize_to_draw
 ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_send_prize_to_draw((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self, int $value, (int, int) $twab, int $amount) impure inline;
@@ -265,7 +256,7 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ((int, int, int, int)) $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount(int query_id, int timestamp, int share_amount, int contribute_amount) inline;
 
 ;; $PoolMaster$_fun_on_jetton_received_from_account
-((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_on_jetton_received_from_account((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self, int $query_id, slice $from, int $amount, slice $payload) impure inline;
+((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_on_jetton_received_from_account((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self, int $query_id, slice $from, int $amount, cell $payload) impure inline;
 
 ;; $PoolMaster$_fun_require_jetton_wallet
 ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_require_jetton_wallet((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;

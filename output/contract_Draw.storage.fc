@@ -70,25 +70,25 @@ tuple $Twab$_to_tuple(((int, int)) v) inline {
 ;;
 ;; Type: JettonNotification
 ;; Header: 0x7362d09c
-;; TLB: jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = JettonNotification
+;; TLB: jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:^cell = JettonNotification
 ;;
 
-(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline {
+(slice, ((int, int, slice, cell))) $JettonNotification$_load(slice sc_0) inline {
     throw_unless(129, sc_0~load_uint(32) == 1935855772);
     var v'query_id = sc_0~load_uint(64);
     var v'amount = sc_0~load_coins();
     var v'from = sc_0~__tact_load_address();
-    var v'forward_payload = sc_0;
+    var v'forward_payload = sc_0~load_ref();
     return (sc_0, (v'query_id, v'amount, v'from, v'forward_payload));
 }
 
 ;;
 ;; Type: JettonTransfer
 ;; Header: 0x0f8a7ea5
-;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer
+;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:^cell = JettonTransfer
 ;;
 
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref {
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, cell) v) inline_ref {
     var (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload) = v;
     build_0 = store_uint(build_0, 260734629, 32);
     build_0 = build_0.store_uint(v'query_id, 64);
@@ -97,15 +97,15 @@ builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, i
     build_0 = __tact_store_address(build_0, v'response_destination);
     build_0 = ~ null?(v'custom_payload) ? build_0.store_int(true, 1).store_ref(v'custom_payload) : build_0.store_int(false, 1);
     build_0 = build_0.store_coins(v'forward_ton_amount);
-    build_0 = build_0.store_slice(v'forward_payload);
+    build_0 = build_0.store_ref(v'forward_payload);
     return build_0;
 }
 
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline {
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, cell) v) inline {
     return $JettonTransfer$_store(begin_cell(), v).end_cell();
 }
 
-((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline {
+((int, int, slice, slice, cell, int, cell)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, cell forward_payload) inline {
     return (query_id, amount, destination, response_destination, custom_payload, forward_ton_amount, forward_payload);
 }
 

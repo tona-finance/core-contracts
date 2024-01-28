@@ -86,15 +86,6 @@ cell $global_emptyCell() impure inline {
     return end_cell(begin_cell());
 }
 
-slice $Cell$_fun_asSlice(cell $self) impure inline {
-    var ($self) = $self;
-    return begin_parse($self);
-}
-
-slice $global_emptySlice() impure inline {
-    return $Cell$_fun_asSlice($global_emptyCell());
-}
-
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline {
     var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
     builder $b = begin_cell();

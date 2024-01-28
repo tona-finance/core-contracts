@@ -14,15 +14,14 @@
     return $TwabStore$_constructor_store_size(null(), 0);
 }
 
-(slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $PoolAccount$_contract_init(slice $owner, slice $master, slice $staker, slice $reserve) impure inline_ref {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = (null(), null(), null(), null(), null(), null(), 0, 0, 0, null());
+(slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $PoolAccount$_contract_init(slice $owner, slice $master, slice $staker, slice $reserve) impure inline_ref {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = (null(), null(), null(), null(), null(), 0, 0, 0, false, 0, null());
     $self'owner = $owner;
     $self'master = $master;
     $self'staker = $staker;
-    $self'deposit_cache = null();
     ($self'twab_store'store, $self'twab_store'size) = $global_new_twab_store();
     $self'reserve = $reserve;
-    return ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve);
+    return ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve);
 }
 
 int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
@@ -77,227 +76,247 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     return (($self'store, $self'size), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (cell, cell)) $PoolAccount$_fun__get_draw_init((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $Draw$_init_child(__tact_context_sys, $self'master, $self'reserve, $period));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), (cell, cell)) $PoolAccount$_fun__get_draw_init((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $Draw$_init_child(__tact_context_sys, $self'master, $self'reserve, $period));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun__get_draw_address((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_draw_init($period);
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $global_contractAddress(($sinit'code, $sinit'data)));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), slice) $PoolAccount$_fun__get_draw_address((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_draw_init($period);
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (cell, cell)) $PoolAccount$_fun__get_ticket_init((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    slice $draw = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_draw_address($period);
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $Ticket$_init_child(__tact_context_sys, $self'owner, my_address(), $draw, $period));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), (cell, cell)) $PoolAccount$_fun__get_ticket_init((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    slice $draw = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_draw_address($period);
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $Ticket$_init_child(__tact_context_sys, $self'owner, my_address(), $draw, $period));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (slice, slice, slice, slice, slice, int, int, int)) $PoolAccount$_fun_get_core_data((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $PoolAccountData$_constructor_owner_master_staker_reserve_jetton_wallet_share_amount_contribute_amount_withdraw_amount($self'owner, $self'master, $self'staker, $self'reserve, __tact_not_null($self'jetton_wallet), $self'share_amount, $self'contribute_amount, $self'withdraw_amount));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), (slice, slice, slice, slice, slice, int, int, int)) $PoolAccount$_fun_get_core_data((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $PoolAccountData$_constructor_owner_master_staker_reserve_jetton_wallet_share_amount_contribute_amount_withdraw_amount($self'owner, $self'master, $self'staker, $self'reserve, __tact_not_null($self'jetton_wallet), $self'share_amount, $self'contribute_amount, $self'withdraw_amount));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), cell) $PoolAccount$_fun_get_draw_code((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $StateInit$_get_code(($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_draw_init($period)));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), cell) $PoolAccount$_fun_get_draw_code((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $StateInit$_get_code(($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_draw_init($period)));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), cell) $PoolAccount$_fun_get_ticket_code((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $StateInit$_get_code(($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_init($period)));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), cell) $PoolAccount$_fun_get_ticket_code((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $StateInit$_get_code(($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_init($period)));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun_get_draw_address((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_draw_address($period));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), slice) $PoolAccount$_fun_get_draw_address((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_draw_address($period));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun__get_ticket_address((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_init($period);
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $global_contractAddress(($sinit'code, $sinit'data)));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), slice) $PoolAccount$_fun__get_ticket_address((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_init($period);
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun_get_ticket_address((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $period) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_address($period));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), slice) $PoolAccount$_fun_get_ticket_address((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $period) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_address($period));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), int) $PoolAccount$_fun_get_deposit_cache((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $query_id) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), __tact_dict_get_int_int($self'deposit_cache, 257, $query_id, 257));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), int) $PoolAccount$_fun_get_twab_size((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $self'twab_store'size);
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), int) $PoolAccount$_fun_get_twab_size((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $self'twab_store'size);
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), (int, int)) $PoolAccount$_fun_binary_search_twab((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $timestamp) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $timestamp));
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), (int, int)) $PoolAccount$_fun_binary_search_twab((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $timestamp) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $timestamp));
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_require_locked((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    throw_unless(29266, $self'lock);
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_on_jetton_minted((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $query_id, int $amount) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    int $deposit_amount = __tact_dict_get_int_int($self'deposit_cache, 257, $query_id, 257);
-    throw_unless(6682, (~ null?($deposit_amount)));
-    $self'deposit_cache~__tact_dict_set_int_int(257, $query_id, null(), 257);
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_reset_deposit((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    $self'lock = false;
+    $self'deposit_amount = 0;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
+}
+
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_on_jetton_minted((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $query_id, int $amount) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_require_locked();
+    int $deposit_amount = $self'deposit_amount;
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_reset_deposit();
     int $timestamp = now();
     ($self'twab_store'store, $self'twab_store'size)~$TwabStore$_fun_insert($self'share_amount, $timestamp);
-    $self'share_amount = ($self'share_amount + __tact_not_null($deposit_amount));
+    $self'share_amount = ($self'share_amount + $deposit_amount);
     $self'contribute_amount = ($self'contribute_amount + $amount);
-    cell $data = end_cell(store_coins($Builder$_fun_storeTimestamp(__tact_store_address(begin_cell(), $self'owner), $timestamp), __tact_not_null($deposit_amount)));
-    slice $payload = $Builder$_fun_asSlice(store_ref(begin_cell(), $data));
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward(__tact_not_null($self'jetton_wallet), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($query_id, $amount, $self'master, $self'owner, null(), 50000000, $payload)), false, null());
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    cell $payload = end_cell(store_coins($Builder$_fun_storeTimestamp(__tact_store_address(begin_cell(), $self'owner), $timestamp), $deposit_amount));
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward(__tact_not_null($self'jetton_wallet), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($query_id, $amount, $self'master, $self'owner, null(), 100000000, $payload)), false, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_on_jetton_received_from_master((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, int $query_id, int $amount) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_on_jetton_received_from_master((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $query_id, int $amount) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
     cell $payload = end_cell(store_uint(store_uint(begin_cell(), 0, 1), 1, 1));
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_not_null($self'jetton_wallet), 1050000000, (1 + 2), $JettonBurn$_store_cell($JettonBurn$_constructor_query_id_amount_response_destination_custom_payload($query_id, $amount, $self'owner, $payload))));
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward($self'owner, null(), false, null());
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward($self'owner, null(), false, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_require_master((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_set_deposit((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, int $amount) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    $self'lock = true;
+    $self'deposit_amount = $amount;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
+}
+
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_require_unlocked((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    throw_unless(19102, (~ $self'lock));
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
+}
+
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_require_master((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
     throw_unless(4429, ( __tact_slice_eq_bits($self'master, __tact_context_get_sender()) ));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_require_jetton_wallet((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_require_jetton_wallet((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
     throw_unless(4429, ( __tact_slice_eq_bits(__tact_not_null($self'jetton_wallet), __tact_context_get_sender()) ));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_require_staker((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_require_staker((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
     throw_unless(4429, ( __tact_slice_eq_bits($self'staker, __tact_context_get_sender()) ));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), ()) $PoolAccount$_fun_requireOwner((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), ()) $PoolAccount$_fun_requireOwner((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
     throw_unless(132, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), slice) $PoolAccount$_fun_owner((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), $self'owner);
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), slice) $PoolAccount$_fun_owner((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), $self'owner);
 }
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), int) $PoolAccount$_fun_msg_value((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline {
-    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)) = $self;
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), int) $PoolAccount$_fun_msg_value((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline {
+    var (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     int $balance_before_msg = (__tact_my_balance() - $ctx'value);
     int $storage_fee = (100000000 - min($balance_before_msg, 100000000));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ($ctx'value - ($storage_fee + $gas_consumption)));
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ($ctx'value - ($storage_fee + $gas_consumption)));
 }
 
 ;;
 ;; Receivers of a Contract PoolAccount
 ;;
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_JettonNotification((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int, int, slice, slice) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_JettonNotification((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int, int, slice, cell) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload) = $msg;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_require_jetton_wallet();
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_require_jetton_wallet();
     if (( __tact_slice_eq_bits(__tact_create_address(0, 0), $msg'from) )) {
-        ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_on_jetton_minted($msg'query_id, $msg'amount);
+        ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_on_jetton_minted($msg'query_id, $msg'amount);
     } elseif (( __tact_slice_eq_bits($self'master, $msg'from) )) {
-        ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_on_jetton_received_from_master($msg'query_id, $msg'amount);
+        ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_on_jetton_received_from_master($msg'query_id, $msg'amount);
     }
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_InitTicketInternal1((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int, int, int, int) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_InitTicketInternal1((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int, int, int, int) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'period, $msg'start, $msg'end, $msg'avg_balance) = $msg;
     var ($start'timestamp, $start'amount) = $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $msg'start);
     var ($end'timestamp, $end'amount) = $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $msg'end);
     int $avg_balance = $global_average_balance(($start'timestamp, $start'amount), ($end'timestamp, $end'amount));
-    var ($sinit'code, $sinit'data) = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_init($msg'period);
+    var ($sinit'code, $sinit'data) = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun__get_ticket_init($msg'period);
     slice $ticket = $global_contractAddress(($sinit'code, $sinit'data));
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward($ticket, $InitTicketInternal2$_store_cell($InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance($msg'avg_balance, $avg_balance)), false, $StateInit$_as_optional(($sinit'code, $sinit'data)));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward($ticket, $InitTicketInternal2$_store_cell($InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance($msg'avg_balance, $avg_balance)), false, $StateInit$_as_optional(($sinit'code, $sinit'data)));
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_JettonExcesses((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_JettonExcesses((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'query_id) = $msg;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward($self'owner, null(), false, null());
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward($self'owner, null(), false, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_StakerWithdrawal((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_StakerWithdrawal((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'query_id) = $msg;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_require_staker();
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_require_staker();
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     int $withdraw_amount = ($ctx'value - 1000000000);
     int $timestamp = now();
     ($self'twab_store'store, $self'twab_store'size)~$TwabStore$_fun_insert($self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount - $withdraw_amount);
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward($self'master, $WithdrawFinishInternal$_store_cell($WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount($msg'query_id, $self'owner, $timestamp, $withdraw_amount)), false, null());
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward($self'master, $WithdrawFinishInternal$_store_cell($WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount($msg'query_id, $self'owner, $timestamp, $withdraw_amount)), false, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_InitPoolAccountInternal((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (slice) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_InitPoolAccountInternal((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (slice) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'jetton_wallet) = $msg;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_require_master();
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_require_master();
     $self'jetton_wallet = $msg'jetton_wallet;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward($self'owner, null(), false, null());
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward($self'owner, null(), false, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_Deposit((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_Deposit((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'query_id) = $msg;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_requireOwner();
-    throw_unless(58059, null?(__tact_dict_get_int_int($self'deposit_cache, 257, $msg'query_id, 257)));
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_require_unlocked();
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_requireOwner();
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    int $rest_value = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_msg_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), 10000000);
+    int $rest_value = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_msg_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), 10000000);
     int $fwd_fee = $Context$_fun_readForwardFee(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw));
     int $staker_fee = 1000000000;
     int $deposit_amount = (($rest_value - $fwd_fee) - $staker_fee);
     throw_unless(3012, ($deposit_amount > 0));
-    $self'deposit_cache~__tact_dict_set_int_int(257, $msg'query_id, $deposit_amount, 257);
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_set_deposit($deposit_amount);
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body(true, $self'staker, ($deposit_amount + $staker_fee), (1 + 2), $DepositInStaker$_store_cell($DepositInStaker$_constructor_query_id($msg'query_id))));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_Withdraw((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int, int) $msg) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_Withdraw((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int, int) $msg) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'query_id, $msg'amount) = $msg;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_requireOwner();
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_requireOwner();
     throw_unless(7189, ($msg'amount > 0));
-    int $rest_value = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_msg_value(__tact_context_get(), 1150000000);
+    int $rest_value = ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_msg_value(__tact_context_get(), 1150000000);
     throw_unless(2805, ($rest_value >= 0));
     int $acc_withdraw_amount = $self'withdraw_amount;
     $self'withdraw_amount = ($self'withdraw_amount + $msg'amount);
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_forward($self'master, $WithdrawInternal$_store_cell($WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount($msg'query_id, $self'owner, $msg'amount, $self'contribute_amount, $acc_withdraw_amount)), true, null());
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward($self'master, $WithdrawInternal$_store_cell($WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount($msg'query_id, $self'owner, $msg'amount, $self'contribute_amount, $acc_withdraw_amount)), true, null());
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_receive_binary_bounce_DepositInStaker((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int) $src) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_receive_binary_bounce_DepositInStaker((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int) $src) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($src'query_id) = $src;
-    $self'deposit_cache~__tact_dict_set_int_int(257, $src'query_id, null(), 257);
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_reset_deposit();
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
-(((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice)), ()) $PoolAccount$_internal_binary_Deploy((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) $self, (int) $deploy) impure inline {
-    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve) = $self;
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_Deploy((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int) $deploy) impure inline {
+    var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($deploy'queryId) = $deploy;
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve)~$PoolAccount$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
-    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, $self'deposit_cache, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'reserve), ());
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
 ;;
@@ -338,13 +357,6 @@ _ %get_ticket_address(int $$period) method_id(77790) {
     return res;
 }
 
-_ %get_deposit_cache(int $$query_id) method_id(110543) {
-    int $query_id = $$query_id;
-    var self = $PoolAccount$_contract_load();
-    var res = self~$PoolAccount$_fun_get_deposit_cache($query_id);
-    return res;
-}
-
 _ %get_twab_size() method_id(111123) {
     var self = $PoolAccount$_contract_load();
     var res = self~$PoolAccount$_fun_get_twab_size();
@@ -376,7 +388,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmcYVzF23YqGhpwWWpv5RWiy6iJGpsTMpK9mEcWPDwYwgq";
+    return "ipfs://Qmc9RS75eP8qo6m6rYVCy5gA2J71ZyEkTDc1KNWifSN3Tn";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -387,7 +399,7 @@ _ lazy_deployment_completed() method_id {
 ;; Routing of a Contract PoolAccount
 ;;
 
-((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice), int) $PoolAccount$_contract_router_internal((slice, slice, slice, slice, cell, (cell, int), int, int, int, slice) self, int msg_bounced, slice in_msg) impure inline_ref {
+((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice), int) $PoolAccount$_contract_router_internal((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) self, int msg_bounced, slice in_msg) impure inline_ref {
     ;; Handle bounced messages
     if (msg_bounced) {
         

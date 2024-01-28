@@ -12,11 +12,13 @@ trait TicketInitializer with BasePoolAccount {
     master: Address;
     staker: Address;
     jetton_wallet: Address?;
-    deposit_cache: map<Int, Int>;
     twab_store: TwabStore;
     share_amount: Int;
     contribute_amount: Int;
     withdraw_amount: Int;
+
+    lock: Bool;
+    deposit_amount: Int;
     // ---------------------
 
     receive(msg: InitTicketInternal1) {

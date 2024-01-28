@@ -43,8 +43,6 @@ PROGRAM{
   DECLPROC $Draw$_contract_load
   DECLPROC $Draw$_contract_store
   DECLPROC $global_emptyCell
-  DECLPROC $Cell$_fun_asSlice
-  DECLPROC $global_emptySlice
   DECLPROC $global_randomInt
   DECLPROC $global_contractAddress
   DECLPROC $global_send
@@ -275,8 +273,9 @@ PROGRAM{
     64 LDU
     LDGRAMS
     __tact_load_address INLINECALLDICT
-    s3 s0 s3 XC2PU
-    s2 s3 XCHG
+    SWAP
+    LDREF
+    4 -ROLL
   }>
   $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
@@ -305,8 +304,7 @@ PROGRAM{
     }>
     SWAP
     STGRAMS
-    SWAP
-    STSLICER
+    STREF
   }>
   $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
@@ -616,13 +614,6 @@ PROGRAM{
     NEWC
     ENDC
   }>
-  $Cell$_fun_asSlice PROCINLINE:<{
-    CTOS
-  }>
-  $global_emptySlice PROCINLINE:<{
-    $global_emptyCell INLINECALLDICT
-    $Cell$_fun_asSlice INLINECALLDICT
-  }>
   $global_randomInt PROCINLINE:<{
     __tact_prepare_random INLINECALLDICT
     RANDU256
@@ -830,6 +821,7 @@ PROGRAM{
     }>
   }>
   $Draw$_fun_on_jetton_from_pool_master PROCINLINE:<{
+    CTOS
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
     128 LDU
@@ -1224,7 +1216,7 @@ PROGRAM{
     OVER
     PUSHNULL
     OVER
-    $global_emptySlice INLINECALLDICT
+    $global_emptyCell INLINECALLDICT
     s6 PUSH
     s4 s6 XCHG
     s5 s8 XCHG
@@ -1309,7 +1301,7 @@ PROGRAM{
           2 PUSHINT
           PUSHNULL
           0 PUSHINT
-          $global_emptySlice INLINECALLDICT
+          $global_emptyCell INLINECALLDICT
           s3 22 s() XCHG
           s10 PUSH
           s0 s3 XCHG
@@ -1463,7 +1455,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d4e6b625866723945633368726d584554766a367a623634424c45645550576347357943427a33347158783358} PUSHSLICE
+    x{697066733a2f2f516d525077693558635446334c57466b705155796a7876475133676e6e3971447a436f374a356834594d6f676976} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

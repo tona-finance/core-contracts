@@ -1,85 +1,52 @@
-import * as fs from "fs";
-import { Cell, Address, contractAddress } from "@ton/core";
-import { prepareTactDeployment } from "@tact-lang/deployer";
+import { TonClient4, WalletContractV4 } from "@ton/ton";
+import { Cell, Address, toNano } from "@ton/core";
+import { mnemonicToWalletKey } from "@ton/crypto";
 import { PoolMaster } from "../output/contract_PoolMaster";
 import { PrizeReserve } from "../output/contract_PrizeReserve";
 
+import * as dotenv from "dotenv";
+dotenv.config();
+
 async function main() {
     // Parameters
-    const testnet = true;                                 // Flag for testnet or mainnet
-    const owner = Address.parse("UQC67azZnhLSuEt_--CbmhD0lnA-Wl8KJbQsxcQ8Ys7buDYy");    // Our sample contract has an owner
-    const tonstakers = Address.parse("EQCkWxfyhAkim3g2DjKQQg8T5P4g-Q1-K_jErGcDJZ4i-vqR");
-    const jetton_master = Address.parse("EQC98_qAmNEptUtPc7W6xdHh_ZHrBUFpw5Ft_IzNU20QAJav");
-    const jetton_wallet_code = Cell.fromBase64("te6cckEBDAEA7AABAwDAAQIBIAoCAgEgBQMBQr+ugP0vHgNIDiKCNjWW7nUte7J/UHdrlQhqAnkYlnWSPgQABAA5AgEgCAYBQb9u1PlCp4SM4ssGa3ehEoxqH/jEP0OKLc4kYSup/6uLAwcADAB0c1RPTgFBv0VGpv/ht5z92GutPbh0MT3N4vsF5qdKp/NVLZYXx50TCQAeAFRvbnN0YWtlcnMgVE9OAUO/+HLr21FNnJfCg7fwrlF5Ap4rYRnDlGJxnk9G7Y90E+ZACwBQAGh0dHBzOi8vdG9uc3Rha2Vycy5jb20vamV0dG9uL21ldGEuanNvbto46fw=");
-    
-    // Prepare deploy
-    const pool_sinit = await PoolMaster.init(owner, tonstakers, jetton_master, jetton_wallet_code);;    // Create initial data for our contract
-    let pool_address = contractAddress(0, pool_sinit);     // Calculate contract address. MUST match with address in the verifier
-    let pool_data = pool_sinit.data.toBoc();               // Create init data
-    let pool_pkg = fs.readFileSync("output/contract_PoolMaster.pkg");
-    let pool_link = await prepareTactDeployment({
-        pkg: pool_pkg,
-        data: pool_data,
-        testnet: testnet,
+    const workchain = 0; //we are working in basechain.
+    const client = new TonClient4({
+        endpoint: "https://sandbox-v4.tonhubapi.com",
     });
-    // Present a deployment link and contract address
-    console.log('Pool Master address: ' + pool_address.toString({ testOnly: testnet }));
-    console.log('Pool Master Deploy link: ' + pool_link);
+    const mnemonics = (process.env.MNEMONICS || "").toString();
+    const keyPair = await mnemonicToWalletKey(mnemonics.split(" "));
+    const wallet = WalletContractV4.create({
+        workchain,
+        publicKey: keyPair.publicKey,
+    });
+    const sender = client.open(wallet).sender(keyPair.secretKey);
 
-    const reserve_sinit = await PrizeReserve.init(pool_address, tonstakers, jetton_master, jetton_wallet_code);;    // Create initial data for our contract 
-    let reserve_address = contractAddress(0, reserve_sinit);     // Calculate contract address. MUST match with address in the verifier
-    let reserve_data = reserve_sinit.data.toBoc();               // Create init data
-    let reserve_pkg = fs.readFileSync("output/contract_PrizeReserve.pkg");
-    let reserve_link = await prepareTactDeployment({
-        pkg: reserve_pkg,
-        data: reserve_data,
-        testnet: testnet,
-    });
-    // Present a deployment link and contract address
-    console.log('Prize Reserve address: ' + reserve_address.toString({ testOnly: testnet }));
-    console.log('Prize Reserve Deploy link: ' + reserve_link);
+    const staker_pool = Address.parse("kQDpB9FoXA1Bcr7DtQ5oWtLrAgtDEAez4ZRQyGUA7vqiNwc9");
+    const jetton_master = Address.parse("kQDy5FWLkA-THNO8VNMD8MJoEI4vBfdaEAlSOtrsAeAN6l0B");
+    const jetton_wallet_code = Cell.fromBase64("te6ccgECJQEACfsAART/APSkE/S88sgLAQIBYgIDA3rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVEts88uCCHAQFAgEgGhsC7gGOW4Ag1yFwIddJwh+VMCDXCx/eIIIQF41FGbqOGjDTHwGCEBeNRRm68uCB0z/6AFlsEjEToAJ/4IIQe92X3rqOGdMfAYIQe92X3rry4IHTP/oAWWwSMROgAn/gMH/gcCHXScIflTAg1wsf3iCCEA+KfqW64wIgBgcAnsj4QwHMfwHKAFUgWvoCWCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbJ7VQCEDDbPGwX2zx/CAkDOIIQWV8HvLrjAoIQF41FGbqPB9s8bBbbPH/gMHAODxAAvtMfAYIQD4p+pbry4IHTP/oA+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdIAAZHUkm0B4voA1FVgAWz4QW8kUdmhgTMxIcL/8vRAy1RzvFYQVH7cVH7cLhCaXwoigWy3AscF8vRUc7xWEFR+3FR+3C4KAcYVXwVxMsIAkjBy3lQUMoIAkUEGbDH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMPoAMXHXIfoAMfoAMKcDqwASqIIJMS0AoIIImJaAoLzy9E3LEDpHiRA2XkAB2zwLAfIyNjY2NhA4R2X4Q1ESAtD0BDBtAYEOtQGAEPQPb6Hy4IcBgQ61IgKAEPQXyAHI9ADJAcxwAcoAQANZINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFslcDAK6cFnIcAHLAXMBywFwAcsAEszMyfkAyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgYcFCHf4BAVEfeECPIVVDbPMkQSRA4QBcQRhBFDRcApoIQF41FGVAHyx8Vyz9QA/oCASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYB+gLMAfYw0x8BghBZXwe8uvLggdM/+gD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdIAAZHUkm0B4lUwbBT4QW8kUaahggDrwiHC//L0QJhUc4lUfalTul8FMiOCALfIAscF8vSCEDuaygC88ucBSpgQN0YWUFTbPH8RAKzTHwGCEBeNRRm68uCB0z/6APpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAH6ANRVUAJm+EFvJFHIoIFxzSHC//L0QLpUc6tUf8tUfcstEDdfBzJTIMcFs5Fb4w1Uc6tUf8tUfcstEhMBzDBsMzNwgEBUEyZ/BshVMIIQe92X3lAFyx8Tyz8B+gIBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFskkUEQUQzBtbRcB7FUw+ENREgLQ9AQwbQGBDrUBgBD0D2+h8uCHAYEOtSICgBD0F8gByPQAyQHMcAHKAEADWSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbJAYEI+AIUAtQVXwX4J28QI6GCCJiWgGa2CKGCCJiWgKBSMKEhwgCON1UxbDH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMPoAMXHXIfoAMfoAMKcDqwBYoKGSbFHiJsIA4wAQPUywEEpecV4xFRYAknBZyHABywFzAcsBcAHLABLMzMn5AMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIUAXHBRTy9FgBvlUgVHS8VhBUftxUftwyNTU1NSHCAI7CAXFQVHAEyFUwghBzYtCcUAXLHxPLPwH6AgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbMySVVMBRDMG1tkl8F4lUCFwGINFsybDMzcCDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiCHHBbOTIsIAkXDikl8D4w0YAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7ABkB/nByA8gBghDVMnbbWMsfyz/JQUATECQQI21tyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAZAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAhG/2BbZ5tnjYaQcHQIBICEiAbrtRNDUAfhj0gABjkX6APpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiEMwbBPg+CjXCwqDCbry4IkeAfZUchBUdUNUF2H4Q1ESAtD0BDBtAYEOtQGAEPQPb6Hy4IcBgQ61IgKAEPQXyAHI9ADJAcxwAcoAQANZINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFslsMjAgAYr6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgSAtEB2zwfAARwWQAIEDZFQAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwG9Sd75VFlvHHU9PeBVnDJoJwnZdOWrNOy3M6DpZtlGbopIAgFIIyQAEbCvu1E0NIAAYAB1sm7jQ1aXBmczovL1FtY0RCazdNaUdTZmpmYVdLUkpNWTVvcHpBZXpVbWtQMzFjNzFKUERDeHVZN2aCA=");
+    const jetton_wallet_system = Cell.fromBase64("te6cckECJwEACgUAAQHAAQEFoB1rAgEU/wD0pBP0vPLICwMCAWINBAIBIAoFAgEgCQYCAUgIBwB1sm7jQ1aXBmczovL1FtY0RCazdNaUdTZmpmYVdLUkpNWTVvcHpBZXpVbWtQMzFjNzFKUERDeHVZN2aCAAEbCvu1E0NIAAYAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwG9Sd75VFlvHHU9PeBVnDJoJwnZdOWrNOy3M6DpZtlGbopIAhG/2BbZ5tnjYaQkCwH2VHIQVHVDVBdh+ENREgLQ9AQwbQGBDrUBgBD0D2+h8uCHAYEOtSICgBD0F8gByPQAyQHMcAHKAEADWSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbJbDIwDAAIEDZFQAN60AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRLbPPLggiQPDgCeyPhDAcx/AcoAVSBa+gJYINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFsntVALuAY5bgCDXIXAh10nCH5UwINcLH94gghAXjUUZuo4aMNMfAYIQF41FGbry4IHTP/oAWWwSMROgAn/gghB73Zfeuo4Z0x8BghB73ZfeuvLggdM/+gBZbBIxE6ACf+Awf+BwIddJwh+VMCDXCx/eIIIQD4p+pbrjAiAbEAM4ghBZXwe8uuMCghAXjUUZuo8H2zxsFts8f+AwcBkYEQJm+EFvJFHIoIFxzSHC//L0QLpUc6tUf8tUfcstEDdfBzJTIMcFs5Fb4w1Uc6tUf8tUfcstFhIC1BVfBfgnbxAjoYIImJaAZrYIoYIImJaAoFIwoSHCAI43VTFsMfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4Igw+gAxcdch+gAx+gAwpwOrAFigoZJsUeImwgDjABA9TLAQSl5xXjEVEwGINFsybDMzcCDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiCHHBbOTIsIAkXDikl8D4w0UAf5wcgPIAYIQ1TJ221jLH8s/yUFAExAkECNtbchxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAIQG+VSBUdLxWEFR+3FR+3DI1NTU1IcIAjsIBcVBUcATIVTCCEHNi0JxQBcsfE8s/AfoCASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFszJJVUwFEMwbW2SXwXiVQIgAexVMPhDURIC0PQEMG0BgQ61AYAQ9A9vofLghwGBDrUiAoAQ9BfIAcj0AMkBzHABygBAA1kg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WyQGBCPgCFwCScFnIcAHLAXMBywFwAcsAEszMyfkAyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhQBccFFPL0WACs0x8BghAXjUUZuvLggdM/+gD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+gDUVVAB9jDTHwGCEFlfB7y68uCB0z/6APpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0gABkdSSbQHiVTBsFPhBbyRRpqGCAOvCIcL/8vRAmFRziVR9qVO6XwUyI4IAt8gCxwXy9IIQO5rKALzy5wFKmBA3RhZQVNs8fxoBzDBsMzNwgEBUEyZ/BshVMIIQe92X3lAFyx8Tyz8B+gIBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFskkUEQUQzBtbSACEDDbPGwX2zx/IxwBbPhBbyRR2aGBMzEhwv/y9EDLVHO8VhBUftxUftwuEJpfCiKBbLcCxwXy9FRzvFYQVH7cVH7cLh0BxhVfBXEywgCSMHLeVBQyggCRQQZsMfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4Igw+gAxcdch+gAx+gAwpwOrABKoggkxLQCgggiYloCgvPL0TcsQOkeJEDZeQAHbPB4B8jI2NjY2EDhHZfhDURIC0PQEMG0BgQ61AYAQ9A9vofLghwGBDrUiAoAQ9BfIAcj0AMkBzHABygBAA1kg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WyVwfArpwWchwAcsBcwHLAXABywASzMzJ+QDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiBhwUId/gEBUR94QI8hVUNs8yRBJEDhAFxBGEEUiIAHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAhAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAKaCEBeNRRlQB8sfFcs/UAP6AgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WAfoCzAC+0x8BghAPin6luvLggdM/+gD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0gABkdSSbQHi+gDUVWABuu1E0NQB+GPSAAGORfoA+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIQzBsE+D4KNcLCoMJuvLgiSUBivpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiBIC0QHbPCYABHBZFarR4g==");
+    const pool = await PoolMaster.fromInit(wallet.address, staker_pool, jetton_master, jetton_wallet_code, jetton_wallet_system);;    // Create initial data for our contract
+    await client.open(pool).send(
+        sender,
+        { value: toNano("0.2") },
+        {
+            $$type: "Deploy",
+            queryId: 0n,
+        },
+    );
+    console.log("Pool Master address", pool.address.toString({ testOnly: true }));
+
+    const reserve = await PrizeReserve.fromInit(pool.address, staker_pool, jetton_master, jetton_wallet_code, jetton_wallet_system);;    // Create initial data for our contract
+    await client.open(reserve).send(
+        sender,
+        { value: toNano("0.2") },
+        {
+            $$type: "Deploy",
+            queryId: 0n,
+        },
+    );
+    console.log("Prize Reserve address", reserve.address.toString({ testOnly: true }));
 }
-
-// async function main() {
-//     const workchain = 0; // basechain
-//     const client = new TonClient4({
-//         endpoint: "https://sandbox-v4.tonhubapi.com", // Test-net API endpoint
-//     });
-
-//     const mnemonics = (process.env.MNEMONICS || "").toString();
-//     const keypair = await mnemonicToPrivateKey(mnemonics.split(" "));
-//     const deployer = WalletContractV4.create({
-//         workchain: workchain,
-//         publicKey: keypair.publicKey,
-//     });
-//     console.log("Deployer Address: " + deployer.address);
-//     let deployer_contract = client.open(deployer);
-//     console.log("Deployer Balance: " + fromNano(await deployer_contract.getBalance()));
-
-//     // Parameters
-//     const tonstakers = Address.parse("EQCkWxfyhAkim3g2DjKQQg8T5P4g-Q1-K_jErGcDJZ4i-vqR");
-//     const jetton_master = Address.parse("EQC98_qAmNEptUtPc7W6xdHh_ZHrBUFpw5Ft_IzNU20QAJav");
-//     const jetton_wallet_code = Cell.fromBase64("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");
-
-//     // Deploying
-//     let sinit = await PoolMaster.init(deployer_contract.address, tonstakers, jetton_master, jetton_wallet_code);
-//     let pool_master_contract = contractAddress(workchain, sinit);
-//     console.log("Pool Master Address: " + pool_master_contract);
-//     let deploy_amount = toNano("0.5");
-//     let seqno = await deployer_contract.getSeqno();
-//     await deployer_contract.sendTransfer({
-//         seqno: seqno,
-//         secretKey: keypair.secretKey,
-//         messages: [
-//             internal({
-//                 to: pool_master_contract,
-//                 value: deploy_amount,
-//                 init: sinit,
-//             })
-//         ],
-//     });
-//     console.log("Deployer Balance: " + fromNano(await deployer_contract.getBalance()));
-// }
 
 main().catch((error) => {
     console.error(error);

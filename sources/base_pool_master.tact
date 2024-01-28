@@ -55,25 +55,14 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     }
 
     receive("init account") {
-        let sinit_1: StateInit = self._get_account_init(sender());
-        let account: Address = contractAddress(sinit_1);
-        let sinit_2: StateInit = get_jetton_wallet_init(
+        let sinit: StateInit = self._get_account_init(sender());
+        let account: Address = contractAddress(sinit);
+        let jetton_wallet: Address = get_jetton_wallet_address(
             account,
             self.jetton_master,
             self.jetton_wallet_code,
             self.jetton_system  // note: Only in Testnet!
         );
-        let jetton_wallet: Address = contractAddress(sinit_2);
-
-        // // Note: optional, init jetton wallet account
-        // send(SendParameters {
-        //     bounce: false,
-        //     to: jetton_wallet,
-        //     value: ton("0.1"),
-        //     mode: SendIgnoreErrors,
-        //     code: sinit_2.code,
-        //     data: sinit_2.data
-        // });
 
         // init pool account
         self.forward(
@@ -82,7 +71,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
                 jetton_wallet: jetton_wallet
             }.toCell(),
             false,
-            sinit_1
+            sinit
         );
     }
 
@@ -127,7 +116,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
                 response_destination: msg.user,
                 custom_payload: null,
                 forward_ton_amount: ton("1.1"), // handle jetton notification of account, including burn fee
-                forward_payload: emptySlice()
+                forward_payload: emptyCell()
             }.toCell(),
             false,
             null
@@ -155,11 +144,11 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
     fun send_prize_to_draw(value: Int, twab: Twab, amount: Int) {
         // twab timestamp + twab amount + owner
-        let payload: Slice = beginCell()
+        let payload: Cell = beginCell()
             .storeTimestamp(twab.timestamp)
             .storeUint(twab.amount, 128)
             .storeAddress(self.owner)
-            .asSlice();
+            .endCell();
         send(SendParameters {
             bounce: false,
             to: self.jetton_wallet,
@@ -202,10 +191,9 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         );
     }
 
-    fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Slice) {
-        let data: Slice = payload.loadRef().beginParse();
-        payload.endParse();
-        // timestamp + user + deposit_amount
+    fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Cell) {
+        // user + timestamp + deposit_amount
+        let data: Slice = payload.beginParse();
         let user: Address = data.loadAddress();
         let timestamp: Int = data.loadTimestamp();
         let deposit_amount: Int = data.loadCoins();
