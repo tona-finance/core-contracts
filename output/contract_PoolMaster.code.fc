@@ -135,11 +135,11 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_on_jetton_received_from_account((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self, int $query_id, slice $from, int $amount, slice $payload) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
     slice $data = begin_parse(preload_ref($payload));
-    end_parse($payload);
     int $timestamp = $data~$Slice$_fun_loadTimestamp();
     slice $user = $data~__tact_load_address();
     int $deposit_amount = $data~load_coins();
     end_parse($data);
+    end_parse($payload);
     throw_unless(27196, ( __tact_slice_eq_bits(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_address($user), $from) ));
     ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount + $deposit_amount);
@@ -191,14 +191,6 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
 }
 
-((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_internal_text_532f8e27a4edd8e408107374afc9cb09b9efb63d00b4b70bc898460f5dd59b1a((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
-    var ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker) = $self;
-    var ($sinit'code, $sinit'data) = $global_get_jetton_wallet_init(my_address(), $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system);
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_code_data(false, $self'jetton_wallet, 100000000, 2, $sinit'code, $sinit'data));
-    ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_forward(__tact_context_get_sender(), null(), false, null());
-    return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
-}
-
 ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline {
     var ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker) = $self;
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_requireOwner();
@@ -217,7 +209,6 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     slice $account = $global_contractAddress(($sinit_1'code, $sinit_1'data));
     var ($sinit_2'code, $sinit_2'data) = $global_get_jetton_wallet_init($account, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system);
     slice $jetton_wallet = $global_contractAddress(($sinit_2'code, $sinit_2'data));
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_code_data(false, $jetton_wallet, 100000000, 2, $sinit_2'code, $sinit_2'data));
     ($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun_forward($account, $InitPoolAccountInternal$_store_cell($InitPoolAccountInternal$_constructor_jetton_wallet($jetton_wallet)), false, $StateInit$_as_optional(($sinit_1'code, $sinit_1'data)));
     return (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker), ());
 }
@@ -331,7 +322,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmRRVU6HKbqYBBss3676EKU19wLq8KPMepkci9QUqcaNdJ";
+    return "ipfs://QmVJXFSfJaAq9kxQS39yqSsHcmKS7iFA3B1C4tYiV8L4dj";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -400,12 +391,6 @@ _ lazy_deployment_completed() method_id {
     ;; Text Receivers
     if (op == 0) {
         var text_op = slice_hash(in_msg);
-        
-        ;; Receive "init jetton wallet" message
-        if (text_op == 0x532f8e27a4edd8e408107374afc9cb09b9efb63d00b4b70bc898460f5dd59b1a) {
-            self~$PoolMaster$_internal_text_532f8e27a4edd8e408107374afc9cb09b9efb63d00b4b70bc898460f5dd59b1a();
-            return (self, true);
-        }
         
         ;; Receive "init draw" message
         if (text_op == 0x8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2) {

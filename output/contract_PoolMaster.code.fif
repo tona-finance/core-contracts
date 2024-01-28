@@ -92,13 +92,11 @@ PROGRAM{
   DECLPROC $PoolMaster$_fun_msg_value
   DECLPROC $PoolMaster$_fun_requireOwner
   DECLPROC $PoolMaster$_fun_owner
-  DECLPROC $SendParameters$_constructor_bounce_to_value_mode_code_data
   DECLPROC $InitPoolAccountInternal$_constructor_jetton_wallet
   DECLPROC $WithdrawNotify$_constructor_query_id_timestamp_share_amount
   DECLPROC $ChangeOwnerOk$_constructor_queryId_newOwner
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $PoolMaster$_internal_binary_JettonNotification
-  DECLPROC $PoolMaster$_internal_text_532f8e27a4edd8e408107374afc9cb09b9efb63d00b4b70bc898460f5dd59b1a
   DECLPROC $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2
   DECLPROC $PoolMaster$_internal_text_cc6af9da0449068a05d5f478d36201caad0c689ed788da96090ff3cccdea88cc
   DECLPROC $PoolMaster$_internal_binary_SetPrize
@@ -1259,13 +1257,13 @@ PROGRAM{
     DUP
     PLDREF
     CTOS
-    SWAP
-    ENDS
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
+    ENDS
+    s0 s3 XCHG
     ENDS
     s10 17 s() XCHG
     s9 16 s() XCHG
@@ -1278,25 +1276,24 @@ PROGRAM{
     s2 16 s() XCHG
     s15 s14 XCHG2
     27196 PUSHINT
-    s0 s14 XCHG
-    16 s() PUSH
+    s14 s15 XCPU
     $PoolMaster$_fun__get_account_address INLINECALLDICT
     s0 s13 XCHG2
     __tact_slice_eq_bits INLINECALLDICT
     s1 s14 XCHG
     THROWANYIFNOT
     s4 s3 s2 XC2PU
-    16 s() PUSH
+    s15 PUSH
     $Twab$_fun_next_twab INLINECALLDICT
-    s2 s13 XCPU
+    s2 s15 XCPU
     ADD
     s0 s4 XCHG
     16 s() PUSH
     ADD
     s3 s11 XCHG
-    s2 s15 XCHG
+    s2 s14 XCHG
     s0 16 s() XCHG
-    s1 s13 XCHG
+    s1 s15 XCHG
     $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount INLINECALLDICT
     $DepositNotify$_store_cell INLINECALLDICT
     s6 s13 XCHG
@@ -1304,12 +1301,12 @@ PROGRAM{
     s4 s11 XCHG
     s3 s10 XCHG
     s2 s9 XCHG
-    s3 s8 XCHG
-    s5 s7 XCHG
+    s5 s8 XCHG
+    s4 s7 XCHG
     s1 s6 XCHG
     s1 s5 XCHG
-    s3 s4 XCHG
-    s1 s3 s0 XCHG3
+    s4 s4 s0 XCHG3
+    s1 s3 XCHG
     FALSE
     PUSHNULL
     $PoolMaster$_fun_forward INLINECALLDICT
@@ -1355,10 +1352,6 @@ PROGRAM{
   $PoolMaster$_fun_owner PROCINLINE:<{
     s11 PUSH
   }>
-  $SendParameters$_constructor_bounce_to_value_mode_code_data PROCINLINE:<{
-    PUSHNULL
-    -ROT
-  }>
   $InitPoolAccountInternal$_constructor_jetton_wallet PROCINLINE:<{
   }>
   $WithdrawNotify$_constructor_query_id_timestamp_share_amount PROCINLINE:<{
@@ -1373,24 +1366,6 @@ PROGRAM{
     4 12 BLKSWAP
     s1 s2 XCHG
     $PoolMaster$_fun_on_jetton_received_from_account INLINECALLDICT
-  }>
-  $PoolMaster$_internal_text_532f8e27a4edd8e408107374afc9cb09b9efb63d00b4b70bc898460f5dd59b1a PROCINLINE:<{
-    MYADDR
-    s11 s10 s9 PUSH3
-    $global_get_jetton_wallet_init INLINECALLDICT
-    FALSE
-    s0 s2 XCHG
-    100000000 PUSHINT
-    2 PUSHINT
-    s12 PUSH
-    s1 s3 s4 XCHG3
-    $SendParameters$_constructor_bounce_to_value_mode_code_data INLINECALLDICT
-    $global_send INLINECALLDICT
-    __tact_context_get_sender INLINECALLDICT
-    PUSHNULL
-    FALSE
-    PUSHNULL
-    $PoolMaster$_fun_forward INLINECALLDICT
   }>
   $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2 PROCINLINE:<{
     $PoolMaster$_fun_requireOwner INLINECALLDICT
@@ -1446,17 +1421,7 @@ PROGRAM{
     s0 s13 s12 PUSH3
     s14 PUSH
     $global_get_jetton_wallet_init INLINECALLDICT
-    2DUP
     $global_contractAddress INLINECALLDICT
-    FALSE
-    s0 s2 XCHG
-    100000000 PUSHINT
-    s2 PUSH
-    s0 s5 XCHG
-    2 PUSHINT
-    s0 s1 s3 XCHG3
-    $SendParameters$_constructor_bounce_to_value_mode_code_data INLINECALLDICT
-    $global_send INLINECALLDICT
     $InitPoolAccountInternal$_constructor_jetton_wallet INLINECALLDICT
     $InitPoolAccountInternal$_store_cell INLINECALLDICT
     s0 s3 XCHG
@@ -1668,7 +1633,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5252565536484b6271594242737333363736454b553139774c71384b504d65706b63693951557163614e644a} PUSHSLICE
+    x{697066733a2f2f516d564a584653664a614171396b78515333397971537348636d4b5337694641334231433474596956384c34646a} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1756,15 +1721,6 @@ PROGRAM{
     0 EQINT
     IF:<{
       HASHSU
-      DUP
-      37625989361243919086068238814103117345164213064101250250365002275944140217114 PUSHINT
-      EQUAL
-      IFJMP:<{
-        DROP
-        $PoolMaster$_internal_text_532f8e27a4edd8e408107374afc9cb09b9efb63d00b4b70bc898460f5dd59b1a INLINECALLDICT
-        TRUE
-        RETALT
-      }>
       DUP
       63112914226139486450175388854194155415692667133303230034238535823845133332898 PUSHINT
       EQUAL

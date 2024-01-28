@@ -19,26 +19,26 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     spent_amount: Int;
     next_period: Int;
 
-    // Note: optional
-    receive("init jetton wallet") {
-        let sinit: StateInit = get_jetton_wallet_init(
-            myAddress(),
-            self.jetton_master,
-            self.jetton_wallet_code,
-            self.jetton_system  // note: Only in Testnet!
-        );
+    // // Note: optional
+    // receive("init jetton wallet") {
+    //     let sinit: StateInit = get_jetton_wallet_init(
+    //         myAddress(),
+    //         self.jetton_master,
+    //         self.jetton_wallet_code,
+    //         self.jetton_system  // note: Only in Testnet!
+    //     );
 
-        send(SendParameters {
-            bounce: false,
-            to: self.jetton_wallet,
-            value: ton("0.1"),
-            mode: SendIgnoreErrors,
-            code: sinit.code,
-            data: sinit.data
-        });
+    //     send(SendParameters {
+    //         bounce: false,
+    //         to: self.jetton_wallet,
+    //         value: ton("0.1"),
+    //         mode: SendIgnoreErrors,
+    //         code: sinit.code,
+    //         data: sinit.data
+    //     });
 
-        self.forward(sender(), null, false, null);
-    }
+    //     self.forward(sender(), null, false, null);
+    // }
 
     receive("init draw") {
         self.requireOwner();
@@ -65,15 +65,15 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         );
         let jetton_wallet: Address = contractAddress(sinit_2);
 
-        // Note: optional, init jetton wallet account
-        send(SendParameters {
-            bounce: false,
-            to: jetton_wallet,
-            value: ton("0.1"),
-            mode: SendIgnoreErrors,
-            code: sinit_2.code,
-            data: sinit_2.data
-        });
+        // // Note: optional, init jetton wallet account
+        // send(SendParameters {
+        //     bounce: false,
+        //     to: jetton_wallet,
+        //     value: ton("0.1"),
+        //     mode: SendIgnoreErrors,
+        //     code: sinit_2.code,
+        //     data: sinit_2.data
+        // });
 
         // init pool account
         self.forward(
@@ -204,12 +204,12 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
     fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Slice) {
         let data: Slice = payload.preloadRef().beginParse();
-        payload.endParse();
         // timestamp + user + deposit_amount
         let timestamp: Int = data.loadTimestamp();
         let user: Address = data.loadAddress();
         let deposit_amount: Int = data.loadCoins();
         data.endParse();
+        payload.endParse();
 
         require(from == self._get_account_address(user), "Invalid pool account");
         self.twab = self.twab.next_twab(self.share_amount, timestamp);
