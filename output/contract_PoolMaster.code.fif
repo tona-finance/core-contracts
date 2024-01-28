@@ -1254,8 +1254,8 @@ PROGRAM{
   $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount PROCINLINE:<{
   }>
   $PoolMaster$_fun_on_jetton_received_from_account PROCINLINE:<{
-    DUP
-    PLDREF
+    LDREF
+    SWAP
     CTOS
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP

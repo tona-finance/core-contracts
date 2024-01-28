@@ -203,7 +203,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     }
 
     fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Slice) {
-        let data: Slice = payload.preloadRef().beginParse();
+        let data: Slice = payload.loadRef().beginParse();
         // timestamp + user + deposit_amount
         let timestamp: Int = data.loadTimestamp();
         let user: Address = data.loadAddress();
