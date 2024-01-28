@@ -1303,12 +1303,12 @@ PROGRAM{
     s5 s14 XCPU
     ADD
     NEWC
-    s13 PUSH
-    __tact_store_address INLINECALLDICT
-    s0 s8 XCHG2
-    $Builder$_fun_storeTimestamp INLINECALLDICT
-    s0 s13 XCHG2
+    s0 s14 XCHG2
     STGRAMS
+    s0 s7 XCHG2
+    $Builder$_fun_storeTimestamp INLINECALLDICT
+    s11 PUSH
+    __tact_store_address INLINECALLDICT
     ENDC
     s8 PUSH
     __tact_not_null INLINECALLDICT
@@ -1329,11 +1329,12 @@ PROGRAM{
     s10 s13 XCHG
     s9 s12 XCHG
     s8 s11 XCHG
-    4 7 REVERSE
+    s7 s10 XCHG
+    s5 s9 XCHG
     s4 s8 XCHG
-    s3 s7 XCHG
-    s5 s6 XCHG
+    5 3 REVERSE
     s5 s4 s0 XCHG3
+    s1 s2 XCHG
     FALSE
     PUSHNULL
     $PoolAccount$_fun_forward INLINECALLDICT
