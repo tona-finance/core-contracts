@@ -20,6 +20,7 @@ contract PoolMaster with BasePoolMaster, Deployable {
 
     jetton_master: Address;
     jetton_wallet_code: Cell;
+    jetton_system: Cell; // note: Only in Testnet!
     jetton_wallet: Address;
     twab: Twab;
     share_amount: Int as coins;
@@ -34,15 +35,18 @@ contract PoolMaster with BasePoolMaster, Deployable {
         owner: Address,
         staker: Address,
         jetton_master: Address,
-        jetton_wallet_code: Cell
+        jetton_wallet_code: Cell,
+        jetton_system: Cell  // note: Only in Testnet!
     ) {
         self.owner = owner;
         self.jetton_master = jetton_master;
         self.jetton_wallet_code = jetton_wallet_code;
+        self.jetton_system = jetton_system;  // note: Only in Testnet!
         self.jetton_wallet = get_jetton_wallet_address(
             myAddress(),
             jetton_master,
-            jetton_wallet_code
+            jetton_wallet_code,
+            jetton_system  // note: Only in Testnet!
         );
         self.twab = new_twab();
         self.share_amount = 0;
@@ -68,7 +72,8 @@ contract PoolMaster with BasePoolMaster, Deployable {
             myAddress(),
             self.staker,
             self.jetton_master,
-            self.jetton_wallet_code
+            self.jetton_wallet_code,
+            self.jetton_system // note: Only in Testnet!
         );
         return contractAddress(sinit);
     }
@@ -412,12 +417,14 @@ contract PrizeReserve with BasePrizeReserve, Deployable {
         pool_master: Address,
         staker: Address,
         jetton_master: Address,
-        jetton_wallet_code: Cell
+        jetton_wallet_code: Cell,
+        jetton_system: Cell  // note: Only in Testnet!
     ) {
         let jetton_wallet: Address = get_jetton_wallet_address(
             myAddress(),
             jetton_master,
-            jetton_wallet_code
+            jetton_wallet_code,
+            jetton_system  // note: Only in Testnet!
         );
         self.jetton_wallet = jetton_wallet;
         self.pool_master = pool_master;

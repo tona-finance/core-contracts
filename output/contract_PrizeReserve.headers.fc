@@ -79,25 +79,22 @@ builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice, slice) v
 builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inline;
 
 ;; $PrizeReserve$init$_load
-(slice, ((slice, slice, slice, cell))) $PrizeReserve$init$_load(slice sc_0) inline;
-
-;; $Builder$_fun_storeTimestamp
-builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inline;
+(slice, ((slice, slice, slice, cell, cell))) $PrizeReserve$init$_load(slice sc_0) inline;
 
 ;; $StateInit$_constructor_code_data
 ((cell, cell)) $StateInit$_constructor_code_data(cell code, cell data) inline;
 
-;; $global_get_staker_jetton_wallet_init
-(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline;
+;; $global_get_jetton_wallet_init
+(cell, cell) $global_get_jetton_wallet_init(slice $owner, slice $master, cell $code, cell $system) impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
 
 ;; $global_get_jetton_wallet_address
-slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code) impure inline;
+slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code, cell $system) impure inline;
 
 ;; $PrizeReserve$_contract_init
-(slice, slice, slice) $PrizeReserve$_contract_init(slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code) impure inline_ref;
+(slice, slice, slice) $PrizeReserve$_contract_init(slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code, cell $jetton_system) impure inline_ref;
 
 ;; $PrizeReserve$_contract_load
 (slice, slice, slice) $PrizeReserve$_contract_load() impure inline_ref;

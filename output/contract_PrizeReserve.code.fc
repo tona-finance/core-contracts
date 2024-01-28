@@ -10,24 +10,19 @@
 ;; Contract PrizeReserve functions
 ;;
 
-builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inline {
-    var ($self) = $self;
-    return store_uint($self, $timestamp, 48);
-}
-
-(cell, cell) $global_get_staker_jetton_wallet_init(slice $owner, slice $master, cell $code) impure inline {
-    cell $data = end_cell($Builder$_fun_storeTimestamp(store_coins(store_ref(__tact_store_address(__tact_store_address(store_coins(begin_cell(), 0), $owner), $master), $code), 0), 0));
+(cell, cell) $global_get_jetton_wallet_init(slice $owner, slice $master, cell $code, cell $system) impure inline {
+    cell $data = end_cell(__tact_store_address(__tact_store_address(store_uint(store_ref(begin_cell(), $system), 0, 1), $owner), $master));
     return $StateInit$_constructor_code_data($code, $data);
 }
 
-slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code) impure inline {
-    var ($sinit'code, $sinit'data) = $global_get_staker_jetton_wallet_init($owner, $master, $code);
+slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code, cell $system) impure inline {
+    var ($sinit'code, $sinit'data) = $global_get_jetton_wallet_init($owner, $master, $code, $system);
     return $global_contractAddress(($sinit'code, $sinit'data));
 }
 
-(slice, slice, slice) $PrizeReserve$_contract_init(slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code) impure inline_ref {
+(slice, slice, slice) $PrizeReserve$_contract_init(slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code, cell $jetton_system) impure inline_ref {
     var (($self'jetton_wallet, $self'pool_master, $self'staker)) = (null(), null(), null());
-    slice $jetton_wallet = $global_get_jetton_wallet_address(my_address(), $jetton_master, $jetton_wallet_code);
+    slice $jetton_wallet = $global_get_jetton_wallet_address(my_address(), $jetton_master, $jetton_wallet_code, $jetton_system);
     $self'jetton_wallet = $jetton_wallet;
     $self'pool_master = $pool_master;
     $self'staker = $staker;

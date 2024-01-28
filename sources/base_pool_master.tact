@@ -11,6 +11,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
     jetton_master: Address;
     jetton_wallet_code: Cell;
+    jetton_system: Cell;
     jetton_wallet: Address;
     twab: Twab;
     share_amount: Int;
@@ -38,7 +39,8 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         let jetton_wallet: Address = get_jetton_wallet_address(
             account,
             self.jetton_master,
-            self.jetton_wallet_code
+            self.jetton_wallet_code,
+            self.jetton_system  // note: Only in Testnet!
         );
         self.forward(
             account,
@@ -150,7 +152,8 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         let draw_jetton_wallet: Address = get_jetton_wallet_address(
             draw,
             self.jetton_master,
-            self.jetton_wallet_code
+            self.jetton_wallet_code,
+            self.jetton_system  // note: Only in Testnet!
         );
         self.forward(
             draw,

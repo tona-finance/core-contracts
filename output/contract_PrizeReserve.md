@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PrizeReserve
-BOC Size: 2003 bytes
+BOC Size: 1997 bytes
 
 # Types
 Total Types: 38

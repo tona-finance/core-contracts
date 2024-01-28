@@ -326,11 +326,12 @@ cell $ChangeOwnerOk$_store_cell((int, slice) v) inline {
 ;; Type: PoolMaster
 ;;
 
-builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, int), int, int, int, int, slice) v) inline {
-    var (v'owner, v'jetton_master, v'jetton_wallet_code, v'jetton_wallet, (v'twab'timestamp, v'twab'amount), v'share_amount, v'contribute_amount, v'spent_amount, v'next_period, v'staker) = v;
+builder $PoolMaster$_store(builder build_0, (slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) v) inline {
+    var (v'owner, v'jetton_master, v'jetton_wallet_code, v'jetton_system, v'jetton_wallet, (v'twab'timestamp, v'twab'amount), v'share_amount, v'contribute_amount, v'spent_amount, v'next_period, v'staker) = v;
     build_0 = __tact_store_address(build_0, v'owner);
     build_0 = __tact_store_address(build_0, v'jetton_master);
     build_0 = build_0.store_ref(v'jetton_wallet_code);
+    build_0 = build_0.store_ref(v'jetton_system);
     build_0 = __tact_store_address(build_0, v'jetton_wallet);
     build_0 = $Twab$_store(build_0, (v'twab'timestamp, v'twab'amount));
     var build_1 = begin_cell();
@@ -343,10 +344,11 @@ builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, in
     return build_0;
 }
 
-(slice, ((slice, slice, cell, slice, (int, int), int, int, int, int, slice))) $PoolMaster$_load(slice sc_0) inline {
+(slice, ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice))) $PoolMaster$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'jetton_master = sc_0~__tact_load_address();
     var v'jetton_wallet_code = sc_0~load_ref();
+    var v'jetton_system = sc_0~load_ref();
     var v'jetton_wallet = sc_0~__tact_load_address();
     var v'twab = sc_0~$Twab$_load();
     slice sc_1 = sc_0~load_ref().begin_parse();
@@ -355,18 +357,19 @@ builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, in
     var v'spent_amount = sc_1~load_coins();
     var v'next_period = sc_1~load_uint(32);
     var v'staker = sc_1~__tact_load_address();
-    return (sc_0, (v'owner, v'jetton_master, v'jetton_wallet_code, v'jetton_wallet, v'twab, v'share_amount, v'contribute_amount, v'spent_amount, v'next_period, v'staker));
+    return (sc_0, (v'owner, v'jetton_master, v'jetton_wallet_code, v'jetton_system, v'jetton_wallet, v'twab, v'share_amount, v'contribute_amount, v'spent_amount, v'next_period, v'staker));
 }
 
-(slice, ((slice, slice, slice, cell))) $PoolMaster$init$_load(slice sc_0) inline {
+(slice, ((slice, slice, slice, cell, cell))) $PoolMaster$init$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'staker = sc_0~__tact_load_address();
     var v'jetton_master = sc_0~__tact_load_address();
     var v'jetton_wallet_code = sc_0~load_ref();
-    return (sc_0, (v'owner, v'staker, v'jetton_master, v'jetton_wallet_code));
+    var v'jetton_system = sc_0~load_ref();
+    return (sc_0, (v'owner, v'staker, v'jetton_master, v'jetton_wallet_code, v'jetton_system));
 }
 
-(slice, slice, cell, slice, (int, int), int, int, int, int, slice) $PoolMaster$_contract_load() impure inline_ref {
+(slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $PoolMaster$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -375,13 +378,13 @@ builder $PoolMaster$_store(builder build_0, (slice, slice, cell, slice, (int, in
     } else {
         ;; Allow only workchain deployments
         throw_unless(137, my_address().preload_uint(11) == 1024);
-        (slice owner, slice staker, slice jetton_master, cell jetton_wallet_code) = $sc~$PoolMaster$init$_load();
+        (slice owner, slice staker, slice jetton_master, cell jetton_wallet_code, cell jetton_system) = $sc~$PoolMaster$init$_load();
         $sc.end_parse();
-        return $PoolMaster$_contract_init(owner, staker, jetton_master, jetton_wallet_code);
+        return $PoolMaster$_contract_init(owner, staker, jetton_master, jetton_wallet_code, jetton_system);
     }
 }
 
-() $PoolMaster$_contract_store((slice, slice, cell, slice, (int, int), int, int, int, int, slice) v) impure inline {
+() $PoolMaster$_contract_store((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);
@@ -466,16 +469,17 @@ builder $Draw$init$_store(builder build_0, (slice, slice, int) v) inline {
 ;; Type: PrizeReserve
 ;;
 
-builder $PrizeReserve$init$_store(builder build_0, (slice, slice, slice, cell) v) inline {
-    var (v'pool_master, v'staker, v'jetton_master, v'jetton_wallet_code) = v;
+builder $PrizeReserve$init$_store(builder build_0, (slice, slice, slice, cell, cell) v) inline {
+    var (v'pool_master, v'staker, v'jetton_master, v'jetton_wallet_code, v'jetton_system) = v;
     build_0 = __tact_store_address(build_0, v'pool_master);
     build_0 = __tact_store_address(build_0, v'staker);
     build_0 = __tact_store_address(build_0, v'jetton_master);
     build_0 = build_0.store_ref(v'jetton_wallet_code);
+    build_0 = build_0.store_ref(v'jetton_system);
     return build_0;
 }
 
-(cell, cell) $PrizeReserve$_init_child(cell sys', slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code) inline {
+(cell, cell) $PrizeReserve$_init_child(cell sys', slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code, cell $jetton_system) inline {
     slice sc' = sys'.begin_parse();
     cell source = sc'~load_dict();
     cell contracts = new_dict();
@@ -500,6 +504,6 @@ builder $PrizeReserve$init$_store(builder build_0, (slice, slice, slice, cell) v
     builder b = begin_cell();
     b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
     b = b.store_int(false, 1);
-    b = $PrizeReserve$init$_store(b, ($pool_master, $staker, $jetton_master, $jetton_wallet_code));
+    b = $PrizeReserve$init$_store(b, ($pool_master, $staker, $jetton_master, $jetton_wallet_code, $jetton_system));
     return (mine, b.end_cell());
 }

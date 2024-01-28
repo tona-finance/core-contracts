@@ -203,12 +203,13 @@ builder $PrizeReserve$_store(builder build_0, (slice, slice, slice) v) inline {
     return (sc_0, (v'jetton_wallet, v'pool_master, v'staker));
 }
 
-(slice, ((slice, slice, slice, cell))) $PrizeReserve$init$_load(slice sc_0) inline {
+(slice, ((slice, slice, slice, cell, cell))) $PrizeReserve$init$_load(slice sc_0) inline {
     var v'pool_master = sc_0~__tact_load_address();
     var v'staker = sc_0~__tact_load_address();
     var v'jetton_master = sc_0~__tact_load_address();
     var v'jetton_wallet_code = sc_0~load_ref();
-    return (sc_0, (v'pool_master, v'staker, v'jetton_master, v'jetton_wallet_code));
+    var v'jetton_system = sc_0~load_ref();
+    return (sc_0, (v'pool_master, v'staker, v'jetton_master, v'jetton_wallet_code, v'jetton_system));
 }
 
 (slice, slice, slice) $PrizeReserve$_contract_load() impure inline_ref {
@@ -220,9 +221,9 @@ builder $PrizeReserve$_store(builder build_0, (slice, slice, slice) v) inline {
     } else {
         ;; Allow only workchain deployments
         throw_unless(137, my_address().preload_uint(11) == 1024);
-        (slice pool_master, slice staker, slice jetton_master, cell jetton_wallet_code) = $sc~$PrizeReserve$init$_load();
+        (slice pool_master, slice staker, slice jetton_master, cell jetton_wallet_code, cell jetton_system) = $sc~$PrizeReserve$init$_load();
         $sc.end_parse();
-        return $PrizeReserve$_contract_init(pool_master, staker, jetton_master, jetton_wallet_code);
+        return $PrizeReserve$_contract_init(pool_master, staker, jetton_master, jetton_wallet_code, jetton_system);
     }
 }
 

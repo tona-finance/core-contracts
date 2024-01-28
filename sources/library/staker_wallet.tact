@@ -1,17 +1,17 @@
 import "./timestamp.tact";
 
-fun get_staker_jetton_wallet_init(
+// note: Only in testnet!
+fun get_jetton_wallet_init(
     owner: Address,
     master: Address,
-    code: Cell
+    code: Cell,
+    system: Cell
 ): StateInit {
     let data: Cell = beginCell()
-        .storeCoins(0) // balance
+        .storeRef(system)
+        .storeUint(0, 1)
         .storeAddress(owner)
         .storeAddress(master)
-        .storeRef(code)
-        .storeCoins(0) // locked
-        .storeTimestamp(0) // locked_expiration
         .endCell();
     return StateInit {
         code: code,
@@ -19,11 +19,13 @@ fun get_staker_jetton_wallet_init(
     };
 }
 
+// note: Only in Testnet!
 fun get_jetton_wallet_address(
     owner: Address,
     master: Address,
-    code: Cell
+    code: Cell,
+    system: Cell
 ): Address {
-    let sinit: StateInit = get_staker_jetton_wallet_init(owner, master, code);
+    let sinit: StateInit = get_jetton_wallet_init(owner, master, code, system);
     return contractAddress(sinit);
 }

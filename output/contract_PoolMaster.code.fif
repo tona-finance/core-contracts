@@ -45,9 +45,8 @@ PROGRAM{
   DECLPROC $PoolAccount$init$_store
   DECLPROC $Draw$init$_store
   DECLPROC $PrizeReserve$init$_store
-  DECLPROC $Builder$_fun_storeTimestamp
   DECLPROC $StateInit$_constructor_code_data
-  DECLPROC $global_get_staker_jetton_wallet_init
+  DECLPROC $global_get_jetton_wallet_init
   DECLPROC $global_contractAddress
   DECLPROC $global_get_jetton_wallet_address
   DECLPROC $Twab$_constructor_timestamp_amount
@@ -60,6 +59,7 @@ PROGRAM{
   DECLPROC $global_emptySlice
   DECLPROC $global_send
   DECLPROC $Builder$_fun_asSlice
+  DECLPROC $Builder$_fun_storeTimestamp
   DECLPROC $Slice$_fun_loadTimestamp
   DECLPROC $Twab$_fun_next_twab
   DECLPROC $PrizeReserve$_init_child
@@ -416,15 +416,17 @@ PROGRAM{
     ENDC
   }>
   $PoolMaster$_store PROCINLINE:<{
-    s11 s10 XCHG2
+    s12 s11 XCHG2
     __tact_store_address INLINECALLDICT
-    s0 s8 XCHG2
+    s0 s9 XCHG2
     __tact_store_address INLINECALLDICT
-    s1 s6 XCHG
+    s1 s7 XCHG
     STREF
-    s0 s4 XCHG2
+    s1 s5 XCHG
+    STREF
+    s0 s3 XCHG2
     __tact_store_address INLINECALLDICT
-    -ROT
+    s0 s2 XCHG
     $Twab$_store INLINECALLDICT
     NEWC
     ROT
@@ -447,6 +449,7 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     SWAP
     LDREF
+    LDREF
     __tact_load_address INLINECALLDICT
     SWAP
     $Twab$_load INLINECALLDICT
@@ -460,6 +463,7 @@ PROGRAM{
     32 LDU
     __tact_load_address INLINECALLDICT
     NIP
+    s5 s12 XCHG
     s5 s11 XCHG
     s5 s10 XCHG
     s5 s9 XCHG
@@ -495,7 +499,8 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     SWAP
     LDREF
-    4 -ROLL
+    LDREF
+    5 -ROLL
   }>
   $PoolAccount$init$_store PROCINLINE:<{
     s4 s3 XCHG2
@@ -520,34 +525,28 @@ PROGRAM{
     STIX
   }>
   $PrizeReserve$init$_store PROCINLINE:<{
-    s4 s3 XCHG2
-    __tact_store_address INLINECALLDICT
-    SWAP
+    s5 s4 XCHG2
     __tact_store_address INLINECALLDICT
     ROT
     __tact_store_address INLINECALLDICT
-    STREF
-  }>
-  $Builder$_fun_storeTimestamp PROCINLINE:<{
     SWAP
-    48 STU
+    __tact_store_address INLINECALLDICT
+    s1 s2 XCHG
+    STREF
+    STREF
   }>
   $StateInit$_constructor_code_data PROCINLINE:<{
   }>
-  $global_get_staker_jetton_wallet_init PROCINLINE:<{
+  $global_get_jetton_wallet_init PROCINLINE:<{
     NEWC
+    STREF
     0 PUSHINT
-    STGRAMS
+    SWAP
+    1 STU
     s0 s3 XCHG2
     __tact_store_address INLINECALLDICT
     SWAP
     __tact_store_address INLINECALLDICT
-    s1 s(-1) PUXC
-    STREF
-    0 PUSHINT
-    STGRAMS
-    0 PUSHINT
-    $Builder$_fun_storeTimestamp INLINECALLDICT
     ENDC
     $StateInit$_constructor_code_data INLINECALLDICT
   }>
@@ -557,7 +556,7 @@ PROGRAM{
     __tact_compute_contract_address INLINECALLDICT
   }>
   $global_get_jetton_wallet_address PROCINLINE:<{
-    $global_get_staker_jetton_wallet_init INLINECALLDICT
+    $global_get_jetton_wallet_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
   $Twab$_constructor_timestamp_amount PROCINLINE:<{
@@ -568,14 +567,15 @@ PROGRAM{
     $Twab$_constructor_timestamp_amount INLINECALLDICT
   }>
   $PoolMaster$_contract_init PROCREF:<{
-    2DUP
+    s2 s1 s0 PUSH3
     MYADDR
-    s0 s4 s3 XCHG3
+    s6 s1 s3 XCHG3
+    s5 s4 XCHG2
     $global_get_jetton_wallet_address INLINECALLDICT
     $global_new_twab INLINECALLDICT
     0 PUSHINT
     s0 s0 s0 PUSH3
-    s7 s9 XCHG
+    s7 s10 XCHG
     7 ROLL
   }>
   $PoolMaster$_contract_load PROCREF:<{
@@ -588,7 +588,7 @@ PROGRAM{
     SWAP
     IFJMP:<{
       $PoolMaster$_load INLINECALLDICT
-      1 11 BLKDROP2
+      1 12 BLKDROP2
     }>
     MYADDR
     11 PLDU
@@ -596,9 +596,9 @@ PROGRAM{
     EQUAL
     137 THROWIFNOT
     $PoolMaster$init$_load INLINECALLDICT
-    s0 s4 XCHG
+    s0 s5 XCHG
     ENDS
-    3 ROLL
+    4 ROLL
     $PoolMaster$_contract_init INLINECALLDICT
   }>
   $PoolMaster$_contract_store PROCINLINE:<{
@@ -609,7 +609,7 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    11 -ROLL
+    12 -ROLL
     $PoolMaster$_store INLINECALLDICT
     ENDC
     c4 POP
@@ -731,6 +731,10 @@ PROGRAM{
     ENDC
     CTOS
   }>
+  $Builder$_fun_storeTimestamp PROCINLINE:<{
+    SWAP
+    48 STU
+  }>
   $Slice$_fun_loadTimestamp PROCINLINE:<{
     48 LDU
     DROP
@@ -748,7 +752,7 @@ PROGRAM{
     $Twab$_constructor_timestamp_amount INLINECALLDICT
   }>
   $PrizeReserve$_init_child PROCINLINE:<{
-    s0 s4 XCHG
+    s0 s5 XCHG
     CTOS
     LDDICT
     DROP
@@ -789,15 +793,16 @@ PROGRAM{
     FALSE
     SWAP
     1 STI
-    4 -ROLL
-    s0 s5 XCHG
+    5 -ROLL
+    s0 s6 XCHG
     $PrizeReserve$init$_store INLINECALLDICT
     ENDC
   }>
   $PoolMaster$_fun__get_prize_reserve_address PROCINLINE:<{
     __tact_context_sys GETGLOB
     MYADDR
-    s2 s11 s10 PUSH3
+    s2 s12 s11 PUSH3
+    s13 PUSH
     $PrizeReserve$_init_child INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
@@ -843,13 +848,15 @@ PROGRAM{
     ENDC
   }>
   $PoolMaster$_fun__get_account_init PROCINLINE:<{
-    11 -ROLL
+    12 -ROLL
     $PoolMaster$_fun__get_prize_reserve_address INLINECALLDICT
     __tact_context_sys GETGLOB
     MYADDR
-    s14 s0 s3 XCHG3
-    s0 s14 PUXC
+    s15 s0 s3 XCHG3
+    DUP
+    s0 16 s() XCHG
     $PoolAccount$_init_child INLINECALLDICT
+    s12 s13 XCHG
     s11 s12 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
@@ -897,13 +904,14 @@ PROGRAM{
     ENDC
   }>
   $PoolMaster$_fun__get_draw_init PROCINLINE:<{
-    11 -ROLL
+    12 -ROLL
     $PoolMaster$_fun__get_prize_reserve_address INLINECALLDICT
     __tact_context_sys GETGLOB
     MYADDR
     s0 s0 s3 XCHG3
-    s0 s14 XCHG
+    s0 s15 XCHG
     $Draw$_init_child INLINECALLDICT
+    s12 s13 XCHG
     s11 s12 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
@@ -918,83 +926,89 @@ PROGRAM{
   $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period PROCINLINE:<{
   }>
   $PoolMaster$_fun_get_core_data PROCINLINE:<{
-    s10 s9 s8 PUSH3
-    s10 s9 s8 PUSH3
-    s10 s9 s8 PUSH3
-    s10 s9 PUSH2
-    21 s() PUSH
-    s12 PUSH
-    s10 23 s() XCHG
-    s9 22 s() XCHG
-    s8 21 s() XCHG
-    s7 20 s() XCHG
-    s6 19 s() XCHG
-    s5 18 s() XCHG
-    s4 17 s() XCHG
-    s3 16 s() XCHG
-    s15 s14 s13 XCHG3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    23 s() PUSH
+    s13 PUSH
+    s11 25 s() XCHG
+    s10 24 s() XCHG
+    s9 23 s() XCHG
+    s8 22 s() XCHG
+    s7 21 s() XCHG
+    s6 20 s() XCHG
+    s5 19 s() XCHG
+    s4 18 s() XCHG
+    s3 17 s() XCHG
+    s2 16 s() XCHG
+    s15 s14 XCHG2
     $PoolMaster$_fun__get_prize_reserve_address INLINECALLDICT
     NIP
     s7 POP
     s7 POP
     s7 POP
     s7 POP
+    s7 POP
     s8 s10 XCHG
     s7 s9 XCHG
-    3 4 BLKSWAP
+    4 3 BLKSWAP
     $PoolMasterData$_constructor_owner_staker_prize_reserve_twab_share_amount_contribute_amount_spent_amount_next_period INLINECALLDICT
-    s10 19 s() XCHG
-    s9 18 s() XCHG
-    s10 17 s() XCHG
-    s9 16 s() XCHG
-    s10 s15 XCHG
-    s9 s14 XCHG
-    s10 s13 XCHG
-    4 9 REVERSE
-    s9 s10 XCHG
+    s10 20 s() XCHG
+    s9 19 s() XCHG
+    s10 18 s() XCHG
+    s9 17 s() XCHG
+    s10 16 s() XCHG
+    s9 s15 XCHG
+    s10 s14 XCHG
+    5 9 REVERSE
+    s9 s11 XCHG
   }>
   $PoolMaster$_fun_get_account_code PROCINLINE:<{
-    s10 s9 s8 PUSH3
-    s10 s9 s8 PUSH3
-    s10 s9 s8 PUSH3
-    s10 s9 PUSH2
-    21 s() PUSH
-    s0 s11 XCHG
-    s10 21 s() XCHG
-    s9 20 s() XCHG
-    s8 19 s() XCHG
-    s7 18 s() XCHG
-    s6 17 s() XCHG
-    s5 16 s() XCHG
-    s4 s15 XCHG
-    s3 s14 XCHG
-    s2 s13 XCHG
-    s0 22 s() XCHG
-    s1 s12 XCHG
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    23 s() PUSH
+    s0 s12 XCHG
+    s11 23 s() XCHG
+    s10 22 s() XCHG
+    s9 21 s() XCHG
+    s8 20 s() XCHG
+    s7 19 s() XCHG
+    s6 18 s() XCHG
+    s5 17 s() XCHG
+    s4 16 s() XCHG
+    s3 s15 XCHG
+    s2 s14 XCHG
+    s0 24 s() XCHG
+    s1 s13 XCHG
     $PoolMaster$_fun__get_account_init INLINECALLDICT
-    11 2 BLKDROP2
+    12 2 BLKDROP2
     $StateInit$_get_code INLINECALLDICT
   }>
   $PoolMaster$_fun_get_draw_code PROCINLINE:<{
-    s11 s10 s9 PUSH3
-    s11 s10 s9 PUSH3
-    s11 s10 s9 PUSH3
-    s11 s10 PUSH2
-    s11 22 s() XCHG
-    s10 21 s() XCHG
-    s9 20 s() XCHG
-    s8 19 s() XCHG
-    s7 18 s() XCHG
-    s6 17 s() XCHG
-    s5 16 s() XCHG
-    s4 s15 XCHG
-    s3 s14 XCHG
-    s2 s13 XCHG
-    s0 22 s() XCHG
-    s1 s12 XCHG
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 24 s() XCHG
+    s11 23 s() XCHG
+    s10 22 s() XCHG
+    s9 21 s() XCHG
+    s8 20 s() XCHG
+    s7 19 s() XCHG
+    s6 18 s() XCHG
+    s5 17 s() XCHG
+    s4 16 s() XCHG
+    s3 s15 XCHG
+    s2 s14 XCHG
+    s0 24 s() XCHG
+    s1 s13 XCHG
     $PoolMaster$_fun__get_draw_init INLINECALLDICT
-    11 2 BLKDROP2
+    12 2 BLKDROP2
     $StateInit$_get_code INLINECALLDICT
+    s11 s12 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
     s8 s9 XCHG
@@ -1010,24 +1024,26 @@ PROGRAM{
     $global_contractAddress INLINECALLDICT
   }>
   $PoolMaster$_fun_get_account_address PROCINLINE:<{
-    s11 s10 s9 PUSH3
-    s11 s10 s9 PUSH3
-    s11 s10 s9 PUSH3
-    s11 s10 PUSH2
-    s11 22 s() XCHG
-    s10 21 s() XCHG
-    s9 20 s() XCHG
-    s8 19 s() XCHG
-    s7 18 s() XCHG
-    s6 17 s() XCHG
-    s5 16 s() XCHG
-    s4 s15 XCHG
-    s3 s14 XCHG
-    s2 s13 XCHG
-    s0 22 s() XCHG
-    s1 s12 XCHG
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 24 s() XCHG
+    s11 23 s() XCHG
+    s10 22 s() XCHG
+    s9 21 s() XCHG
+    s8 20 s() XCHG
+    s7 19 s() XCHG
+    s6 18 s() XCHG
+    s5 17 s() XCHG
+    s4 16 s() XCHG
+    s3 s15 XCHG
+    s2 s14 XCHG
+    s0 24 s() XCHG
+    s1 s13 XCHG
     $PoolMaster$_fun__get_account_address INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
+    s11 s12 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
     s8 s9 XCHG
@@ -1043,24 +1059,26 @@ PROGRAM{
     $global_contractAddress INLINECALLDICT
   }>
   $PoolMaster$_fun_get_draw_address PROCINLINE:<{
-    s11 s10 s9 PUSH3
-    s11 s10 s9 PUSH3
-    s11 s10 s9 PUSH3
-    s11 s10 PUSH2
-    s11 22 s() XCHG
-    s10 21 s() XCHG
-    s9 20 s() XCHG
-    s8 19 s() XCHG
-    s7 18 s() XCHG
-    s6 17 s() XCHG
-    s5 16 s() XCHG
-    s4 s15 XCHG
-    s3 s14 XCHG
-    s2 s13 XCHG
-    s0 22 s() XCHG
-    s1 s12 XCHG
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 s11 s10 PUSH3
+    s12 24 s() XCHG
+    s11 23 s() XCHG
+    s10 22 s() XCHG
+    s9 21 s() XCHG
+    s8 20 s() XCHG
+    s7 19 s() XCHG
+    s6 18 s() XCHG
+    s5 17 s() XCHG
+    s4 16 s() XCHG
+    s3 s15 XCHG
+    s2 s14 XCHG
+    s0 24 s() XCHG
+    s1 s13 XCHG
     $PoolMaster$_fun__get_draw_address INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
+    s11 s12 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
     s8 s9 XCHG
@@ -1142,7 +1160,7 @@ PROGRAM{
     s0 s3 XCHG2
     $Builder$_fun_storeTimestamp INLINECALLDICT
     128 STU
-    s13 PUSH
+    s14 PUSH
     __tact_store_address INLINECALLDICT
     $Builder$_fun_asSlice INLINECALLDICT
     FALSE
@@ -1151,13 +1169,14 @@ PROGRAM{
     0 PUSHINT
     s8 PUSH
     DEC
+    s12 19 s() XCHG
     s11 18 s() XCHG
     s10 17 s() XCHG
     s9 16 s() XCHG
     s8 s15 XCHG
     s7 s14 XCHG
     s6 s13 XCHG
-    s5 s12 XCHG
+    s5 19 s() XCHG
     s4 18 s() XCHG
     s3 17 s() XCHG
     s2 16 s() XCHG
@@ -1167,9 +1186,9 @@ PROGRAM{
     s13 s0 s0 XCHG3
     PUSHNULL
     100000000 PUSHINT
-    s13 PUSH
+    s14 PUSH
     s0 s3 XCHG
-    s0 s15 XCHG
+    s0 22 s() XCHG
     $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
     $JettonTransfer$_store_cell INLINECALLDICT
     s4 s15 XCHG
@@ -1177,6 +1196,7 @@ PROGRAM{
     s11 s13 s0 XCHG3
     $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
     $global_send INLINECALLDICT
+    s4 s11 XCHG
     s3 s10 XCHG
     s9 s8 s7 XCHG3
     s3 s6 XCHG
@@ -1189,31 +1209,34 @@ PROGRAM{
   $PoolMaster$_fun_init_draw PROCINLINE:<{
     s4 PUSH
     INC
+    s12 s15 XCHG
     s11 s14 XCHG
     s10 s13 XCHG
-    s9 s12 XCHG
+    s9 s15 XCHG
     s8 s14 XCHG
     s7 s13 XCHG
-    s6 s12 XCHG
+    s6 s15 XCHG
     s5 s14 XCHG
     s4 s13 XCHG
-    s3 s12 XCHG
+    s3 s15 XCHG
     s0 s13 s14 XCHG3
     $PoolMaster$_fun__get_draw_init INLINECALLDICT
     2DUP
     $global_contractAddress INLINECALLDICT
-    s0 s12 s11 PUSH3
+    s0 s13 s12 PUSH3
+    s14 PUSH
     $global_get_jetton_wallet_address INLINECALLDICT
-    s3 s15 XCHG
+    s3 18 s() XCHG
     s0 s2 XCHG
     s1 17 s() XCHG
     s0 16 s() XCHG
     $InitDrawInternal$_constructor_deployer_jetton_wallet_twab_timestamp_twab_amount INLINECALLDICT
     $InitDrawInternal$_store_cell INLINECALLDICT
-    s0 s12 XCHG
+    s0 s15 XCHG
     FALSE
     s0 s14 XCHG
     $StateInit$_as_optional INLINECALLDICT
+    s12 s15 XCHG
     s11 s14 XCHG
     s10 s13 XCHG
     s9 s12 XCHG
@@ -1237,13 +1260,14 @@ PROGRAM{
     SWAP
     LDGRAMS
     ENDS
+    s10 17 s() XCHG
     s9 16 s() XCHG
     s8 s15 XCHG
     s7 s14 XCHG
     s6 s13 XCHG
     s5 s12 XCHG
     s4 s11 XCHG
-    s3 s10 XCHG
+    s3 17 s() XCHG
     s2 16 s() XCHG
     s15 s14 XCHG2
     27196 PUSHINT
@@ -1259,12 +1283,16 @@ PROGRAM{
     $Twab$_fun_next_twab INLINECALLDICT
     s2 s13 XCPU
     ADD
-    s4 s9 XCPU
+    s0 s4 XCHG
+    16 s() PUSH
     ADD
     s3 s11 XCHG
-    s15 s13 s9 XCHG3
+    s2 s15 XCHG
+    s0 16 s() XCHG
+    s1 s13 XCHG
     $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount INLINECALLDICT
     $DepositNotify$_store_cell INLINECALLDICT
+    s6 s13 XCHG
     s5 s12 XCHG
     s4 s11 XCHG
     s3 s10 XCHG
@@ -1287,15 +1315,15 @@ PROGRAM{
     THROWANYIFNOT
   }>
   $PoolMaster$_fun_require_account PROCINLINE:<{
-    11 -ROLL
+    12 -ROLL
     41207 PUSHINT
-    s0 s12 XCHG
+    s0 s13 XCHG
     $PoolMaster$_fun__get_account_address INLINECALLDICT
     __tact_context_get_sender INLINECALLDICT
     __tact_slice_eq_bits INLINECALLDICT
-    s1 s12 XCHG
+    s1 s13 XCHG
     THROWANYIFNOT
-    10 ROLL
+    11 ROLL
   }>
   $PoolMaster$_fun_msg_value PROCINLINE:<{
     NIP
@@ -1313,12 +1341,12 @@ PROGRAM{
   }>
   $PoolMaster$_fun_requireOwner PROCINLINE:<{
     __tact_context_get_sender INLINECALLDICT
-    s11 s(-1) PUXC
+    s12 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
     132 THROWIFNOT
   }>
   $PoolMaster$_fun_owner PROCINLINE:<{
-    s10 PUSH
+    s11 PUSH
   }>
   $InitPoolAccountInternal$_constructor_jetton_wallet PROCINLINE:<{
   }>
@@ -1329,20 +1357,9 @@ PROGRAM{
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
   $PoolMaster$_internal_binary_JettonNotification PROCINLINE:<{
-    s10 s14 XCHG
-    s9 s13 XCHG
-    s8 s12 XCHG
-    s7 s11 XCHG
-    s6 s14 XCHG
-    s5 s13 XCHG
-    s4 s12 XCHG
-    s3 s11 XCHG
-    s14 s13 s12 XCHG3
+    12 4 BLKSWAP
     $PoolMaster$_fun_require_jetton_wallet INLINECALLDICT
-    s10 s14 XCHG
-    s9 s13 XCHG
-    s8 s12 XCHG
-    4 8 BLKSWAP
+    4 12 BLKSWAP
     s1 s2 XCHG
     $PoolMaster$_fun_on_jetton_received_from_account INLINECALLDICT
   }>
@@ -1353,19 +1370,20 @@ PROGRAM{
     0 EQINT
     THROWANYIFNOT
     __tact_context_get INLINECALLDICT
-    s13 s14 XCHG
-    s12 s14 XCHG
-    s11 s14 XCHG
-    s10 s14 XCHG
-    s9 s14 XCHG
-    s8 s14 XCHG
-    s7 s14 XCHG
-    s6 s14 XCHG
-    s2 PUSH
+    s14 s15 XCHG
+    s13 s15 XCHG
+    s12 s15 XCHG
+    s11 s15 XCHG
+    s10 s15 XCHG
+    s9 s15 XCHG
+    s8 s15 XCHG
+    s7 s15 XCHG
     s6 s15 XCHG
     s5 s15 XCHG
     s4 s15 XCHG
     s3 s15 XCHG
+    s2 s15 XCHG
+    s15 PUSH
     -ROT
     10000000 PUSHINT
     $PoolMaster$_fun_msg_value INLINECALLDICT
@@ -1377,6 +1395,7 @@ PROGRAM{
     s6 s5 s4 PUSH3
     NOW
     $Twab$_fun_next_twab INLINECALLDICT
+    s13 s14 XCHG
     s12 s13 XCHG
     s11 s12 XCHG
     s10 s11 XCHG
@@ -1395,7 +1414,8 @@ PROGRAM{
     $PoolMaster$_fun__get_account_init INLINECALLDICT
     2DUP
     $global_contractAddress INLINECALLDICT
-    s0 s12 s11 PUSH3
+    s0 s13 s12 PUSH3
+    s14 PUSH
     $global_get_jetton_wallet_address INLINECALLDICT
     $InitPoolAccountInternal$_constructor_jetton_wallet INLINECALLDICT
     $InitPoolAccountInternal$_store_cell INLINECALLDICT
@@ -1407,26 +1427,27 @@ PROGRAM{
     $PoolMaster$_fun_forward INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_SetPrize PROCINLINE:<{
-    11 -ROLL
+    12 -ROLL
     $PoolMaster$_fun_requireOwner INLINECALLDICT
     3556 PUSHINT
     s2 PUSH
     0 GTINT
     THROWANYIFNOT
     __tact_context_get INLINECALLDICT
-    s13 s14 XCHG
-    s12 s14 XCHG
-    s11 s14 XCHG
-    s10 s14 XCHG
-    s9 s14 XCHG
-    s8 s14 XCHG
-    s7 s14 XCHG
-    s6 s14 XCHG
-    s2 PUSH
+    s14 s15 XCHG
+    s13 s15 XCHG
+    s12 s15 XCHG
+    s11 s15 XCHG
+    s10 s15 XCHG
+    s9 s15 XCHG
+    s8 s15 XCHG
+    s7 s15 XCHG
     s6 s15 XCHG
     s5 s15 XCHG
     s4 s15 XCHG
     s3 s15 XCHG
+    s2 s15 XCHG
+    s15 PUSH
     -ROT
     20000000 PUSHINT
     $PoolMaster$_fun_msg_value INLINECALLDICT
@@ -1437,41 +1458,45 @@ PROGRAM{
     GEQ
     s1 s2 XCHG
     THROWANYIFNOT
-    s3 s13 XCPU
+    s3 s14 XCPU
     ADD
     s7 s6 s5 PUSH3
     NOW
     $Twab$_fun_next_twab INLINECALLDICT
-    s12 s13 XCHG
-    s11 s13 XCHG
-    s10 s13 XCHG
-    s9 s13 XCHG
-    s8 s13 XCHG
-    s7 s13 XCHG
-    s6 s13 XCHG
-    s5 s13 XCHG
+    s13 s14 XCHG
+    s12 s14 XCHG
+    s11 s14 XCHG
+    s10 s14 XCHG
+    s9 s14 XCHG
+    s8 s14 XCHG
+    s7 s14 XCHG
+    s6 s14 XCHG
+    s5 s14 XCHG
     s2 s4 XCHG
-    s3 s13 s0 XCHG3
-    s13 s(-1) s(-1) PUXCPU
-    s0 17 s() XCHG
+    s3 s14 s0 XCHG3
+    s14 s(-1) s(-1) PUXCPU
+    s0 18 s() XCHG
     $PoolMaster$_fun_send_prize_to_draw INLINECALLDICT
-    s10 s13 XCHG
-    3 10 BLKSWAP
+    s11 s14 XCHG
+    3 11 BLKSWAP
     $PoolMaster$_fun_init_draw INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_WithdrawInternal PROCINLINE:<{
+    s11 16 s() XCHG
     s10 s15 XCHG
     s9 s14 XCHG
     s8 s13 XCHG
     s7 s12 XCHG
-    s6 s11 XCHG
+    s6 16 s() XCHG
     s5 s15 XCHG
     s4 s14 XCHG
     s3 s13 XCHG
-    s12 s11 s15 XCHG3
-    s13 PUSH
+    s2 s12 XCHG
+    s1 16 s() XCHG
+    s15 s13 XCPU
     $PoolMaster$_fun_require_account INLINECALLDICT
-    s2 s11 PUSH2
+    s2 PUSH
+    17 s() PUSH
     MUL
     s4 PUSH
     DIV
@@ -1481,7 +1506,8 @@ PROGRAM{
     ADD
     SWAP
     ADD
-    s0 s12 XCHG2
+    SWAP
+    s0 17 s() XCHG
     LEQ
     s1 s15 XCHG
     THROWANYIFNOT
@@ -1496,6 +1522,7 @@ PROGRAM{
     $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
     $JettonTransfer$_store_cell INLINECALLDICT
     s3 PUSH
+    s8 s13 XCHG
     s7 s12 XCHG
     s6 s11 XCHG
     s5 s10 XCHG
@@ -1508,15 +1535,7 @@ PROGRAM{
     $PoolMaster$_fun_forward INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_WithdrawFinishInternal PROCINLINE:<{
-    s10 s14 XCHG
-    s9 s13 XCHG
-    s8 s12 XCHG
-    s7 s11 XCHG
-    s6 s14 XCHG
-    s5 s13 XCHG
-    s4 s12 XCHG
-    s3 s11 XCHG
-    s14 s13 s12 XCHG3
+    12 4 BLKSWAP
     s14 PUSH
     $PoolMaster$_fun_require_account INLINECALLDICT
     s6 s5 s4 XC2PU
@@ -1524,9 +1543,10 @@ PROGRAM{
     $Twab$_fun_next_twab INLINECALLDICT
     s4 s12 XCPU
     SUB
-    s11 s13 s12 XCHG3
+    s15 s13 s12 XCHG3
     $WithdrawNotify$_constructor_query_id_timestamp_share_amount INLINECALLDICT
     $WithdrawNotify$_store_cell INLINECALLDICT
+    s9 s13 XCHG
     s8 s12 XCHG
     s7 s11 XCHG
     s6 s10 XCHG
@@ -1540,19 +1560,14 @@ PROGRAM{
     $PoolMaster$_fun_forward INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_ChangeOwner PROCINLINE:<{
-    s10 s12 XCHG
-    5 8 REVERSE
-    s7 s11 XCHG
-    s6 s12 XCHG
-    s5 s11 XCHG
-    s4 s12 XCHG
-    s3 s11 XCHG
-    s12 s11 s12 XCHG3
+    12 2 BLKSWAP
     $PoolMaster$_fun_requireOwner INLINECALLDICT
-    s10 POP
-    s10 s11 XCPU
+    s11 POP
+    s12 s11 XCPU
     $ChangeOwnerOk$_constructor_queryId_newOwner INLINECALLDICT
     $ChangeOwnerOk$_store_cell INLINECALLDICT
+    s11 s12 XCHG
+    s9 s11 XCHG
     s8 s10 XCHG
     s7 s9 XCHG
     s6 s8 XCHG
@@ -1560,6 +1575,7 @@ PROGRAM{
     s4 s6 XCHG
     s3 s5 XCHG
     s4 s3 s0 XCHG3
+    s1 s2 XCHG
     $PoolMaster$_fun_reply INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_Deploy PROCINLINE:<{
@@ -1570,37 +1586,37 @@ PROGRAM{
   %get_core_data PROC:<{
     $PoolMaster$_contract_load INLINECALLDICT
     $PoolMaster$_fun_get_core_data INLINECALLDICT
-    11 9 BLKDROP2
+    12 9 BLKDROP2
     $PoolMasterData$_to_external INLINECALLDICT
   }>
   %get_account_code PROC:<{
     $PoolMaster$_contract_load INLINECALLDICT
     $PoolMaster$_fun_get_account_code INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
   }>
   %get_draw_code PROC:<{
     $PoolMaster$_contract_load INLINECALLDICT
-    11 ROLL
+    12 ROLL
     $PoolMaster$_fun_get_draw_code INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
   }>
   %get_account_address PROC:<{
     __tact_verify_address INLINECALLDICT
     $PoolMaster$_contract_load INLINECALLDICT
-    11 ROLL
+    12 ROLL
     $PoolMaster$_fun_get_account_address INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
   }>
   %get_draw_address PROC:<{
     $PoolMaster$_contract_load INLINECALLDICT
-    11 ROLL
+    12 ROLL
     $PoolMaster$_fun_get_draw_address INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
   }>
   %owner PROC:<{
     $PoolMaster$_contract_load INLINECALLDICT
     $PoolMaster$_fun_owner INLINECALLDICT
-    11 1 BLKDROP2
+    12 1 BLKDROP2
   }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
@@ -1740,7 +1756,7 @@ PROGRAM{
     s0 s2 XCHG
     __tact_context_sender SETGLOB
     $PoolMaster$_contract_load INLINECALLDICT
-    2 11 BLKSWAP
+    2 12 BLKSWAP
     $PoolMaster$_contract_router_internal INLINECALLDICT
     130 THROWIFNOT
     $PoolMaster$_contract_store INLINECALLDICT
