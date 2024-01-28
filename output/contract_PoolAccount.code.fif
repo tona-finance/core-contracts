@@ -38,6 +38,7 @@ PROGRAM{
   DECLPROC $JettonBurn$_store_cell
   DECLPROC $WithdrawInternal$_store
   DECLPROC $WithdrawInternal$_store_cell
+  DECLPROC $WithdrawInternal$_load_bounced
   DECLPROC $WithdrawFinishInternal$_store
   DECLPROC $WithdrawFinishInternal$_store_cell
   DECLPROC $InitPoolAccountInternal$_load
@@ -105,9 +106,9 @@ PROGRAM{
   DECLPROC $PoolAccount$_fun_owner
   DECLPROC $PoolAccount$_fun_msg_value
   DECLPROC $InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance
-  DECLPROC $WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount
+  DECLPROC $WithdrawFinishInternal$_constructor_query_id_timestamp_amount_user
   DECLPROC $DepositInStaker$_constructor_query_id
-  DECLPROC $WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount
+  DECLPROC $WithdrawInternal$_constructor_query_id_withdraw_amount_acc_contribute_amount_acc_withdraw_amount_user
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $PoolAccount$_internal_binary_JettonNotification
   DECLPROC $PoolAccount$_internal_binary_InitTicketInternal1
@@ -117,6 +118,7 @@ PROGRAM{
   DECLPROC $PoolAccount$_internal_binary_Deposit
   DECLPROC $PoolAccount$_internal_binary_Withdraw
   DECLPROC $PoolAccount$_receive_binary_bounce_DepositInStaker
+  DECLPROC $PoolAccount$_receive_binary_bounce_WithdrawInternal
   DECLPROC $PoolAccount$_internal_binary_Deploy
   119856 DECLMETHOD %get_core_data
   96685 DECLMETHOD %get_draw_code
@@ -457,19 +459,19 @@ PROGRAM{
     ENDC
   }>
   $WithdrawInternal$_store PROCINLINE:<{
-    2498498580 PUSHINT
+    1451320 PUSHINT
     s0 s6 XCHG2
     32 STU
     s1 s4 XCHG
     64 STU
     ROT
+    STGRAMS
+    SWAP
+    STGRAMS
+    SWAP
+    STGRAMS
+    SWAP
     __tact_store_address INLINECALLDICT
-    SWAP
-    STGRAMS
-    SWAP
-    STGRAMS
-    SWAP
-    STGRAMS
   }>
   $WithdrawInternal$_store_cell PROCINLINE:<{
     NEWC
@@ -477,17 +479,27 @@ PROGRAM{
     $WithdrawInternal$_store INLINECALLDICT
     ENDC
   }>
+  $WithdrawInternal$_load_bounced PROCINLINE:<{
+    32 LDU
+    SWAP
+    1451320 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    LDGRAMS
+    -ROT
+  }>
   $WithdrawFinishInternal$_store PROCINLINE:<{
-    2966263530 PUSHINT
+    3632036714 PUSHINT
     s0 s5 XCHG2
     32 STU
     s1 s3 XCHG
     64 STU
-    SWAP
-    __tact_store_address INLINECALLDICT
     64 STU
     SWAP
     STGRAMS
+    SWAP
+    __tact_store_address INLINECALLDICT
   }>
   $WithdrawFinishInternal$_store_cell PROCINLINE:<{
     NEWC
@@ -1293,37 +1305,37 @@ PROGRAM{
     s5 s14 XCPU
     ADD
     NEWC
-    s0 s14 XCHG2
-    STGRAMS
-    s0 s7 XCHG2
-    $Builder$_fun_storeTimestamp INLINECALLDICT
-    NEWC
-    s12 PUSH
+    s13 PUSH
     __tact_store_address INLINECALLDICT
+    s0 s8 XCHG2
+    $Builder$_fun_storeTimestamp INLINECALLDICT
+    s0 s13 XCHG2
+    STGRAMS
     ENDC
-    SWAP
-    STREF
-    $Builder$_fun_asSlice INLINECALLDICT
     s8 PUSH
     __tact_not_null INLINECALLDICT
-    s15 s14 s0 XCHG3
     PUSHNULL
-    200000000 PUSHINT
+    100000000 PUSHINT
+    s0 s3 XCHG
+    NEWC
+    STREF
+    $Builder$_fun_asSlice INLINECALLDICT
+    s4 17 s() XCHG
+    s3 16 s() XCHG
     s13 PUSH
     s3 s15 XCPU
-    3 -ROLL
-    s0 18 s() XCHG
+    s3 s1 s3 XCHG3
+    s1 18 s() XCHG
     $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
     $JettonTransfer$_store_cell INLINECALLDICT
     s10 s13 XCHG
     s9 s12 XCHG
     s8 s11 XCHG
-    s7 s10 XCHG
-    s5 s9 XCHG
+    4 7 REVERSE
     s4 s8 XCHG
-    5 3 REVERSE
+    s3 s7 XCHG
+    s5 s6 XCHG
     s5 s4 s0 XCHG3
-    s1 s2 XCHG
     FALSE
     PUSHNULL
     $PoolAccount$_fun_forward INLINECALLDICT
@@ -1417,11 +1429,11 @@ PROGRAM{
   }>
   $InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance PROCINLINE:<{
   }>
-  $WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount PROCINLINE:<{
+  $WithdrawFinishInternal$_constructor_query_id_timestamp_amount_user PROCINLINE:<{
   }>
   $DepositInStaker$_constructor_query_id PROCINLINE:<{
   }>
-  $WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount PROCINLINE:<{
+  $WithdrawInternal$_constructor_query_id_withdraw_amount_acc_contribute_amount_acc_withdraw_amount_user PROCINLINE:<{
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
@@ -1520,18 +1532,18 @@ PROGRAM{
     $TwabStore$_fun_insert INLINECALLDICT
     s7 s9 XCPU
     SUB
+    s14 s8 s9 XCHG3
     s13 PUSH
-    s3 s15 XCHG
-    s0 s9 s10 XCHG3
-    $WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount INLINECALLDICT
+    $WithdrawFinishInternal$_constructor_query_id_timestamp_amount_user INLINECALLDICT
     $WithdrawFinishInternal$_store_cell INLINECALLDICT
     s10 PUSH
     s0 s12 XCHG
     s0 s13 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
-    s8 s9 XCHG
+    s7 s9 XCHG
     s6 s8 XCHG
+    s6 s7 XCHG
     s5 s6 XCHG
     s4 s5 XCHG
     s3 s4 XCHG
@@ -1620,7 +1632,7 @@ PROGRAM{
     0 GTINT
     THROWANYIFNOT
     __tact_context_get INLINECALLDICT
-    1150000000 PUSHINT
+    2000000000 PUSHINT
     $PoolAccount$_fun_msg_value INLINECALLDICT
     2805 PUSHINT
     SWAP
@@ -1628,11 +1640,10 @@ PROGRAM{
     THROWANYIFNOT
     s3 s12 PUSH2
     ADD
-    s12 PUSH
-    s3 s15 XCHG
-    s14 s6 s2 XCPUXC
-    s0 s6 XCHG
-    $WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount INLINECALLDICT
+    s14 s13 s0 XCHG3
+    s5 s4 PUXC
+    s13 PUSH
+    $WithdrawInternal$_constructor_query_id_withdraw_amount_acc_contribute_amount_acc_withdraw_amount_user INLINECALLDICT
     $WithdrawInternal$_store_cell INLINECALLDICT
     s9 PUSH
     s11 s13 XCHG
@@ -1643,8 +1654,8 @@ PROGRAM{
     s6 s8 XCHG
     s5 s7 XCHG
     s4 s6 XCHG
-    s4 s1 s5 XCHG3
-    3 -ROLL
+    s3 s5 XCHG
+    s0 s4 s4 XCHG3
     TRUE
     PUSHNULL
     $PoolAccount$_fun_forward INLINECALLDICT
@@ -1652,6 +1663,12 @@ PROGRAM{
   $PoolAccount$_receive_binary_bounce_DepositInStaker PROCINLINE:<{
     DROP
     $PoolAccount$_fun_reset_deposit INLINECALLDICT
+  }>
+  $PoolAccount$_receive_binary_bounce_WithdrawInternal PROCINLINE:<{
+    NIP
+    s1 s4 XCHG
+    SUB
+    s0 s3 XCHG
   }>
   $PoolAccount$_internal_binary_Deploy PROCINLINE:<{
     $DeployOk$_constructor_queryId INLINECALLDICT
@@ -1714,7 +1731,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d4e64655839467a4c464372486373756241435163426b396a4c6f754d4e765356713846426d4d465a57476735} PUSHSLICE
+    x{697066733a2f2f516d54515461724b484e46773437754154444a31527464386a7a766a476a314e53396e524a696645323446625042} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1736,12 +1753,22 @@ PROGRAM{
         DUP
         32 PLDU
       }>
+      DUP
       1205158801 PUSHINT
       EQUAL
       IFJMP:<{
+        DROP
         $DepositInStaker$_load INLINECALLDICT
         NIP
         $PoolAccount$_receive_binary_bounce_DepositInStaker INLINECALLDICT
+        TRUE
+      }>
+      1451320 PUSHINT
+      EQUAL
+      IFJMP:<{
+        $WithdrawInternal$_load_bounced INLINECALLDICT
+        1 2 BLKDROP2
+        $PoolAccount$_receive_binary_bounce_WithdrawInternal INLINECALLDICT
         TRUE
       }>
       DROP

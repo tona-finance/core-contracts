@@ -159,6 +159,9 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 ;; $Slice$_fun_loadTimestamp
 (slice, int) $Slice$_fun_loadTimestamp(slice $self) impure inline;
 
+;; $Slice$_fun_loadTwab
+(slice, (int, int)) $Slice$_fun_loadTwab(slice $self) impure inline;
+
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
@@ -176,9 +179,6 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 
 ;; $Draw$_fun_activate
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab, int $prize_amount, int $deadline) impure inline;
-
-;; $Draw$_fun_forward
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_forward((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $Draw$_fun_on_jetton_from_pool_master
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, slice $payload) impure inline;
@@ -209,6 +209,9 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 
 ;; $Draw$_fun_get_ticket_address
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun_get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+
+;; $Draw$_fun_forward
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_forward((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $Draw$_fun_notify
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_notify((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, cell $body) impure inline;

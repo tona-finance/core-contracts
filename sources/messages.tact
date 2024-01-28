@@ -48,17 +48,17 @@ message SetPrize {
 
 message WithdrawInternal {
     query_id: Int as uint64;
-    user: Address;
     withdraw_amount: Int as coins;
     acc_contribute_amount: Int as coins;
     acc_withdraw_amount: Int as coins;
+    user: Address;
 }
 
 message WithdrawFinishInternal {
     query_id: Int as uint64;
-    user: Address;
     timestamp: Int as uint64;
     amount: Int as coins;
+    user: Address;
 }
 
 message DepositNotify {

@@ -39,9 +39,9 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
             self.master,
             WithdrawFinishInternal {
                 query_id: msg.query_id,
-                user: self.owner,
                 timestamp: timestamp,
-                amount: withdraw_amount
+                amount: withdraw_amount,
+                user: self.owner
             }.toCell(),
             false,
             null
@@ -88,8 +88,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         self.requireOwner();
         require(msg.amount > 0, "Zero amount");
 
-        // withdraw gas fee 0.01 + 1.1 < 1.15
-        let rest_value: Int = self.msg_value(context(), ton("1.15"));
+        // withdraw gas fee > 1.5
+        let rest_value: Int = self.msg_value(context(), ton("2.0"));
         require(rest_value >= 0, "Insufficient value");
 
         let acc_withdraw_amount: Int = self.withdraw_amount;
@@ -99,10 +99,10 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
             self.master,
             WithdrawInternal {
                 query_id: msg.query_id,
-                user: self.owner,
                 withdraw_amount: msg.amount,
                 acc_contribute_amount: self.contribute_amount,
-                acc_withdraw_amount: acc_withdraw_amount
+                acc_withdraw_amount: acc_withdraw_amount,
+                user: self.owner
             }.toCell(),
             true, // bounce this message
             null
@@ -113,10 +113,9 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         self.reset_deposit();
     }
 
-    // TODO: this causes an compile error
-    // bounced(src: bounced<WithdrawInternal>) {
-    //     self.withdraw_amount = self.withdraw_amount - src.withdraw_amount;
-    // }
+    bounced(src: bounced<WithdrawInternal>) {
+        self.withdraw_amount = self.withdraw_amount - src.withdraw_amount;
+    }
 
     fun on_jetton_minted(query_id: Int, amount: Int) {
         self.require_locked();
@@ -132,11 +131,11 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         self.contribute_amount = self.contribute_amount + amount;
 
         // user + timestamp + deposit_amount
-        let payload: Slice = beginCell()
-            .storeCoins(deposit_amount)
+        let payload: Cell = beginCell()
+            .storeAddress(self.owner)
             .storeTimestamp(timestamp)
-            .storeRef(beginCell().storeAddress(self.owner).endCell())
-            .asSlice();
+            .storeCoins(deposit_amount)
+            .endCell();
         self.forward(
             self.jetton_wallet!!,
             JettonTransfer {
@@ -145,8 +144,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
                 destination: self.master,
                 response_destination: self.owner,
                 custom_payload: null,
-                forward_ton_amount: ton("0.2"), // handle jetton notification of master
-                forward_payload: payload
+                forward_ton_amount: ton("0.1"), // handle jetton notification of master
+                forward_payload: beginCell().storeRef(payload).asSlice()
             }.toCell(),
             false,
             null

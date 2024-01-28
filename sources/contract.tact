@@ -292,21 +292,9 @@ contract Draw with PrizeDistributor {
     }
 
     fun on_jetton_from_pool_master(amount: Int, payload: Slice) {
-        // twab timestamp + twab amount + pool owner
-        let twab_timestamp: Int = payload.loadTimestamp();
-        let twab_amount: Int = payload.loadUint(128);
-        let owner: Address = payload.loadAddress();
-        payload.endParse();
-
-        let twab: Twab = Twab {
-            timestamp: twab_timestamp,
-            amount: twab_amount
-        };
+        let twab: Twab = payload.loadTwab();
         let deadline: Int = now() + self.EXPIRATION_INTERVAL;
         self.activate(twab, amount, deadline);
-
-        // refund to pool owner
-        self.forward(owner, null, false, null);
     }
 
     inline fun activate(twab: Twab, prize_amount: Int, deadline: Int) {

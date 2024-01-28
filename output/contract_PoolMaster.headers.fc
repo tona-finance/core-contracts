@@ -70,10 +70,10 @@ cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) i
 (slice, ((int))) $SetPrize$_load(slice sc_0) inline;
 
 ;; $WithdrawInternal$_load
-(slice, ((int, slice, int, int, int))) $WithdrawInternal$_load(slice sc_0) inline;
+(slice, ((int, int, int, int, slice))) $WithdrawInternal$_load(slice sc_0) inline;
 
 ;; $WithdrawFinishInternal$_load
-(slice, ((int, slice, int, int))) $WithdrawFinishInternal$_load(slice sc_0) inline;
+(slice, ((int, int, int, slice))) $WithdrawFinishInternal$_load(slice sc_0) inline;
 
 ;; $DepositNotify$_store
 builder $DepositNotify$_store(builder build_0, (int, int, int, int) v) inline;
@@ -185,6 +185,9 @@ slice $Builder$_fun_asSlice(builder $self) impure inline;
 
 ;; $Builder$_fun_storeTimestamp
 builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inline;
+
+;; $Builder$_fun_storeTwab
+builder $Builder$_fun_storeTwab(builder $self, (int, int) $twab) impure inline;
 
 ;; $Slice$_fun_loadTimestamp
 (slice, int) $Slice$_fun_loadTimestamp(slice $self) impure inline;

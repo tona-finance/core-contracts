@@ -60,6 +60,7 @@ PROGRAM{
   DECLPROC $global_send
   DECLPROC $Builder$_fun_asSlice
   DECLPROC $Builder$_fun_storeTimestamp
+  DECLPROC $Builder$_fun_storeTwab
   DECLPROC $Slice$_fun_loadTimestamp
   DECLPROC $Twab$_fun_next_twab
   DECLPROC $PrizeReserve$_init_child
@@ -303,29 +304,30 @@ PROGRAM{
   $WithdrawInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
-    2498498580 PUSHINT
+    1451320 PUSHINT
     EQUAL
     129 THROWIFNOT
     64 LDU
+    LDGRAMS
+    LDGRAMS
+    LDGRAMS
     __tact_load_address INLINECALLDICT
-    SWAP
-    LDGRAMS
-    LDGRAMS
-    LDGRAMS
-    5 -ROLL
+    s1 s5 XCHG
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
   }>
   $WithdrawFinishInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
-    2966263530 PUSHINT
+    3632036714 PUSHINT
     EQUAL
     129 THROWIFNOT
     64 LDU
-    __tact_load_address INLINECALLDICT
-    SWAP
     64 LDU
     LDGRAMS
-    4 -ROLL
+    __tact_load_address INLINECALLDICT
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
   }>
   $DepositNotify$_store PROCINLINE:<{
     472802433 PUSHINT
@@ -734,6 +736,11 @@ PROGRAM{
   $Builder$_fun_storeTimestamp PROCINLINE:<{
     SWAP
     48 STU
+  }>
+  $Builder$_fun_storeTwab PROCINLINE:<{
+    -ROT
+    $Builder$_fun_storeTimestamp INLINECALLDICT
+    128 STU
   }>
   $Slice$_fun_loadTimestamp PROCINLINE:<{
     DUP
@@ -1158,11 +1165,8 @@ PROGRAM{
   }>
   $PoolMaster$_fun_send_prize_to_draw PROCINLINE:<{
     NEWC
-    s0 s3 XCHG2
-    $Builder$_fun_storeTimestamp INLINECALLDICT
-    128 STU
-    s14 PUSH
-    __tact_store_address INLINECALLDICT
+    2SWAP
+    $Builder$_fun_storeTwab INLINECALLDICT
     $Builder$_fun_asSlice INLINECALLDICT
     FALSE
     s11 PUSH
@@ -1254,14 +1258,14 @@ PROGRAM{
   $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount PROCINLINE:<{
   }>
   $PoolMaster$_fun_on_jetton_received_from_account PROCINLINE:<{
-    LDGRAMS
-    $Slice$_fun_loadTimestamp INLINECALLDICT
-    SWAP
-    LDREF
-    DROP
+    PLDREF
     CTOS
     __tact_load_address INLINECALLDICT
-    NIP
+    SWAP
+    $Slice$_fun_loadTimestamp INLINECALLDICT
+    SWAP
+    LDGRAMS
+    DROP
     s10 17 s() XCHG
     s9 16 s() XCHG
     s8 s15 XCHG
@@ -1273,7 +1277,8 @@ PROGRAM{
     s2 16 s() XCHG
     s15 s14 XCHG2
     27196 PUSHINT
-    s14 s15 XCPU
+    s0 s14 XCHG
+    17 s() PUSH
     $PoolMaster$_fun__get_account_address INLINECALLDICT
     s0 s13 XCHG2
     __tact_slice_eq_bits INLINECALLDICT
@@ -1282,7 +1287,7 @@ PROGRAM{
     s4 s3 s2 XC2PU
     s15 PUSH
     $Twab$_fun_next_twab INLINECALLDICT
-    s2 s15 XCPU
+    s2 s13 XCPU
     ADD
     s0 s4 XCHG
     16 s() PUSH
@@ -1290,7 +1295,7 @@ PROGRAM{
     s3 s11 XCHG
     s2 s14 XCHG
     s0 16 s() XCHG
-    s1 s15 XCHG
+    s1 s13 XCHG
     $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount INLINECALLDICT
     $DepositNotify$_store_cell INLINECALLDICT
     s6 s13 XCHG
@@ -1298,12 +1303,12 @@ PROGRAM{
     s4 s11 XCHG
     s3 s10 XCHG
     s2 s9 XCHG
-    s5 s8 XCHG
+    s3 s8 XCHG
     s4 s7 XCHG
     s1 s6 XCHG
     s1 s5 XCHG
-    s4 s4 s0 XCHG3
-    s1 s3 XCHG
+    s3 s4 XCHG
+    s2 s3 XCHG
     FALSE
     PUSHNULL
     $PoolMaster$_fun_forward INLINECALLDICT
@@ -1494,32 +1499,30 @@ PROGRAM{
     s3 s13 XCHG
     s2 s12 XCHG
     s1 16 s() XCHG
-    s15 s13 XCPU
+    s15 s15 XCPU
     $PoolMaster$_fun_require_account INLINECALLDICT
-    s2 PUSH
-    17 s() PUSH
+    s2 s12 PUSH2
     MUL
     s4 PUSH
     DIV
-    s13 PUSH
+    s14 PUSH
     46439 PUSHINT
-    s0 18 s() XCHG
+    s0 19 s() XCHG
     ADD
     SWAP
     ADD
-    SWAP
-    s0 17 s() XCHG
+    s0 s13 XCHG2
     LEQ
-    s1 s15 XCHG
+    s1 16 s() XCHG
     THROWANYIFNOT
     __tact_context_get_sender INLINECALLDICT
     PUSHNULL
-    1100000000 PUSHINT
+    1500000000 PUSHINT
     $global_emptySlice INLINECALLDICT
     s6 16 s() XCHG
-    s5 s14 XCHG
+    s5 s15 XCHG
     s3 s4 XCHG
-    s3 s15 XCHG
+    s3 17 s() XCHG
     $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
     $JettonTransfer$_store_cell INLINECALLDICT
     s3 PUSH
@@ -1529,22 +1532,22 @@ PROGRAM{
     s5 s10 XCHG
     s0 s9 XCHG
     s3 s8 XCHG
-    s7 s1 s5 XCHG3
-    s3 s4 s4 XCHG3
+    s0 s1 s7 XCHG3
+    s4 s4 XCHG2
     FALSE
     PUSHNULL
     $PoolMaster$_fun_forward INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_WithdrawFinishInternal PROCINLINE:<{
     12 4 BLKSWAP
-    s14 PUSH
+    s12 PUSH
     $PoolMaster$_fun_require_account INLINECALLDICT
     s6 s5 s4 XC2PU
-    s14 PUSH
+    s15 PUSH
     $Twab$_fun_next_twab INLINECALLDICT
-    s4 s12 XCPU
+    s4 s13 XCPU
     SUB
-    s15 s13 s12 XCHG3
+    s15 s14 s13 XCHG3
     $WithdrawNotify$_constructor_query_id_timestamp_share_amount INLINECALLDICT
     $WithdrawNotify$_store_cell INLINECALLDICT
     s9 s13 XCHG
@@ -1552,8 +1555,8 @@ PROGRAM{
     s7 s11 XCHG
     s6 s10 XCHG
     s5 s9 XCHG
-    s7 s8 XCHG
-    s7 s5 s0 XCHG3
+    s2 s7 XCHG
+    s6 s5 s0 XCHG3
     s1 s4 XCHG
     s3 s3 s0 XCHG3
     FALSE
@@ -1629,7 +1632,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d576d5a5574775752767a7557503938544a3955766b6f655367467a5573717a367a44587242764a43736a6456} PUSHSLICE
+    x{697066733a2f2f516d55456b79684537685774636e7578756f3755577948565336574857766351417679756e6b3732454c7a385a68} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1675,7 +1678,7 @@ PROGRAM{
       TRUE
     }>
     DUP
-    2498498580 PUSHINT
+    1451320 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
@@ -1685,7 +1688,7 @@ PROGRAM{
       TRUE
     }>
     DUP
-    2966263530 PUSHINT
+    3632036714 PUSHINT
     EQUAL
     IFJMP:<{
       DROP

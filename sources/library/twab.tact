@@ -1,8 +1,23 @@
+import "./timestamp";
 
 // === Twab ===
 struct Twab {
     timestamp: Int as uint64;
     amount: Int as uint128;
+}
+
+inline extends fun storeTwab(self: Builder, twab: Twab): Builder {
+    return self.storeTimestamp(twab.timestamp)
+        .storeUint(twab.amount, 128);
+}
+
+inline extends mutates fun loadTwab(self: Slice): Twab {
+    let timestamp: Int = self.loadTimestamp();
+    let amount: Int = self.loadUint(128);
+    return Twab {
+        timestamp: timestamp,
+        amount: amount
+    };
 }
 
 inline fun new_twab(): Twab {

@@ -152,33 +152,33 @@ cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) i
 
 ;;
 ;; Type: WithdrawInternal
-;; Header: 0x94ec1014
-;; TLB: withdraw_internal#94ec1014 query_id:uint64 user:address withdraw_amount:coins acc_contribute_amount:coins acc_withdraw_amount:coins = WithdrawInternal
+;; Header: 0x00162538
+;; TLB: withdraw_internal#00162538 query_id:uint64 withdraw_amount:coins acc_contribute_amount:coins acc_withdraw_amount:coins user:address = WithdrawInternal
 ;;
 
-(slice, ((int, slice, int, int, int))) $WithdrawInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2498498580);
+(slice, ((int, int, int, int, slice))) $WithdrawInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1451320);
     var v'query_id = sc_0~load_uint(64);
-    var v'user = sc_0~__tact_load_address();
     var v'withdraw_amount = sc_0~load_coins();
     var v'acc_contribute_amount = sc_0~load_coins();
     var v'acc_withdraw_amount = sc_0~load_coins();
-    return (sc_0, (v'query_id, v'user, v'withdraw_amount, v'acc_contribute_amount, v'acc_withdraw_amount));
+    var v'user = sc_0~__tact_load_address();
+    return (sc_0, (v'query_id, v'withdraw_amount, v'acc_contribute_amount, v'acc_withdraw_amount, v'user));
 }
 
 ;;
 ;; Type: WithdrawFinishInternal
-;; Header: 0xb0cd96ea
-;; TLB: withdraw_finish_internal#b0cd96ea query_id:uint64 user:address timestamp:uint64 amount:coins = WithdrawFinishInternal
+;; Header: 0xd87c7b6a
+;; TLB: withdraw_finish_internal#d87c7b6a query_id:uint64 timestamp:uint64 amount:coins user:address = WithdrawFinishInternal
 ;;
 
-(slice, ((int, slice, int, int))) $WithdrawFinishInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2966263530);
+(slice, ((int, int, int, slice))) $WithdrawFinishInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3632036714);
     var v'query_id = sc_0~load_uint(64);
-    var v'user = sc_0~__tact_load_address();
     var v'timestamp = sc_0~load_uint(64);
     var v'amount = sc_0~load_coins();
-    return (sc_0, (v'query_id, v'user, v'timestamp, v'amount));
+    var v'user = sc_0~__tact_load_address();
+    return (sc_0, (v'query_id, v'timestamp, v'amount, v'user));
 }
 
 ;;

@@ -66,12 +66,12 @@ TLB: `set_prize#d3643815 amount:coins = SetPrize`
 Signature: `SetPrize{amount:coins}`
 
 ## WithdrawInternal
-TLB: `withdraw_internal#94ec1014 query_id:uint64 user:address withdraw_amount:coins acc_contribute_amount:coins acc_withdraw_amount:coins = WithdrawInternal`
-Signature: `WithdrawInternal{query_id:uint64,user:address,withdraw_amount:coins,acc_contribute_amount:coins,acc_withdraw_amount:coins}`
+TLB: `withdraw_internal#00162538 query_id:uint64 withdraw_amount:coins acc_contribute_amount:coins acc_withdraw_amount:coins user:address = WithdrawInternal`
+Signature: `WithdrawInternal{query_id:uint64,withdraw_amount:coins,acc_contribute_amount:coins,acc_withdraw_amount:coins,user:address}`
 
 ## WithdrawFinishInternal
-TLB: `withdraw_finish_internal#b0cd96ea query_id:uint64 user:address timestamp:uint64 amount:coins = WithdrawFinishInternal`
-Signature: `WithdrawFinishInternal{query_id:uint64,user:address,timestamp:uint64,amount:coins}`
+TLB: `withdraw_finish_internal#d87c7b6a query_id:uint64 timestamp:uint64 amount:coins user:address = WithdrawFinishInternal`
+Signature: `WithdrawFinishInternal{query_id:uint64,timestamp:uint64,amount:coins,user:address}`
 
 ## DepositNotify
 TLB: `deposit_notify#1c2e6481 query_id:uint64 timestamp:uint64 share_amount:coins contribute_amount:coins = DepositNotify`

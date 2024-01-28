@@ -36,6 +36,13 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     return ($self, $self~load_uint(48));
 }
 
+(slice, (int, int)) $Slice$_fun_loadTwab(slice $self) impure inline {
+    var ($self) = $self;
+    int $timestamp = $self~$Slice$_fun_loadTimestamp();
+    int $amount = $self~load_uint(128);
+    return ($self, $Twab$_constructor_timestamp_amount($timestamp, $amount));
+}
+
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_beacon((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab) impure inline {
     var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
     var (($twab'timestamp, $twab'amount)) = $twab;
@@ -63,14 +70,9 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
 
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, slice $payload) impure inline {
     var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
-    int $twab_timestamp = $payload~$Slice$_fun_loadTimestamp();
-    int $twab_amount = $payload~load_uint(128);
-    slice $owner = $payload~__tact_load_address();
-    end_parse($payload);
-    var ($twab'timestamp, $twab'amount) = $Twab$_constructor_timestamp_amount($twab_timestamp, $twab_amount);
+    var ($twab'timestamp, $twab'amount) = $payload~$Slice$_fun_loadTwab();
     int $deadline = (now() + 1209600);
     ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_activate(($twab'timestamp, $twab'amount), $amount, $deadline);
-    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward($owner, null(), false, null());
     return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
 }
 
@@ -323,7 +325,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmbBW4uALYU9NC3Pt4r4JvYVTfqYSsYcTiirteBbrJ6Ksf";
+    return "ipfs://QmSTcPtzDGGCKdb5RSNGtBjic5ACUDW5YuYr66VB37kAVc";
 }
 
 _ lazy_deployment_completed() method_id {

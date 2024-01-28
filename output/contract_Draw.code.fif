@@ -51,13 +51,13 @@ PROGRAM{
   DECLPROC $Twab$_constructor_timestamp_amount
   DECLPROC $global_average_balance
   DECLPROC $Slice$_fun_loadTimestamp
+  DECLPROC $Slice$_fun_loadTwab
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
   DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
   DECLPROC $Draw$_fun_activate_beacon
   DECLPROC $Draw$_fun_activate_distributor
   DECLPROC $Draw$_fun_activate
-  DECLPROC $Draw$_fun_forward
   DECLPROC $Draw$_fun_on_jetton_from_pool_master
   DECLPROC $Draw$_fun_require_over
   DECLPROC $Ticket$_init_child
@@ -68,6 +68,7 @@ PROGRAM{
   DECLPROC $Draw$_fun_get_ticket_code
   DECLPROC $Draw$_fun__get_ticket_address
   DECLPROC $Draw$_fun_get_ticket_address
+  DECLPROC $Draw$_fun_forward
   DECLPROC $Draw$_fun_notify
   DECLPROC $Draw$_fun_prizes_per_tier
   DECLPROC $Draw$_fun_prize_amount_per_pick
@@ -752,6 +753,13 @@ PROGRAM{
     48 LDU
     DROP
   }>
+  $Slice$_fun_loadTwab PROCINLINE:<{
+    $Slice$_fun_loadTimestamp INLINECALLDICT
+    SWAP
+    128 LDU
+    -ROT
+    $Twab$_constructor_timestamp_amount INLINECALLDICT
+  }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body PROCINLINE:<{
@@ -785,82 +793,14 @@ PROGRAM{
     TRUE
     s12 POP
   }>
-  $Draw$_fun_forward PROCINLINE:<{
-    PUSHNULL
-    PUSHNULL
-    s2 PUSH
-    ISNULL
-    NOT
-    IF:<{
-      2DROP
-      $StateInit$_not_null INLINECALLDICT
-      SWAP
-    }>ELSE<{
-      s2 POP
-    }>
-    __tact_context_get INLINECALLDICT
-    s1 s3 XCHG
-    3 BLKDROP
-    __tact_my_balance INLINECALLDICT
-    SWAP
-    SUB
-    100000000 PUSHINT
-    LESS
-    IF:<{
-      100000000 PUSHINT
-      0 PUSHINT
-      RAWRESERVE
-      s2 s4 XCHG
-      0 PUSHINT
-      s0 s3 XCHG
-      s0 s4 XCHG
-      130 PUSHINT
-      s2 s3 XCHG2
-      $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
-      $global_send INLINECALLDICT
-    }>ELSE<{
-      s2 s4 XCHG
-      0 PUSHINT
-      s0 s3 XCHG
-      s0 s4 XCHG
-      66 PUSHINT
-      s2 s3 XCHG2
-      $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
-      $global_send INLINECALLDICT
-    }>
-  }>
   $Draw$_fun_on_jetton_from_pool_master PROCINLINE:<{
-    $Slice$_fun_loadTimestamp INLINECALLDICT
-    SWAP
-    128 LDU
-    __tact_load_address INLINECALLDICT
-    SWAP
-    ENDS
-    -ROT
-    $Twab$_constructor_timestamp_amount INLINECALLDICT
+    $Slice$_fun_loadTwab INLINECALLDICT
+    s2 POP
     NOW
     1209600 PUSHINT
     ADD
-    s15 16 s() XCHG
-    s14 16 s() XCHG
-    s13 16 s() XCHG
-    s12 16 s() XCHG
-    s11 16 s() XCHG
-    s10 16 s() XCHG
-    s9 16 s() XCHG
-    s8 16 s() XCHG
-    s7 16 s() XCHG
-    s6 16 s() XCHG
-    s5 16 s() XCHG
-    s4 16 s() XCHG
-    s1 s3 s0 XCHG3
-    s1 16 s() XCHG
+    s1 s3 XCHG
     $Draw$_fun_activate INLINECALLDICT
-    12 ROLL
-    PUSHNULL
-    FALSE
-    PUSHNULL
-    $Draw$_fun_forward INLINECALLDICT
   }>
   $Draw$_fun_require_over PROCINLINE:<{
     6571 PUSHINT
@@ -996,6 +936,50 @@ PROGRAM{
     s4 s6 XCHG
     s3 s5 XCHG
     s4 s3 s0 XCHG3
+  }>
+  $Draw$_fun_forward PROCINLINE:<{
+    PUSHNULL
+    PUSHNULL
+    s2 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      2DROP
+      $StateInit$_not_null INLINECALLDICT
+      SWAP
+    }>ELSE<{
+      s2 POP
+    }>
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    __tact_my_balance INLINECALLDICT
+    SWAP
+    SUB
+    100000000 PUSHINT
+    LESS
+    IF:<{
+      100000000 PUSHINT
+      0 PUSHINT
+      RAWRESERVE
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      130 PUSHINT
+      s2 s3 XCHG2
+      $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
+      $global_send INLINECALLDICT
+    }>ELSE<{
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      66 PUSHINT
+      s2 s3 XCHG2
+      $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
+      $global_send INLINECALLDICT
+    }>
   }>
   $Draw$_fun_notify PROCINLINE:<{
     __tact_context_get_sender INLINECALLDICT
@@ -1463,7 +1447,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d6242573475414c5955394e433350743472344a76595654667159537359635469697274654262724a364b7366} PUSHSLICE
+    x{697066733a2f2f516d53546350747a444747434b64623552534e4774426a696335414355445735597559723636564233376b415663} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

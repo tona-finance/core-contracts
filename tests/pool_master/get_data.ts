@@ -12,7 +12,7 @@ async function main() {
         endpoint: "https://sandbox-v4.tonhubapi.com",
         // endpoint: "https://mainnet-v4.tonhubapi.com",
     });
-    const pool_master_addr = Address.parse("kQDSCUidV0MyRppD_n99q658gLsWW6Cz7F5R6CtWJ-hjIrV4");
+    const pool_master_addr = Address.parse("kQD26WdJ4jzy2X5-vQrf0nWE-IC3snFmXKYMWv6UOMaXEYPy");
 
     const pool_master = PoolMaster.fromAddress(pool_master_addr);
     const pool_master_contract = client.open(pool_master);

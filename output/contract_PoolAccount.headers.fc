@@ -115,16 +115,19 @@ builder $JettonBurn$_store(builder build_0, (int, int, slice, cell) v) inline;
 cell $JettonBurn$_store_cell((int, int, slice, cell) v) inline;
 
 ;; $WithdrawInternal$_store
-builder $WithdrawInternal$_store(builder build_0, (int, slice, int, int, int) v) inline;
+builder $WithdrawInternal$_store(builder build_0, (int, int, int, int, slice) v) inline;
 
 ;; $WithdrawInternal$_store_cell
-cell $WithdrawInternal$_store_cell((int, slice, int, int, int) v) inline;
+cell $WithdrawInternal$_store_cell((int, int, int, int, slice) v) inline;
+
+;; $WithdrawInternal$_load_bounced
+(slice, ((int, int))) $WithdrawInternal$_load_bounced(slice sc_0) inline;
 
 ;; $WithdrawFinishInternal$_store
-builder $WithdrawFinishInternal$_store(builder build_0, (int, slice, int, int) v) inline;
+builder $WithdrawFinishInternal$_store(builder build_0, (int, int, int, slice) v) inline;
 
 ;; $WithdrawFinishInternal$_store_cell
-cell $WithdrawFinishInternal$_store_cell((int, slice, int, int) v) inline;
+cell $WithdrawFinishInternal$_store_cell((int, int, int, slice) v) inline;
 
 ;; $InitPoolAccountInternal$_load
 (slice, ((slice))) $InitPoolAccountInternal$_load(slice sc_0) inline;
@@ -321,14 +324,14 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance
 ((int, int)) $InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance(int draw_avg_balance, int user_avg_balance) inline;
 
-;; $WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount
-((int, slice, int, int)) $WithdrawFinishInternal$_constructor_query_id_user_timestamp_amount(int query_id, slice user, int timestamp, int amount) inline;
+;; $WithdrawFinishInternal$_constructor_query_id_timestamp_amount_user
+((int, int, int, slice)) $WithdrawFinishInternal$_constructor_query_id_timestamp_amount_user(int query_id, int timestamp, int amount, slice user) inline;
 
 ;; $DepositInStaker$_constructor_query_id
 ((int)) $DepositInStaker$_constructor_query_id(int query_id) inline;
 
-;; $WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount
-((int, slice, int, int, int)) $WithdrawInternal$_constructor_query_id_user_withdraw_amount_acc_contribute_amount_acc_withdraw_amount(int query_id, slice user, int withdraw_amount, int acc_contribute_amount, int acc_withdraw_amount) inline;
+;; $WithdrawInternal$_constructor_query_id_withdraw_amount_acc_contribute_amount_acc_withdraw_amount_user
+((int, int, int, int, slice)) $WithdrawInternal$_constructor_query_id_withdraw_amount_acc_contribute_amount_acc_withdraw_amount_user(int query_id, int withdraw_amount, int acc_contribute_amount, int acc_withdraw_amount, slice user) inline;
 
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int queryId) inline;
