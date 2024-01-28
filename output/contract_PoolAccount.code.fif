@@ -1307,23 +1307,22 @@ PROGRAM{
     STGRAMS
     s0 s7 XCHG2
     $Builder$_fun_storeTimestamp INLINECALLDICT
-    s11 PUSH
+    NEWC
+    s12 PUSH
     __tact_store_address INLINECALLDICT
     ENDC
-    s8 PUSH
-    __tact_not_null INLINECALLDICT
-    PUSHNULL
-    100000000 PUSHINT
-    s0 s3 XCHG
-    NEWC
+    SWAP
     STREF
     $Builder$_fun_asSlice INLINECALLDICT
-    s4 17 s() XCHG
-    s3 16 s() XCHG
+    s8 PUSH
+    __tact_not_null INLINECALLDICT
+    s15 s14 s0 XCHG3
+    PUSHNULL
+    100000000 PUSHINT
     s13 PUSH
     s3 s15 XCPU
-    s3 s1 s3 XCHG3
-    s1 18 s() XCHG
+    3 -ROLL
+    s0 18 s() XCHG
     $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
     $JettonTransfer$_store_cell INLINECALLDICT
     s10 s13 XCHG

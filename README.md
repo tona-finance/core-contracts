@@ -31,5 +31,5 @@ MIT
 |-|-|-|
 |TonStakers|kQBFYjw666fu-JHxzJ6XrNACW_CjwFp_VnnliSKAoOeoQ3pj|-|
 |TsTon Jetton Master|kQDyRov9Xe4mV6YY9xUNIzqWqG5bxnXUXM371EN1GlfH7iY-|-|
-|Pool Master|kQCwlVGWgxxRgEo6xofMPpEvF5vby623CvGlUE9lUaMg8Phw|-|
-|Prize Reserve|kQC-tv5AEKQC4BCtvroB12lAyW4N51gcf7m1xWFR62Y0qZle|-|
+|Pool Master|kQC0TPR1hjcYbthG2EgI31xbIfvUn2GxFyrStyPiZC7ApwaU|-|
+|Prize Reserve|kQD6UUNijabO0bGJeHHbFn8_m5flqk5hv4pUPJR0s8EDsLmy|-|
