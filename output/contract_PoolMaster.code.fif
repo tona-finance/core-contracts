@@ -55,7 +55,10 @@ PROGRAM{
   DECLPROC $PoolMaster$_contract_load
   DECLPROC $PoolMaster$_contract_store
   DECLPROC $global_emptyCell
+  DECLPROC $Cell$_fun_asSlice
+  DECLPROC $global_emptySlice
   DECLPROC $global_send
+  DECLPROC $Builder$_fun_asSlice
   DECLPROC $Builder$_fun_storeTimestamp
   DECLPROC $Slice$_fun_loadTimestamp
   DECLPROC $Twab$_fun_next_twab
@@ -249,9 +252,8 @@ PROGRAM{
     64 LDU
     LDGRAMS
     __tact_load_address INLINECALLDICT
-    SWAP
-    LDREF
-    4 -ROLL
+    s3 s0 s3 XC2PU
+    s2 s3 XCHG
   }>
   $JettonTransfer$_store PROCREF:<{
     260734629 PUSHINT
@@ -280,7 +282,8 @@ PROGRAM{
     }>
     SWAP
     STGRAMS
-    STREF
+    SWAP
+    STSLICER
   }>
   $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
@@ -615,6 +618,13 @@ PROGRAM{
     NEWC
     ENDC
   }>
+  $Cell$_fun_asSlice PROCINLINE:<{
+    CTOS
+  }>
+  $global_emptySlice PROCINLINE:<{
+    $global_emptyCell INLINECALLDICT
+    $Cell$_fun_asSlice INLINECALLDICT
+  }>
   $global_send PROCINLINE:<{
     NEWC
     1 PUSHINT
@@ -716,6 +726,10 @@ PROGRAM{
     ENDC
     SWAP
     SENDRAWMSG
+  }>
+  $Builder$_fun_asSlice PROCINLINE:<{
+    ENDC
+    CTOS
   }>
   $Builder$_fun_storeTimestamp PROCINLINE:<{
     SWAP
@@ -1149,7 +1163,7 @@ PROGRAM{
     128 STU
     s14 PUSH
     __tact_store_address INLINECALLDICT
-    ENDC
+    $Builder$_fun_asSlice INLINECALLDICT
     FALSE
     s11 PUSH
     2 PUSHINT
@@ -1240,13 +1254,14 @@ PROGRAM{
   $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount PROCINLINE:<{
   }>
   $PoolMaster$_fun_on_jetton_received_from_account PROCINLINE:<{
-    CTOS
-    __tact_load_address INLINECALLDICT
-    SWAP
+    LDGRAMS
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
-    LDGRAMS
-    ENDS
+    LDREF
+    DROP
+    CTOS
+    __tact_load_address INLINECALLDICT
+    NIP
     s10 17 s() XCHG
     s9 16 s() XCHG
     s8 s15 XCHG
@@ -1258,8 +1273,7 @@ PROGRAM{
     s2 16 s() XCHG
     s15 s14 XCHG2
     27196 PUSHINT
-    s0 s14 XCHG
-    17 s() PUSH
+    s14 s15 XCPU
     $PoolMaster$_fun__get_account_address INLINECALLDICT
     s0 s13 XCHG2
     __tact_slice_eq_bits INLINECALLDICT
@@ -1268,7 +1282,7 @@ PROGRAM{
     s4 s3 s2 XC2PU
     s15 PUSH
     $Twab$_fun_next_twab INLINECALLDICT
-    s2 s13 XCPU
+    s2 s15 XCPU
     ADD
     s0 s4 XCHG
     16 s() PUSH
@@ -1276,7 +1290,7 @@ PROGRAM{
     s3 s11 XCHG
     s2 s14 XCHG
     s0 16 s() XCHG
-    s1 s13 XCHG
+    s1 s15 XCHG
     $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount INLINECALLDICT
     $DepositNotify$_store_cell INLINECALLDICT
     s6 s13 XCHG
@@ -1284,12 +1298,12 @@ PROGRAM{
     s4 s11 XCHG
     s3 s10 XCHG
     s2 s9 XCHG
-    s3 s8 XCHG
+    s5 s8 XCHG
     s4 s7 XCHG
     s1 s6 XCHG
     s1 s5 XCHG
-    s3 s4 XCHG
-    s2 s3 XCHG
+    s4 s4 s0 XCHG3
+    s1 s3 XCHG
     FALSE
     PUSHNULL
     $PoolMaster$_fun_forward INLINECALLDICT
@@ -1501,7 +1515,7 @@ PROGRAM{
     __tact_context_get_sender INLINECALLDICT
     PUSHNULL
     1100000000 PUSHINT
-    $global_emptyCell INLINECALLDICT
+    $global_emptySlice INLINECALLDICT
     s6 16 s() XCHG
     s5 s14 XCHG
     s3 s4 XCHG
@@ -1615,7 +1629,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d64424d394e6832367757707465535970783547696a544c6d50796659784a734b6d4b785a47485a7361386d61} PUSHSLICE
+    x{697066733a2f2f516d576d5a5574775752767a7557503938544a3955766b6f655367467a5573717a367a44587242764a43736a6456} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

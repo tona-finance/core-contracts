@@ -16,7 +16,7 @@ message(0x7362d09c) JettonNotification {
     query_id: Int as uint64;
     amount: Int as coins;
     from: Address;
-    forward_payload: Cell;
+    forward_payload: Slice as remaining;
 }
 
 message(0xd53276db) JettonExcesses {
@@ -30,7 +30,7 @@ message(0xf8a7ea5) JettonTransfer {
     response_destination: Address;
     custom_payload: Cell?;
     forward_ton_amount: Int as coins;
-    forward_payload: Cell;
+    forward_payload: Slice as remaining;
 }
 
 message(0x595f07bc) JettonBurn {

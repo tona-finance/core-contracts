@@ -20,7 +20,7 @@ async function main() {
     });
     const sender = client.open(wallet).sender(keyPair.secretKey);
 
-    const account_address = Address.parse("kQAhCf_7kwY-o25PtvmuJBW-SZJ4pMnpK3p9UUrFkA_hIA2P");
+    const account_address = Address.parse("kQDYB1QF-wVValPzXsC5WlAMSRfnH4S07uO9lqoRJYH3BOMW");
     const account = PoolAccount.fromAddress(account_address);    // Create initial data for our contract
     const account_client = client.open(account);
     await account_client.send(

@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PoolMaster
-BOC Size: 5459 bytes
+BOC Size: 5463 bytes
 
 # Types
 Total Types: 38
@@ -46,16 +46,16 @@ TLB: `staker_withdrawal#0a77535c query_id:uint64 = StakerWithdrawal`
 Signature: `StakerWithdrawal{query_id:uint64}`
 
 ## JettonNotification
-TLB: `jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:^cell = JettonNotification`
-Signature: `JettonNotification{query_id:uint64,amount:coins,from:address,forward_payload:^cell}`
+TLB: `jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = JettonNotification`
+Signature: `JettonNotification{query_id:uint64,amount:coins,from:address,forward_payload:remainder<slice>}`
 
 ## JettonExcesses
 TLB: `jetton_excesses#d53276db query_id:uint64 = JettonExcesses`
 Signature: `JettonExcesses{query_id:uint64}`
 
 ## JettonTransfer
-TLB: `jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:^cell = JettonTransfer`
-Signature: `JettonTransfer{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:^cell}`
+TLB: `jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer`
+Signature: `JettonTransfer{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
 
 ## JettonBurn
 TLB: `jetton_burn#595f07bc query_id:uint64 amount:coins response_destination:address custom_payload:Maybe ^cell = JettonBurn`

@@ -156,8 +156,8 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
     ($self'twab_store'store, $self'twab_store'size)~$TwabStore$_fun_insert($self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount + $deposit_amount);
     $self'contribute_amount = ($self'contribute_amount + $amount);
-    cell $payload = end_cell(store_coins($Builder$_fun_storeTimestamp(__tact_store_address(begin_cell(), $self'owner), $timestamp), $deposit_amount));
-    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward(__tact_not_null($self'jetton_wallet), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($query_id, $amount, $self'master, $self'owner, null(), 100000000, $payload)), false, null());
+    slice $payload = $Builder$_fun_asSlice(store_ref($Builder$_fun_storeTimestamp(store_coins(begin_cell(), $deposit_amount), $timestamp), end_cell(__tact_store_address(begin_cell(), $self'owner))));
+    ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_forward(__tact_not_null($self'jetton_wallet), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($query_id, $amount, $self'master, $self'owner, null(), 200000000, $payload)), false, null());
     return (($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve), ());
 }
 
@@ -223,7 +223,7 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ;; Receivers of a Contract PoolAccount
 ;;
 
-(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_JettonNotification((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int, int, slice, cell) $msg) impure inline {
+(((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice)), ()) $PoolAccount$_internal_binary_JettonNotification((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $self, (int, int, slice, slice) $msg) impure inline {
     var ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve) = $self;
     var ($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload) = $msg;
     ($self'owner, $self'master, $self'staker, $self'jetton_wallet, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'contribute_amount, $self'withdraw_amount, $self'lock, $self'deposit_amount, $self'reserve)~$PoolAccount$_fun_require_jetton_wallet();
@@ -388,7 +388,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://Qmc9RS75eP8qo6m6rYVCy5gA2J71ZyEkTDc1KNWifSN3Tn";
+    return "ipfs://QmNdeX9FzLFCrHcsubACQcBk9jLouMNvSVq8FBmMFZWGg5";
 }
 
 _ lazy_deployment_completed() method_id {

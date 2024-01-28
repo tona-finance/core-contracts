@@ -33,6 +33,8 @@ PROGRAM{
   DECLPROC $PrizeReserve$_contract_load
   DECLPROC $PrizeReserve$_contract_store
   DECLPROC $global_emptyCell
+  DECLPROC $Cell$_fun_asSlice
+  DECLPROC $global_emptySlice
   DECLPROC $global_send
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
@@ -200,7 +202,8 @@ PROGRAM{
     }>
     SWAP
     STGRAMS
-    STREF
+    SWAP
+    STSLICER
   }>
   $JettonTransfer$_store_cell PROCINLINE:<{
     NEWC
@@ -356,6 +359,13 @@ PROGRAM{
   $global_emptyCell PROCINLINE:<{
     NEWC
     ENDC
+  }>
+  $Cell$_fun_asSlice PROCINLINE:<{
+    CTOS
+  }>
+  $global_emptySlice PROCINLINE:<{
+    $global_emptyCell INLINECALLDICT
+    $Cell$_fun_asSlice INLINECALLDICT
   }>
   $global_send PROCINLINE:<{
     NEWC
@@ -635,7 +645,7 @@ PROGRAM{
     $PrizeReserve$_fun_require_ticket INLINECALLDICT
     PUSHNULL
     0 PUSHINT
-    $global_emptyCell INLINECALLDICT
+    $global_emptySlice INLINECALLDICT
     s7 PUSH
     s6 s9 XCHG
     s5 s7 XCHG
@@ -668,7 +678,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d544b3439594a4553426b4155525a79664b4a6a374d396432554b485348685968486e4d473765336170586e61} PUSHSLICE
+    x{697066733a2f2f516d4e796a33384e7834664366736d5a684267486747336d783839325a7666686f6766636d6d635457696f317250} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

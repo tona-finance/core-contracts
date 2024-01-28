@@ -116,7 +116,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
                 response_destination: msg.user,
                 custom_payload: null,
                 forward_ton_amount: ton("1.1"), // handle jetton notification of account, including burn fee
-                forward_payload: emptyCell()
+                forward_payload: emptySlice()
             }.toCell(),
             false,
             null
@@ -144,11 +144,11 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
     fun send_prize_to_draw(value: Int, twab: Twab, amount: Int) {
         // twab timestamp + twab amount + owner
-        let payload: Cell = beginCell()
+        let payload: Slice = beginCell()
             .storeTimestamp(twab.timestamp)
             .storeUint(twab.amount, 128)
             .storeAddress(self.owner)
-            .endCell();
+            .asSlice();
         send(SendParameters {
             bounce: false,
             to: self.jetton_wallet,
@@ -191,13 +191,12 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         );
     }
 
-    fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Cell) {
+    fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Slice) {
         // user + timestamp + deposit_amount
-        let data: Slice = payload.beginParse();
-        let user: Address = data.loadAddress();
-        let timestamp: Int = data.loadTimestamp();
-        let deposit_amount: Int = data.loadCoins();
-        data.endParse();
+        let deposit_amount: Int = payload.loadCoins();
+        let timestamp: Int = payload.loadTimestamp();
+        let user_slice: Slice = payload.loadRef().beginParse();
+        let user: Address = user_slice.loadAddress();
 
         require(from == self._get_account_address(user), "Invalid pool account");
         self.twab = self.twab.next_twab(self.share_amount, timestamp);

@@ -273,7 +273,7 @@ contract Draw with PrizeDistributor {
                 response_destination: ctx.sender,
                 custom_payload: null,
                 forward_ton_amount: 0, // no need to notify reserve
-                forward_payload: emptyCell()
+                forward_payload: emptySlice()
             }.toCell(),
             false,
             null
@@ -291,13 +291,12 @@ contract Draw with PrizeDistributor {
         }
     }
 
-    fun on_jetton_from_pool_master(amount: Int, payload: Cell) {
+    fun on_jetton_from_pool_master(amount: Int, payload: Slice) {
         // twab timestamp + twab amount + pool owner
-        let data: Slice = payload.beginParse();
-        let twab_timestamp: Int = data.loadTimestamp();
-        let twab_amount: Int = data.loadUint(128);
-        let owner: Address = data.loadAddress();
-        data.endParse();
+        let twab_timestamp: Int = payload.loadTimestamp();
+        let twab_amount: Int = payload.loadUint(128);
+        let owner: Address = payload.loadAddress();
+        payload.endParse();
 
         let twab: Twab = Twab {
             timestamp: twab_timestamp,

@@ -66,7 +66,7 @@ slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code,
     var ($self'jetton_wallet, $self'pool_master, $self'staker) = $self;
     var ($msg'query_id, $msg'user, $msg'draw, $msg'period, $msg'amount) = $msg;
     ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_require_ticket($msg'user, $msg'draw, $msg'period);
-    ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_forward($self'jetton_wallet, $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $msg'user, $msg'user, null(), 0, $global_emptyCell())), false, null());
+    ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_forward($self'jetton_wallet, $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $msg'user, $msg'user, null(), 0, $global_emptySlice())), false, null());
     return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
 }
 
@@ -98,7 +98,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmTK49YJESBkAURZyfKJj7M9d2UKHSHhYhHnMG7e3apXna";
+    return "ipfs://QmNyj38Nx4fCfsmZhBgHgG3mx892ZvfhogfcmmcTWio1rP";
 }
 
 _ lazy_deployment_completed() method_id {

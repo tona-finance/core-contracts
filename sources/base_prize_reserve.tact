@@ -18,7 +18,7 @@ trait BasePrizeReserve with MsgValueHelper {
                 response_destination: msg.user,
                 custom_payload: null,
                 forward_ton_amount: 0,
-                forward_payload: emptyCell()
+                forward_payload: emptySlice()
             }.toCell(),
             false,
             null

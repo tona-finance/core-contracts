@@ -37,10 +37,10 @@ cell __tact_dict_set_code(cell dict, int id, cell code) inline;
 cell __tact_dict_get_code(cell dict, int id) inline;
 
 ;; $JettonInternalTransfer$_store
-builder $JettonInternalTransfer$_store(builder build_0, (int, int, slice, slice, int, cell) v) inline_ref;
+builder $JettonInternalTransfer$_store(builder build_0, (int, int, slice, slice, int, slice) v) inline_ref;
 
 ;; $JettonInternalTransfer$_store_cell
-cell $JettonInternalTransfer$_store_cell((int, int, slice, slice, int, cell) v) inline;
+cell $JettonInternalTransfer$_store_cell((int, int, slice, slice, int, slice) v) inline;
 
 ;; $JettonBurnNotification$_load
 (slice, ((int, int, slice, slice))) $JettonBurnNotification$_load(slice sc_0) inline;
@@ -84,6 +84,12 @@ builder $JettonWallet$init$_store(builder build_0, (slice, slice) v) inline;
 ;; $global_emptyCell
 cell $global_emptyCell() impure inline;
 
+;; $Cell$_fun_asSlice
+slice $Cell$_fun_asSlice(cell $self) impure inline;
+
+;; $global_emptySlice
+slice $global_emptySlice() impure inline;
+
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
 
@@ -103,7 +109,7 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_bounce_mode_body_code_data(slice to, int value, int bounce, int mode, cell body, cell code, cell data) inline;
 
 ;; $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload
-((int, int, slice, slice, int, cell)) $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, cell forward_payload) inline;
+((int, int, slice, slice, int, slice)) $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, slice forward_payload) inline;
 
 ;; $JettonMaster$_fun__compute_mint_amount
 ((int, slice, cell), int) $JettonMaster$_fun__compute_mint_amount((int, slice, cell) $self, (int, int, int, slice) $msg) impure inline;

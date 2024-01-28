@@ -72,7 +72,7 @@ contract JettonMaster {
                 response_address: msg.receiver,
                 from: newAddress(0, 0),
                 forward_ton_amount: ton("0.5"),
-                forward_payload: emptyCell()
+                forward_payload: emptySlice()
             }.toCell(),
             code: initCode.code,
             data: initCode.data

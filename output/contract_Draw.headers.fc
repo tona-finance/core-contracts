@@ -64,13 +64,13 @@ builder $Twab$_store(builder build_0, (int, int) v) inline;
 (slice, ((int, int))) $Twab$_load(slice sc_0) inline;
 
 ;; $JettonNotification$_load
-(slice, ((int, int, slice, cell))) $JettonNotification$_load(slice sc_0) inline;
+(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline;
 
 ;; $JettonTransfer$_store
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, cell) v) inline_ref;
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
 
 ;; $JettonTransfer$_store_cell
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, cell) v) inline;
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
 
 ;; $InitTicketInternal1$_store
 builder $InitTicketInternal1$_store(builder build_0, (int, int, int, int) v) inline;
@@ -135,6 +135,12 @@ builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inlin
 ;; $global_emptyCell
 cell $global_emptyCell() impure inline;
 
+;; $Cell$_fun_asSlice
+slice $Cell$_fun_asSlice(cell $self) impure inline;
+
+;; $global_emptySlice
+slice $global_emptySlice() impure inline;
+
 ;; $global_randomInt
 int $global_randomInt() impure inline;
 
@@ -160,7 +166,7 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
 ;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, cell)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, cell forward_payload) inline;
+((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
 
 ;; $Draw$_fun_activate_beacon
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_beacon((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab) impure inline;
@@ -175,7 +181,7 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_forward((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $Draw$_fun_on_jetton_from_pool_master
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, cell $payload) impure inline;
+((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, slice $payload) impure inline;
 
 ;; $Draw$_fun_require_over
 ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_over((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;

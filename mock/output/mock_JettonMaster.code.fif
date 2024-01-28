@@ -26,6 +26,8 @@ PROGRAM{
   DECLPROC $JettonMaster$_contract_load
   DECLPROC $JettonMaster$_contract_store
   DECLPROC $global_emptyCell
+  DECLPROC $Cell$_fun_asSlice
+  DECLPROC $global_emptySlice
   DECLPROC $global_contractAddress
   DECLPROC $global_send
   DECLPROC $JettonWallet$_init_child
@@ -156,7 +158,8 @@ PROGRAM{
     __tact_store_address INLINECALLDICT
     SWAP
     STGRAMS
-    STREF
+    SWAP
+    STSLICER
   }>
   $JettonInternalTransfer$_store_cell PROCINLINE:<{
     NEWC
@@ -286,6 +289,13 @@ PROGRAM{
   $global_emptyCell PROCINLINE:<{
     NEWC
     ENDC
+  }>
+  $Cell$_fun_asSlice PROCINLINE:<{
+    CTOS
+  }>
+  $global_emptySlice PROCINLINE:<{
+    $global_emptyCell INLINECALLDICT
+    $Cell$_fun_asSlice INLINECALLDICT
   }>
   $global_contractAddress PROCINLINE:<{
     0 PUSHINT
@@ -481,7 +491,7 @@ PROGRAM{
     s2 s2 PUSH2
     __tact_create_address INLINECALLDICT
     500000000 PUSHINT
-    $global_emptyCell INLINECALLDICT
+    $global_emptySlice INLINECALLDICT
     s5 s11 XCHG
     s4 s10 XCHG
     s3 s12 XCHG
@@ -605,7 +615,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d55694a414863624641385850467765735a755774726f6b6d434c687570357844587643766a364e4548436652} PUSHSLICE
+    x{697066733a2f2f516d634c4a767051467375554d61787a6841714d65634d3764394477576f625a3937336f425a79794a736745646e} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

@@ -22,7 +22,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), $JettonWallet$_init_child(__tact_context_sys, $owner_address, $self'jetton_master));
 }
 
-((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg) impure inline {
+((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -33,7 +33,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 
-((int, slice, slice), int) $JettonWallet$_fun__internal_transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg) impure inline {
+((int, slice, slice), int) $JettonWallet$_fun__internal_transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -46,7 +46,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), $remain);
 }
 
-((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_notification((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg) impure inline {
+((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_notification((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -56,7 +56,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 
-((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_excesses((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, cell) $msg, int $remain) impure inline {
+((int, slice, slice), ()) $JettonWallet$_fun__internal_transfer_excesses((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, int, slice) $msg, int $remain) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -83,7 +83,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 
-((int, slice, slice), ()) $JettonWallet$_fun__transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, cell) $msg) impure inline {
+((int, slice, slice), ()) $JettonWallet$_fun__transfer_validate((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, slice) $msg) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'destination, $msg'response_destination, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -91,7 +91,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 
-((int, slice, slice), ()) $JettonWallet$_fun__transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, cell) $msg) impure inline {
+((int, slice, slice), ()) $JettonWallet$_fun__transfer_estimate_remain_value((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, slice) $msg) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'destination, $msg'response_destination, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -103,7 +103,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 
-((int, slice, slice), ()) $JettonWallet$_fun__transfer_jetton((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, cell) $msg) impure inline {
+((int, slice, slice), ()) $JettonWallet$_fun__transfer_jetton((int, slice, slice) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice, cell, int, slice) $msg) impure inline {
     var (($self'balance, $self'owner, $self'jetton_master)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'destination, $msg'response_destination, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
@@ -122,7 +122,7 @@
 ;; Receivers of a Contract JettonWallet
 ;;
 
-(((int, slice, slice)), ()) $JettonWallet$_internal_binary_JettonTransfer((int, slice, slice) $self, (int, int, slice, slice, cell, int, cell) $msg) impure inline {
+(((int, slice, slice)), ()) $JettonWallet$_internal_binary_JettonTransfer((int, slice, slice) $self, (int, int, slice, slice, cell, int, slice) $msg) impure inline {
     var ($self'balance, $self'owner, $self'jetton_master) = $self;
     var ($msg'query_id, $msg'amount, $msg'destination, $msg'response_destination, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
@@ -145,7 +145,7 @@
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 
-(((int, slice, slice)), ()) $JettonWallet$_internal_binary_JettonInternalTransfer((int, slice, slice) $self, (int, int, slice, slice, int, cell) $msg) impure inline {
+(((int, slice, slice)), ()) $JettonWallet$_internal_binary_JettonInternalTransfer((int, slice, slice) $self, (int, int, slice, slice, int, slice) $msg) impure inline {
     var ($self'balance, $self'owner, $self'jetton_master) = $self;
     var ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
@@ -195,7 +195,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmcDBk7MiGSfjfaWKRJMY5opzAezUmkP31c71JPDCxuY7f";
+    return "ipfs://QmVY1qEDvH5L96PTb9AtLkVtfYgYmKc9KLfETgmg4ZZnGM";
 }
 
 _ lazy_deployment_completed() method_id {

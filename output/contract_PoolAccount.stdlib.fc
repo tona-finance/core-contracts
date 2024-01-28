@@ -163,6 +163,11 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
     send_raw_message($c, $params'mode);
 }
 
+slice $Builder$_fun_asSlice(builder $self) impure inline {
+    var ($self) = $self;
+    return begin_parse(end_cell($self));
+}
+
 int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline {
     var (($self'bounced, $self'sender, $self'value, $self'raw)) = $self;
     var (($self'bounced, $self'sender, $self'value, $self'raw)) = $self;
