@@ -38,8 +38,8 @@
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     var (($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload)) = $msg;
     int $tonBalanceBeforeMsg = (__tact_my_balance() - $ctx'value);
-    int $storage_fee = (50000000 - min($tonBalanceBeforeMsg, 50000000));
-    int $remain = ($ctx'value - ($storage_fee + 50000000));
+    int $storage_fee = (10000000 - min($tonBalanceBeforeMsg, 10000000));
+    int $remain = ($ctx'value - ($storage_fee + 10000000));
     if (($msg'forward_ton_amount > 0)) {
         $remain = ($remain - ($Context$_fun_readForwardFee(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) + $msg'forward_ton_amount));
     }
@@ -99,7 +99,7 @@
     if (($msg'forward_ton_amount > 0)) {
         $fwd_count = 2;
     }
-    throw_unless(37185, ($ctx'value > ((($fwd_count * $Context$_fun_readForwardFee(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw))) + (2 * 50000000)) + 50000000)));
+    throw_unless(37185, ($ctx'value > ((($fwd_count * $Context$_fun_readForwardFee(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw))) + (2 * 10000000)) + 10000000)));
     return (($self'balance, $self'owner, $self'jetton_master), ());
 }
 

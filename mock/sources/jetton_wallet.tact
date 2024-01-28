@@ -21,8 +21,8 @@ contract JettonWallet {
     owner: Address;
     jetton_master: Address;
     
-    const gasConsumption: Int = ton("0.05");
-    const minTonsForStorage: Int = ton("0.05");
+    const gasConsumption: Int = ton("0.01");
+    const minTonsForStorage: Int = ton("0.01");
 
     init(owner: Address, jetton_master: Address) {
         self.owner = owner;

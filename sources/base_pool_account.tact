@@ -145,7 +145,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
                 destination: self.master,
                 response_destination: self.owner,
                 custom_payload: null,
-                forward_ton_amount: ton("0.05"), // handle jetton notification of master
+                forward_ton_amount: ton("0.035"), // handle jetton notification of master
                 forward_payload: payload
             }.toCell(),
             false,
