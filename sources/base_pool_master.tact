@@ -19,6 +19,26 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     spent_amount: Int;
     next_period: Int;
 
+    receive("init jetton wallet") {
+        let sinit: StateInit = get_jetton_wallet_init(
+            myAddress(),
+            self.jetton_master,
+            self.jetton_wallet_code,
+            self.jetton_system  // note: Only in Testnet!
+        );
+
+        send(SendParameters {
+            bounce: false,
+            to: self.jetton_wallet,
+            value: ton("0.1"),
+            mode: SendIgnoreErrors,
+            code: sinit.code,
+            data: sinit.data
+        });
+
+        self.forward(sender(), null, false, null);
+    }
+
     receive("init draw") {
         self.requireOwner();
         require(self.next_period == 0, "Draw is initialized");
@@ -34,21 +54,34 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     }
 
     receive("init account") {
-        let sinit: StateInit = self._get_account_init(sender());
-        let account: Address = contractAddress(sinit);
-        let jetton_wallet: Address = get_jetton_wallet_address(
+        let sinit_1: StateInit = self._get_account_init(sender());
+        let account: Address = contractAddress(sinit_1);
+        let sinit_2: StateInit = get_jetton_wallet_init(
             account,
             self.jetton_master,
             self.jetton_wallet_code,
             self.jetton_system  // note: Only in Testnet!
         );
+        let jetton_wallet: Address = contractAddress(sinit_2);
+
+        // init jetton wallet account
+        send(SendParameters {
+            bounce: false,
+            to: jetton_wallet,
+            value: ton("0.1"),
+            mode: SendIgnoreErrors,
+            code: sinit_2.code,
+            data: sinit_2.data
+        });
+
+        // init pool account
         self.forward(
             account,
             InitPoolAccountInternal {
                 jetton_wallet: jetton_wallet
             }.toCell(),
             false,
-            sinit
+            sinit_1
         );
     }
 

@@ -282,6 +282,9 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ;; $PoolMaster$_fun_owner
 ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), slice) $PoolMaster$_fun_owner((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self) impure inline;
 
+;; $SendParameters$_constructor_bounce_to_value_mode_code_data
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_code_data(int bounce, slice to, int value, int mode, cell code, cell data) inline;
+
 ;; $InitPoolAccountInternal$_constructor_jetton_wallet
 ((slice)) $InitPoolAccountInternal$_constructor_jetton_wallet(slice jetton_wallet) inline;
 
