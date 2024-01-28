@@ -1257,13 +1257,13 @@ PROGRAM{
     LDREF
     SWAP
     CTOS
+    SWAP
+    ENDS
     $Slice$_fun_loadTimestamp INLINECALLDICT
     SWAP
     __tact_load_address INLINECALLDICT
     SWAP
     LDGRAMS
-    ENDS
-    s0 s3 XCHG
     ENDS
     s10 17 s() XCHG
     s9 16 s() XCHG
@@ -1276,24 +1276,25 @@ PROGRAM{
     s2 16 s() XCHG
     s15 s14 XCHG2
     27196 PUSHINT
-    s14 s15 XCPU
+    s0 s14 XCHG
+    16 s() PUSH
     $PoolMaster$_fun__get_account_address INLINECALLDICT
     s0 s13 XCHG2
     __tact_slice_eq_bits INLINECALLDICT
     s1 s14 XCHG
     THROWANYIFNOT
     s4 s3 s2 XC2PU
-    s15 PUSH
+    16 s() PUSH
     $Twab$_fun_next_twab INLINECALLDICT
-    s2 s15 XCPU
+    s2 s13 XCPU
     ADD
     s0 s4 XCHG
     16 s() PUSH
     ADD
     s3 s11 XCHG
-    s2 s14 XCHG
+    s2 s15 XCHG
     s0 16 s() XCHG
-    s1 s15 XCHG
+    s1 s13 XCHG
     $DepositNotify$_constructor_query_id_timestamp_share_amount_contribute_amount INLINECALLDICT
     $DepositNotify$_store_cell INLINECALLDICT
     s6 s13 XCHG
@@ -1301,12 +1302,12 @@ PROGRAM{
     s4 s11 XCHG
     s3 s10 XCHG
     s2 s9 XCHG
-    s5 s8 XCHG
-    s4 s7 XCHG
+    s3 s8 XCHG
+    s5 s7 XCHG
     s1 s6 XCHG
     s1 s5 XCHG
-    s4 s4 s0 XCHG3
-    s1 s3 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
     FALSE
     PUSHNULL
     $PoolMaster$_fun_forward INLINECALLDICT

@@ -204,12 +204,12 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
     fun on_jetton_received_from_account(query_id: Int, from: Address, amount: Int, payload: Slice) {
         let data: Slice = payload.loadRef().beginParse();
+        payload.endParse();
         // timestamp + user + deposit_amount
         let timestamp: Int = data.loadTimestamp();
         let user: Address = data.loadAddress();
         let deposit_amount: Int = data.loadCoins();
         data.endParse();
-        payload.endParse();
 
         require(from == self._get_account_address(user), "Invalid pool account");
         self.twab = self.twab.next_twab(self.share_amount, timestamp);

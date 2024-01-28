@@ -135,11 +135,11 @@ builder $Builder$_fun_storeTimestamp(builder $self, int $timestamp) impure inlin
 ((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice), ()) $PoolMaster$_fun_on_jetton_received_from_account((slice, slice, cell, cell, slice, (int, int), int, int, int, int, slice) $self, int $query_id, slice $from, int $amount, slice $payload) impure inline {
     var (($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)) = $self;
     slice $data = begin_parse($payload~load_ref());
+    end_parse($payload);
     int $timestamp = $data~$Slice$_fun_loadTimestamp();
     slice $user = $data~__tact_load_address();
     int $deposit_amount = $data~load_coins();
     end_parse($data);
-    end_parse($payload);
     throw_unless(27196, ( __tact_slice_eq_bits(($self'owner, $self'jetton_master, $self'jetton_wallet_code, $self'jetton_system, $self'jetton_wallet, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'contribute_amount, $self'spent_amount, $self'next_period, $self'staker)~$PoolMaster$_fun__get_account_address($user), $from) ));
     ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount + $deposit_amount);
