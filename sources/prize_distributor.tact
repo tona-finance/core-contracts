@@ -9,23 +9,22 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
     const CHOICES: Int = 16;
     const CARDINALITY: Int = 5;
     const PICK_BITS: Int = 4 * 5;
-    const TOTAL_PICKS: Int = 1 << (4 * 5);
 
     // from draw beacon
     // ---------------------
     active: Bool;
     pool_master: Address;
+    prize_reserve: Address;
     period: Int;
-    jetton_wallet: Address?;
     start: Twab?;
     end: Twab?;
+    prize_amount: Int;
+    avail_prize_amount: Int;
+    winning_number: Int;
+    deadline: Int;
     // ---------------------
 
-    prize_amount: Int;
-    winning_number: Int;
     prize_percentage: map<Int, Int>;
-    deadline: Int;
-    avail_prize_amount: Int;
 
     receive(msg: ClaimPrizeInternal) {
         self.require_active();
@@ -33,78 +32,64 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
         self.require_ticket(msg.user, msg.pool_account);
 
         let prize_amount: Int = self.compute_prize_amount(msg.pick_payload);
+        let pay_amount: Int = min(prize_amount, self.avail_prize_amount);
+        let debt_amount: Int = prize_amount - pay_amount;
+        self.avail_prize_amount = self.avail_prize_amount - pay_amount;
+        self.native_reserve();
+
         if (prize_amount > 0) {
-            let pay_amount: Int = min(prize_amount, self.avail_prize_amount);
-            if (pay_amount > 0) {
-                self.avail_prize_amount = self.avail_prize_amount - pay_amount;
+            if (debt_amount > 0) {
+                // send prize to user
                 send(SendParameters {
                     bounce: false,
-                    to: self.jetton_wallet!!,
-                    value: ton("0.1"), // transfer value 0.1
-                    mode: SendIgnoreErrors,
-                    body: JettonTransfer {
-                        query_id: msg.query_id,
-                        amount: pay_amount,
-                        destination: msg.user,
-                        response_destination: msg.user,
-                        custom_payload: null,
-                        forward_ton_amount: 0,
-                        forward_payload: emptySlice()
-                    }.toCell()
+                    to: msg.user,
+                    value: pay_amount,
+                    mode: SendPayGasSeparately + SendIgnoreErrors
                 });
-            }
 
-            let debt_amount: Int = prize_amount - pay_amount;
-            if (debt_amount > 0) {
-                self.notify(
-                    PayPrizeDebtInternal {
+                // send debt to ticket
+                send(SendParameters {
+                    bounce: false,
+                    to: sender(),
+                    value: 0,
+                    mode: SendRemainingBalance + SendIgnoreErrors,
+                    body: PayPrizeDebtInternal {
                         user: msg.user,
                         amount: debt_amount
                     }.toCell()
-                );
+                });
                 return;
             }
         }
 
-        // refund gas
-        self.forward(msg.user, null, false, null);
+        // send all to user
+        send(SendParameters {
+            bounce: false,
+            to: msg.user,
+            value: 0,
+            mode: SendRemainingBalance + SendIgnoreErrors
+        });
     }
 
-    inline fun init_distributor() {
-        self.prize_amount = 0;
-        self.winning_number = 0;
-        self.prize_percentage = emptyMap();
-        self.prize_percentage.set(0, 1);
-        self.prize_percentage.set(1, 3);
-        self.prize_percentage.set(2, 8);
-        self.prize_percentage.set(3, 23);
-        self.prize_percentage.set(4, 65);
-        self.deadline = 0;
-        self.avail_prize_amount = 0;
-    }
+    // inline fun init_distributor() {
+    //     self.prize_amount = 0;
+    //     self.winning_number = 0;
+    //     self.prize_percentage = emptyMap();
+    //     self.prize_percentage.set(0, 1);
+    //     self.prize_percentage.set(1, 3);
+    //     self.prize_percentage.set(2, 8);
+    //     self.prize_percentage.set(3, 23);
+    //     self.prize_percentage.set(4, 65);
+    //     self.deadline = 0;
+    //     self.avail_prize_amount = 0;
+    // }
 
-    inline fun activate_distributor(prize_amount: Int, deadline: Int) {
-        self.prize_amount = prize_amount;
-        self.winning_number = randomInt() % self.TOTAL_PICKS;
-        self.deadline = deadline;
-        self.avail_prize_amount = self.avail_prize_amount + prize_amount; 
-    }
-
-    inline fun prizes_per_tier(tier: Int): Int {
-        require(tier < self.CARDINALITY, "Invalid tier");
-
-        if (tier == 0) {
-            return 1;
-        } else if (tier == 1) {
-            return 15;
-        } else if (tier == 2) {
-            return 240;
-        } else if (tier == 3) {
-            return 3840;
-        } else {
-            return 61440;
-        }
-    }
+    // inline fun activate_distributor(prize_amount: Int, deadline: Int) {
+    //     self.prize_amount = prize_amount;
+    //     self.winning_number = randomInt() % self.TOTAL_PICKS;
+    //     self.deadline = deadline;
+    //     self.avail_prize_amount = self.avail_prize_amount + prize_amount; 
+    // }
 
     fun prize_amount_per_pick(tier: Int): Int {
         let percentage: Int? = self.prize_percentage.get(tier);
@@ -141,6 +126,22 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
             prize_amount = prize_amount + amount;
         }
         return prize_amount;
+    }
+
+    inline fun prizes_per_tier(tier: Int): Int {
+        require(tier < self.CARDINALITY, "Invalid tier");
+
+        if (tier == 0) {
+            return 1;
+        } else if (tier == 1) {
+            return 15;
+        } else if (tier == 2) {
+            return 240;
+        } else if (tier == 3) {
+            return 3840;
+        } else {
+            return 61440;
+        }
     }
 
     inline fun require_ticket(user: Address, pool_account: Address) {

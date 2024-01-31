@@ -10,33 +10,32 @@ trait TicketInitializer with BasePoolAccount {
     owner: Address;
 
     master: Address;
-    staker: Address;
-    jetton_wallet: Address?;
     twab_store: TwabStore;
     share_amount: Int;
-    contribute_amount: Int;
-    withdraw_amount: Int;
-
     lock: Bool;
-    deposit_amount: Int;
     // ---------------------
 
-    receive(msg: InitTicketInternal1) {
+    receive(msg: PrepareInitTicket) {
+        self.require_draw(msg.period);
+
         let start: Twab = self.twab_store.binary_search_twab(msg.start);
         let end: Twab = self.twab_store.binary_search_twab(msg.end);
         let avg_balance: Int = average_balance(start, end);
         let sinit: StateInit = self._get_ticket_init(msg.period);
-        let ticket: Address = contractAddress(sinit);
         // deploy and init ticket
         self.forward(
-            ticket,
-            InitTicketInternal2 {
+            contractAddress(sinit),
+            InitTicketInternal {
                 draw_avg_balance: msg.avg_balance,
                 user_avg_balance: avg_balance
             }.toCell(),
             false,
             sinit
         );
+    }
+
+    inline fun require_draw(period: Int) {
+        require(sender() == self._get_draw_address(period), "Only from draw");
     }
 
     inline fun _get_draw_address(period: Int): Address {

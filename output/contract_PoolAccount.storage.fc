@@ -3,11 +3,6 @@
 ;; TLB: _ code:^cell data:^cell = StateInit
 ;;
 
-_ $StateInit$_get_code((cell, cell) v) inline {
-    var (v'code, v'data) = v;
-    return v'code;
-}
-
 ((cell, cell)) $StateInit$_not_null(tuple v) inline {
     throw_if(128, null?(v));
     var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
@@ -138,198 +133,107 @@ builder $TwabStore$_store(builder build_0, (cell, int) v) inline {
 }
 
 ;;
-;; Type: DepositInStaker
-;; Header: 0x47d54391
-;; TLB: deposit_in_staker#47d54391 query_id:uint64 = DepositInStaker
+;; Type: DepositInternal
+;; Header: 0xa152ad13
+;; TLB: deposit_internal#a152ad13 amount:coins user:address = DepositInternal
 ;;
 
-builder $DepositInStaker$_store(builder build_0, (int) v) inline {
-    var (v'query_id) = v;
-    build_0 = store_uint(build_0, 1205158801, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
+builder $DepositInternal$_store(builder build_0, (int, slice) v) inline {
+    var (v'amount, v'user) = v;
+    build_0 = store_uint(build_0, 2706550035, 32);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'user);
     return build_0;
 }
 
-cell $DepositInStaker$_store_cell((int) v) inline {
-    return $DepositInStaker$_store(begin_cell(), v).end_cell();
+cell $DepositInternal$_store_cell((int, slice) v) inline {
+    return $DepositInternal$_store(begin_cell(), v).end_cell();
 }
 
-(slice, ((int))) $DepositInStaker$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1205158801);
-    var v'query_id = sc_0~load_uint(64);
-    return (sc_0, (v'query_id));
-}
-
-((int)) $DepositInStaker$_constructor_query_id(int query_id) inline {
-    return (query_id);
-}
-
-;;
-;; Type: StakerWithdrawal
-;; Header: 0x0a77535c
-;; TLB: staker_withdrawal#0a77535c query_id:uint64 = StakerWithdrawal
-;;
-
-(slice, ((int))) $StakerWithdrawal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 175592284);
-    var v'query_id = sc_0~load_uint(64);
-    return (sc_0, (v'query_id));
-}
-
-;;
-;; Type: JettonNotification
-;; Header: 0x7362d09c
-;; TLB: jetton_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = JettonNotification
-;;
-
-(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1935855772);
-    var v'query_id = sc_0~load_uint(64);
+(slice, ((int))) $DepositInternal$_load_bounced(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2706550035);
     var v'amount = sc_0~load_coins();
-    var v'from = sc_0~__tact_load_address();
-    var v'forward_payload = sc_0;
-    return (sc_0, (v'query_id, v'amount, v'from, v'forward_payload));
+    return (sc_0, (v'amount));
 }
 
-;;
-;; Type: JettonExcesses
-;; Header: 0xd53276db
-;; TLB: jetton_excesses#d53276db query_id:uint64 = JettonExcesses
-;;
-
-(slice, ((int))) $JettonExcesses$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3576854235);
-    var v'query_id = sc_0~load_uint(64);
-    return (sc_0, (v'query_id));
-}
-
-;;
-;; Type: JettonTransfer
-;; Header: 0x0f8a7ea5
-;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer
-;;
-
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref {
-    var (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload) = v;
-    build_0 = store_uint(build_0, 260734629, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
-    build_0 = build_0.store_coins(v'amount);
-    build_0 = __tact_store_address(build_0, v'destination);
-    build_0 = __tact_store_address(build_0, v'response_destination);
-    build_0 = ~ null?(v'custom_payload) ? build_0.store_int(true, 1).store_ref(v'custom_payload) : build_0.store_int(false, 1);
-    build_0 = build_0.store_coins(v'forward_ton_amount);
-    build_0 = build_0.store_slice(v'forward_payload);
-    return build_0;
-}
-
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline {
-    return $JettonTransfer$_store(begin_cell(), v).end_cell();
-}
-
-((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline {
-    return (query_id, amount, destination, response_destination, custom_payload, forward_ton_amount, forward_payload);
-}
-
-;;
-;; Type: JettonBurn
-;; Header: 0x595f07bc
-;; TLB: jetton_burn#595f07bc query_id:uint64 amount:coins response_destination:address custom_payload:Maybe ^cell = JettonBurn
-;;
-
-builder $JettonBurn$_store(builder build_0, (int, int, slice, cell) v) inline {
-    var (v'query_id, v'amount, v'response_destination, v'custom_payload) = v;
-    build_0 = store_uint(build_0, 1499400124, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
-    build_0 = build_0.store_coins(v'amount);
-    build_0 = __tact_store_address(build_0, v'response_destination);
-    build_0 = ~ null?(v'custom_payload) ? build_0.store_int(true, 1).store_ref(v'custom_payload) : build_0.store_int(false, 1);
-    return build_0;
-}
-
-cell $JettonBurn$_store_cell((int, int, slice, cell) v) inline {
-    return $JettonBurn$_store(begin_cell(), v).end_cell();
-}
-
-((int, int, slice, cell)) $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload(int query_id, int amount, slice response_destination, cell custom_payload) inline {
-    return (query_id, amount, response_destination, custom_payload);
+((int, slice)) $DepositInternal$_constructor_amount_user(int amount, slice user) inline {
+    return (amount, user);
 }
 
 ;;
 ;; Type: WithdrawInternal
-;; Header: 0x00162538
-;; TLB: withdraw_internal#00162538 query_id:uint64 withdraw_amount:coins acc_contribute_amount:coins acc_withdraw_amount:coins user:address = WithdrawInternal
+;; Header: 0xff1a77b3
+;; TLB: withdraw_internal#ff1a77b3 amount:coins user:address = WithdrawInternal
 ;;
 
-builder $WithdrawInternal$_store(builder build_0, (int, int, int, int, slice) v) inline {
-    var (v'query_id, v'withdraw_amount, v'acc_contribute_amount, v'acc_withdraw_amount, v'user) = v;
-    build_0 = store_uint(build_0, 1451320, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
-    build_0 = build_0.store_coins(v'withdraw_amount);
-    build_0 = build_0.store_coins(v'acc_contribute_amount);
-    build_0 = build_0.store_coins(v'acc_withdraw_amount);
-    build_0 = __tact_store_address(build_0, v'user);
-    return build_0;
-}
-
-cell $WithdrawInternal$_store_cell((int, int, int, int, slice) v) inline {
-    return $WithdrawInternal$_store(begin_cell(), v).end_cell();
-}
-
-(slice, ((int, int))) $WithdrawInternal$_load_bounced(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1451320);
-    var v'query_id = sc_0~load_uint(64);
-    var v'withdraw_amount = sc_0~load_coins();
-    return (sc_0, (v'query_id, v'withdraw_amount));
-}
-
-((int, int, int, int, slice)) $WithdrawInternal$_constructor_query_id_withdraw_amount_acc_contribute_amount_acc_withdraw_amount_user(int query_id, int withdraw_amount, int acc_contribute_amount, int acc_withdraw_amount, slice user) inline {
-    return (query_id, withdraw_amount, acc_contribute_amount, acc_withdraw_amount, user);
-}
-
-;;
-;; Type: WithdrawFinishInternal
-;; Header: 0xd87c7b6a
-;; TLB: withdraw_finish_internal#d87c7b6a query_id:uint64 timestamp:uint64 amount:coins user:address = WithdrawFinishInternal
-;;
-
-builder $WithdrawFinishInternal$_store(builder build_0, (int, int, int, slice) v) inline {
-    var (v'query_id, v'timestamp, v'amount, v'user) = v;
-    build_0 = store_uint(build_0, 3632036714, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
-    build_0 = build_0.store_uint(v'timestamp, 64);
+builder $WithdrawInternal$_store(builder build_0, (int, slice) v) inline {
+    var (v'amount, v'user) = v;
+    build_0 = store_uint(build_0, 4279924659, 32);
     build_0 = build_0.store_coins(v'amount);
     build_0 = __tact_store_address(build_0, v'user);
     return build_0;
 }
 
-cell $WithdrawFinishInternal$_store_cell((int, int, int, slice) v) inline {
-    return $WithdrawFinishInternal$_store(begin_cell(), v).end_cell();
+cell $WithdrawInternal$_store_cell((int, slice) v) inline {
+    return $WithdrawInternal$_store(begin_cell(), v).end_cell();
 }
 
-((int, int, int, slice)) $WithdrawFinishInternal$_constructor_query_id_timestamp_amount_user(int query_id, int timestamp, int amount, slice user) inline {
-    return (query_id, timestamp, amount, user);
+(slice, ((int))) $WithdrawInternal$_load_bounced(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 4279924659);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
 }
 
-;;
-;; Type: InitPoolAccountInternal
-;; Header: 0x388876b7
-;; TLB: init_pool_account_internal#388876b7 jetton_wallet:address = InitPoolAccountInternal
-;;
-
-(slice, ((slice))) $InitPoolAccountInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 948467383);
-    var v'jetton_wallet = sc_0~__tact_load_address();
-    return (sc_0, (v'jetton_wallet));
+((int, slice)) $WithdrawInternal$_constructor_amount_user(int amount, slice user) inline {
+    return (amount, user);
 }
 
 ;;
-;; Type: InitTicketInternal1
-;; Header: 0xb635015f
-;; TLB: init_ticket_internal1#b635015f period:uint32 start:uint64 end:uint64 avg_balance:coins = InitTicketInternal1
+;; Type: Withdraw
+;; Header: 0x0ba69751
+;; TLB: withdraw#0ba69751 amount:coins = Withdraw
 ;;
 
-(slice, ((int, int, int, int))) $InitTicketInternal1$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3056927071);
+(slice, ((int))) $Withdraw$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 195467089);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
+}
+
+;;
+;; Type: DepositFinish
+;; Header: 0xcff32eaa
+;; TLB: deposit_finish#cff32eaa timestamp:uint64 amount:coins = DepositFinish
+;;
+
+(slice, ((int, int))) $DepositFinish$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3488820906);
+    var v'timestamp = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'timestamp, v'amount));
+}
+
+;;
+;; Type: WithdrawFinish
+;; Header: 0x1440585b
+;; TLB: withdraw_finish#1440585b timestamp:uint64 amount:coins = WithdrawFinish
+;;
+
+(slice, ((int, int))) $WithdrawFinish$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 339761243);
+    var v'timestamp = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'timestamp, v'amount));
+}
+
+;;
+;; Type: PrepareInitTicket
+;; Header: 0xfd2a75d9
+;; TLB: prepare_init_ticket#fd2a75d9 period:uint32 start:uint64 end:uint64 avg_balance:coins = PrepareInitTicket
+;;
+
+(slice, ((int, int, int, int))) $PrepareInitTicket$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 4247418329);
     var v'period = sc_0~load_uint(32);
     var v'start = sc_0~load_uint(64);
     var v'end = sc_0~load_uint(64);
@@ -338,117 +242,74 @@ cell $WithdrawFinishInternal$_store_cell((int, int, int, slice) v) inline {
 }
 
 ;;
-;; Type: Deposit
-;; Header: 0xa2aca06d
-;; TLB: deposit#a2aca06d query_id:uint64 = Deposit
+;; Type: InitTicketInternal
+;; Header: 0xb10fd50e
+;; TLB: init_ticket_internal#b10fd50e draw_avg_balance:coins user_avg_balance:coins = InitTicketInternal
 ;;
 
-(slice, ((int))) $Deposit$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2729222253);
-    var v'query_id = sc_0~load_uint(64);
-    return (sc_0, (v'query_id));
-}
-
-;;
-;; Type: Withdraw
-;; Header: 0xc9b0c4c2
-;; TLB: withdraw#c9b0c4c2 query_id:uint64 amount:coins = Withdraw
-;;
-
-(slice, ((int, int))) $Withdraw$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3383805122);
-    var v'query_id = sc_0~load_uint(64);
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'query_id, v'amount));
-}
-
-;;
-;; Type: InitTicketInternal2
-;; Header: 0x358ded52
-;; TLB: init_ticket_internal2#358ded52 draw_avg_balance:coins user_avg_balance:coins = InitTicketInternal2
-;;
-
-builder $InitTicketInternal2$_store(builder build_0, (int, int) v) inline {
+builder $InitTicketInternal$_store(builder build_0, (int, int) v) inline {
     var (v'draw_avg_balance, v'user_avg_balance) = v;
-    build_0 = store_uint(build_0, 898493778, 32);
+    build_0 = store_uint(build_0, 2970604814, 32);
     build_0 = build_0.store_coins(v'draw_avg_balance);
     build_0 = build_0.store_coins(v'user_avg_balance);
     return build_0;
 }
 
-cell $InitTicketInternal2$_store_cell((int, int) v) inline {
-    return $InitTicketInternal2$_store(begin_cell(), v).end_cell();
+cell $InitTicketInternal$_store_cell((int, int) v) inline {
+    return $InitTicketInternal$_store(begin_cell(), v).end_cell();
 }
 
-((int, int)) $InitTicketInternal2$_constructor_draw_avg_balance_user_avg_balance(int draw_avg_balance, int user_avg_balance) inline {
+((int, int)) $InitTicketInternal$_constructor_draw_avg_balance_user_avg_balance(int draw_avg_balance, int user_avg_balance) inline {
     return (draw_avg_balance, user_avg_balance);
 }
 
 ;;
 ;; Type: PoolAccountData
-;; TLB: _ owner:address master:address staker:address reserve:address jetton_wallet:address share_amount:coins contribute_amount:coins withdraw_amount:coins = PoolAccountData
+;; TLB: _ owner:address master:address prize_reserve:address share_amount:coins = PoolAccountData
 ;;
 
-(slice, slice, slice, slice, slice, int, int, int) $PoolAccountData$_to_external(((slice, slice, slice, slice, slice, int, int, int)) v) inline {
-    var (v'owner, v'master, v'staker, v'reserve, v'jetton_wallet, v'share_amount, v'contribute_amount, v'withdraw_amount) = v; 
-    return (v'owner, v'master, v'staker, v'reserve, v'jetton_wallet, v'share_amount, v'contribute_amount, v'withdraw_amount);
+(slice, slice, slice, int) $PoolAccountData$_to_external(((slice, slice, slice, int)) v) inline {
+    var (v'owner, v'master, v'prize_reserve, v'share_amount) = v; 
+    return (v'owner, v'master, v'prize_reserve, v'share_amount);
 }
 
-((slice, slice, slice, slice, slice, int, int, int)) $PoolAccountData$_constructor_owner_master_staker_reserve_jetton_wallet_share_amount_contribute_amount_withdraw_amount(slice owner, slice master, slice staker, slice reserve, slice jetton_wallet, int share_amount, int contribute_amount, int withdraw_amount) inline {
-    return (owner, master, staker, reserve, jetton_wallet, share_amount, contribute_amount, withdraw_amount);
+((slice, slice, slice, int)) $PoolAccountData$_constructor_owner_master_prize_reserve_share_amount(slice owner, slice master, slice prize_reserve, int share_amount) inline {
+    return (owner, master, prize_reserve, share_amount);
 }
 
 ;;
 ;; Type: PoolAccount
 ;;
 
-builder $PoolAccount$_store(builder build_0, (slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) v) inline {
-    var (v'owner, v'master, v'staker, v'jetton_wallet, (v'twab_store'store, v'twab_store'size), v'share_amount, v'contribute_amount, v'withdraw_amount, v'lock, v'deposit_amount, v'reserve) = v;
+builder $PoolAccount$_store(builder build_0, (slice, slice, (cell, int), int, int, slice) v) inline {
+    var (v'owner, v'master, (v'twab_store'store, v'twab_store'size), v'share_amount, v'lock, v'prize_reserve) = v;
     build_0 = __tact_store_address(build_0, v'owner);
     build_0 = __tact_store_address(build_0, v'master);
-    build_0 = __tact_store_address(build_0, v'staker);
-    var build_1 = begin_cell();
-    build_1 = __tact_store_address_opt(build_1, v'jetton_wallet);
-    build_1 = $TwabStore$_store(build_1, (v'twab_store'store, v'twab_store'size));
-    build_1 = build_1.store_coins(v'share_amount);
-    build_1 = build_1.store_coins(v'contribute_amount);
-    build_1 = build_1.store_coins(v'withdraw_amount);
-    build_1 = build_1.store_int(v'lock, 1);
-    build_1 = build_1.store_coins(v'deposit_amount);
-    var build_2 = begin_cell();
-    build_2 = __tact_store_address(build_2, v'reserve);
-    build_1 = store_ref(build_1, build_2.end_cell());
-    build_0 = store_ref(build_0, build_1.end_cell());
+    build_0 = $TwabStore$_store(build_0, (v'twab_store'store, v'twab_store'size));
+    build_0 = build_0.store_coins(v'share_amount);
+    build_0 = build_0.store_int(v'lock, 1);
+    build_0 = __tact_store_address(build_0, v'prize_reserve);
     return build_0;
 }
 
-(slice, ((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice))) $PoolAccount$_load(slice sc_0) inline {
+(slice, ((slice, slice, (cell, int), int, int, slice))) $PoolAccount$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'master = sc_0~__tact_load_address();
-    var v'staker = sc_0~__tact_load_address();
-    slice sc_1 = sc_0~load_ref().begin_parse();
-    var v'jetton_wallet = sc_1~__tact_load_address_opt();
-    var v'twab_store = sc_1~$TwabStore$_load();
-    var v'share_amount = sc_1~load_coins();
-    var v'contribute_amount = sc_1~load_coins();
-    var v'withdraw_amount = sc_1~load_coins();
-    var v'lock = sc_1~load_int(1);
-    var v'deposit_amount = sc_1~load_coins();
-    slice sc_2 = sc_1~load_ref().begin_parse();
-    var v'reserve = sc_2~__tact_load_address();
-    return (sc_0, (v'owner, v'master, v'staker, v'jetton_wallet, v'twab_store, v'share_amount, v'contribute_amount, v'withdraw_amount, v'lock, v'deposit_amount, v'reserve));
+    var v'twab_store = sc_0~$TwabStore$_load();
+    var v'share_amount = sc_0~load_coins();
+    var v'lock = sc_0~load_int(1);
+    var v'prize_reserve = sc_0~__tact_load_address();
+    return (sc_0, (v'owner, v'master, v'twab_store, v'share_amount, v'lock, v'prize_reserve));
 }
 
-(slice, ((slice, slice, slice, slice))) $PoolAccount$init$_load(slice sc_0) inline {
+(slice, ((slice, slice, slice))) $PoolAccount$init$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'master = sc_0~__tact_load_address();
-    var v'staker = sc_0~__tact_load_address();
-    slice sc_1 = sc_0~load_ref().begin_parse();
-    var v'reserve = sc_1~__tact_load_address();
-    return (sc_0, (v'owner, v'master, v'staker, v'reserve));
+    var v'prize_reserve = sc_0~__tact_load_address();
+    return (sc_0, (v'owner, v'master, v'prize_reserve));
 }
 
-(slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) $PoolAccount$_contract_load() impure inline_ref {
+(slice, slice, (cell, int), int, int, slice) $PoolAccount$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -457,13 +318,13 @@ builder $PoolAccount$_store(builder build_0, (slice, slice, slice, slice, (cell,
     } else {
         ;; Allow only workchain deployments
         throw_unless(137, my_address().preload_uint(11) == 1024);
-        (slice owner, slice master, slice staker, slice reserve) = $sc~$PoolAccount$init$_load();
+        (slice owner, slice master, slice prize_reserve) = $sc~$PoolAccount$init$_load();
         $sc.end_parse();
-        return $PoolAccount$_contract_init(owner, master, staker, reserve);
+        return $PoolAccount$_contract_init(owner, master, prize_reserve);
     }
 }
 
-() $PoolAccount$_contract_store((slice, slice, slice, slice, (cell, int), int, int, int, int, int, slice) v) impure inline {
+() $PoolAccount$_contract_store((slice, slice, (cell, int), int, int, slice) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);
@@ -476,14 +337,14 @@ builder $PoolAccount$_store(builder build_0, (slice, slice, slice, slice, (cell,
 ;;
 
 builder $Draw$init$_store(builder build_0, (slice, slice, int) v) inline {
-    var (v'pool_master, v'reserve, v'period) = v;
+    var (v'pool_master, v'prize_reserve, v'period) = v;
     build_0 = __tact_store_address(build_0, v'pool_master);
-    build_0 = __tact_store_address(build_0, v'reserve);
+    build_0 = __tact_store_address(build_0, v'prize_reserve);
     build_0 = build_0.store_int(v'period, 257);
     return build_0;
 }
 
-(cell, cell) $Draw$_init_child(cell sys', slice $pool_master, slice $reserve, int $period) inline {
+(cell, cell) $Draw$_init_child(cell sys', slice $pool_master, slice $prize_reserve, int $period) inline {
     slice sc' = sys'.begin_parse();
     cell source = sc'~load_dict();
     cell contracts = new_dict();
@@ -500,7 +361,7 @@ builder $Draw$init$_store(builder build_0, (slice, slice, int) v) inline {
     builder b = begin_cell();
     b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
     b = b.store_int(false, 1);
-    b = $Draw$init$_store(b, ($pool_master, $reserve, $period));
+    b = $Draw$init$_store(b, ($pool_master, $prize_reserve, $period));
     return (mine, b.end_cell());
 }
 

@@ -16,26 +16,8 @@ slice __tact_verify_address(slice address) inline {
     return (cs, __tact_verify_address(raw));
 }
 
-(slice, slice) __tact_load_address_opt(slice cs) inline {
-    slice raw = cs~load_msg_addr();
-    if (raw.preload_uint(2) != 0) {
-        return (cs, __tact_verify_address(raw));
-    } else {
-        return (cs, null());
-    }
-}
-
 builder __tact_store_address(builder b, slice address) inline {
     return b.store_slice(__tact_verify_address(address));
-}
-
-builder __tact_store_address_opt(builder b, slice address) inline {
-    if (null?(address)) {
-        b = b.store_uint(0, 2);
-        return b;
-    } else {
-        return __tact_store_address(b, address);
-    }
 }
 
 slice __tact_create_address(int chain, int hash) inline {
@@ -122,19 +104,6 @@ forall X0, X1 -> tuple __tact_tuple_create_2((X0, X1) v) asm "2 TUPLE";
 
 forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm "2 UNTUPLE";
 
-cell $global_emptyCell() impure inline {
-    return end_cell(begin_cell());
-}
-
-slice $Cell$_fun_asSlice(cell $self) impure inline {
-    var ($self) = $self;
-    return begin_parse($self);
-}
-
-slice $global_emptySlice() impure inline {
-    return $Cell$_fun_asSlice($global_emptyCell());
-}
-
 int $global_randomInt() impure inline {
     __tact_prepare_random();
     return random();
@@ -188,8 +157,8 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
     send_raw_message($c, $params'mode);
 }
 
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_forward((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
-    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_forward((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
+    var (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -205,15 +174,9 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
         if (($balanceBeforeMessage < 100000000)) {
             raw_reserve(100000000, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+            return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
-}
-
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_notify((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, cell $body) impure inline {
-    var (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)) = $self;
-    ($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve)~$Draw$_fun_forward(__tact_context_get_sender(), $body, false, null());
-    return (($self'active, $self'pool_master, $self'period, $self'jetton_wallet, $self'start, $self'end, $self'prize_amount, $self'winning_number, $self'prize_percentage, $self'deadline, $self'avail_prize_amount, $self'reserve), ());
+    return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage), ());
 }

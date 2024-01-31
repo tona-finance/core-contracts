@@ -67,8 +67,5 @@
     "sources/**/*",
     "output",
     "scripts/**/*",
-    "mock/sources/**/*",
-    "mock/output",
-    "mock/scripts/**/*"
   ]
 }

@@ -20,36 +20,35 @@
 
 ;;
 ;; Type: ClaimPrizeInternal
-;; Header: 0x579ddb5b
-;; TLB: claim_prize_internal#579ddb5b query_id:uint64 user:address pool_account:address pick_payload:remainder<slice> = ClaimPrizeInternal
+;; Header: 0xaad107a3
+;; TLB: claim_prize_internal#aad107a3 user:address pool_account:address pick_payload:remainder<slice> = ClaimPrizeInternal
 ;;
 
-builder $ClaimPrizeInternal$_store(builder build_0, (int, slice, slice, slice) v) inline {
-    var (v'query_id, v'user, v'pool_account, v'pick_payload) = v;
-    build_0 = store_uint(build_0, 1469963099, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
+builder $ClaimPrizeInternal$_store(builder build_0, (slice, slice, slice) v) inline {
+    var (v'user, v'pool_account, v'pick_payload) = v;
+    build_0 = store_uint(build_0, 2865825699, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = __tact_store_address(build_0, v'pool_account);
     build_0 = build_0.store_slice(v'pick_payload);
     return build_0;
 }
 
-cell $ClaimPrizeInternal$_store_cell((int, slice, slice, slice) v) inline {
+cell $ClaimPrizeInternal$_store_cell((slice, slice, slice) v) inline {
     return $ClaimPrizeInternal$_store(begin_cell(), v).end_cell();
 }
 
-((int, slice, slice, slice)) $ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload(int query_id, slice user, slice pool_account, slice pick_payload) inline {
-    return (query_id, user, pool_account, pick_payload);
+((slice, slice, slice)) $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload(slice user, slice pool_account, slice pick_payload) inline {
+    return (user, pool_account, pick_payload);
 }
 
 ;;
-;; Type: InitTicketInternal2
-;; Header: 0x358ded52
-;; TLB: init_ticket_internal2#358ded52 draw_avg_balance:coins user_avg_balance:coins = InitTicketInternal2
+;; Type: InitTicketInternal
+;; Header: 0xb10fd50e
+;; TLB: init_ticket_internal#b10fd50e draw_avg_balance:coins user_avg_balance:coins = InitTicketInternal
 ;;
 
-(slice, ((int, int))) $InitTicketInternal2$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 898493778);
+(slice, ((int, int))) $InitTicketInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2970604814);
     var v'draw_avg_balance = sc_0~load_coins();
     var v'user_avg_balance = sc_0~load_coins();
     return (sc_0, (v'draw_avg_balance, v'user_avg_balance));
@@ -70,54 +69,57 @@ cell $ClaimPrizeInternal$_store_cell((int, slice, slice, slice) v) inline {
 
 ;;
 ;; Type: ClaimPrize
-;; Header: 0x004f88d8
-;; TLB: claim_prize#004f88d8 query_id:uint64 index_payload:remainder<slice> = ClaimPrize
+;; Header: 0xbbc4b04f
+;; TLB: claim_prize#bbc4b04f index_payload:remainder<slice> = ClaimPrize
 ;;
 
-(slice, ((int, slice))) $ClaimPrize$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 5212376);
-    var v'query_id = sc_0~load_uint(64);
+(slice, ((slice))) $ClaimPrize$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3150229583);
     var v'index_payload = sc_0;
-    return (sc_0, (v'query_id, v'index_payload));
+    return (sc_0, (v'index_payload));
 }
 
 ;;
 ;; Type: ClaimPrizeDebt
-;; Header: 0xe61db7ab
-;; TLB: claim_prize_debt#e61db7ab query_id:uint64 amount:coins reserve:address = ClaimPrizeDebt
+;; Header: 0x771f1b42
+;; TLB: claim_prize_debt#771f1b42 amount:coins reserve:address = ClaimPrizeDebt
 ;;
 
-(slice, ((int, int, slice))) $ClaimPrizeDebt$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3860707243);
-    var v'query_id = sc_0~load_uint(64);
+(slice, ((int, slice))) $ClaimPrizeDebt$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1998527298);
     var v'amount = sc_0~load_coins();
     var v'reserve = sc_0~__tact_load_address();
-    return (sc_0, (v'query_id, v'amount, v'reserve));
+    return (sc_0, (v'amount, v'reserve));
 }
 
 ;;
 ;; Type: ClaimPrizeDebtInternal
-;; Header: 0xe00fdea0
-;; TLB: claim_prize_debt_internal#e00fdea0 query_id:uint64 user:address draw:address period:uint32 amount:coins = ClaimPrizeDebtInternal
+;; Header: 0x3dc1492c
+;; TLB: claim_prize_debt_internal#3dc1492c amount:coins user:address draw:address period:uint32 = ClaimPrizeDebtInternal
 ;;
 
-builder $ClaimPrizeDebtInternal$_store(builder build_0, (int, slice, slice, int, int) v) inline {
-    var (v'query_id, v'user, v'draw, v'period, v'amount) = v;
-    build_0 = store_uint(build_0, 3759136416, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
+builder $ClaimPrizeDebtInternal$_store(builder build_0, (int, slice, slice, int) v) inline {
+    var (v'amount, v'user, v'draw, v'period) = v;
+    build_0 = store_uint(build_0, 1036077356, 32);
+    build_0 = build_0.store_coins(v'amount);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = __tact_store_address(build_0, v'draw);
     build_0 = build_0.store_uint(v'period, 32);
-    build_0 = build_0.store_coins(v'amount);
     return build_0;
 }
 
-cell $ClaimPrizeDebtInternal$_store_cell((int, slice, slice, int, int) v) inline {
+cell $ClaimPrizeDebtInternal$_store_cell((int, slice, slice, int) v) inline {
     return $ClaimPrizeDebtInternal$_store(begin_cell(), v).end_cell();
 }
 
-((int, slice, slice, int, int)) $ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount(int query_id, slice user, slice draw, int period, int amount) inline {
-    return (query_id, user, draw, period, amount);
+(slice, ((int))) $ClaimPrizeDebtInternal$_load_bounced(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1036077356);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
+}
+
+((int, slice, slice, int)) $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period(int amount, slice user, slice draw, int period) inline {
+    return (amount, user, draw, period);
 }
 
 ;;

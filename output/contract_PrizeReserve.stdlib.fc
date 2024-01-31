@@ -82,19 +82,6 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
     return __tact_compute_contract_address(0, $s'code, $s'data);
 }
 
-cell $global_emptyCell() impure inline {
-    return end_cell(begin_cell());
-}
-
-slice $Cell$_fun_asSlice(cell $self) impure inline {
-    var ($self) = $self;
-    return begin_parse($self);
-}
-
-slice $global_emptySlice() impure inline {
-    return $Cell$_fun_asSlice($global_emptyCell());
-}
-
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline {
     var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
     builder $b = begin_cell();
@@ -138,8 +125,19 @@ slice $global_emptySlice() impure inline {
     send_raw_message($c, $params'mode);
 }
 
-((slice, slice, slice), ()) $PrizeReserve$_fun_forward((slice, slice, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
-    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
+int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline {
+    var (($self'bounced, $self'sender, $self'value, $self'raw)) = $self;
+    var (($self'bounced, $self'sender, $self'value, $self'raw)) = $self;
+    slice $sc = $self'raw;
+    $sc~__tact_load_address();
+    $sc~load_coins();
+    $sc~skip_bits(1);
+    $sc~load_coins();
+    return (($sc~load_coins() * 3) / 2);
+}
+
+((slice), ()) $PrizeReserve$_fun_forward((slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
+    var (($self'pool_master)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -148,22 +146,22 @@ slice $global_emptySlice() impure inline {
         $code = $init2'code;
         $data = $init2'data;
     }
-    if ((50000000 > 0)) {
+    if ((10000000 > 0)) {
         var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
         int $balance = __tact_my_balance();
         int $balanceBeforeMessage = ($balance - $ctx'value);
-        if (($balanceBeforeMessage < 50000000)) {
-            raw_reserve(50000000, 0);
+        if (($balanceBeforeMessage < 10000000)) {
+            raw_reserve(10000000, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
+            return (($self'pool_master), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
+    return (($self'pool_master), ());
 }
 
-((slice, slice, slice), ()) $PrizeReserve$_fun_notify((slice, slice, slice) $self, cell $body) impure inline {
-    var (($self'jetton_wallet, $self'pool_master, $self'staker)) = $self;
-    ($self'jetton_wallet, $self'pool_master, $self'staker)~$PrizeReserve$_fun_forward(__tact_context_get_sender(), $body, false, null());
-    return (($self'jetton_wallet, $self'pool_master, $self'staker), ());
+((slice), ()) $PrizeReserve$_fun_notify((slice) $self, cell $body) impure inline {
+    var (($self'pool_master)) = $self;
+    ($self'pool_master)~$PrizeReserve$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return (($self'pool_master), ());
 }

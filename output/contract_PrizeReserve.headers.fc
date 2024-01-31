@@ -51,104 +51,83 @@ builder $DeployOk$_store(builder build_0, (int) v) inline;
 ;; $DeployOk$_store_cell
 cell $DeployOk$_store_cell((int) v) inline;
 
-;; $JettonTransfer$_store
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
-
-;; $JettonTransfer$_store_cell
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
-
 ;; $ClaimPrizeDebtInternal$_load
-(slice, ((int, slice, slice, int, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline;
+(slice, ((int, slice, slice, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline;
 
 ;; $PrizeReserve$_store
-builder $PrizeReserve$_store(builder build_0, (slice, slice, slice) v) inline;
+builder $PrizeReserve$_store(builder build_0, (slice) v) inline;
 
 ;; $PrizeReserve$_load
-(slice, ((slice, slice, slice))) $PrizeReserve$_load(slice sc_0) inline;
+(slice, ((slice))) $PrizeReserve$_load(slice sc_0) inline;
 
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
 ;; $PrizeReserveData$_to_external
-(slice, slice, slice) $PrizeReserveData$_to_external(((slice, slice, slice)) v) inline;
+(slice, int) $PrizeReserveData$_to_external(((slice, int)) v) inline;
 
 ;; $PoolAccount$init$_store
-builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice, slice) v) inline;
+builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice) v) inline;
 
 ;; $Ticket$init$_store
 builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inline;
 
 ;; $PrizeReserve$init$_load
-(slice, ((slice, slice, slice, cell, cell))) $PrizeReserve$init$_load(slice sc_0) inline;
+(slice, ((slice))) $PrizeReserve$init$_load(slice sc_0) inline;
 
-;; $StateInit$_constructor_code_data
-((cell, cell)) $StateInit$_constructor_code_data(cell code, cell data) inline;
+;; $PrizeReserve$_contract_init
+(slice) $PrizeReserve$_contract_init(slice $pool_master) impure inline_ref;
 
-;; $global_get_jetton_wallet_init
-(cell, cell) $global_get_jetton_wallet_init(slice $owner, slice $master, cell $code, cell $system) impure inline;
+;; $PrizeReserve$_contract_load
+(slice) $PrizeReserve$_contract_load() impure inline_ref;
+
+;; $PrizeReserve$_contract_store
+() $PrizeReserve$_contract_store((slice) v) impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
 
-;; $global_get_jetton_wallet_address
-slice $global_get_jetton_wallet_address(slice $owner, slice $master, cell $code, cell $system) impure inline;
-
-;; $PrizeReserve$_contract_init
-(slice, slice, slice) $PrizeReserve$_contract_init(slice $pool_master, slice $staker, slice $jetton_master, cell $jetton_wallet_code, cell $jetton_system) impure inline_ref;
-
-;; $PrizeReserve$_contract_load
-(slice, slice, slice) $PrizeReserve$_contract_load() impure inline_ref;
-
-;; $PrizeReserve$_contract_store
-() $PrizeReserve$_contract_store((slice, slice, slice) v) impure inline;
-
-;; $global_emptyCell
-cell $global_emptyCell() impure inline;
-
-;; $Cell$_fun_asSlice
-slice $Cell$_fun_asSlice(cell $self) impure inline;
-
-;; $global_emptySlice
-slice $global_emptySlice() impure inline;
-
 ;; $global_send
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline;
+
+;; $Context$_fun_readForwardFee
+int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
-;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
-
 ;; $PoolAccount$_init_child
-(cell, cell) $PoolAccount$_init_child(cell sys', slice $owner, slice $master, slice $staker, slice $reserve) inline;
+(cell, cell) $PoolAccount$_init_child(cell sys', slice $owner, slice $master, slice $prize_reserve) inline;
 
 ;; $Ticket$_init_child
 (cell, cell) $Ticket$_init_child(cell sys', slice $owner, slice $pool_account, slice $draw, int $period) inline;
 
 ;; $PrizeReserve$_fun__get_pool_account_address
-((slice, slice, slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice, slice, slice) $self, slice $user) impure inline;
+((slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice) $self, slice $user) impure inline;
 
 ;; $PrizeReserve$_fun__get_ticket_init
-((slice, slice, slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
+((slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice) $self, slice $user, slice $draw, int $period) impure inline;
 
-;; $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker
-((slice, slice, slice)) $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker(slice jetton_wallet, slice pool_master, slice staker) inline;
+;; $PrizeReserveData$_constructor_pool_master_balance
+((slice, int)) $PrizeReserveData$_constructor_pool_master_balance(slice pool_master, int balance) inline;
 
 ;; $PrizeReserve$_fun_get_core_data
-((slice, slice, slice), (slice, slice, slice)) $PrizeReserve$_fun_get_core_data((slice, slice, slice) $self) impure inline;
+((slice), (slice, int)) $PrizeReserve$_fun_get_core_data((slice) $self) impure inline;
 
 ;; $PrizeReserve$_fun_forward
-((slice, slice, slice), ()) $PrizeReserve$_fun_forward((slice, slice, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
+((slice), ()) $PrizeReserve$_fun_forward((slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $PrizeReserve$_fun_notify
-((slice, slice, slice), ()) $PrizeReserve$_fun_notify((slice, slice, slice) $self, cell $body) impure inline;
+((slice), ()) $PrizeReserve$_fun_notify((slice) $self, cell $body) impure inline;
 
 ;; $PrizeReserve$_fun__get_ticket_address
-((slice, slice, slice), slice) $PrizeReserve$_fun__get_ticket_address((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
+((slice), slice) $PrizeReserve$_fun__get_ticket_address((slice) $self, slice $user, slice $draw, int $period) impure inline;
 
 ;; $PrizeReserve$_fun_require_ticket
-((slice, slice, slice), ()) $PrizeReserve$_fun_require_ticket((slice, slice, slice) $self, slice $user, slice $draw, int $period) impure inline;
+((slice), ()) $PrizeReserve$_fun_require_ticket((slice) $self, slice $user, slice $draw, int $period) impure inline;
+
+;; $SendParameters$_constructor_bounce_to_value_mode
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline;
 
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int queryId) inline;

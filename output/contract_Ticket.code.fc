@@ -100,7 +100,7 @@
 ;; Receivers of a Contract Ticket
 ;;
 
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_InitTicketInternal2((slice, int, slice, slice, int, int, cell, int) $self, (int, int) $msg) impure inline {
+(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_InitTicketInternal((slice, int, slice, slice, int, int, cell, int) $self, (int, int) $msg) impure inline {
     var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
     var ($msg'draw_avg_balance, $msg'user_avg_balance) = $msg;
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_inactive();
@@ -111,28 +111,28 @@
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
 }
 
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_ClaimPrize((slice, int, slice, slice, int, int, cell, int) $self, (int, slice) $msg) impure inline {
+(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_ClaimPrize((slice, int, slice, slice, int, int, cell, int) $self, (slice) $msg) impure inline {
     var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
-    var ($msg'query_id, $msg'index_payload) = $msg;
+    var ($msg'index_payload) = $msg;
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_active();
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_requireOwner();
     int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_msg_value(__tact_context_get(), 1000000000);
     throw_unless(2805, ($rest_value >= 0));
     slice $pick_payload = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_payload($msg'index_payload);
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload($msg'query_id, $self'owner, $self'pool_account, $pick_payload)), false, null());
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_pick_payload($self'owner, $self'pool_account, $pick_payload)), false, null());
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
 }
 
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_ClaimPrizeDebt((slice, int, slice, slice, int, int, cell, int) $self, (int, int, slice) $msg) impure inline {
+(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_ClaimPrizeDebt((slice, int, slice, slice, int, int, cell, int) $self, (int, slice) $msg) impure inline {
     var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
-    var ($msg'query_id, $msg'amount, $msg'reserve) = $msg;
+    var ($msg'amount, $msg'reserve) = $msg;
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_active();
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_requireOwner();
     throw_unless(16960, ($msg'amount <= $self'debt_amount));
     int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_msg_value(__tact_context_get(), 100000000);
     throw_unless(2805, ($rest_value >= 0));
     $self'debt_amount = ($self'debt_amount - $msg'amount);
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($msg'reserve, $ClaimPrizeDebtInternal$_store_cell($ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount($msg'query_id, $self'owner, $self'draw, $self'period, $msg'amount)), false, null());
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($msg'reserve, $ClaimPrizeDebtInternal$_store_cell($ClaimPrizeDebtInternal$_constructor_amount_user_draw_period($msg'amount, $self'owner, $self'draw, $self'period)), true, null());
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
 }
 
@@ -143,6 +143,13 @@
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_draw();
     $self'debt_amount = ($self'debt_amount + $msg'amount);
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($msg'user, null(), false, null());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+}
+
+(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal((slice, int, slice, slice, int, int, cell, int) $self, (int) $src) impure inline {
+    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
+    var ($src'amount) = $src;
+    $self'debt_amount = ($self'debt_amount + $src'amount);
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
 }
 
@@ -181,7 +188,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://Qmd1fceXhDwvxv6c9bc8qwvFt7Y9heVdyb7qLoxbZFeS4X";
+    return "ipfs://QmdTzjnPpQakttYoheVjVkFdN8nzPJH3GwSVt82ooSUh5V";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -195,6 +202,23 @@ _ lazy_deployment_completed() method_id {
 ((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_contract_router_internal((slice, int, slice, slice, int, int, cell, int) self, int msg_bounced, slice in_msg) impure inline_ref {
     ;; Handle bounced messages
     if (msg_bounced) {
+        
+        ;; Skip 0xFFFFFFFF
+        in_msg~skip_bits(32);
+        
+        ;; Parse op
+        int op = 0;
+        if (slice_bits(in_msg) >= 32) {
+            op = in_msg.preload_uint(32);
+        }
+        
+        ;; Bounced handler for ClaimPrizeDebtInternal message
+        if (op == 1036077356) {
+            var msg = in_msg~$ClaimPrizeDebtInternal$_load_bounced();
+            self~$Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal(msg);
+            return (self, true);
+        }
+        
         return (self, true);
     }
     
@@ -205,22 +229,22 @@ _ lazy_deployment_completed() method_id {
     }
     
     
-    ;; Receive InitTicketInternal2 message
-    if (op == 898493778) {
-        var msg = in_msg~$InitTicketInternal2$_load();
-        self~$Ticket$_internal_binary_InitTicketInternal2(msg);
+    ;; Receive InitTicketInternal message
+    if (op == 2970604814) {
+        var msg = in_msg~$InitTicketInternal$_load();
+        self~$Ticket$_internal_binary_InitTicketInternal(msg);
         return (self, true);
     }
     
     ;; Receive ClaimPrize message
-    if (op == 5212376) {
+    if (op == 3150229583) {
         var msg = in_msg~$ClaimPrize$_load();
         self~$Ticket$_internal_binary_ClaimPrize(msg);
         return (self, true);
     }
     
     ;; Receive ClaimPrizeDebt message
-    if (op == 3860707243) {
+    if (op == 1998527298) {
         var msg = in_msg~$ClaimPrizeDebt$_load();
         self~$Ticket$_internal_binary_ClaimPrizeDebt(msg);
         return (self, true);

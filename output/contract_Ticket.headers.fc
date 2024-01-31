@@ -37,28 +37,31 @@ int __tact_dict_get_int_int(cell d, int kl, int k, int vl) inline;
 int __tact_slice_eq_bits(slice a, slice b) inline;
 
 ;; $ClaimPrizeInternal$_store
-builder $ClaimPrizeInternal$_store(builder build_0, (int, slice, slice, slice) v) inline;
+builder $ClaimPrizeInternal$_store(builder build_0, (slice, slice, slice) v) inline;
 
 ;; $ClaimPrizeInternal$_store_cell
-cell $ClaimPrizeInternal$_store_cell((int, slice, slice, slice) v) inline;
+cell $ClaimPrizeInternal$_store_cell((slice, slice, slice) v) inline;
 
-;; $InitTicketInternal2$_load
-(slice, ((int, int))) $InitTicketInternal2$_load(slice sc_0) inline;
+;; $InitTicketInternal$_load
+(slice, ((int, int))) $InitTicketInternal$_load(slice sc_0) inline;
 
 ;; $PayPrizeDebtInternal$_load
 (slice, ((slice, int))) $PayPrizeDebtInternal$_load(slice sc_0) inline;
 
 ;; $ClaimPrize$_load
-(slice, ((int, slice))) $ClaimPrize$_load(slice sc_0) inline;
+(slice, ((slice))) $ClaimPrize$_load(slice sc_0) inline;
 
 ;; $ClaimPrizeDebt$_load
-(slice, ((int, int, slice))) $ClaimPrizeDebt$_load(slice sc_0) inline;
+(slice, ((int, slice))) $ClaimPrizeDebt$_load(slice sc_0) inline;
 
 ;; $ClaimPrizeDebtInternal$_store
-builder $ClaimPrizeDebtInternal$_store(builder build_0, (int, slice, slice, int, int) v) inline;
+builder $ClaimPrizeDebtInternal$_store(builder build_0, (int, slice, slice, int) v) inline;
 
 ;; $ClaimPrizeDebtInternal$_store_cell
-cell $ClaimPrizeDebtInternal$_store_cell((int, slice, slice, int, int) v) inline;
+cell $ClaimPrizeDebtInternal$_store_cell((int, slice, slice, int) v) inline;
+
+;; $ClaimPrizeDebtInternal$_load_bounced
+(slice, ((int))) $ClaimPrizeDebtInternal$_load_bounced(slice sc_0) inline;
 
 ;; $Ticket$_store
 builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, int, cell, int) v) inline;
@@ -132,8 +135,8 @@ slice $Builder$_fun_asSlice(builder $self) impure inline;
 ;; $Ticket$_fun_msg_value
 ((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_msg_value((slice, int, slice, slice, int, int, cell, int) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline;
 
-;; $ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload
-((int, slice, slice, slice)) $ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload(int query_id, slice user, slice pool_account, slice pick_payload) inline;
+;; $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload
+((slice, slice, slice)) $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload(slice user, slice pool_account, slice pick_payload) inline;
 
-;; $ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount
-((int, slice, slice, int, int)) $ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount(int query_id, slice user, slice draw, int period, int amount) inline;
+;; $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period
+((int, slice, slice, int)) $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period(int amount, slice user, slice draw, int period) inline;

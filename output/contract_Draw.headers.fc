@@ -9,14 +9,8 @@ slice __tact_verify_address(slice address) inline;
 ;; __tact_load_address
 (slice, slice) __tact_load_address(slice cs) inline;
 
-;; __tact_load_address_opt
-(slice, slice) __tact_load_address_opt(slice cs) inline;
-
 ;; __tact_store_address
 builder __tact_store_address(builder b, slice address) inline;
-
-;; __tact_store_address_opt
-builder __tact_store_address_opt(builder b, slice address) inline;
 
 ;; __tact_create_address
 slice __tact_create_address(int chain, int hash) inline;
@@ -63,29 +57,23 @@ builder $Twab$_store(builder build_0, (int, int) v) inline;
 ;; $Twab$_load
 (slice, ((int, int))) $Twab$_load(slice sc_0) inline;
 
-;; $JettonNotification$_load
-(slice, ((int, int, slice, slice))) $JettonNotification$_load(slice sc_0) inline;
+;; $PrepareInitTicket$_store
+builder $PrepareInitTicket$_store(builder build_0, (int, int, int, int) v) inline;
 
-;; $JettonTransfer$_store
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref;
+;; $PrepareInitTicket$_store_cell
+cell $PrepareInitTicket$_store_cell((int, int, int, int) v) inline;
 
-;; $JettonTransfer$_store_cell
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline;
+;; $InitDraw$_load
+(slice, ((int, int, slice))) $InitDraw$_load(slice sc_0) inline;
 
-;; $InitTicketInternal1$_store
-builder $InitTicketInternal1$_store(builder build_0, (int, int, int, int) v) inline;
-
-;; $InitTicketInternal1$_store_cell
-cell $InitTicketInternal1$_store_cell((int, int, int, int) v) inline;
-
-;; $InitDrawInternal$_load
-(slice, ((slice, slice, int, int))) $InitDrawInternal$_load(slice sc_0) inline;
+;; $OpenDraw$_load
+(slice, ((int, int, int, slice))) $OpenDraw$_load(slice sc_0) inline;
 
 ;; $InitTicket$_load
 (slice, ((slice))) $InitTicket$_load(slice sc_0) inline;
 
 ;; $ClaimPrizeInternal$_load
-(slice, ((int, slice, slice, slice))) $ClaimPrizeInternal$_load(slice sc_0) inline;
+(slice, ((slice, slice, slice))) $ClaimPrizeInternal$_load(slice sc_0) inline;
 
 ;; $PayPrizeDebtInternal$_store
 builder $PayPrizeDebtInternal$_store(builder build_0, (slice, int) v) inline;
@@ -97,16 +85,13 @@ cell $PayPrizeDebtInternal$_store_cell((slice, int) v) inline;
 ((int, int)) $Twab$_not_null(tuple v) inline;
 
 ;; $Draw$_store
-builder $Draw$_store(builder build_0, (int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) v) inline;
+builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int, int, int, int, cell) v) inline;
 
 ;; $Twab$_as_optional
 tuple $Twab$_as_optional((int, int) v) inline;
 
 ;; $Draw$_load
-(slice, ((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice))) $Draw$_load(slice sc_0) inline;
-
-;; $StateInit$_get_code
-_ $StateInit$_get_code((cell, cell) v) inline;
+(slice, ((int, slice, slice, int, tuple, tuple, int, int, int, int, cell))) $Draw$_load(slice sc_0) inline;
 
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
@@ -114,8 +99,11 @@ _ $StateInit$_get_code((cell, cell) v) inline;
 ;; $Twab$_to_tuple
 tuple $Twab$_to_tuple(((int, int)) v) inline;
 
+;; $Twab$_to_opt_tuple
+tuple $Twab$_to_opt_tuple(tuple v) inline;
+
 ;; $DrawData$_to_external
-(int, slice, slice, slice, int, tuple, tuple, int, int, int, int) $DrawData$_to_external(((int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) v) inline;
+(int, slice, slice, int, tuple, tuple, int, int, int, int) $DrawData$_to_external(((int, slice, slice, int, tuple, tuple, int, int, int, int)) v) inline;
 
 ;; $Draw$init$_load
 (slice, ((slice, slice, int))) $Draw$init$_load(slice sc_0) inline;
@@ -124,22 +112,13 @@ tuple $Twab$_to_tuple(((int, int)) v) inline;
 builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inline;
 
 ;; $Draw$_contract_init
-(int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $Draw$_contract_init(slice $pool_master, slice $reserve, int $period) impure inline_ref;
+(int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $Draw$_contract_init(slice $pool_master, slice $prize_reserve, int $period) impure inline_ref;
 
 ;; $Draw$_contract_load
-(int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $Draw$_contract_load() impure inline_ref;
+(int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $Draw$_contract_load() impure inline_ref;
 
 ;; $Draw$_contract_store
-() $Draw$_contract_store((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) v) impure inline;
-
-;; $global_emptyCell
-cell $global_emptyCell() impure inline;
-
-;; $Cell$_fun_asSlice
-slice $Cell$_fun_asSlice(cell $self) impure inline;
-
-;; $global_emptySlice
-slice $global_emptySlice() impure inline;
+() $Draw$_contract_store((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) v) impure inline;
 
 ;; $global_randomInt
 int $global_randomInt() impure inline;
@@ -156,98 +135,68 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $global_average_balance
 int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 
-;; $Slice$_fun_loadTimestamp
-(slice, int) $Slice$_fun_loadTimestamp(slice $self) impure inline;
-
-;; $Slice$_fun_loadTwab
-(slice, (int, int)) $Slice$_fun_loadTwab(slice $self) impure inline;
-
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
-
-;; $SendParameters$_constructor_bounce_to_value_mode_body
-((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
-
-;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
-((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;
-
-;; $Draw$_fun_activate_beacon
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_beacon((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab) impure inline;
-
-;; $Draw$_fun_activate_distributor
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate_distributor((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $prize_amount, int $deadline) impure inline;
-
-;; $Draw$_fun_activate
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_activate((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, int) $twab, int $prize_amount, int $deadline) impure inline;
-
-;; $Draw$_fun_on_jetton_from_pool_master
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_on_jetton_from_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $amount, slice $payload) impure inline;
-
-;; $Draw$_fun_require_over
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_over((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
 
 ;; $Ticket$_init_child
 (cell, cell) $Ticket$_init_child(cell sys', slice $owner, slice $pool_account, slice $draw, int $period) inline;
 
 ;; $Draw$_fun__get_ticket_init
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), (cell, cell)) $Draw$_fun__get_ticket_init((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), (cell, cell)) $Draw$_fun__get_ticket_init((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $user, slice $pool_account) impure inline;
 
-;; $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount
-((int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) $DrawData$_constructor_active_pool_master_prize_reserve_jetton_wallet_period_start_end_prize_amount_winning_number_deadline_avail_prize_amount(int active, slice pool_master, slice prize_reserve, slice jetton_wallet, int period, (int, int) start, (int, int) end, int prize_amount, int winning_number, int deadline, int avail_prize_amount) inline;
+;; $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline
+((int, slice, slice, int, tuple, tuple, int, int, int, int)) $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline(int active, slice pool_master, slice prize_reserve, int period, tuple start, tuple end, int prize_amount, int avail_prize_amount, int winning_number, int deadline) inline;
 
 ;; $Draw$_fun_get_core_data
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), (int, slice, slice, slice, int, (int, int), (int, int), int, int, int, int)) $Draw$_fun_get_core_data((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), (int, slice, slice, int, tuple, tuple, int, int, int, int)) $Draw$_fun_get_core_data((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self) impure inline;
 
 ;; $Draw$_fun_get_prize_percentage
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_get_prize_percentage((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline;
-
-;; $Draw$_fun_get_ticket_code
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), cell) $Draw$_fun_get_ticket_code((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
-
-;; $Draw$_fun__get_ticket_address
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun__get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
-
-;; $Draw$_fun_get_ticket_address
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), slice) $Draw$_fun_get_ticket_address((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), int) $Draw$_fun_get_prize_percentage((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, int $tier) impure inline;
 
 ;; $Draw$_fun_forward
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_forward((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
-
-;; $Draw$_fun_notify
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_notify((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, cell $body) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_forward((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $Draw$_fun_prizes_per_tier
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_prizes_per_tier((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), int) $Draw$_fun_prizes_per_tier((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, int $tier) impure inline;
 
 ;; $Draw$_fun_prize_amount_per_pick
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_prize_amount_per_pick((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $tier) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), int) $Draw$_fun_prize_amount_per_pick((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, int $tier) impure inline;
 
 ;; $Draw$_fun_compute_tier
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_compute_tier((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, int $pick_number) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), int) $Draw$_fun_compute_tier((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, int $pick_number) impure inline;
 
 ;; $Draw$_fun_compute_prize_amount
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_compute_prize_amount((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $pick_payload) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), int) $Draw$_fun_compute_prize_amount((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $pick_payload) impure inline;
+
+;; $Draw$_fun__get_ticket_address
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), slice) $Draw$_fun__get_ticket_address((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $user, slice $pool_account) impure inline;
 
 ;; $Draw$_fun_require_ticket
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_ticket((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, slice $user, slice $pool_account) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_require_ticket((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $user, slice $pool_account) impure inline;
 
 ;; $Draw$_fun_require_not_over
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_not_over((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_require_not_over((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self) impure inline;
+
+;; $Draw$_fun_native_reserve
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_native_reserve((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self) impure inline;
 
 ;; $Draw$_fun_require_active
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_active((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_require_active((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self) impure inline;
+
+;; $Draw$_fun_require_over
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_require_over((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self) impure inline;
 
 ;; $Draw$_fun_require_pool_master
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_pool_master((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_require_pool_master((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self) impure inline;
 
-;; $Draw$_fun_require_jetton_wallet
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), ()) $Draw$_fun_require_jetton_wallet((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self) impure inline;
+;; $SendParameters$_constructor_bounce_to_value_mode
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline;
 
-;; $Draw$_fun_msg_value
-((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice), int) $Draw$_fun_msg_value((int, slice, int, slice, tuple, tuple, int, int, cell, int, int, slice) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline;
+;; $SendParameters$_constructor_bounce_to_value_mode_body
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
 ;; $PayPrizeDebtInternal$_constructor_user_amount
 ((slice, int)) $PayPrizeDebtInternal$_constructor_user_amount(slice user, int amount) inline;
 
-;; $InitTicketInternal1$_constructor_period_start_end_avg_balance
-((int, int, int, int)) $InitTicketInternal1$_constructor_period_start_end_avg_balance(int period, int start, int end, int avg_balance) inline;
+;; $PrepareInitTicket$_constructor_period_start_end_avg_balance
+((int, int, int, int)) $PrepareInitTicket$_constructor_period_start_end_avg_balance(int period, int start, int end, int avg_balance) inline;

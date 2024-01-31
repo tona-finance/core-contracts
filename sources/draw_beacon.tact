@@ -3,30 +3,71 @@ import "./messages";
 
 trait DrawBeacon {
 
+    const TOTAL_PICKS: Int = 1 << (4 * 5);
+    const EXPIRATION_INTERVAL: Int = 60 * 60 * 24 * 14; // 14 days
+
     active: Bool;
     pool_master: Address;
+    prize_reserve: Address;
     period: Int;
-    jetton_wallet: Address?;
     start: Twab?;
     end: Twab?;
+    prize_amount: Int;
+    avail_prize_amount: Int;
+    winning_number: Int;
+    deadline: Int;
 
-    receive(msg: InitDrawInternal) {
+    receive("send to reserve") {
+        self.require_active();
+        self.require_over();
+
+        self.avail_prize_amount = 0;
+
+        self.native_reserve();
+        send(SendParameters {
+            bounce: false,
+            to: self.prize_reserve,
+            value: 0,
+            mode: SendRemainingBalance
+        });
+    }
+
+    receive(msg: InitDraw) {
         self.require_pool_master();
 
-        self.jetton_wallet = msg.jetton_wallet;
         self.start = Twab {
             timestamp: msg.twab_timestamp,
             amount: msg.twab_amount
         };
-
         // refund gas
-        self.forward(msg.deployer, null, false, null);
+        self.forward(msg.refund_address, null, false, null);
+    }
+
+    receive(msg: OpenDraw) {
+        self.require_pool_master();
+
+        self.active = true;
+        self.end = Twab {
+            timestamp: msg.twab_timestamp,
+            amount: msg.twab_amount
+        };
+        self.prize_amount = msg.prize_amount;
+        self.avail_prize_amount = msg.prize_amount;
+        self.winning_number = randomInt() % self.TOTAL_PICKS;
+        self.deadline = now() + self.EXPIRATION_INTERVAL;
+
+        self.native_reserve();
+        // refund gas
+        send(SendParameters {
+            bounce: false,
+            to: msg.refund_address,
+            value: 0,
+            mode: SendRemainingBalance + SendIgnoreErrors
+        });
     }
 
     receive(msg: InitTicket) {
         self.require_active();
-
-        // note: no need to check gas
 
         let start: Twab = self.start!!;
         let end: Twab = self.end!!;
@@ -34,7 +75,7 @@ trait DrawBeacon {
 
         self.forward(
             msg.pool_account,
-            InitTicketInternal1 {
+            PrepareInitTicket {
                 period: self.period,
                 start: start.timestamp,
                 end: end.timestamp,
@@ -45,19 +86,19 @@ trait DrawBeacon {
         );
     }
 
-    inline fun activate_beacon(twab: Twab) {
-        self.end = twab;
+    inline fun native_reserve() {
+        nativeReserve(self.avail_prize_amount + self.storageReserve, 0);
     }
 
     inline fun require_active() {
         require(self.active, "Draw is inactive");
     }
 
-    inline fun require_pool_master() {
-        require(sender() == self.pool_master, "Invalid sender");
+    inline fun require_over() {
+        require(now() >= self.deadline, "Draw is not over");
     }
 
-    inline fun require_jetton_wallet() {
-        require(sender() == self.jetton_wallet!!, "Invalid sender");
+    inline fun require_pool_master() {
+        require(sender() == self.pool_master, "Only from pool master");
     }
 }

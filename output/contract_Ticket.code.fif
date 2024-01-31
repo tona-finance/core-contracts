@@ -12,12 +12,13 @@ PROGRAM{
   DECLPROC __tact_slice_eq_bits
   DECLPROC $ClaimPrizeInternal$_store
   DECLPROC $ClaimPrizeInternal$_store_cell
-  DECLPROC $InitTicketInternal2$_load
+  DECLPROC $InitTicketInternal$_load
   DECLPROC $PayPrizeDebtInternal$_load
   DECLPROC $ClaimPrize$_load
   DECLPROC $ClaimPrizeDebt$_load
   DECLPROC $ClaimPrizeDebtInternal$_store
   DECLPROC $ClaimPrizeDebtInternal$_store_cell
+  DECLPROC $ClaimPrizeDebtInternal$_load_bounced
   DECLPROC $Ticket$_store
   DECLPROC $Ticket$_load
   DECLPROC $StateInit$_not_null
@@ -42,12 +43,13 @@ PROGRAM{
   DECLPROC $Ticket$_fun_requireOwner
   DECLPROC $Ticket$_fun_owner
   DECLPROC $Ticket$_fun_msg_value
-  DECLPROC $ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload
-  DECLPROC $ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount
-  DECLPROC $Ticket$_internal_binary_InitTicketInternal2
+  DECLPROC $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload
+  DECLPROC $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period
+  DECLPROC $Ticket$_internal_binary_InitTicketInternal
   DECLPROC $Ticket$_internal_binary_ClaimPrize
   DECLPROC $Ticket$_internal_binary_ClaimPrizeDebt
   DECLPROC $Ticket$_internal_binary_PayPrizeDebtInternal
+  DECLPROC $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal
   119856 DECLMETHOD %get_core_data
   72805 DECLMETHOD %get_index_status
   83229 DECLMETHOD %owner
@@ -138,12 +140,10 @@ PROGRAM{
     SDEQ
   }>
   $ClaimPrizeInternal$_store PROCINLINE:<{
-    1469963099 PUSHINT
-    s0 s5 XCHG2
+    2865825699 PUSHINT
+    s0 s4 XCHG2
     32 STU
-    s1 s3 XCHG
-    64 STU
-    SWAP
+    ROT
     __tact_store_address INLINECALLDICT
     SWAP
     __tact_store_address INLINECALLDICT
@@ -152,14 +152,14 @@ PROGRAM{
   }>
   $ClaimPrizeInternal$_store_cell PROCINLINE:<{
     NEWC
-    4 -ROLL
+    3 -ROLL
     $ClaimPrizeInternal$_store INLINECALLDICT
     ENDC
   }>
-  $InitTicketInternal2$_load PROCINLINE:<{
+  $InitTicketInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
-    898493778 PUSHINT
+    2970604814 PUSHINT
     EQUAL
     129 THROWIFNOT
     LDGRAMS
@@ -180,42 +180,47 @@ PROGRAM{
   $ClaimPrize$_load PROCINLINE:<{
     32 LDU
     SWAP
-    5212376 PUSHINT
+    3150229583 PUSHINT
     EQUAL
     129 THROWIFNOT
-    64 LDU
-    TUCK
+    DUP
   }>
   $ClaimPrizeDebt$_load PROCINLINE:<{
     32 LDU
     SWAP
-    3860707243 PUSHINT
+    1998527298 PUSHINT
     EQUAL
     129 THROWIFNOT
-    64 LDU
     LDGRAMS
     __tact_load_address INLINECALLDICT
-    s3 s3 s0 XCHG3
+    s1 s2 XCHG
   }>
   $ClaimPrizeDebtInternal$_store PROCINLINE:<{
-    3759136416 PUSHINT
-    s0 s6 XCHG2
+    1036077356 PUSHINT
+    s0 s5 XCHG2
     32 STU
-    s1 s4 XCHG
-    64 STU
-    ROT
-    __tact_store_address INLINECALLDICT
-    SWAP
-    __tact_store_address INLINECALLDICT
-    32 STU
-    SWAP
+    s0 s3 XCHG2
     STGRAMS
+    SWAP
+    __tact_store_address INLINECALLDICT
+    SWAP
+    __tact_store_address INLINECALLDICT
+    32 STU
   }>
   $ClaimPrizeDebtInternal$_store_cell PROCINLINE:<{
     NEWC
-    5 -ROLL
+    4 -ROLL
     $ClaimPrizeDebtInternal$_store INLINECALLDICT
     ENDC
+  }>
+  $ClaimPrizeDebtInternal$_load_bounced PROCINLINE:<{
+    32 LDU
+    SWAP
+    1036077356 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDGRAMS
+    SWAP
   }>
   $Ticket$_store PROCINLINE:<{
     s8 s7 XCHG2
@@ -601,11 +606,11 @@ PROGRAM{
     ADD
     SUB
   }>
-  $ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload PROCINLINE:<{
+  $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload PROCINLINE:<{
   }>
-  $ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount PROCINLINE:<{
+  $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period PROCINLINE:<{
   }>
-  $Ticket$_internal_binary_InitTicketInternal2 PROCINLINE:<{
+  $Ticket$_internal_binary_InitTicketInternal PROCINLINE:<{
     8 2 BLKSWAP
     $Ticket$_fun_require_inactive INLINECALLDICT
     $Ticket$_fun_require_pool_account INLINECALLDICT
@@ -628,7 +633,7 @@ PROGRAM{
     $Ticket$_fun_forward INLINECALLDICT
   }>
   $Ticket$_internal_binary_ClaimPrize PROCINLINE:<{
-    8 2 BLKSWAP
+    8 -ROLL
     $Ticket$_fun_require_active INLINECALLDICT
     $Ticket$_fun_requireOwner INLINECALLDICT
     __tact_context_get INLINECALLDICT
@@ -640,33 +645,20 @@ PROGRAM{
     THROWANYIFNOT
     8 ROLL
     $Ticket$_fun_compute_pick_payload INLINECALLDICT
-    s9 s8 s(-1) XCPUXC
-    s7 s(-1) PUXC
-    $ClaimPrizeInternal$_constructor_query_id_user_pool_account_pick_payload INLINECALLDICT
+    s8 s6 s(-2) PU2XC
+    $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload INLINECALLDICT
     $ClaimPrizeInternal$_store_cell INLINECALLDICT
-    s4 PUSH
-    s8 s9 XCHG
-    s7 s8 XCHG
-    s0 s6 XCHG
-    s0 s7 XCHG
-    s4 s5 XCHG
-    s3 s4 XCHG
-    s0 s3 s3 XCHG3
+    s5 s(-1) PUXC
     FALSE
     PUSHNULL
     $Ticket$_fun_forward INLINECALLDICT
   }>
   $Ticket$_internal_binary_ClaimPrizeDebt PROCINLINE:<{
-    s7 s10 XCHG
-    s6 s9 XCHG
-    s5 s8 XCHG
-    s4 s10 XCHG
-    s3 s9 XCHG
-    s8 s10 s9 XCHG3
+    8 2 BLKSWAP
     $Ticket$_fun_require_active INLINECALLDICT
     $Ticket$_fun_requireOwner INLINECALLDICT
     16960 PUSHINT
-    s11 s1 PUSH2
+    s10 s1 PUSH2
     LEQ
     THROWANYIFNOT
     __tact_context_get INLINECALLDICT
@@ -676,19 +668,20 @@ PROGRAM{
     SWAP
     -1 GTINT
     THROWANYIFNOT
-    s10 PUSH
+    s9 PUSH
     SUB
-    s8 s7 s(-1) XCPUXC
-    s5 s4 s11 PU2XC
-    $ClaimPrizeDebtInternal$_constructor_query_id_user_draw_period_amount INLINECALLDICT
+    s9 s7 s4 XCPU2
+    s5 PUSH
+    $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period INLINECALLDICT
     $ClaimPrizeDebtInternal$_store_cell INLINECALLDICT
-    s6 s9 XCHG
-    s5 s8 XCHG
-    s4 s7 XCHG
-    s3 s6 XCHG
-    s5 s4 s0 XCHG3
-    s3 s3 s0 XCHG3
-    FALSE
+    s7 s9 XCHG
+    s6 s8 XCHG
+    s5 s7 XCHG
+    s4 s6 XCHG
+    s3 s5 XCHG
+    s4 s3 s0 XCHG3
+    s1 s2 XCHG
+    TRUE
     PUSHNULL
     $Ticket$_fun_forward INLINECALLDICT
   }>
@@ -708,6 +701,9 @@ PROGRAM{
     FALSE
     PUSHNULL
     $Ticket$_fun_forward INLINECALLDICT
+  }>
+  $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal PROCINLINE:<{
+    ADD
   }>
   %get_core_data PROC:<{
     $Ticket$_contract_load INLINECALLDICT
@@ -735,7 +731,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d643166636558684477767876366339626338717776467437593968655664796237714c6f78625a4665533458} PUSHSLICE
+    x{697066733a2f2f516d64547a6a6e507051616b7474596f6865566a566b46644e386e7a504a4833477753567438326f6f5355683556} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -746,6 +742,25 @@ PROGRAM{
   $Ticket$_contract_router_internal PROCREF:<{
     SWAP
     IFJMP:<{
+      32 PUSHINT
+      SDSKIPFIRST
+      0 PUSHINT
+      OVER
+      SBITS
+      31 GTINT
+      IF:<{
+        DROP
+        DUP
+        32 PLDU
+      }>
+      1036077356 PUSHINT
+      EQUAL
+      IFJMP:<{
+        $ClaimPrizeDebtInternal$_load_bounced INLINECALLDICT
+        NIP
+        $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal INLINECALLDICT
+        TRUE
+      }>
       DROP
       TRUE
     }>
@@ -759,32 +774,32 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    898493778 PUSHINT
+    2970604814 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
-      $InitTicketInternal2$_load INLINECALLDICT
+      $InitTicketInternal$_load INLINECALLDICT
       1 2 BLKDROP2
-      $Ticket$_internal_binary_InitTicketInternal2 INLINECALLDICT
+      $Ticket$_internal_binary_InitTicketInternal INLINECALLDICT
       TRUE
     }>
     DUP
-    5212376 PUSHINT
+    3150229583 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
       $ClaimPrize$_load INLINECALLDICT
-      1 2 BLKDROP2
+      NIP
       $Ticket$_internal_binary_ClaimPrize INLINECALLDICT
       TRUE
     }>
     DUP
-    3860707243 PUSHINT
+    1998527298 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
       $ClaimPrizeDebt$_load INLINECALLDICT
-      1 3 BLKDROP2
+      1 2 BLKDROP2
       $Ticket$_internal_binary_ClaimPrizeDebt INLINECALLDICT
       TRUE
     }>

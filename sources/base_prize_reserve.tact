@@ -4,25 +4,20 @@ import "./messages";
 
 trait BasePrizeReserve with MsgValueHelper {
 
-    jetton_wallet: Address;
+    receive() {}
 
     receive(msg: ClaimPrizeDebtInternal) {
         self.require_ticket(msg.user, msg.draw, msg.period);
 
-        self.forward(
-            self.jetton_wallet,
-            JettonTransfer {
-                query_id: msg.query_id,
-                amount: msg.amount,
-                destination: msg.user,
-                response_destination: msg.user,
-                custom_payload: null,
-                forward_ton_amount: 0,
-                forward_payload: emptySlice()
-            }.toCell(),
-            false,
-            null
-        );
+        let ctx: Context = context();
+        let fee: Int = ctx.readForwardFee() + ton("0.01");
+        nativeReserve(myBalance() - self.storageReserve - fee - msg.amount, 0);
+        send(SendParameters {
+            bounce: false,
+            to: msg.user,
+            value: msg.amount,
+            mode: SendRemainingBalance
+        });
     }
 
     inline fun require_ticket(user: Address, draw: Address, period: Int) {

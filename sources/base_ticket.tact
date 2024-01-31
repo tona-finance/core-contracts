@@ -17,7 +17,7 @@ trait BaseTicket with Ownable, MsgValueHelper {
     used_indexes: map<Int, Bool>;
     debt_amount: Int;
 
-    receive(msg: InitTicketInternal2) {
+    receive(msg: InitTicketInternal) {
         self.require_inactive();
         self.require_pool_account();
 
@@ -40,7 +40,6 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.forward(
             self.draw,
             ClaimPrizeInternal {
-                query_id: msg.query_id,
                 user: self.owner,
                 pool_account: self.pool_account,
                 pick_payload: pick_payload
@@ -63,13 +62,12 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.forward(
             msg.reserve,
             ClaimPrizeDebtInternal {
-                query_id: msg.query_id,
+                amount: msg.amount,
                 user: self.owner,
                 draw: self.draw,
-                period: self.period,
-                amount: msg.amount
+                period: self.period
             }.toCell(),
-            false,
+            true, // bounce this message
             null
         );
     }
@@ -82,6 +80,10 @@ trait BaseTicket with Ownable, MsgValueHelper {
 
         // refund gas
         self.forward(msg.user, null, false, null);
+    }
+
+    bounced(src: bounced<ClaimPrizeDebtInternal>) {
+        self.debt_amount = self.debt_amount + src.amount;
     }
 
     fun compute_pick_payload(index_payload: Slice): Slice {

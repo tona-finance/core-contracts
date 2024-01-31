@@ -10,17 +10,6 @@
                   "inline": true
                 }
             }
-        },
-        {
-            "name": "mock",
-            "path": "./mock/sources/pool.tact",
-            "output": "./mock/output",
-            "options": {
-                "debug": true,
-                "experimental": {
-                  "inline": true
-                }
-            }
         }
     ]
 }

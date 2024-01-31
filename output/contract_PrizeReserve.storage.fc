@@ -9,10 +9,6 @@
     return (vvv'code, vvv'data);
 }
 
-((cell, cell)) $StateInit$_constructor_code_data(cell code, cell data) inline {
-    return (code, data);
-}
-
 ;;
 ;; Type: SendParameters
 ;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
@@ -20,6 +16,10 @@
 
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline {
     return (bounce, to, value, mode, body, code, data);
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline {
+    return (bounce, to, value, mode, null(), null(), null());
 }
 
 ;;
@@ -56,78 +56,47 @@ cell $DeployOk$_store_cell((int) v) inline {
 }
 
 ;;
-;; Type: JettonTransfer
-;; Header: 0x0f8a7ea5
-;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer
-;;
-
-builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref {
-    var (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload) = v;
-    build_0 = store_uint(build_0, 260734629, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
-    build_0 = build_0.store_coins(v'amount);
-    build_0 = __tact_store_address(build_0, v'destination);
-    build_0 = __tact_store_address(build_0, v'response_destination);
-    build_0 = ~ null?(v'custom_payload) ? build_0.store_int(true, 1).store_ref(v'custom_payload) : build_0.store_int(false, 1);
-    build_0 = build_0.store_coins(v'forward_ton_amount);
-    build_0 = build_0.store_slice(v'forward_payload);
-    return build_0;
-}
-
-cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline {
-    return $JettonTransfer$_store(begin_cell(), v).end_cell();
-}
-
-((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline {
-    return (query_id, amount, destination, response_destination, custom_payload, forward_ton_amount, forward_payload);
-}
-
-;;
 ;; Type: ClaimPrizeDebtInternal
-;; Header: 0xe00fdea0
-;; TLB: claim_prize_debt_internal#e00fdea0 query_id:uint64 user:address draw:address period:uint32 amount:coins = ClaimPrizeDebtInternal
+;; Header: 0x3dc1492c
+;; TLB: claim_prize_debt_internal#3dc1492c amount:coins user:address draw:address period:uint32 = ClaimPrizeDebtInternal
 ;;
 
-(slice, ((int, slice, slice, int, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3759136416);
-    var v'query_id = sc_0~load_uint(64);
+(slice, ((int, slice, slice, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1036077356);
+    var v'amount = sc_0~load_coins();
     var v'user = sc_0~__tact_load_address();
     var v'draw = sc_0~__tact_load_address();
     var v'period = sc_0~load_uint(32);
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'query_id, v'user, v'draw, v'period, v'amount));
+    return (sc_0, (v'amount, v'user, v'draw, v'period));
 }
 
 ;;
 ;; Type: PrizeReserveData
-;; TLB: _ jetton_wallet:address pool_master:address staker:address = PrizeReserveData
+;; TLB: _ pool_master:address balance:coins = PrizeReserveData
 ;;
 
-(slice, slice, slice) $PrizeReserveData$_to_external(((slice, slice, slice)) v) inline {
-    var (v'jetton_wallet, v'pool_master, v'staker) = v; 
-    return (v'jetton_wallet, v'pool_master, v'staker);
+(slice, int) $PrizeReserveData$_to_external(((slice, int)) v) inline {
+    var (v'pool_master, v'balance) = v; 
+    return (v'pool_master, v'balance);
 }
 
-((slice, slice, slice)) $PrizeReserveData$_constructor_jetton_wallet_pool_master_staker(slice jetton_wallet, slice pool_master, slice staker) inline {
-    return (jetton_wallet, pool_master, staker);
+((slice, int)) $PrizeReserveData$_constructor_pool_master_balance(slice pool_master, int balance) inline {
+    return (pool_master, balance);
 }
 
 ;;
 ;; Type: PoolAccount
 ;;
 
-builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice, slice) v) inline {
-    var (v'owner, v'master, v'staker, v'reserve) = v;
+builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice) v) inline {
+    var (v'owner, v'master, v'prize_reserve) = v;
     build_0 = __tact_store_address(build_0, v'owner);
     build_0 = __tact_store_address(build_0, v'master);
-    build_0 = __tact_store_address(build_0, v'staker);
-    var build_1 = begin_cell();
-    build_1 = __tact_store_address(build_1, v'reserve);
-    build_0 = store_ref(build_0, build_1.end_cell());
+    build_0 = __tact_store_address(build_0, v'prize_reserve);
     return build_0;
 }
 
-(cell, cell) $PoolAccount$_init_child(cell sys', slice $owner, slice $master, slice $staker, slice $reserve) inline {
+(cell, cell) $PoolAccount$_init_child(cell sys', slice $owner, slice $master, slice $prize_reserve) inline {
     slice sc' = sys'.begin_parse();
     cell source = sc'~load_dict();
     cell contracts = new_dict();
@@ -148,7 +117,7 @@ builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice, slice) v
     builder b = begin_cell();
     b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
     b = b.store_int(false, 1);
-    b = $PoolAccount$init$_store(b, ($owner, $master, $staker, $reserve));
+    b = $PoolAccount$init$_store(b, ($owner, $master, $prize_reserve));
     return (mine, b.end_cell());
 }
 
@@ -188,31 +157,23 @@ builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inlin
 ;; Type: PrizeReserve
 ;;
 
-builder $PrizeReserve$_store(builder build_0, (slice, slice, slice) v) inline {
-    var (v'jetton_wallet, v'pool_master, v'staker) = v;
-    build_0 = __tact_store_address(build_0, v'jetton_wallet);
+builder $PrizeReserve$_store(builder build_0, (slice) v) inline {
+    var (v'pool_master) = v;
     build_0 = __tact_store_address(build_0, v'pool_master);
-    build_0 = __tact_store_address(build_0, v'staker);
     return build_0;
 }
 
-(slice, ((slice, slice, slice))) $PrizeReserve$_load(slice sc_0) inline {
-    var v'jetton_wallet = sc_0~__tact_load_address();
+(slice, ((slice))) $PrizeReserve$_load(slice sc_0) inline {
     var v'pool_master = sc_0~__tact_load_address();
-    var v'staker = sc_0~__tact_load_address();
-    return (sc_0, (v'jetton_wallet, v'pool_master, v'staker));
+    return (sc_0, (v'pool_master));
 }
 
-(slice, ((slice, slice, slice, cell, cell))) $PrizeReserve$init$_load(slice sc_0) inline {
+(slice, ((slice))) $PrizeReserve$init$_load(slice sc_0) inline {
     var v'pool_master = sc_0~__tact_load_address();
-    var v'staker = sc_0~__tact_load_address();
-    var v'jetton_master = sc_0~__tact_load_address();
-    var v'jetton_wallet_code = sc_0~load_ref();
-    var v'jetton_system = sc_0~load_ref();
-    return (sc_0, (v'pool_master, v'staker, v'jetton_master, v'jetton_wallet_code, v'jetton_system));
+    return (sc_0, (v'pool_master));
 }
 
-(slice, slice, slice) $PrizeReserve$_contract_load() impure inline_ref {
+(slice) $PrizeReserve$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -221,13 +182,13 @@ builder $PrizeReserve$_store(builder build_0, (slice, slice, slice) v) inline {
     } else {
         ;; Allow only workchain deployments
         throw_unless(137, my_address().preload_uint(11) == 1024);
-        (slice pool_master, slice staker, slice jetton_master, cell jetton_wallet_code, cell jetton_system) = $sc~$PrizeReserve$init$_load();
+        (slice pool_master) = $sc~$PrizeReserve$init$_load();
         $sc.end_parse();
-        return $PrizeReserve$_contract_init(pool_master, staker, jetton_master, jetton_wallet_code, jetton_system);
+        return $PrizeReserve$_contract_init(pool_master);
     }
 }
 
-() $PrizeReserve$_contract_store((slice, slice, slice) v) impure inline {
+() $PrizeReserve$_contract_store((slice) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);
