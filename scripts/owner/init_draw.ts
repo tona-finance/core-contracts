@@ -1,7 +1,8 @@
 import { TonClient4, WalletContractV4 } from "@ton/ton";
-import { Address, toNano } from "@ton/core";
+import { toNano } from "@ton/core";
 import { mnemonicToWalletKey } from "@ton/crypto";
-import { PoolAccount } from "../output/contract_PoolAccount";
+import { PoolMaster } from "../../output/contract_PoolMaster";
+import { Deployments } from "../deployments";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -20,18 +21,15 @@ async function main() {
     });
     const sender = client.open(wallet).sender(keyPair.secretKey);
 
-    const account_address = Address.parse("kQCVHS0r4rZ09qV3JGu2f8yKsdhG474Ze6F4t6LMrkMziKhl");
-    const account = PoolAccount.fromAddress(account_address);    // Create initial data for our contract
-    const account_client = client.open(account);
-    await account_client.send(
+    const pool = PoolMaster.fromAddress(Deployments.PoolMaster);    // Create initial data for our contract
+    const pool_client = client.open(pool);
+    await pool_client.send(
         sender,
-        { value: toNano("2.1") },
-        {
-            $$type: "Withdraw",
-            query_id: 0n,
-            amount: toNano("0.9")
-        }
+        { value: toNano("0.51") },
+        "init draw"
     );
+    // const pool_account_address = await pool_client.getGetAccountAddress(wallet.address);
+    // console.log("Pool account address", pool_account_address.toString({ testOnly: true }));
 }
 
 main().catch((error) => {

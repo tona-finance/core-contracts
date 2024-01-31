@@ -1,8 +1,8 @@
 import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToWalletKey } from "@ton/crypto";
-import { PoolMaster } from "../output/contract_PoolMaster";
-import { Deployments } from "./deployments";
+import { PoolMaster } from "../../output/contract_PoolMaster";
+import { Deployments } from "../deployments";
 
 import * as dotenv from "dotenv";
 dotenv.config();

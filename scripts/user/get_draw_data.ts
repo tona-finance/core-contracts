@@ -1,7 +1,7 @@
 import { Address, TonClient4 } from "@ton/ton";
-import { PoolMaster } from "../output/contract_PoolMaster";
-import { Draw } from "../output/contract_Draw";
-import { Deployments } from "./deployments";
+import { PoolMaster } from "../../output/contract_PoolMaster";
+import { Draw } from "../../output/contract_Draw";
+import { Deployments } from "../deployments";
 
 import * as dotenv from "dotenv";
 dotenv.config();

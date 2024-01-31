@@ -1,8 +1,9 @@
 import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToWalletKey } from "@ton/crypto";
-import { PoolMaster } from "../output/contract_PoolMaster";
-import { Deployments } from "./deployments";
+import { Draw } from "../../output/contract_Draw";
+import { PoolAccount } from "../../output/contract_PoolAccount";
+import { Deployments } from "../deployments";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -21,12 +22,17 @@ async function main() {
     });
     const sender = client.open(wallet).sender(keyPair.secretKey);
 
-    const pool = PoolMaster.fromAddress(Deployments.PoolMaster);    // Create initial data for our contract
-    const pool_client = client.open(pool);
-    await pool_client.send(
+    const period = 0n;
+    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
+    const draw = await Draw.fromInit(Deployments.PoolMaster, Deployments.PrizeReserve, period);    // Create initial data for our contract
+    const draw_client = client.open(draw);
+    await draw_client.send(
         sender,
-        { value: toNano("2.0") },
-        null
+        { value: toNano("1.0") },
+        {
+            $$type: "InitTicket",
+            pool_account: pool_account.address,
+        }
     );
 }
 

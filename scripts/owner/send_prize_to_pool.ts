@@ -1,8 +1,8 @@
 import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToWalletKey } from "@ton/crypto";
-import { PoolMaster } from "../output/contract_PoolMaster";
-import { Deployments } from "./deployments";
+import { PoolMaster } from "../../output/contract_PoolMaster";
+import { Deployments } from "../deployments";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -25,11 +25,9 @@ async function main() {
     const pool_client = client.open(pool);
     await pool_client.send(
         sender,
-        { value: toNano("0.51") },
-        "init draw"
+        { value: toNano("2.0") },
+        null
     );
-    // const pool_account_address = await pool_client.getGetAccountAddress(wallet.address);
-    // console.log("Pool account address", pool_account_address.toString({ testOnly: true }));
 }
 
 main().catch((error) => {
