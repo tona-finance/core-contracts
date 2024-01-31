@@ -42,7 +42,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
 
     receive("init draw") {
         self.requireOwner();
-        require(self.next_period == 0, "Draw is initialized");
+        require(self.next_period == 0, "Already initialized");
 
         let ctx: Context = context();
         // initialize gas fee 0.01

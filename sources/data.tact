@@ -29,8 +29,8 @@ struct DrawData {
     prize_reserve: Address;
     jetton_wallet: Address;
     period: Int as uint32;
-    start: Twab;
-    end: Twab;
+    start: Twab?;
+    end: Twab?;
     prize_amount: Int as coins;
     winning_number: Int as uint32;
     deadline: Int as uint64;

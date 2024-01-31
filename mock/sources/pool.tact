@@ -3,7 +3,7 @@ import "./jetton_master";
 import "./messages";
 
 
-contract StakingPool with Deployable {
+contract StakingPool {
     override const storageReserve: Int = ton("0.05");
 
     jetton_content: Cell;
@@ -18,13 +18,22 @@ contract StakingPool with Deployable {
 
     receive("init jetton master") {
         let sinit: StateInit = self.jetton_master_init();
-        self.forward(contractAddress(sinit), null, false, sinit);
+        let jetton_master: Address = contractAddress(sinit);
+        self.forward(
+            jetton_master,
+            FactoryDeploy {
+                queryId: 0,
+                cashback: sender()
+            }.toCell(),
+            false,
+            sinit
+        );
     }
 
     receive(msg: PoolDeposit) {
         let ctx: Context = context();
-        // deposit fee 1.0
-        let deposit_amount: Int = ctx.value - ton("1.0");
+        // deposit fee 0.5
+        let deposit_amount: Int = ctx.value - ton("0.5");
         require(deposit_amount > 0, "invalid deposit amount");
 
         let balance_before: Int = max(myBalance() - self.storageReserve - ctx.value, 0);
@@ -74,7 +83,7 @@ contract StakingPool with Deployable {
     }
 
     // === Get methods ===
-    get fun jetton_master(): Address {
+    get fun get_jetton_master(): Address {
         return self.jetton_master_address();
     }
 }

@@ -11,7 +11,7 @@ struct JettonData {
     jetton_wallet_code: Cell;   // code of wallet for that jetton
 }
 
-contract JettonMaster {
+contract JettonMaster with FactoryDeployable {
     total_supply: Int as coins = 0;      // the total number of issued jettons
     owner: Address;         // owner of this jetton
     jetton_content: Cell;   // data in accordance to Token Data Standard #64
@@ -24,8 +24,6 @@ contract JettonMaster {
     //********************************************//
     //                  Messages                  //
     //********************************************//
-
-    receive() {}
 
     // @dev  JettonBurnNotification is sent from Jetton wallet after burning jettons
     receive(msg: JettonBurnNotification) {
@@ -46,7 +44,6 @@ contract JettonMaster {
     //********************************************//
 
     // @dev  calculate_jetton_wallet_init retrieve init code of a jetton wallet
-    // @note one MUST override this function in inherited contract
     inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit {
         return initOf JettonWallet(owner_address, myAddress());
     }
@@ -83,7 +80,7 @@ contract JettonMaster {
     inline fun _burn_notification_validate(ctx: Context, msg: JettonBurnNotification) {
         let initCode: StateInit = self.calculate_jetton_wallet_init(msg.sender);
         require(ctx.sender == contractAddress(initCode), "Sender is not a Jetton wallet");
-    } 
+    }
 
     inline fun _compute_mint_amount(msg: JettonMint): Int {
         if (self.total_supply == 0 || msg.total_balance == 0) {
