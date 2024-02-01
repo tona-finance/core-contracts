@@ -1,0 +1,49 @@
+;;
+;; Header files for TicketTester
+;; NOTE: declarations are sorted for optimal order
+;;
+
+;; __tact_verify_address
+slice __tact_verify_address(slice address) inline;
+
+;; __tact_load_address
+(slice, slice) __tact_load_address(slice cs) inline;
+
+;; __tact_store_address
+builder __tact_store_address(builder b, slice address) inline;
+
+;; __tact_dict_set_int_int
+(cell, ()) __tact_dict_set_int_int(cell d, int kl, int k, int v, int vl) inline;
+
+;; __tact_dict_get_int_int
+int __tact_dict_get_int_int(cell d, int kl, int k, int vl) inline;
+
+;; $ComputePickNumber$_load
+(slice, ((int, int))) $ComputePickNumber$_load(slice sc_0) inline;
+
+;; $ComputePickPayload$_load
+(slice, ((slice))) $ComputePickPayload$_load(slice sc_0) inline;
+
+;; $TicketTester$_store
+builder $TicketTester$_store(builder build_0, (slice, int, cell) v) inline;
+
+;; $TicketTester$_load
+(slice, ((slice, int, cell))) $TicketTester$_load(slice sc_0) inline;
+
+;; $TicketTester$init$_load
+(slice, ((slice, int))) $TicketTester$init$_load(slice sc_0) inline;
+
+;; $TicketTester$_contract_init
+(slice, int, cell) $TicketTester$_contract_init(slice $owner, int $size) impure inline_ref;
+
+;; $TicketTester$_contract_load
+(slice, int, cell) $TicketTester$_contract_load() impure inline_ref;
+
+;; $TicketTester$_contract_store
+() $TicketTester$_contract_store((slice, int, cell) v) impure inline;
+
+;; $TicketTester$_fun_compute_pick_number
+((slice, int, cell), int) $TicketTester$_fun_compute_pick_number((slice, int, cell) $self, int $index) impure inline;
+
+;; $TicketTester$_fun_compute_pick_payload
+((slice, int, cell), cell) $TicketTester$_fun_compute_pick_payload((slice, int, cell) $self, slice $index_payload) impure inline;

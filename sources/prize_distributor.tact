@@ -31,7 +31,11 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
         self.require_not_over();
         self.require_ticket(msg.user, msg.pool_account);
 
-        let prize_amount: Int = self.compute_prize_amount(msg.pick_payload);
+        let prize_amount: Int = 0;
+        repeat(4) {
+            let amount: Int = self.compute_prize_amount(msg.pick_payload);
+            prize_amount = prize_amount + amount;
+        }
         let pay_amount: Int = min(prize_amount, self.avail_prize_amount);
         let debt_amount: Int = prize_amount - pay_amount;
         self.avail_prize_amount = self.avail_prize_amount - pay_amount;
@@ -71,26 +75,6 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
         });
     }
 
-    // inline fun init_distributor() {
-    //     self.prize_amount = 0;
-    //     self.winning_number = 0;
-    //     self.prize_percentage = emptyMap();
-    //     self.prize_percentage.set(0, 1);
-    //     self.prize_percentage.set(1, 3);
-    //     self.prize_percentage.set(2, 8);
-    //     self.prize_percentage.set(3, 23);
-    //     self.prize_percentage.set(4, 65);
-    //     self.deadline = 0;
-    //     self.avail_prize_amount = 0;
-    // }
-
-    // inline fun activate_distributor(prize_amount: Int, deadline: Int) {
-    //     self.prize_amount = prize_amount;
-    //     self.winning_number = randomInt() % self.TOTAL_PICKS;
-    //     self.deadline = deadline;
-    //     self.avail_prize_amount = self.avail_prize_amount + prize_amount; 
-    // }
-
     fun prize_amount_per_pick(tier: Int): Int {
         let percentage: Int? = self.prize_percentage.get(tier);
         if (percentage != null) {
@@ -118,7 +102,7 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
 
     fun compute_prize_amount(pick_payload: Slice): Int {
         let prize_amount: Int = 0;
-        let size: Int = pick_payload.loadUint(8);
+        let size: Int = pick_payload.bits() / self.PICK_BITS;
         repeat(size) {
             let pick_number: Int = pick_payload.loadUint(self.PICK_BITS);
             let tier: Int = self.compute_tier(pick_number);

@@ -5,6 +5,17 @@
             "path": "./sources/contract.tact",
             "output": "./output",
             "options": {
+                "debug": false,
+                "experimental": {
+                  "inline": true
+                }
+            }
+        },
+        {
+            "name": "test",
+            "path": "./sources/tests/ticket_tester.tact",
+            "output": "./output",
+            "options": {
                 "debug": true,
                 "experimental": {
                   "inline": true

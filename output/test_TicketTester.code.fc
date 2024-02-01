@@ -1,0 +1,140 @@
+#pragma version =0.4.3;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "test_TicketTester.headers.fc";
+#include "test_TicketTester.stdlib.fc";
+#include "test_TicketTester.storage.fc";
+
+;;
+;; Contract TicketTester functions
+;;
+
+(slice, int, cell) $TicketTester$_contract_init(slice $owner, int $size) impure inline_ref {
+    var (($self'owner, $self'picks, $self'used_indexes)) = (null(), 0, null());
+    $self'owner = $owner;
+    $self'picks = $size;
+    $self'used_indexes = null();
+    return ($self'owner, $self'picks, $self'used_indexes);
+}
+
+((slice, int, cell), int) $TicketTester$_fun_compute_pick_number((slice, int, cell) $self, int $index) impure inline {
+    var (($self'owner, $self'picks, $self'used_indexes)) = $self;
+    return (($self'owner, $self'picks, $self'used_indexes), cell_hash(end_cell(store_uint(__tact_store_address(begin_cell(), my_address()), $index, 20))));
+}
+
+((slice, int, cell), cell) $TicketTester$_fun_compute_pick_payload((slice, int, cell) $self, slice $index_payload) impure inline {
+    var (($self'owner, $self'picks, $self'used_indexes)) = $self;
+    int $size = (slice_bits($index_payload) / 20);
+    throw_unless(13788, ($size <= 51));
+    $self'picks = ($self'picks - $size);
+    throw_unless(16022, ($self'picks >= 0));
+    builder $pick_payload = begin_cell();
+    repeat ($size) {
+        int $pick_index = $index_payload~load_uint(20);
+        int $pick_used = __tact_dict_get_int_int($self'used_indexes, 257, $pick_index, 1);
+        throw_unless(60931, null?($pick_used));
+        $self'used_indexes~__tact_dict_set_int_int(257, $pick_index, true, 1);
+        int $pick_number = ($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_compute_pick_number($pick_index);
+        store_uint($pick_payload, ($pick_number % 1048576), 20);
+    }
+    return (($self'owner, $self'picks, $self'used_indexes), end_cell($pick_payload));
+}
+
+;;
+;; Receivers of a Contract TicketTester
+;;
+
+(((slice, int, cell)), ()) $TicketTester$_internal_binary_ComputePickNumber((slice, int, cell) $self, (int, int) $msg) impure inline {
+    var ($self'owner, $self'picks, $self'used_indexes) = $self;
+    var ($msg'index, $msg'expected_number) = $msg;
+    int $pick_number = (($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_compute_pick_number($msg'index) % 1048576);
+    throw_unless(40648, ($pick_number == $msg'expected_number));
+    return (($self'owner, $self'picks, $self'used_indexes), ());
+}
+
+(((slice, int, cell)), ()) $TicketTester$_internal_binary_ComputePickPayload((slice, int, cell) $self, (slice) $msg) impure inline {
+    var ($self'owner, $self'picks, $self'used_indexes) = $self;
+    var ($msg'index_payload) = $msg;
+    ($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_compute_pick_payload($msg'index_payload);
+    return (($self'owner, $self'picks, $self'used_indexes), ());
+}
+
+;;
+;; Get methods of a Contract TicketTester
+;;
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmQtCbXNsUNCD1Cn7LJuH4RKMTqyP9DhSSd2TsRoxyEdaV";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract TicketTester
+;;
+
+((slice, int, cell), int) $TicketTester$_contract_router_internal((slice, int, cell) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive ComputePickNumber message
+    if (op == 682995259) {
+        var msg = in_msg~$ComputePickNumber$_load();
+        self~$TicketTester$_internal_binary_ComputePickNumber(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ComputePickPayload message
+    if (op == 2685960500) {
+        var msg = in_msg~$ComputePickPayload$_load();
+        self~$TicketTester$_internal_binary_ComputePickPayload(msg);
+        return (self, true);
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $TicketTester$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$TicketTester$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $TicketTester$_contract_store(self);
+}

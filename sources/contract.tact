@@ -121,7 +121,7 @@ contract PoolAccount with TicketInitializer, Deployable {
     }
 
     get fun binary_search_twab(timestamp: Int): Twab {
-        return self.twab_store.binary_search_twab(timestamp);
+        return self.twab_store.binary_search_twab(self.share_amount, timestamp);
     }
 }
 

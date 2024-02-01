@@ -30,6 +30,14 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     return (($end'amount - $start'amount) / ($end'timestamp - $start'timestamp));
 }
 
+(int, int) $global_interpolate_twab((int, int) $start, (int, int) $end, int $timestamp) impure inline {
+    var (($start'timestamp, $start'amount)) = $start;
+    var (($end'timestamp, $end'amount)) = $end;
+    throw_unless(10349, ($start'timestamp <= $timestamp));
+    throw_unless(23432, ($timestamp <= $end'timestamp));
+    return $Twab$_constructor_timestamp_amount($timestamp, ($start'amount + (($timestamp - $start'timestamp) * $global_average_balance(($start'timestamp, $start'amount), ($end'timestamp, $end'amount)))));
+}
+
 (int, int) $Twab$_fun_next_twab((int, int) $self, int $balance, int $timestamp) impure inline {
     var (($self'timestamp, $self'amount)) = $self;
     var (($self'timestamp, $self'amount)) = $self;
@@ -37,30 +45,41 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     return $Twab$_constructor_timestamp_amount($timestamp, ($self'amount + (($timestamp - $self'timestamp) * $balance)));
 }
 
-(int, int) $TwabStore$_fun_binary_search_twab((cell, int) $self, int $timestamp) impure inline {
+(int, int) $TwabStore$_fun_binary_search_twab((cell, int) $self, int $balance, int $timestamp) impure inline {
     var (($self'store, $self'size)) = $self;
     var (($self'store, $self'size)) = $self;
+    throw_unless(19074, ($self'size > 0));
     int $low = 0;
     int $high = ($self'size - 1);
     while (($low <= $high)) {
         int $mid = (($low + $high) / 2);
         var ($twab'timestamp, $twab'amount) = $Twab$_not_null($Twab$_load_opt(__tact_dict_get_int_cell($self'store, 257, $mid)));
-        if (($twab'timestamp == $timestamp)) {
-            return ($twab'timestamp, $twab'amount);
-        } elseif (($twab'timestamp < $timestamp)) {
+        if (($twab'timestamp < $timestamp)) {
             $low = ($mid + 1);
-        } else {
+        } elseif (($twab'timestamp > $timestamp)) {
             $high = ($mid - 1);
+        } else {
+            return ($twab'timestamp, $twab'amount);
         }
     }
-    return $Twab$_not_null($Twab$_load_opt(__tact_dict_get_int_cell($self'store, 257, $high)));
+    if (($high < 0)) {
+        return $Twab$_constructor_timestamp_amount($timestamp, 0);
+    } else {
+        var ($left'timestamp, $left'amount) = $Twab$_not_null($Twab$_load_opt(__tact_dict_get_int_cell($self'store, 257, $high)));
+        tuple $right = $Twab$_load_opt(__tact_dict_get_int_cell($self'store, 257, ($high + 1)));
+        if (null?($right)) {
+            $right = $Twab$_as_optional($Twab$_fun_next_twab(($left'timestamp, $left'amount), $balance, $timestamp));
+        }
+        return $global_interpolate_twab(($left'timestamp, $left'amount), $Twab$_not_null($right), $timestamp);
+    }
 }
 
 ((cell, int), ()) $TwabStore$_fun_insert((cell, int) $self, int $balance, int $timestamp) impure inline {
     var (($self'store, $self'size)) = $self;
     var (($self'store, $self'size)) = $self;
     if (($self'size == 0)) {
-        $self'store~__tact_dict_set_int_cell(257, $self'size, $Twab$_store_cell($Twab$_constructor_timestamp_amount($timestamp, 0)));
+        var ($twab'timestamp, $twab'amount) = $Twab$_constructor_timestamp_amount($timestamp, 0);
+        $self'store~__tact_dict_set_int_cell(257, $self'size, $Twab$_store_cell(($twab'timestamp, $twab'amount)));
     } else {
         var ($last_twab'timestamp, $last_twab'amount) = $Twab$_not_null($Twab$_load_opt(__tact_dict_get_int_cell($self'store, 257, ($self'size - 1))));
         var ($new_twab'timestamp, $new_twab'amount) = $Twab$_fun_next_twab(($last_twab'timestamp, $last_twab'amount), $balance, $timestamp);
@@ -110,7 +129,7 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
 
 ((slice, slice, (cell, int), int, int, slice), (int, int)) $PoolAccount$_fun_binary_search_twab((slice, slice, (cell, int), int, int, slice) $self, int $timestamp) impure inline {
     var (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)) = $self;
-    return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve), $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $timestamp));
+    return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve), $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $self'share_amount, $timestamp));
 }
 
 ((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_require_draw((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline {
@@ -158,9 +177,10 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     var ($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve) = $self;
     var ($msg'period, $msg'start, $msg'end, $msg'avg_balance) = $msg;
     ($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)~$PoolAccount$_fun_require_draw($msg'period);
-    var ($start'timestamp, $start'amount) = $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $msg'start);
-    var ($end'timestamp, $end'amount) = $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $msg'end);
+    var ($start'timestamp, $start'amount) = $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $self'share_amount, $msg'start);
+    var ($end'timestamp, $end'amount) = $TwabStore$_fun_binary_search_twab(($self'twab_store'store, $self'twab_store'size), $self'share_amount, $msg'end);
     int $avg_balance = $global_average_balance(($start'timestamp, $start'amount), ($end'timestamp, $end'amount));
+    throw_unless(11439, ($avg_balance > 0));
     var ($sinit'code, $sinit'data) = ($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)~$PoolAccount$_fun__get_ticket_init($msg'period);
     ($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)~$PoolAccount$_fun_forward($global_contractAddress(($sinit'code, $sinit'data)), $InitTicketInternal$_store_cell($InitTicketInternal$_constructor_draw_avg_balance_user_avg_balance($msg'avg_balance, $avg_balance)), false, $StateInit$_as_optional(($sinit'code, $sinit'data)));
     return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve), ());
@@ -274,14 +294,13 @@ _ supported_interfaces() method_id {
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
         "org.ton.deploy.lazy.v0"H >> 128,
-        "org.ton.debug.v0"H >> 128,
         "org.ton.chain.workchain.v0"H >> 128,
         "org.ton.ownable"H >> 128
     );
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmSnB2hMtSsXaXBu8aRieFZ7CA2FJLW2f9UmfT7D9chiXb";
+    return "ipfs://QmUghWPHc7MxEJMSrsCqYgio32BKJXr8bJHxw2qXCWoxfV";
 }
 
 _ lazy_deployment_completed() method_id {

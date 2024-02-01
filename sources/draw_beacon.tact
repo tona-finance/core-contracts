@@ -45,6 +45,7 @@ trait DrawBeacon {
 
     receive(msg: OpenDraw) {
         self.require_pool_master();
+        require(msg.twab_timestamp > (self.start!!).timestamp, "Invalid twab timestamp");
 
         self.active = true;
         self.end = Twab {

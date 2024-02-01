@@ -55,6 +55,11 @@ tuple $Twab$_as_optional((int, int) v) inline {
     return __tact_tuple_create_2(v'timestamp, v'amount);
 }
 
+_ $Twab$_get_timestamp((int, int) v) inline {
+    var (v'timestamp, v'amount) = v;
+    return v'timestamp;
+}
+
 tuple $Twab$_to_tuple(((int, int)) v) inline {
     var (v'timestamp, v'amount) = v;
     return __tact_tuple_create_2(v'timestamp, v'amount);

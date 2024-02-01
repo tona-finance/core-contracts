@@ -30,6 +30,7 @@ PROGRAM{
   DECLPROC $Twab$_as_optional
   DECLPROC $Draw$_load
   DECLPROC $StateInit$_not_null
+  DECLPROC $Twab$_get_timestamp
   DECLPROC $Twab$_to_tuple
   DECLPROC $Twab$_to_opt_tuple
   DECLPROC $DrawData$_to_external
@@ -409,6 +410,9 @@ PROGRAM{
     ISNULL
     128 THROWIF
     2 UNTUPLE
+  }>
+  $Twab$_get_timestamp PROCINLINE:<{
+    DROP
   }>
   $Twab$_to_tuple PROCINLINE:<{
     2 TUPLE
@@ -843,10 +847,12 @@ PROGRAM{
   }>
   $Draw$_fun_compute_prize_amount PROCINLINE:<{
     0 PUSHINT
-    SWAP
-    8 LDU
-    SWAP
+    OVER
+    SBITS
+    20 PUSHINT
+    DIV
     REPEAT:<{
+      SWAP
       20 LDU
       s11 s13 XCHG
       5 9 REVERSE
@@ -869,10 +875,10 @@ PROGRAM{
       s5 s7 XCHG
       s4 s6 XCHG
       s3 s5 XCHG
-      s4 s0 s3 XCHG3
-      s0 s2 XCHG
+      s4 s3 s0 XCHG3
+      s1 s2 XCHG
     }>
-    DROP
+    NIP
   }>
   $Draw$_fun__get_ticket_address PROCINLINE:<{
     $Draw$_fun__get_ticket_init INLINECALLDICT
@@ -953,31 +959,48 @@ PROGRAM{
       11 ROLL
       s0 s13 PUXC
       $Draw$_fun_require_ticket INLINECALLDICT
-      11 ROLL
-      $Draw$_fun_compute_prize_amount INLINECALLDICT
-      s0 s4 PUSH2
+      0 PUSHINT
+      4 PUSHINT
+      REPEAT:<{
+        11 -ROLL
+        s12 PUSH
+        $Draw$_fun_compute_prize_amount INLINECALLDICT
+        s1 s12 XCHG
+        ADD
+        s10 s11 XCHG
+        s9 s10 XCHG
+        s8 s9 XCHG
+        s7 s8 XCHG
+        s6 s7 XCHG
+        s5 s6 XCHG
+        s4 s5 XCHG
+        s3 s4 XCHG
+        s1 s3 s0 XCHG3
+      }>
+      s12 POP
+      s11 s3 PUSH2
       MIN
-      2DUP
+      s12 s0 PUSH2
       SUB
-      s6 s1 XCPU
+      s5 s1 XCPU
       SUB
-      s10 s13 XCHG
-      s9 s12 XCHG
-      s8 s11 XCHG
-      s7 s13 XCHG
+      s10 s12 XCHG
+      5 8 REVERSE
+      s7 s11 XCHG
       s6 s12 XCHG
       s5 s11 XCHG
-      s4 s13 XCHG
-      s11 s13 s3 XCHG3
+      s4 s12 XCHG
+      s12 s3 s3 XCHG3
+      s0 s12 XCHG
       $Draw$_fun_native_reserve INLINECALLDICT
-      s0 s11 XCHG
+      s0 s13 XCHG
       0 GTINT
       IF:<{
-        s11 PUSH
+        s10 PUSH
         0 GTINT
         IFJMP:<{
           FALSE
-          s0 s14 s13 XCPUXC
+          s0 s14 s12 XCPUXC
           3 PUSHINT
           $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
           $global_send INLINECALLDICT
@@ -986,26 +1009,25 @@ PROGRAM{
           0 PUSHINT
           s0 s15 XCHG
           130 PUSHINT
-          s0 s14 XCHG
+          s0 s13 XCHG
           $PayPrizeDebtInternal$_constructor_user_amount INLINECALLDICT
           $PayPrizeDebtInternal$_store_cell INLINECALLDICT
           s4 s3 s0 XCHG3
-          s15 s13 s0 XCHG3
+          s15 s12 s0 XCHG3
           $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
           $global_send INLINECALLDICT
           s6 s10 XCHG
           s5 s9 XCHG
           s4 s8 XCHG
-          s3 s7 XCHG
-          s6 s1 s4 XCHG3
-          s0 s5 s3 XCHG3
+          4 4 BLKSWAP
+          s3 s0 s0 XCHG3
           RETALT
         }>
-        s11 POP
-        s11 POP
+        s10 POP
+        s10 POP
       }>ELSE<{
-        s11 POP
-        s11 POP
+        s10 POP
+        s10 POP
       }>
       FALSE
       s0 s12 XCHG2
@@ -1013,7 +1035,13 @@ PROGRAM{
       130 PUSHINT
       $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
       $global_send INLINECALLDICT
-      4 7 BLKSWAP
+      s6 s10 XCHG
+      s5 s9 XCHG
+      s4 s8 XCHG
+      s3 s7 XCHG
+      s6 s1 s4 XCHG3
+      s0 s3 s3 XCHG3
+      s0 s5 XCHG
     }>
     EXECUTE
   }>
@@ -1070,6 +1098,13 @@ PROGRAM{
     $Draw$_fun_require_pool_master INLINECALLDICT
     s10 POP
     5 BLKDROP
+    8459 PUSHINT
+    OVER
+    $Twab$_not_null INLINECALLDICT
+    $Twab$_get_timestamp INLINECALLDICT
+    s7 s(-1) PUXC
+    GREATER
+    THROWANYIFNOT
     s0 s5 XCHG
     TRUE
     s0 s9 XCHG
@@ -1142,11 +1177,10 @@ PROGRAM{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
     42980537499636128163026532310500881091 PUSHINT
-    36993126140238121407019133875791708966 PUSHINT
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5a4a32476a324674614467794b724458717a4c35504e7837506f5246396b73795271547950564d7a5a755255} PUSHSLICE
+    x{697066733a2f2f516d6379586138645969767a6e706143734758794841554d64644a3547686f73514b5937774d6767646e4238485a} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

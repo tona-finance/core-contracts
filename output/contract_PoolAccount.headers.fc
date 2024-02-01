@@ -171,11 +171,14 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $global_average_balance
 int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 
+;; $global_interpolate_twab
+(int, int) $global_interpolate_twab((int, int) $start, (int, int) $end, int $timestamp) impure inline;
+
 ;; $Twab$_fun_next_twab
 (int, int) $Twab$_fun_next_twab((int, int) $self, int $balance, int $timestamp) impure inline;
 
 ;; $TwabStore$_fun_binary_search_twab
-(int, int) $TwabStore$_fun_binary_search_twab((cell, int) $self, int $timestamp) impure inline;
+(int, int) $TwabStore$_fun_binary_search_twab((cell, int) $self, int $balance, int $timestamp) impure inline;
 
 ;; $TwabStore$_fun_insert
 ((cell, int), ()) $TwabStore$_fun_insert((cell, int) $self, int $balance, int $timestamp) impure inline;

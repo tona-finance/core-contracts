@@ -92,7 +92,7 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
 ((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), int) $Draw$_fun_compute_prize_amount((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $pick_payload) impure inline {
     var (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)) = $self;
     int $prize_amount = 0;
-    int $size = $pick_payload~load_uint(8);
+    int $size = (slice_bits($pick_payload) / 20);
     repeat ($size) {
         int $pick_number = $pick_payload~load_uint(20);
         int $tier = ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_compute_tier($pick_number);
@@ -154,7 +154,11 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_require_active();
     ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_require_not_over();
     ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_require_ticket($msg'user, $msg'pool_account);
-    int $prize_amount = ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_compute_prize_amount($msg'pick_payload);
+    int $prize_amount = 0;
+    repeat (4) {
+        int $amount = ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_compute_prize_amount($msg'pick_payload);
+        $prize_amount = ($prize_amount + $amount);
+    }
     int $pay_amount = min($prize_amount, $self'avail_prize_amount);
     int $debt_amount = ($prize_amount - $pay_amount);
     $self'avail_prize_amount = ($self'avail_prize_amount - $pay_amount);
@@ -193,6 +197,7 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     var ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage) = $self;
     var ($msg'twab_timestamp, $msg'twab_amount, $msg'prize_amount, $msg'refund_address) = $msg;
     ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)~$Draw$_fun_require_pool_master();
+    throw_unless(8459, ($msg'twab_timestamp > $Twab$_get_timestamp($Twab$_not_null($self'start))));
     $self'active = true;
     $self'end = $Twab$_as_optional($Twab$_constructor_timestamp_amount($msg'twab_timestamp, $msg'twab_amount));
     $self'prize_amount = $msg'prize_amount;
@@ -237,13 +242,12 @@ _ supported_interfaces() method_id {
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
         "org.ton.deploy.lazy.v0"H >> 128,
-        "org.ton.debug.v0"H >> 128,
         "org.ton.chain.workchain.v0"H >> 128
     );
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmZJ2Gj2FtaDgyKrDXqzL5PNx7PoRF9ksyRqTyPVMzZuRU";
+    return "ipfs://QmcyXa8dYivznpaCsGXyHAUMddJ5GhosQKY7wMggdnB8HZ";
 }
 
 _ lazy_deployment_completed() method_id {

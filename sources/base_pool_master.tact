@@ -33,8 +33,8 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         require(self.next_period == 0, "Draw already initialized");
 
         let ctx: Context = context();
-        // deploy fee 0.5
-        require(ctx.value >= ton("0.5"), "Insufficient value");
+        // deploy fee 0.3
+        require(ctx.value >= ton("0.3"), "Insufficient value");
 
         let twab: Twab = self.twab.next_twab(self.share_amount, now());
         let sinit: StateInit = self._get_draw_init(self.next_period);
@@ -54,10 +54,11 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     receive("open draw") {
         self.requireOwner();
         require(self.next_period > 0, "Draw not initialized");
+        require(self.prize_amount > 0, "No prize");
 
         let ctx: Context = context();
-        // set prize fee 0.6
-        require(ctx.value >= ton("0.6"), "Insufficient value");
+        // set prize fee 0.4
+        require(ctx.value >= ton("0.4"), "Insufficient value");
 
         let twab: Twab = self.twab.next_twab(self.share_amount, now());
         send(SendParameters {

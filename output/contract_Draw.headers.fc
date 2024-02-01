@@ -96,6 +96,9 @@ tuple $Twab$_as_optional((int, int) v) inline;
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
+;; $Twab$_get_timestamp
+_ $Twab$_get_timestamp((int, int) v) inline;
+
 ;; $Twab$_to_tuple
 tuple $Twab$_to_tuple(((int, int)) v) inline;
 

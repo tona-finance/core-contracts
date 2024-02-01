@@ -55,6 +55,7 @@ PROGRAM{
   DECLPROC $global_send
   DECLPROC $Twab$_constructor_timestamp_amount
   DECLPROC $global_average_balance
+  DECLPROC $global_interpolate_twab
   DECLPROC $Twab$_fun_next_twab
   DECLPROC $TwabStore$_fun_binary_search_twab
   DECLPROC $TwabStore$_fun_insert
@@ -637,6 +638,25 @@ PROGRAM{
     SUB
     DIV
   }>
+  $global_interpolate_twab PROCINLINE:<{
+    10349 PUSHINT
+    s5 s1 PUSH2
+    LEQ
+    THROWANYIFNOT
+    23432 PUSHINT
+    s1 s3 PUSH2
+    LEQ
+    THROWANYIFNOT
+    s0 s4 PUSH2
+    SUB
+    s4 PUSH
+    s3 s6 XCHG
+    s0 s4 s6 XCHG3
+    $global_average_balance INLINECALLDICT
+    MUL
+    ADD
+    $Twab$_constructor_timestamp_amount INLINECALLDICT
+  }>
   $Twab$_fun_next_twab PROCINLINE:<{
     19317 PUSHINT
     s1 s4 PUSH2
@@ -653,48 +673,88 @@ PROGRAM{
     CONT:<{
       c2 SAVE
       SAMEALTSAVE
+      19074 PUSHINT
+      s3 PUSH
+      0 GTINT
+      THROWANYIFNOT
       0 PUSHINT
-      s0 s2 XCHG
+      s0 s3 XCHG
       DEC
       WHILE:<{
-        s2 s0 PUSH2
+        s3 s0 PUSH2
         LEQ
       }>DO<{
-        s2 s0 PUSH2
+        s3 s0 PUSH2
         ADD
         1 RSHIFT#
-        s4 PUSH
+        s5 PUSH
         257 PUSHINT
         s2 PUSH
         __tact_dict_get_int_cell INLINECALLDICT
         $Twab$_load_opt INLINECALLDICT
         $Twab$_not_null INLINECALLDICT
         s1 s4 PUSH2
-        EQUAL
-        IFJMP:<{
-          5 2 BLKDROP2
-          RETALT
-        }>
-        DROP
-        s3 PUSH
         LESS
         IF:<{
-          s3 POP
-          s0 s2 XCHG
+          2DROP
+          s4 POP
+          s0 s3 XCHG
           INC
         }>ELSE<{
+          s3 POP
+          s0 s3 PUSH2
+          GREATER
+          IFNOTJMP:<{
+            NIP
+            s5 POP
+            s3 POP
+            2DROP
+            RETALT
+          }>
+          DROP
           NIP
           DEC
-          s0 s2 XCHG
+          s0 s3 XCHG
         }>
-        s0 s2 XCHG
+        s0 s3 XCHG
       }>
-      NIP
-      257 PUSHINT
-      s2 POP
-      __tact_dict_get_int_cell INLINECALLDICT
-      $Twab$_load_opt INLINECALLDICT
-      $Twab$_not_null INLINECALLDICT
+      s3 POP
+      s2 PUSH
+      0 LESSINT
+      IF:<{
+        3 1 BLKDROP2
+        0 PUSHINT
+        $Twab$_constructor_timestamp_amount INLINECALLDICT
+      }>ELSE<{
+        s3 PUSH
+        257 PUSHINT
+        s4 PUSH
+        __tact_dict_get_int_cell INLINECALLDICT
+        $Twab$_load_opt INLINECALLDICT
+        $Twab$_not_null INLINECALLDICT
+        257 PUSHINT
+        s0 s5 XCHG
+        INC
+        s6 s5 s0 XCHG3
+        __tact_dict_get_int_cell INLINECALLDICT
+        $Twab$_load_opt INLINECALLDICT
+        DUP
+        ISNULL
+        IF:<{
+          DROP
+          s3 s2 s1 PU2XC
+          s3 PUSH
+          $Twab$_fun_next_twab INLINECALLDICT
+          $Twab$_as_optional INLINECALLDICT
+          SWAP
+        }>ELSE<{
+          s2 POP
+        }>
+        SWAP
+        $Twab$_not_null INLINECALLDICT
+        ROT
+        $global_interpolate_twab INLINECALLDICT
+      }>
     }>
     EXECUTE
   }>
@@ -702,10 +762,12 @@ PROGRAM{
     s2 PUSH
     0 EQINT
     IF:<{
-      257 PUSHINT
-      s2 POP
+      NIP
       0 PUSHINT
       $Twab$_constructor_timestamp_amount INLINECALLDICT
+      SWAP
+      257 PUSHINT
+      s0 s2 XCHG
       $Twab$_store_cell INLINECALLDICT
       s2 PUSH
       s3 s4 XCHG
@@ -859,6 +921,7 @@ PROGRAM{
   }>
   $PoolAccount$_fun_binary_search_twab PROCINLINE:<{
     s5 s4 s(-2) PU2XC
+    s5 s(-1) PUXC
     $TwabStore$_fun_binary_search_twab INLINECALLDICT
   }>
   $PoolAccount$_fun_forward PROCINLINE:<{
@@ -979,13 +1042,19 @@ PROGRAM{
     s10 s9 s8 XCHG3
     s7 PUSH
     $PoolAccount$_fun_require_draw INLINECALLDICT
-    s4 s3 s10 PU2XC
+    s4 s3 s(-2) PU2XC
+    s4 s12 PUXC
     $TwabStore$_fun_binary_search_twab INLINECALLDICT
-    s5 s4 s10 PU2XC
+    s5 s4 s(-2) PU2XC
+    s5 s12 PUXC
     $TwabStore$_fun_binary_search_twab INLINECALLDICT
     s2 s3 XCHG
     s2 s11 XCHG
     $global_average_balance INLINECALLDICT
+    11439 PUSHINT
+    OVER
+    0 GTINT
+    THROWANYIFNOT
     s5 s7 XCHG
     s4 s6 XCHG
     s3 s5 XCHG
@@ -1170,12 +1239,11 @@ PROGRAM{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
     42980537499636128163026532310500881091 PUSHINT
-    36993126140238121407019133875791708966 PUSHINT
     209474421377847335869795010607481022628 PUSHINT
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d536e4232684d74537358615842753861526965465a37434132464a4c57326639556d66543744396368695862} PUSHSLICE
+    x{697066733a2f2f516d55676857504863374d78454a4d53727343715967696f3332424b4a587238624a48787732715843576f786656} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

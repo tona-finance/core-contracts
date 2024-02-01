@@ -1,29 +1,15 @@
-import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
-import { mnemonicToWalletKey } from "@ton/crypto";
 import { PoolMaster } from "../../output/contract_PoolMaster";
-import { Deployments } from "../deployments";
-
-import * as dotenv from "dotenv";
-dotenv.config();
+import { Deployments, Client, getKeyPair, getWallet } from "../utils";
 
 async function main() {
     // Parameters
-    const workchain = 0; //we are working in basechain.
-    const client = new TonClient4({
-        endpoint: "https://sandbox-v4.tonhubapi.com",
-    });
-    const mnemonics = (process.env.MNEMONICS || "").toString();
-    const keyPair = await mnemonicToWalletKey(mnemonics.split(" "));
-    const wallet = WalletContractV4.create({
-        workchain,
-        publicKey: keyPair.publicKey,
-    });
-    const sender = client.open(wallet).sender(keyPair.secretKey);
+    const keypair = await getKeyPair();
+    const wallet = await getWallet(keypair);
+    const sender = Client.open(wallet).sender(keypair.secretKey);
 
     const pool = PoolMaster.fromAddress(Deployments.PoolMaster);    // Create initial data for our contract
-    const pool_client = client.open(pool);
-    await pool_client.send(
+    await Client.open(pool).send(
         sender,
         { value: toNano("2.0") },
         null

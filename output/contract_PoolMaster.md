@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PoolMaster
-BOC Size: 3942 bytes
+BOC Size: 3930 bytes
 
 # Types
 Total Types: 31
@@ -172,7 +172,10 @@ Argument: period
 3556: Draw not initialized
 4429: Invalid sender
 6571: Draw is not over
+8459: Invalid twab timestamp
 8888: Only from draw
+10349: Start time >= timestamp
+11439: Zero average balance
 13788: Invalid pick size
 16022: Insufficient picks
 16960: Invalid claim amount
@@ -180,6 +183,7 @@ Argument: period
 19074: Empty twab store
 19102: Account locked
 19317: Invalid timestamp
+23432: timestamp >= End time
 24632: Only from pool master
 30919: Ticket is active
 31206: Start time >= End time
@@ -187,6 +191,7 @@ Argument: period
 46439: Invalid withdraw amount
 47849: Draw is over
 49516: Ticket is inactive
+51181: No prize
 54615: Insufficient balance
 54665: Draw is inactive
 55483: Invalid tier

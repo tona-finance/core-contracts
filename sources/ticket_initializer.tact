@@ -18,9 +18,11 @@ trait TicketInitializer with BasePoolAccount {
     receive(msg: PrepareInitTicket) {
         self.require_draw(msg.period);
 
-        let start: Twab = self.twab_store.binary_search_twab(msg.start);
-        let end: Twab = self.twab_store.binary_search_twab(msg.end);
+        let start: Twab = self.twab_store.binary_search_twab(self.share_amount, msg.start);
+        let end: Twab = self.twab_store.binary_search_twab(self.share_amount, msg.end);
         let avg_balance: Int = average_balance(start, end);
+        require(avg_balance > 0, "Zero average balance");
+
         let sinit: StateInit = self._get_ticket_init(msg.period);
         // deploy and init ticket
         self.forward(

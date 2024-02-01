@@ -3,7 +3,8 @@
   "scripts": {
     "build": "tact --config ./tact.config.json",
     "test": "jest",
-    "deploy": "ts-node ./scripts/deploy.ts"
+    "deploy_pool_master": "ts-node ./scripts/deploy_pool_master.ts",
+    "deploy_prize_reserve": "ts-node ./scripts/deploy_prize_reserve.ts"
   },
   "dependencies": {
     "@tact-lang/compiler": "^1.1.5",
@@ -11,9 +12,9 @@
     "@tact-lang/deployer": "^0.2.0",
     "@tact-lang/emulator": "^4.2.3",
     "@tact-lang/ton-jest": "^0.0.4",
-    "@ton/ton": "^13.9.0",
     "@ton/core": "^0.53.0",
     "@ton/crypto": "^3.2.0",
+    "@ton/ton": "^13.9.0",
     "@types/jest": "^29.2.4",
     "@types/node": "^18.11.14",
     "@types/qs": "^6.9.7",
@@ -29,6 +30,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@tact-lang/ton-abi": "^0.0.3",
     "dotenv": "^16.4.1"
   }
 }

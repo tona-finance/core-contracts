@@ -35,13 +35,13 @@
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), cell_hash(end_cell(store_uint(__tact_store_address(begin_cell(), my_address()), $index, 20))));
 }
 
-((slice, int, slice, slice, int, int, cell, int), slice) $Ticket$_fun_compute_pick_payload((slice, int, slice, slice, int, int, cell, int) $self, slice $index_payload) impure inline {
+((slice, int, slice, slice, int, int, cell, int), cell) $Ticket$_fun_compute_pick_payload((slice, int, slice, slice, int, int, cell, int) $self, slice $index_payload) impure inline {
     var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
     int $size = (slice_bits($index_payload) / 20);
-    throw_unless(13788, ( (($size > 0)) ? (($size < 256)) : (false) ));
-    throw_unless(16022, ($self'picks >= $size));
+    throw_unless(13788, ($size <= 51));
     $self'picks = ($self'picks - $size);
-    builder $pick_payload = store_uint(begin_cell(), $size, 8);
+    throw_unless(16022, ($self'picks >= 0));
+    builder $pick_payload = begin_cell();
     repeat ($size) {
         int $pick_index = $index_payload~load_uint(20);
         int $pick_used = __tact_dict_get_int_int($self'used_indexes, 257, $pick_index, 1);
@@ -50,7 +50,7 @@
         int $pick_number = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_number($pick_index);
         store_uint($pick_payload, ($pick_number % 1048576), 20);
     }
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), $Builder$_fun_asSlice($pick_payload));
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), end_cell($pick_payload));
 }
 
 ((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_require_draw((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
@@ -118,8 +118,13 @@
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_requireOwner();
     int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_msg_value(__tact_context_get(), 1000000000);
     throw_unless(2805, ($rest_value >= 0));
-    slice $pick_payload = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_payload($msg'index_payload);
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_pick_payload($self'owner, $self'pool_account, $pick_payload)), false, null());
+    builder $pick_builder = begin_cell();
+    repeat (4) {
+        slice $index_payload = begin_parse($msg'index_payload~load_ref());
+        cell $pick_payload = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_payload($index_payload);
+        store_ref($pick_builder, $pick_payload);
+    }
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_pick_payload($self'owner, $self'pool_account, $Builder$_fun_asSlice($pick_builder))), false, null());
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
 }
 
@@ -181,14 +186,13 @@ _ supported_interfaces() method_id {
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
         "org.ton.deploy.lazy.v0"H >> 128,
-        "org.ton.debug.v0"H >> 128,
         "org.ton.chain.workchain.v0"H >> 128,
         "org.ton.ownable"H >> 128
     );
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmdTzjnPpQakttYoheVjVkFdN8nzPJH3GwSVt82ooSUh5V";
+    return "ipfs://QmUs9pz4MqbPCxKu8bK8eFpDCDDGr8TmmUdzXaTeY4Pg3r";
 }
 
 _ lazy_deployment_completed() method_id {

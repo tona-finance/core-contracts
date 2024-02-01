@@ -36,13 +36,20 @@ trait BaseTicket with Ownable, MsgValueHelper {
         let rest_value: Int = self.msg_value(context(), ton("1.0"));
         require(rest_value >= 0, "Insufficient value");
 
-        let pick_payload: Slice = self.compute_pick_payload(msg.index_payload);
+        let pick_builder: Builder = beginCell();
+        // Every cell has up to 4 references to other cells
+        repeat(4) {
+            let index_payload: Slice = msg.index_payload.loadRef().beginParse();
+            let pick_payload: Cell = self.compute_pick_payload(index_payload);
+            pick_builder.storeRef(pick_payload);
+        }
+    
         self.forward(
             self.draw,
             ClaimPrizeInternal {
                 user: self.owner,
                 pool_account: self.pool_account,
-                pick_payload: pick_payload
+                pick_payload: pick_builder.asSlice()
             }.toCell(),
             false,
             null
@@ -86,14 +93,18 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.debt_amount = self.debt_amount + src.amount;
     }
 
-    fun compute_pick_payload(index_payload: Slice): Slice {
+    fun compute_pick_payload(index_payload: Slice): Cell {
         let size: Int = index_payload.bits() / self.PICK_BITS;
-        require(size > 0 && size < 256, "Invalid pick size");
-        require(self.picks >= size, "Insufficient picks");
+        // 51 * 20 = 1020
+        require(size <= 51, "Invalid pick size");
         self.picks = self.picks - size;
+        require(self.picks >= 0, "Insufficient picks");
 
-        // 8 + 20 + 20 + ...
-        let pick_payload: Builder = beginCell().storeUint(size, 8);
+        // 20 + 20 + ... + 20
+        // \______  _______/
+        //        \/
+        //       <=51
+        let pick_payload: Builder = beginCell();
         repeat(size) {
             let pick_index: Int = index_payload.loadUint(self.PICK_BITS);
             let pick_used: Bool? = self.used_indexes.get(pick_index);
@@ -103,7 +114,7 @@ trait BaseTicket with Ownable, MsgValueHelper {
             let pick_number: Int = self.compute_pick_number(pick_index);
             pick_payload.storeUint(pick_number % self.TOTAL_PICKS, self.PICK_BITS);
         }
-        return pick_payload.asSlice();
+        return pick_payload.endCell();
     }
 
     inline fun compute_pick_number(index: Int): Int {

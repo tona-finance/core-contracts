@@ -112,7 +112,7 @@ slice $Builder$_fun_asSlice(builder $self) impure inline;
 ((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_compute_pick_number((slice, int, slice, slice, int, int, cell, int) $self, int $index) impure inline;
 
 ;; $Ticket$_fun_compute_pick_payload
-((slice, int, slice, slice, int, int, cell, int), slice) $Ticket$_fun_compute_pick_payload((slice, int, slice, slice, int, int, cell, int) $self, slice $index_payload) impure inline;
+((slice, int, slice, slice, int, int, cell, int), cell) $Ticket$_fun_compute_pick_payload((slice, int, slice, slice, int, int, cell, int) $self, slice $index_payload) impure inline;
 
 ;; $Ticket$_fun_require_draw
 ((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_require_draw((slice, int, slice, slice, int, int, cell, int) $self) impure inline;
