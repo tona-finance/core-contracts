@@ -11,8 +11,8 @@ export const Client = new TonClient4({
 });
 
 export const Deployments = {
-    PoolMaster: Address.parse("kQDA0L7wa3pPYgCF2t4U7oa42vXnC2XQxcHG2jgauFrGe7-J"),
-    PrizeReserve: Address.parse("kQA6of5hz8lbpd6OeYoGckKu7ugw9s1SdH4q7L8PByowR4HE"),
+    PoolMaster: Address.parse("kQCplbDx0lNOrSL0KTIRBUNTUqT5QpuQiOqdEuYluTbJfSYg"),
+    PrizeReserve: Address.parse("kQAPopoiPXpC5xg3q_6lYqlpoZaOqJ0TwCeYmhb-ZQilJa6B"),
 }
 
 export async function getKeyPair(): Promise<KeyPair> {

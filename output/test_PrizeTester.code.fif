@@ -1,44 +1,38 @@
 PROGRAM{
   DECLPROC __tact_verify_address
-  DECLPROC __tact_load_address
   DECLPROC __tact_store_address
   DECLPROC __tact_my_balance
   DECLPROC __tact_not_null
   DECLPROC __tact_context_get
   DECLPROC __tact_context_get_sender
+  DECLPROC __tact_prepare_random
   DECLPROC __tact_store_bool
-  DECLPROC __tact_dict_set_int_int
-  DECLPROC __tact_dict_get_int_int
   DECLPROC $Deploy$_load
   DECLPROC $DeployOk$_store
   DECLPROC $DeployOk$_store_cell
-  DECLPROC $ComputePickNumber$_load
-  DECLPROC $ComputePickPayload$_load
-  DECLPROC $ComputePrizeAmount$_store
-  DECLPROC $ComputePrizeAmount$_store_cell
-  DECLPROC $TicketTester$_store
-  DECLPROC $TicketTester$_load
+  DECLPROC $ComputePrizeAmount$_load
+  DECLPROC $PrizeTester$_store
+  DECLPROC $PrizeTester$_load
   DECLPROC $StateInit$_not_null
-  DECLPROC $TicketTester$init$_load
-  DECLPROC $TicketTester$_contract_init
-  DECLPROC $TicketTester$_contract_load
-  DECLPROC $TicketTester$_contract_store
+  DECLPROC $PrizeTester$init$_load
+  DECLPROC $global_randomInt
+  DECLPROC $PrizeTester$_contract_init
+  DECLPROC $PrizeTester$_contract_load
+  DECLPROC $PrizeTester$_contract_store
   DECLPROC $global_send
-  DECLPROC $Builder$_fun_asSlice
-  DECLPROC $TicketTester$_fun_compute_pick_number
-  DECLPROC $TicketTester$_fun_compute_pick_payload
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
-  DECLPROC $TicketTester$_fun_forward
-  DECLPROC $TicketTester$_fun_notify
-  DECLPROC $ComputePrizeAmount$_constructor_pick_payload
+  DECLPROC $PrizeTester$_fun_compute_tier
+  DECLPROC $PrizeTester$_fun_prize_amount_per_pick
+  DECLPROC $PrizeTester$_fun_compute_prize_amount
+  DECLPROC $PrizeTester$_fun_forward
+  DECLPROC $PrizeTester$_fun_notify
   DECLPROC $DeployOk$_constructor_queryId
-  DECLPROC $TicketTester$_internal_binary_ComputePickNumber
-  DECLPROC $TicketTester$_internal_binary_ComputePickPayload
-  DECLPROC $TicketTester$_internal_binary_Deploy
+  DECLPROC $PrizeTester$_internal_binary_ComputePrizeAmount
+  DECLPROC $PrizeTester$_internal_binary_Deploy
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
-  DECLPROC $TicketTester$_contract_router_internal
+  DECLPROC $PrizeTester$_contract_router_internal
   DECLPROC recv_internal
   DECLGLOBVAR __tact_context
   DECLGLOBVAR __tact_context_sender
@@ -60,11 +54,6 @@ PROGRAM{
     EQUAL
     136 THROWIFNOT
   }>
-  __tact_load_address PROCINLINE:<{
-    LDMSGADDR
-    SWAP
-    __tact_verify_address INLINECALLDICT
-  }>
   __tact_store_address PROCINLINE:<{
     __tact_verify_address INLINECALLDICT
     STSLICER
@@ -85,38 +74,19 @@ PROGRAM{
   __tact_context_get_sender PROCINLINE:<{
     __tact_context_sender GETGLOB
   }>
+  __tact_prepare_random PROCINLINE:<{
+    __tact_randomized GETGLOB
+    ISNULL
+    IF:<{
+      LTIME
+      ADDRAND
+      TRUE
+      __tact_randomized SETGLOB
+    }>
+  }>
   __tact_store_bool PROCINLINE:<{
     SWAP
     1 STI
-  }>
-  __tact_dict_set_int_int PROCINLINE:<{
-    OVER
-    ISNULL
-    IF:<{
-      2DROP
-      -ROT
-      DICTIDEL
-      DROP
-    }>ELSE<{
-      NEWC
-      SWAP
-      STIX
-      s1 s3 s3 XCHG3
-      DICTISETB
-    }>
-  }>
-  __tact_dict_get_int_int PROCINLINE:<{
-    s1 s3 s3 XCHG3
-    DICTIGET
-    NULLSWAPIFNOT
-    IF:<{
-      SWAP
-      LDIX
-      DROP
-    }>ELSE<{
-      2DROP
-      PUSHNULL
-    }>
   }>
   $Deploy$_load PROCINLINE:<{
     32 LDU
@@ -139,51 +109,35 @@ PROGRAM{
     $DeployOk$_store INLINECALLDICT
     ENDC
   }>
-  $ComputePickNumber$_load PROCINLINE:<{
+  $ComputePrizeAmount$_load PROCINLINE:<{
     32 LDU
     SWAP
-    682995259 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    32 LDU
-    32 LDU
-    -ROT
-  }>
-  $ComputePickPayload$_load PROCINLINE:<{
-    32 LDU
-    SWAP
-    849587341 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    OVER
-  }>
-  $ComputePrizeAmount$_store PROCINLINE:<{
     3641436076 PUSHINT
-    ROT
+    EQUAL
+    129 THROWIFNOT
+    DUP
+  }>
+  $PrizeTester$_store PROCINLINE:<{
+    s6 s7 XCHG2
     32 STU
-    SWAP
-    STSLICER
-  }>
-  $ComputePrizeAmount$_store_cell PROCINLINE:<{
-    NEWC
-    SWAP
-    $ComputePrizeAmount$_store INLINECALLDICT
-    ENDC
-  }>
-  $TicketTester$_store PROCINLINE:<{
-    2SWAP
-    __tact_store_address INLINECALLDICT
+    s0 s4 XCHG2
+    STGRAMS
     s1 s2 XCHG
-    32 STU
-    STDICT
+    8 STU
+    8 STU
+    8 STU
+    8 STU
+    8 STU
   }>
-  $TicketTester$_load PROCINLINE:<{
-    __tact_load_address INLINECALLDICT
-    SWAP
+  $PrizeTester$_load PROCINLINE:<{
     32 LDU
-    LDDICT
-    3 -ROLL
+    LDGRAMS
+    8 LDU
+    8 LDU
+    8 LDU
+    8 LDU
+    8 LDU
+    7 -ROLL
   }>
   $StateInit$_not_null PROCINLINE:<{
     DUP
@@ -191,17 +145,26 @@ PROGRAM{
     128 THROWIF
     2 UNTUPLE
   }>
-  $TicketTester$init$_load PROCINLINE:<{
-    __tact_load_address INLINECALLDICT
-    SWAP
+  $PrizeTester$init$_load PROCINLINE:<{
     257 PUSHINT
     LDIX
-    -ROT
+    SWAP
   }>
-  $TicketTester$_contract_init PROCREF:<{
-    PUSHNULL
+  $global_randomInt PROCINLINE:<{
+    __tact_prepare_random INLINECALLDICT
+    RANDU256
   }>
-  $TicketTester$_contract_load PROCREF:<{
+  $PrizeTester$_contract_init PROCREF:<{
+    $global_randomInt INLINECALLDICT
+    20 MODPOW2#
+    SWAP
+    1 PUSHINT
+    3 PUSHINT
+    8 PUSHINT
+    23 PUSHINT
+    65 PUSHINT
+  }>
+  $PrizeTester$_contract_load PROCREF:<{
     c4 PUSH
     CTOS
     LDREF
@@ -210,21 +173,20 @@ PROGRAM{
     1 LDI
     SWAP
     IFJMP:<{
-      $TicketTester$_load INLINECALLDICT
-      1 3 BLKDROP2
+      $PrizeTester$_load INLINECALLDICT
+      1 7 BLKDROP2
     }>
     MYADDR
     11 PLDU
     10 PUSHPOW2
     EQUAL
     137 THROWIFNOT
-    $TicketTester$init$_load INLINECALLDICT
-    s0 s2 XCHG
-    ENDS
+    $PrizeTester$init$_load INLINECALLDICT
     SWAP
-    $TicketTester$_contract_init INLINECALLDICT
+    ENDS
+    $PrizeTester$_contract_init INLINECALLDICT
   }>
-  $TicketTester$_contract_store PROCINLINE:<{
+  $PrizeTester$_contract_store PROCINLINE:<{
     NEWC
     __tact_context_sys GETGLOB
     SWAP
@@ -232,8 +194,8 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    3 -ROLL
-    $TicketTester$_store INLINECALLDICT
+    7 -ROLL
+    $PrizeTester$_store INLINECALLDICT
     ENDC
     c4 POP
   }>
@@ -339,66 +301,113 @@ PROGRAM{
     SWAP
     SENDRAWMSG
   }>
-  $Builder$_fun_asSlice PROCINLINE:<{
-    ENDC
-    CTOS
+  $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
-  $TicketTester$_fun_compute_pick_number PROCINLINE:<{
-    NEWC
-    MYADDR
-    __tact_store_address INLINECALLDICT
-    20 STU
-    ENDC
-    HASHCU
+  $PrizeTester$_fun_compute_tier PROCINLINE:<{
+    s7 PUSH
+    5 PUSHINT
+    s2 PUSH
+    4 MODPOW2#
+    s2 PUSH
+    4 MODPOW2#
+    WHILE:<{
+      NEQ
+      IF:<{
+        DUP
+        0 GTINT
+      }>ELSE<{
+        FALSE
+      }>
+    }>DO<{
+      DEC
+      s0 s2 XCHG
+      4 RSHIFT#
+      SWAP
+      4 RSHIFT#
+      OVER
+      4 MODPOW2#
+      OVER
+      4 MODPOW2#
+      s3 s4 XCHG
+      s2 s3 XCHG
+    }>
+    2 1 BLKDROP2
   }>
-  $TicketTester$_fun_compute_pick_payload PROCINLINE:<{
+  $PrizeTester$_fun_prize_amount_per_pick PROCINLINE:<{
     DUP
+    0 EQINT
+    IF:<{
+      DROP
+      s5 s4 PUSH2
+      MUL
+      100 PUSHINT
+      DIV
+    }>ELSE<{
+      DUP
+      1 EQINT
+      IFJMP:<{
+        DROP
+        s5 s3 PUSH2
+        MUL
+        1500 PUSHINT
+        DIV
+      }>
+      DUP
+      2 EQINT
+      IFJMP:<{
+        DROP
+        s5 s2 PUSH2
+        MUL
+        24000 PUSHINT
+        DIV
+      }>
+      DUP
+      3 EQINT
+      IFJMP:<{
+        DROP
+        s5 s1 PUSH2
+        MUL
+        384000 PUSHINT
+        DIV
+      }>
+      4 EQINT
+      IFJMP:<{
+        s5 s0 PUSH2
+        MUL
+        6144000 PUSHINT
+        DIV
+      }>
+      0 PUSHINT
+    }>
+  }>
+  $PrizeTester$_fun_compute_prize_amount PROCINLINE:<{
+    0 PUSHINT
+    OVER
     SBITS
     20 PUSHINT
     DIV
-    13788 PUSHINT
-    OVER
-    52 LESSINT
-    THROWANYIFNOT
-    s3 s3 XCPU
-    SUB
-    16022 PUSHINT
-    OVER
-    -1 GTINT
-    THROWANYIFNOT
-    NEWC
-    s0 s4 XCHG
     REPEAT:<{
       SWAP
       20 LDU
-      s3 PUSH
-      257 PUSHINT
-      s3 PUSH
-      1 PUSHINT
-      __tact_dict_get_int_int INLINECALLDICT
-      60931 PUSHINT
-      SWAP
-      ISNULL
-      THROWANYIFNOT
-      s0 s3 XCHG
-      257 PUSHINT
-      s2 PUSH
-      TRUE
-      1 PUSHINT
-      __tact_dict_set_int_int INLINECALLDICT
+      s7 s9 XCHG
+      5 5 REVERSE
+      s4 s8 XCHG
+      s3 s9 XCHG
+      s8 s9 s9 XCHG3
+      $PrizeTester$_fun_compute_tier INLINECALLDICT
+      $PrizeTester$_fun_prize_amount_per_pick INLINECALLDICT
+      s1 s8 XCHG
+      ADD
+      s6 s8 XCHG
+      s5 s7 XCHG
+      s4 s6 XCHG
       s3 s5 XCHG
-      SWAP
-      $TicketTester$_fun_compute_pick_number INLINECALLDICT
-      DROP
-      s0 s4 s4 XCHG3
+      s4 s3 s0 XCHG3
+      s1 s2 XCHG
     }>
     NIP
-    s0 s2 XCHG
-    ENDC
   }>
-  $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
-  }>
-  $TicketTester$_fun_forward PROCINLINE:<{
+  $PrizeTester$_fun_forward PROCINLINE:<{
     PUSHNULL
     PUSHNULL
     s2 PUSH
@@ -420,56 +429,44 @@ PROGRAM{
     $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
     $global_send INLINECALLDICT
   }>
-  $TicketTester$_fun_notify PROCINLINE:<{
+  $PrizeTester$_fun_notify PROCINLINE:<{
     __tact_context_get_sender INLINECALLDICT
     SWAP
     FALSE
     PUSHNULL
-    $TicketTester$_fun_forward INLINECALLDICT
-  }>
-  $ComputePrizeAmount$_constructor_pick_payload PROCINLINE:<{
+    $PrizeTester$_fun_forward INLINECALLDICT
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
-  $TicketTester$_internal_binary_ComputePickNumber PROCINLINE:<{
-    4 -ROLL
-    $TicketTester$_fun_compute_pick_number INLINECALLDICT
-    20 MODPOW2#
-    40648 PUSHINT
-    s0 s5 XCHG
-    EQUAL
-    s1 s4 XCHG
-    THROWANYIFNOT
-    ROT
-  }>
-  $TicketTester$_internal_binary_ComputePickPayload PROCINLINE:<{
-    NEWC
+  $PrizeTester$_internal_binary_ComputePrizeAmount PROCINLINE:<{
+    0 PUSHINT
     3 PUSHINT
     REPEAT:<{
       SWAP
       LDREF
       SWAP
       CTOS
-      s3 s6 XCHG
-      s5 s4 s0 XCHG3
-      $TicketTester$_fun_compute_pick_payload INLINECALLDICT
-      s0 s5 XCHG2
-      STREF
-      s5 s4 s0 XCHG3
-      s1 s3 XCHG
+      s7 s9 XCHG
+      5 5 REVERSE
+      s4 s8 XCHG
+      s3 s9 XCHG
+      s8 s9 s0 XCHG3
+      $PrizeTester$_fun_compute_prize_amount INLINECALLDICT
+      s1 s8 XCHG
+      ADD
+      s6 s8 XCHG
+      s5 s7 XCHG
+      s4 s6 XCHG
+      s3 s5 XCHG
+      s4 s3 s0 XCHG3
+      s1 s2 XCHG
     }>
-    NIP
-    $Builder$_fun_asSlice INLINECALLDICT
-    $ComputePrizeAmount$_constructor_pick_payload INLINECALLDICT
-    $ComputePrizeAmount$_store_cell INLINECALLDICT
-    FALSE
-    PUSHNULL
-    $TicketTester$_fun_forward INLINECALLDICT
+    2DROP
   }>
-  $TicketTester$_internal_binary_Deploy PROCINLINE:<{
+  $PrizeTester$_internal_binary_Deploy PROCINLINE:<{
     $DeployOk$_constructor_queryId INLINECALLDICT
     $DeployOk$_store_cell INLINECALLDICT
-    $TicketTester$_fun_notify INLINECALLDICT
+    $PrizeTester$_fun_notify INLINECALLDICT
   }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
@@ -479,7 +476,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5a68525176646743574b61486d686d4d396743756862357146766e46546737456d773766555856754d585a64} PUSHSLICE
+    x{697066733a2f2f516d5551717438694e67447347666d386e71317971527755653870557138316e4451426f634a7a54544176376851} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -487,7 +484,7 @@ PROGRAM{
     1 LDI
     SWAP
   }>
-  $TicketTester$_contract_router_internal PROCREF:<{
+  $PrizeTester$_contract_router_internal PROCREF:<{
     SWAP
     IFJMP:<{
       DROP
@@ -503,23 +500,13 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    682995259 PUSHINT
+    3641436076 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
-      $ComputePickNumber$_load INLINECALLDICT
-      1 2 BLKDROP2
-      $TicketTester$_internal_binary_ComputePickNumber INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    849587341 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $ComputePickPayload$_load INLINECALLDICT
-      1 2 BLKDROP2
-      $TicketTester$_internal_binary_ComputePickPayload INLINECALLDICT
+      $ComputePrizeAmount$_load INLINECALLDICT
+      NIP
+      $PrizeTester$_internal_binary_ComputePrizeAmount INLINECALLDICT
       TRUE
     }>
     2490013878 PUSHINT
@@ -527,7 +514,7 @@ PROGRAM{
     IFJMP:<{
       $Deploy$_load INLINECALLDICT
       NIP
-      $TicketTester$_internal_binary_Deploy INLINECALLDICT
+      $PrizeTester$_internal_binary_Deploy INLINECALLDICT
       TRUE
     }>
     DROP
@@ -551,10 +538,10 @@ PROGRAM{
     __tact_context SETGLOB
     s0 s2 XCHG
     __tact_context_sender SETGLOB
-    $TicketTester$_contract_load INLINECALLDICT
-    2 3 BLKSWAP
-    $TicketTester$_contract_router_internal INLINECALLDICT
+    $PrizeTester$_contract_load INLINECALLDICT
+    2 7 BLKSWAP
+    $PrizeTester$_contract_router_internal INLINECALLDICT
     130 THROWIFNOT
-    $TicketTester$_contract_store INLINECALLDICT
+    $PrizeTester$_contract_store INLINECALLDICT
   }>
 }END>c

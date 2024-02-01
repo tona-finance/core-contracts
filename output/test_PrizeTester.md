@@ -1,6 +1,6 @@
 # TACT Compilation Report
-Contract: TicketTester
-BOC Size: 1051 bytes
+Contract: PrizeTester
+BOC Size: 892 bytes
 
 # Types
 Total Types: 9

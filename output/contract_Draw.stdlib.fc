@@ -68,24 +68,6 @@ builder __tact_store_bool(builder b, int v) inline {
     return b.store_int(v, 1);
 }
 
-(cell, ()) __tact_dict_set_int_int(cell d, int kl, int k, int v, int vl) inline {
-    if (null?(v)) {
-        var (r, ok) = idict_delete?(d, kl, k);
-        return (r, ());
-    } else {
-        return (idict_set_builder(d, kl, k, begin_cell().store_int(v, vl)), ());
-    }
-}
-
-int __tact_dict_get_int_int(cell d, int kl, int k, int vl) inline {
-    var (r, ok) = idict_get?(d, kl, k);
-    if (ok) {
-        return r~load_int(vl);
-    } else {
-        return null();
-    }
-}
-
 int __tact_slice_eq_bits(slice a, slice b) inline {
     return equal_slice_bits(a, b);
 }
@@ -157,8 +139,8 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
     send_raw_message($c, $params'mode);
 }
 
-((int, slice, slice, int, tuple, tuple, int, int, int, int, cell), ()) $Draw$_fun_forward((int, slice, slice, int, tuple, tuple, int, int, int, int, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
-    var (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage)) = $self;
+((int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int), ()) $Draw$_fun_forward((int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
+    var (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -174,9 +156,9 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
         if (($balanceBeforeMessage < 100000000)) {
             raw_reserve(100000000, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage), ());
+            return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage), ());
+    return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), ());
 }

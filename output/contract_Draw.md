@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: Draw
-BOC Size: 3224 bytes
+BOC Size: 3380 bytes
 
 # Types
 Total Types: 31
@@ -110,8 +110,8 @@ TLB: `_ owner:address master:address prize_reserve:address share_amount:coins = 
 Signature: `PoolAccountData{owner:address,master:address,prize_reserve:address,share_amount:coins}`
 
 ## DrawData
-TLB: `_ active:bool pool_master:address prize_reserve:address period:uint32 start:Maybe Twab{timestamp:uint64,amount:uint128} end:Maybe Twab{timestamp:uint64,amount:uint128} prize_amount:coins avail_prize_amount:coins winning_number:uint32 deadline:uint64 = DrawData`
-Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,period:uint32,start:Maybe Twab{timestamp:uint64,amount:uint128},end:Maybe Twab{timestamp:uint64,amount:uint128},prize_amount:coins,avail_prize_amount:coins,winning_number:uint32,deadline:uint64}`
+TLB: `_ active:bool pool_master:address prize_reserve:address period:uint32 start:Maybe Twab{timestamp:uint64,amount:uint128} end:Maybe Twab{timestamp:uint64,amount:uint128} prize_amount:coins avail_prize_amount:coins winning_number:uint32 deadline:uint64 prize_percentage_0:uint16 prize_percentage_1:uint16 prize_percentage_2:uint16 prize_percentage_3:uint16 prize_percentage_4:uint16 = DrawData`
+Signature: `DrawData{active:bool,pool_master:address,prize_reserve:address,period:uint32,start:Maybe Twab{timestamp:uint64,amount:uint128},end:Maybe Twab{timestamp:uint64,amount:uint128},prize_amount:coins,avail_prize_amount:coins,winning_number:uint32,deadline:uint64,prize_percentage_0:uint16,prize_percentage_1:uint16,prize_percentage_2:uint16,prize_percentage_3:uint16,prize_percentage_4:uint16}`
 
 ## TicketData
 TLB: `_ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData`
@@ -130,12 +130,9 @@ TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
 
 # Get Methods
-Total Get Methods: 2
+Total Get Methods: 1
 
 ## get_core_data
-
-## get_prize_percentage
-Argument: tier
 
 # Error Codes
 2: Stack undeflow
@@ -189,5 +186,4 @@ Argument: tier
 51181: No prize
 54615: Insufficient balance
 54665: Draw is inactive
-55483: Invalid tier
 60931: Pick is used

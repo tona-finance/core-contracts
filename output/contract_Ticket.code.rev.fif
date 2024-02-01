@@ -6,11 +6,11 @@ PROGRAM{
   DECLPROC lazy_deployment_completed;
   DECLPROC ?fun_119856;
   DECLPROC get_abi_ipfs;
-  DECLPROC ?fun_ref_29a0acde78c4b85b;
   DECLPROC ?fun_ref_428114052416431d;
+  DECLPROC ?fun_ref_6e6ce4c8a7f527ee;
   DECLPROC ?fun_ref_823d8f0580c442b7;
   DECLPROC ?fun_ref_87e9bc77dd34272f;
-  DECLPROC ?fun_ref_996893db97a825dc;
+  DECLPROC ?fun_ref_d62c9d5368f9a390;
   recv_internal PROC:<{
     s0 s1 XCHG
     CTOS
@@ -44,7 +44,7 @@ PROGRAM{
     2 SETGLOBVAR
     ?fun_ref_823d8f0580c442b7 INLINECALLDICT
     2 8 BLKSWAP
-    ?fun_ref_29a0acde78c4b85b INLINECALLDICT
+    ?fun_ref_6e6ce4c8a7f527ee INLINECALLDICT
     130 THROWIFNOT
     NEWC
     3 GETGLOBVAR
@@ -161,9 +161,18 @@ PROGRAM{
     8 7 BLKDROP2
   }>
   get_abi_ipfs PROC:<{
-    x{697066733A2F2F516D557339707A344D71625043784B7538624B3865467044434444477238546D6D55647A5861546559345067337282_} PUSHSLICE
+    x{697066733A2F2F516D664C5271564D6666447274534B69484B71595068766871374D525731725A637578706D37426B58384C34615482_} PUSHSLICE
   }>
-  ?fun_ref_29a0acde78c4b85b PROCREF:<{
+  ?fun_ref_428114052416431d PROCREF:<{
+    0 PUSHINT
+    0 PUSHINT
+    s4 s0 s0 XC2PU
+    s2 s4 XCHG
+    s2 s3 XCHG
+    NULL
+    s0 s1 XCHG
+  }>
+  ?fun_ref_6e6ce4c8a7f527ee PROCREF:<{
     s0 s1 XCHG
     <{
       32 PUSHINT
@@ -589,7 +598,7 @@ PROGRAM{
       129 THROWIFNOT
       s0 PUSH
       s1 POP
-      ?fun_ref_996893db97a825dc INLINECALLDICT
+      ?fun_ref_d62c9d5368f9a390 INLINECALLDICT
       -1 PUSHINT
     }> PUSHCONT
     IFJMP
@@ -1004,15 +1013,6 @@ PROGRAM{
     }> IFJMPREF
     s0 POP
     0 PUSHINT
-  }>
-  ?fun_ref_428114052416431d PROCREF:<{
-    0 PUSHINT
-    0 PUSHINT
-    s4 s0 s0 XC2PU
-    s2 s4 XCHG
-    s2 s3 XCHG
-    NULL
-    s0 s1 XCHG
   }>
   ?fun_ref_823d8f0580c442b7 PROCREF:<{
     c4 PUSH
@@ -1568,7 +1568,7 @@ PROGRAM{
     s0 s1 XCHG
     SENDRAWMSG
   }>
-  ?fun_ref_996893db97a825dc PROCREF:<{
+  ?fun_ref_d62c9d5368f9a390 PROCREF:<{
     8 1 BLKSWAP
     49516 PUSHINT
     s7 PUSH
@@ -1598,7 +1598,7 @@ PROGRAM{
     -1 GTINT
     THROWANYIFNOT
     NEWC
-    4 PUSHINT
+    3 PUSHINT
     <{
       s0 s9 XCHG
       LDREF
@@ -1709,9 +1709,16 @@ PROGRAM{
       s1 POP
       s0 s3 XCHG
       ENDC
-      s0 POP
-      1 9 BLKSWAP
-    }> PUSHCONT
+      s0 s10 XCHG2
+      STREF
+      s8 s9 XCHG
+      s7 s8 XCHG
+      s6 s7 XCHG
+      s5 s6 XCHG
+      s4 s5 XCHG
+      s3 s4 XCHG
+      s1 s3 s0 XCHG3
+    }> PUSHREFCONT
     REPEAT
     s9 POP
     s0 s8 XCHG

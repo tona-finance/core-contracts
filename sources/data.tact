@@ -29,6 +29,11 @@ struct DrawData {
     avail_prize_amount: Int as coins;
     winning_number: Int as uint32;
     deadline: Int as uint64;
+    prize_percentage_0: Int as uint16;
+    prize_percentage_1: Int as uint16;
+    prize_percentage_2: Int as uint16;
+    prize_percentage_3: Int as uint16;
+    prize_percentage_4: Int as uint16;
 }
 
 struct TicketData {

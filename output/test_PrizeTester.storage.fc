@@ -1,0 +1,119 @@
+;;
+;; Type: StateInit
+;; TLB: _ code:^cell data:^cell = StateInit
+;;
+
+((cell, cell)) $StateInit$_not_null(tuple v) inline {
+    throw_if(128, null?(v));
+    var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
+    return (vvv'code, vvv'data);
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
+;;
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline {
+    return (bounce, to, value, mode, body, code, data);
+}
+
+;;
+;; Type: Deploy
+;; Header: 0x946a98b6
+;; TLB: deploy#946a98b6 queryId:uint64 = Deploy
+;;
+
+(slice, ((int))) $Deploy$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v) inline {
+    return $DeployOk$_store(begin_cell(), v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int queryId) inline {
+    return (queryId);
+}
+
+;;
+;; Type: ComputePrizeAmount
+;; Header: 0xd90be7ac
+;; TLB: compute_prize_amount#d90be7ac pick_payload:remainder<slice> = ComputePrizeAmount
+;;
+
+(slice, ((slice))) $ComputePrizeAmount$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3641436076);
+    var v'pick_payload = sc_0;
+    return (sc_0, (v'pick_payload));
+}
+
+;;
+;; Type: PrizeTester
+;;
+
+builder $PrizeTester$_store(builder build_0, (int, int, int, int, int, int, int) v) inline {
+    var (v'winning_number, v'prize_amount, v'prize_percentage_0, v'prize_percentage_1, v'prize_percentage_2, v'prize_percentage_3, v'prize_percentage_4) = v;
+    build_0 = build_0.store_uint(v'winning_number, 32);
+    build_0 = build_0.store_coins(v'prize_amount);
+    build_0 = build_0.store_uint(v'prize_percentage_0, 8);
+    build_0 = build_0.store_uint(v'prize_percentage_1, 8);
+    build_0 = build_0.store_uint(v'prize_percentage_2, 8);
+    build_0 = build_0.store_uint(v'prize_percentage_3, 8);
+    build_0 = build_0.store_uint(v'prize_percentage_4, 8);
+    return build_0;
+}
+
+(slice, ((int, int, int, int, int, int, int))) $PrizeTester$_load(slice sc_0) inline {
+    var v'winning_number = sc_0~load_uint(32);
+    var v'prize_amount = sc_0~load_coins();
+    var v'prize_percentage_0 = sc_0~load_uint(8);
+    var v'prize_percentage_1 = sc_0~load_uint(8);
+    var v'prize_percentage_2 = sc_0~load_uint(8);
+    var v'prize_percentage_3 = sc_0~load_uint(8);
+    var v'prize_percentage_4 = sc_0~load_uint(8);
+    return (sc_0, (v'winning_number, v'prize_amount, v'prize_percentage_0, v'prize_percentage_1, v'prize_percentage_2, v'prize_percentage_3, v'prize_percentage_4));
+}
+
+(slice, ((int))) $PrizeTester$init$_load(slice sc_0) inline {
+    var v'prize_amount = sc_0~load_int(257);
+    return (sc_0, (v'prize_amount));
+}
+
+(int, int, int, int, int, int, int) $PrizeTester$_contract_load() impure inline_ref {
+    slice $sc = get_data().begin_parse();
+    __tact_context_sys = $sc~load_ref();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$PrizeTester$_load();
+    } else {
+        ;; Allow only workchain deployments
+        throw_unless(137, my_address().preload_uint(11) == 1024);
+        (int prize_amount) = $sc~$PrizeTester$init$_load();
+        $sc.end_parse();
+        return $PrizeTester$_contract_init(prize_amount);
+    }
+}
+
+() $PrizeTester$_contract_store((int, int, int, int, int, int, int) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_ref(__tact_context_sys);
+    b = b.store_int(true, 1);
+    b = $PrizeTester$_store(b, v);
+    set_data(b.end_cell());
+}

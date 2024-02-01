@@ -143,7 +143,11 @@ contract Draw with PrizeDistributor {
     winning_number: Int as uint32 = 0;
     deadline: Int as uint64 = 0;
 
-    prize_percentage: map<Int, Int>;
+    prize_percentage_0: Int as uint16;
+    prize_percentage_1: Int as uint16;
+    prize_percentage_2: Int as uint16;
+    prize_percentage_3: Int as uint16;
+    prize_percentage_4: Int as uint16;
     // ---------------------
 
     init(pool_master: Address, prize_reserve: Address, period: Int) {
@@ -151,12 +155,11 @@ contract Draw with PrizeDistributor {
         self.prize_reserve = prize_reserve;
         self.period = period;        
 
-        self.prize_percentage = emptyMap();
-        self.prize_percentage.set(0, 1);
-        self.prize_percentage.set(1, 3);
-        self.prize_percentage.set(2, 8);
-        self.prize_percentage.set(3, 23);
-        self.prize_percentage.set(4, 65);
+        self.prize_percentage_0 = 100;
+        self.prize_percentage_1 = 300;
+        self.prize_percentage_2 = 800;
+        self.prize_percentage_3 = 2300;
+        self.prize_percentage_4 = 6500;
     }
 
     override inline fun _get_ticket_init(user: Address, pool_account: Address): StateInit {
@@ -176,12 +179,13 @@ contract Draw with PrizeDistributor {
             prize_amount: self.prize_amount,
             avail_prize_amount: self.avail_prize_amount,
             winning_number: self.winning_number,
-            deadline: self.deadline
+            deadline: self.deadline,
+            prize_percentage_0: self.prize_percentage_0,
+            prize_percentage_1: self.prize_percentage_1,
+            prize_percentage_2: self.prize_percentage_2,
+            prize_percentage_3: self.prize_percentage_3,
+            prize_percentage_4: self.prize_percentage_4
         };
-    }
-
-    get fun get_prize_percentage(tier: Int): Int? {
-        return self.prize_percentage.get(tier);
     }
 }
 

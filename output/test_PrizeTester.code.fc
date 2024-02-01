@@ -1,0 +1,171 @@
+#pragma version =0.4.3;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "test_PrizeTester.headers.fc";
+#include "test_PrizeTester.stdlib.fc";
+#include "test_PrizeTester.storage.fc";
+
+;;
+;; Contract PrizeTester functions
+;;
+
+(int, int, int, int, int, int, int) $PrizeTester$_contract_init(int $prize_amount) impure inline_ref {
+    var (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)) = (null(), null(), null(), null(), null(), null(), null());
+    $self'winning_number = ($global_randomInt() % 1048576);
+    $self'prize_amount = $prize_amount;
+    $self'prize_percentage_0 = 1;
+    $self'prize_percentage_1 = 3;
+    $self'prize_percentage_2 = 8;
+    $self'prize_percentage_3 = 23;
+    $self'prize_percentage_4 = 65;
+    return ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4);
+}
+
+((int, int, int, int, int, int, int), int) $PrizeTester$_fun_compute_tier((int, int, int, int, int, int, int) $self, int $pick_number) impure inline {
+    var (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)) = $self;
+    int $winning_number = $self'winning_number;
+    int $tier = 5;
+    int $user_num = ($pick_number % 16);
+    int $win_num = ($winning_number % 16);
+    while (( (($user_num != $win_num)) ? (($tier > 0)) : (false) )) {
+        $tier = ($tier - 1);
+        $pick_number = ($pick_number / 16);
+        $winning_number = ($winning_number / 16);
+        $user_num = ($pick_number % 16);
+        $win_num = ($winning_number % 16);
+    }
+    return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), $tier);
+}
+
+((int, int, int, int, int, int, int), int) $PrizeTester$_fun_prize_amount_per_pick((int, int, int, int, int, int, int) $self, int $tier) impure inline {
+    var (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)) = $self;
+    if (($tier == 0)) {
+        return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), (($self'prize_amount * $self'prize_percentage_0) / 100));
+    } elseif (($tier == 1)) {
+        return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), (($self'prize_amount * $self'prize_percentage_1) / 1500));
+    } elseif (($tier == 2)) {
+        return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), (($self'prize_amount * $self'prize_percentage_2) / 24000));
+    } elseif (($tier == 3)) {
+        return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), (($self'prize_amount * $self'prize_percentage_3) / 384000));
+    } elseif (($tier == 4)) {
+        return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), (($self'prize_amount * $self'prize_percentage_4) / 6144000));
+    } else {
+        return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), 0);
+    }
+}
+
+((int, int, int, int, int, int, int), int) $PrizeTester$_fun_compute_prize_amount((int, int, int, int, int, int, int) $self, slice $pick_payload) impure inline {
+    var (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)) = $self;
+    int $prize_amount = 0;
+    int $size = (slice_bits($pick_payload) / 20);
+    repeat ($size) {
+        int $pick_number = $pick_payload~load_uint(20);
+        int $tier = ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)~$PrizeTester$_fun_compute_tier($pick_number);
+        int $amount = ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)~$PrizeTester$_fun_prize_amount_per_pick($tier);
+        $prize_amount = ($prize_amount + $amount);
+    }
+    return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), $prize_amount);
+}
+
+;;
+;; Receivers of a Contract PrizeTester
+;;
+
+(((int, int, int, int, int, int, int)), ()) $PrizeTester$_internal_binary_ComputePrizeAmount((int, int, int, int, int, int, int) $self, (slice) $msg) impure inline {
+    var ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4) = $self;
+    var ($msg'pick_payload) = $msg;
+    int $prize_amount = 0;
+    repeat (3) {
+        slice $pick_payload = begin_parse($msg'pick_payload~load_ref());
+        int $amount = ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)~$PrizeTester$_fun_compute_prize_amount($pick_payload);
+        $prize_amount = ($prize_amount + $amount);
+    }
+    return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), ());
+}
+
+(((int, int, int, int, int, int, int)), ()) $PrizeTester$_internal_binary_Deploy((int, int, int, int, int, int, int) $self, (int) $deploy) impure inline {
+    var ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4)~$PrizeTester$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'winning_number, $self'prize_amount, $self'prize_percentage_0, $self'prize_percentage_1, $self'prize_percentage_2, $self'prize_percentage_3, $self'prize_percentage_4), ());
+}
+
+;;
+;; Get methods of a Contract PrizeTester
+;;
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmUQqt8iNgDsGfm8nq1yqRwUe8pUq81nDQBocJzTTAv7hQ";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract PrizeTester
+;;
+
+((int, int, int, int, int, int, int), int) $PrizeTester$_contract_router_internal((int, int, int, int, int, int, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive ComputePrizeAmount message
+    if (op == 3641436076) {
+        var msg = in_msg~$ComputePrizeAmount$_load();
+        self~$PrizeTester$_internal_binary_ComputePrizeAmount(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$PrizeTester$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $PrizeTester$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$PrizeTester$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $PrizeTester$_contract_store(self);
+}

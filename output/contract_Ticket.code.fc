@@ -119,10 +119,10 @@
     int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_msg_value(__tact_context_get(), 1000000000);
     throw_unless(2805, ($rest_value >= 0));
     builder $pick_builder = begin_cell();
-    repeat (4) {
+    repeat (3) {
         slice $index_payload = begin_parse($msg'index_payload~load_ref());
         cell $pick_payload = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_payload($index_payload);
-        store_ref($pick_builder, $pick_payload);
+        $pick_builder = store_ref($pick_builder, $pick_payload);
     }
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_pick_payload($self'owner, $self'pool_account, $Builder$_fun_asSlice($pick_builder))), false, null());
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
@@ -192,7 +192,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmUs9pz4MqbPCxKu8bK8eFpDCDDGr8TmmUdzXaTeY4Pg3r";
+    return "ipfs://QmfLRqVMffDrtSKiHKqYPhvhq7MRW1rZcuxpm7BkX8L4aT";
 }
 
 _ lazy_deployment_completed() method_id {

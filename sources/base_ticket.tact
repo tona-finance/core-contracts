@@ -37,11 +37,12 @@ trait BaseTicket with Ownable, MsgValueHelper {
         require(rest_value >= 0, "Insufficient value");
 
         let pick_builder: Builder = beginCell();
-        // Every cell has up to 4 references to other cells
-        repeat(4) {
+        // Every cell has up to 4 references to other cells, but currently 
+        // max gas = 1.0 limit this to 3 references.
+        repeat(3) {
             let index_payload: Slice = msg.index_payload.loadRef().beginParse();
             let pick_payload: Cell = self.compute_pick_payload(index_payload);
-            pick_builder.storeRef(pick_payload);
+            pick_builder = pick_builder.storeRef(pick_payload);
         }
     
         self.forward(

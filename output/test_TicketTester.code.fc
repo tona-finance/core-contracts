@@ -53,10 +53,23 @@
     return (($self'owner, $self'picks, $self'used_indexes), ());
 }
 
-(((slice, int, cell)), ()) $TicketTester$_internal_binary_ComputePickPayload((slice, int, cell) $self, (slice) $msg) impure inline {
+(((slice, int, cell)), ()) $TicketTester$_internal_binary_ComputePickPayload((slice, int, cell) $self, (slice, slice) $msg) impure inline {
     var ($self'owner, $self'picks, $self'used_indexes) = $self;
-    var ($msg'index_payload) = $msg;
-    ($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_compute_pick_payload($msg'index_payload);
+    var ($msg'prize_tester, $msg'index_payload) = $msg;
+    builder $pick_builder = begin_cell();
+    repeat (3) {
+        slice $index_payload = begin_parse($msg'index_payload~load_ref());
+        cell $pick_payload = ($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_compute_pick_payload($index_payload);
+        $pick_builder = store_ref($pick_builder, $pick_payload);
+    }
+    ($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_forward($msg'prize_tester, $ComputePrizeAmount$_store_cell($ComputePrizeAmount$_constructor_pick_payload($Builder$_fun_asSlice($pick_builder))), false, null());
+    return (($self'owner, $self'picks, $self'used_indexes), ());
+}
+
+(((slice, int, cell)), ()) $TicketTester$_internal_binary_Deploy((slice, int, cell) $self, (int) $deploy) impure inline {
+    var ($self'owner, $self'picks, $self'used_indexes) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'owner, $self'picks, $self'used_indexes)~$TicketTester$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
     return (($self'owner, $self'picks, $self'used_indexes), ());
 }
 
@@ -75,7 +88,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmQtCbXNsUNCD1Cn7LJuH4RKMTqyP9DhSSd2TsRoxyEdaV";
+    return "ipfs://QmZhRQvdgCWKaHmhmM9gCuhb5qFvnFTg7Emw7fUXVuMXZd";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -107,9 +120,16 @@ _ lazy_deployment_completed() method_id {
     }
     
     ;; Receive ComputePickPayload message
-    if (op == 2685960500) {
+    if (op == 849587341) {
         var msg = in_msg~$ComputePickPayload$_load();
         self~$TicketTester$_internal_binary_ComputePickPayload(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$TicketTester$_internal_binary_Deploy(msg);
         return (self, true);
     }
     

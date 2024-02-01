@@ -1,4 +1,57 @@
 ;;
+;; Type: StateInit
+;; TLB: _ code:^cell data:^cell = StateInit
+;;
+
+((cell, cell)) $StateInit$_not_null(tuple v) inline {
+    throw_if(128, null?(v));
+    var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
+    return (vvv'code, vvv'data);
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
+;;
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline {
+    return (bounce, to, value, mode, body, code, data);
+}
+
+;;
+;; Type: Deploy
+;; Header: 0x946a98b6
+;; TLB: deploy#946a98b6 queryId:uint64 = Deploy
+;;
+
+(slice, ((int))) $Deploy$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v) inline {
+    return $DeployOk$_store(begin_cell(), v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int queryId) inline {
+    return (queryId);
+}
+
+;;
 ;; Type: ComputePickNumber
 ;; Header: 0x28b5ae3b
 ;; TLB: compute_pick_number#28b5ae3b index:uint32 expected_number:uint32 = ComputePickNumber
@@ -13,14 +66,36 @@
 
 ;;
 ;; Type: ComputePickPayload
-;; Header: 0xa0188134
-;; TLB: compute_pick_payload#a0188134 index_payload:^slice = ComputePickPayload
+;; Header: 0x32a3ac8d
+;; TLB: compute_pick_payload#32a3ac8d prize_tester:address index_payload:remainder<slice> = ComputePickPayload
 ;;
 
-(slice, ((slice))) $ComputePickPayload$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2685960500);
-    var v'index_payload = sc_0~load_ref().begin_parse();
-    return (sc_0, (v'index_payload));
+(slice, ((slice, slice))) $ComputePickPayload$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 849587341);
+    var v'prize_tester = sc_0~__tact_load_address();
+    var v'index_payload = sc_0;
+    return (sc_0, (v'prize_tester, v'index_payload));
+}
+
+;;
+;; Type: ComputePrizeAmount
+;; Header: 0xd90be7ac
+;; TLB: compute_prize_amount#d90be7ac pick_payload:remainder<slice> = ComputePrizeAmount
+;;
+
+builder $ComputePrizeAmount$_store(builder build_0, (slice) v) inline {
+    var (v'pick_payload) = v;
+    build_0 = store_uint(build_0, 3641436076, 32);
+    build_0 = build_0.store_slice(v'pick_payload);
+    return build_0;
+}
+
+cell $ComputePrizeAmount$_store_cell((slice) v) inline {
+    return $ComputePrizeAmount$_store(begin_cell(), v).end_cell();
+}
+
+((slice)) $ComputePrizeAmount$_constructor_pick_payload(slice pick_payload) inline {
+    return (pick_payload);
 }
 
 ;;

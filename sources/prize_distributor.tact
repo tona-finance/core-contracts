@@ -24,7 +24,11 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
     deadline: Int;
     // ---------------------
 
-    prize_percentage: map<Int, Int>;
+    prize_percentage_0: Int;
+    prize_percentage_1: Int;
+    prize_percentage_2: Int;
+    prize_percentage_3: Int;
+    prize_percentage_4: Int;
 
     receive(msg: ClaimPrizeInternal) {
         self.require_active();
@@ -33,7 +37,8 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
 
         let prize_amount: Int = 0;
         repeat(4) {
-            let amount: Int = self.compute_prize_amount(msg.pick_payload);
+            let pick_payload: Slice = msg.pick_payload.loadRef().beginParse();
+            let amount: Int = self.compute_prize_amount(pick_payload);
             prize_amount = prize_amount + amount;
         }
         let pay_amount: Int = min(prize_amount, self.avail_prize_amount);
@@ -76,10 +81,16 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
     }
 
     fun prize_amount_per_pick(tier: Int): Int {
-        let percentage: Int? = self.prize_percentage.get(tier);
-        if (percentage != null) {
-            let prizes: Int = self.prizes_per_tier(tier);
-            return self.prize_amount * percentage!! / 100 / prizes;
+        if (tier == 0) {
+            return self.prize_amount * self.prize_percentage_0 / 10000;
+        } else if (tier == 1) {
+            return self.prize_amount * self.prize_percentage_1 / 150000;
+        } else if (tier == 2) {
+            return self.prize_amount * self.prize_percentage_2 / 2400000;
+        } else if (tier == 3) {
+            return self.prize_amount * self.prize_percentage_3 / 38400000;
+        } else if (tier == 4) {
+            return self.prize_amount * self.prize_percentage_4 / 614400000;
         } else {
             return 0;
         }
@@ -110,22 +121,6 @@ trait PrizeDistributor with DrawBeacon, MsgValueHelper {
             prize_amount = prize_amount + amount;
         }
         return prize_amount;
-    }
-
-    inline fun prizes_per_tier(tier: Int): Int {
-        require(tier < self.CARDINALITY, "Invalid tier");
-
-        if (tier == 0) {
-            return 1;
-        } else if (tier == 1) {
-            return 15;
-        } else if (tier == 2) {
-            return 240;
-        } else if (tier == 3) {
-            return 3840;
-        } else {
-            return 61440;
-        }
     }
 
     inline fun require_ticket(user: Address, pool_account: Address) {
