@@ -16,16 +16,9 @@
     return ($self'pool_master);
 }
 
-((slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice) $self, slice $user) impure inline {
+((slice), (cell, cell)) $PrizeReserve$_fun__get_pool_account_init((slice) $self, slice $user) impure inline {
     var (($self'pool_master)) = $self;
-    var ($sinit'code, $sinit'data) = $PoolAccount$_init_child(__tact_context_sys, $user, $self'pool_master, my_address());
-    return (($self'pool_master), $global_contractAddress(($sinit'code, $sinit'data)));
-}
-
-((slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice) $self, slice $user, slice $draw, int $period) impure inline {
-    var (($self'pool_master)) = $self;
-    slice $pool_account = ($self'pool_master)~$PrizeReserve$_fun__get_pool_account_address($user);
-    return (($self'pool_master), $Ticket$_init_child(__tact_context_sys, $user, $pool_account, $draw, $period));
+    return (($self'pool_master), $PoolAccount$_init_child(__tact_context_sys, $user, $self'pool_master, my_address()));
 }
 
 ((slice), (slice, int)) $PrizeReserve$_fun_get_core_data((slice) $self) impure inline {
@@ -33,15 +26,15 @@
     return (($self'pool_master), $PrizeReserveData$_constructor_pool_master_balance($self'pool_master, (__tact_my_balance() - 10000000)));
 }
 
-((slice), slice) $PrizeReserve$_fun__get_ticket_address((slice) $self, slice $user, slice $draw, int $period) impure inline {
+((slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice) $self, slice $user) impure inline {
     var (($self'pool_master)) = $self;
-    var ($sinit'code, $sinit'data) = ($self'pool_master)~$PrizeReserve$_fun__get_ticket_init($user, $draw, $period);
+    var ($sinit'code, $sinit'data) = ($self'pool_master)~$PrizeReserve$_fun__get_pool_account_init($user);
     return (($self'pool_master), $global_contractAddress(($sinit'code, $sinit'data)));
 }
 
-((slice), ()) $PrizeReserve$_fun_require_ticket((slice) $self, slice $user, slice $draw, int $period) impure inline {
+((slice), ()) $PrizeReserve$_fun_require_pool_account((slice) $self, slice $user) impure inline {
     var (($self'pool_master)) = $self;
-    throw_unless(4429, ( __tact_slice_eq_bits(($self'pool_master)~$PrizeReserve$_fun__get_ticket_address($user, $draw, $period), __tact_context_get_sender()) ));
+    throw_unless(40127, ( __tact_slice_eq_bits(($self'pool_master)~$PrizeReserve$_fun__get_pool_account_address($user), __tact_context_get_sender()) ));
     return (($self'pool_master), ());
 }
 
@@ -54,14 +47,13 @@
     return (($self'pool_master), ());
 }
 
-(((slice)), ()) $PrizeReserve$_internal_binary_ClaimPrizeDebtInternal((slice) $self, (int, slice, slice, int) $msg) impure inline {
+(((slice)), ()) $PrizeReserve$_internal_binary_ClaimPrizeDebtInternal((slice) $self, (int, slice) $msg) impure inline {
     var ($self'pool_master) = $self;
-    var ($msg'amount, $msg'user, $msg'draw, $msg'period) = $msg;
-    ($self'pool_master)~$PrizeReserve$_fun_require_ticket($msg'user, $msg'draw, $msg'period);
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    int $fee = ($Context$_fun_readForwardFee(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) + 10000000);
+    var ($msg'amount, $msg'user) = $msg;
+    ($self'pool_master)~$PrizeReserve$_fun_require_pool_account($msg'user);
+    int $fee = ($Context$_fun_readForwardFee(__tact_context_get()) + 10000000);
     raw_reserve((((__tact_my_balance() - 10000000) - $fee) - $msg'amount), 0);
-    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, $msg'user, $msg'amount, 128));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, $msg'user, $msg'amount, (128 + 2)));
     return (($self'pool_master), ());
 }
 
@@ -92,7 +84,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmSrSzaa2N9y2cuUDBEQbCA3v7C3UKLoWM9XV3CsjwNzfy";
+    return "ipfs://QmciACL24C2tRTL9B9mHcgyBGCgaJEtXJ1H49fiHUwQi1S";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -123,7 +115,7 @@ _ lazy_deployment_completed() method_id {
     }
     
     ;; Receive ClaimPrizeDebtInternal message
-    if (op == 1036077356) {
+    if (op == 875353941) {
         var msg = in_msg~$ClaimPrizeDebtInternal$_load();
         self~$PrizeReserve$_internal_binary_ClaimPrizeDebtInternal(msg);
         return (self, true);

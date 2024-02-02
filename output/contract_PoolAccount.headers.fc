@@ -106,19 +106,34 @@ cell $WithdrawInternal$_store_cell((int, slice) v) inline;
 (slice, ((int, int))) $WithdrawFinish$_load(slice sc_0) inline;
 
 ;; $PrepareInitTicket$_load
-(slice, ((int, int, int, int))) $PrepareInitTicket$_load(slice sc_0) inline;
+(slice, ((int, int, int, int, int))) $PrepareInitTicket$_load(slice sc_0) inline;
+
+;; $ClaimPrizeDebt$_load
+(slice, ((int, slice))) $ClaimPrizeDebt$_load(slice sc_0) inline;
 
 ;; $InitTicketInternal$_store
-builder $InitTicketInternal$_store(builder build_0, (int, int) v) inline;
+builder $InitTicketInternal$_store(builder build_0, (int, int, int) v) inline;
 
 ;; $InitTicketInternal$_store_cell
-cell $InitTicketInternal$_store_cell((int, int) v) inline;
+cell $InitTicketInternal$_store_cell((int, int, int) v) inline;
+
+;; $PayPrizeDebtInternal$_load
+(slice, ((slice, int, int))) $PayPrizeDebtInternal$_load(slice sc_0) inline;
+
+;; $ClaimPrizeDebtInternal$_store
+builder $ClaimPrizeDebtInternal$_store(builder build_0, (int, slice) v) inline;
+
+;; $ClaimPrizeDebtInternal$_store_cell
+cell $ClaimPrizeDebtInternal$_store_cell((int, slice) v) inline;
+
+;; $ClaimPrizeDebtInternal$_load_bounced
+(slice, ((int))) $ClaimPrizeDebtInternal$_load_bounced(slice sc_0) inline;
 
 ;; $PoolAccount$_store
-builder $PoolAccount$_store(builder build_0, (slice, slice, (cell, int), int, int, slice) v) inline;
+builder $PoolAccount$_store(builder build_0, (slice, slice, (cell, int), int, int, slice, int) v) inline;
 
 ;; $PoolAccount$_load
-(slice, ((slice, slice, (cell, int), int, int, slice))) $PoolAccount$_load(slice sc_0) inline;
+(slice, ((slice, slice, (cell, int), int, int, slice, int))) $PoolAccount$_load(slice sc_0) inline;
 
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
@@ -133,7 +148,7 @@ tuple $StateInit$_as_optional((cell, cell) v) inline;
 (int, int) $Twab$_to_external(((int, int)) v) inline;
 
 ;; $PoolAccountData$_to_external
-(slice, slice, slice, int) $PoolAccountData$_to_external(((slice, slice, slice, int)) v) inline;
+(slice, slice, slice, int, int) $PoolAccountData$_to_external(((slice, slice, slice, int, int)) v) inline;
 
 ;; $PoolAccount$init$_load
 (slice, ((slice, slice, slice))) $PoolAccount$init$_load(slice sc_0) inline;
@@ -151,13 +166,13 @@ builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inlin
 (cell, int) $global_new_twab_store() impure inline;
 
 ;; $PoolAccount$_contract_init
-(slice, slice, (cell, int), int, int, slice) $PoolAccount$_contract_init(slice $owner, slice $master, slice $prize_reserve) impure inline_ref;
+(slice, slice, (cell, int), int, int, slice, int) $PoolAccount$_contract_init(slice $owner, slice $master, slice $prize_reserve) impure inline_ref;
 
 ;; $PoolAccount$_contract_load
-(slice, slice, (cell, int), int, int, slice) $PoolAccount$_contract_load() impure inline_ref;
+(slice, slice, (cell, int), int, int, slice, int) $PoolAccount$_contract_load() impure inline_ref;
 
 ;; $PoolAccount$_contract_store
-() $PoolAccount$_contract_store((slice, slice, (cell, int), int, int, slice) v) impure inline;
+() $PoolAccount$_contract_store((slice, slice, (cell, int), int, int, slice, int) v) impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
@@ -190,61 +205,64 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline;
 (cell, cell) $Draw$_init_child(cell sys', slice $pool_master, slice $prize_reserve, int $period) inline;
 
 ;; $PoolAccount$_fun__get_draw_init
-((slice, slice, (cell, int), int, int, slice), (cell, cell)) $PoolAccount$_fun__get_draw_init((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), (cell, cell)) $PoolAccount$_fun__get_draw_init((slice, slice, (cell, int), int, int, slice, int) $self, int $period) impure inline;
 
 ;; $PoolAccount$_fun__get_draw_address
-((slice, slice, (cell, int), int, int, slice), slice) $PoolAccount$_fun__get_draw_address((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), slice) $PoolAccount$_fun__get_draw_address((slice, slice, (cell, int), int, int, slice, int) $self, int $period) impure inline;
 
 ;; $Ticket$_init_child
 (cell, cell) $Ticket$_init_child(cell sys', slice $owner, slice $pool_account, slice $draw, int $period) inline;
 
 ;; $PoolAccount$_fun__get_ticket_init
-((slice, slice, (cell, int), int, int, slice), (cell, cell)) $PoolAccount$_fun__get_ticket_init((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), (cell, cell)) $PoolAccount$_fun__get_ticket_init((slice, slice, (cell, int), int, int, slice, int) $self, int $period) impure inline;
 
-;; $PoolAccountData$_constructor_owner_master_prize_reserve_share_amount
-((slice, slice, slice, int)) $PoolAccountData$_constructor_owner_master_prize_reserve_share_amount(slice owner, slice master, slice prize_reserve, int share_amount) inline;
+;; $PoolAccountData$_constructor_owner_master_prize_reserve_share_amount_debt_amount
+((slice, slice, slice, int, int)) $PoolAccountData$_constructor_owner_master_prize_reserve_share_amount_debt_amount(slice owner, slice master, slice prize_reserve, int share_amount, int debt_amount) inline;
 
 ;; $PoolAccount$_fun_get_core_data
-((slice, slice, (cell, int), int, int, slice), (slice, slice, slice, int)) $PoolAccount$_fun_get_core_data((slice, slice, (cell, int), int, int, slice) $self) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), (slice, slice, slice, int, int)) $PoolAccount$_fun_get_core_data((slice, slice, (cell, int), int, int, slice, int) $self) impure inline;
 
 ;; $PoolAccount$_fun__get_ticket_address
-((slice, slice, (cell, int), int, int, slice), slice) $PoolAccount$_fun__get_ticket_address((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), slice) $PoolAccount$_fun__get_ticket_address((slice, slice, (cell, int), int, int, slice, int) $self, int $period) impure inline;
 
 ;; $PoolAccount$_fun_get_ticket_address
-((slice, slice, (cell, int), int, int, slice), slice) $PoolAccount$_fun_get_ticket_address((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), slice) $PoolAccount$_fun_get_ticket_address((slice, slice, (cell, int), int, int, slice, int) $self, int $period) impure inline;
 
 ;; $PoolAccount$_fun_get_twab_size
-((slice, slice, (cell, int), int, int, slice), int) $PoolAccount$_fun_get_twab_size((slice, slice, (cell, int), int, int, slice) $self) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), int) $PoolAccount$_fun_get_twab_size((slice, slice, (cell, int), int, int, slice, int) $self) impure inline;
 
 ;; $PoolAccount$_fun_binary_search_twab
-((slice, slice, (cell, int), int, int, slice), (int, int)) $PoolAccount$_fun_binary_search_twab((slice, slice, (cell, int), int, int, slice) $self, int $timestamp) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), (int, int)) $PoolAccount$_fun_binary_search_twab((slice, slice, (cell, int), int, int, slice, int) $self, int $timestamp) impure inline;
 
 ;; $PoolAccount$_fun_forward
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_forward((slice, slice, (cell, int), int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_forward((slice, slice, (cell, int), int, int, slice, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $PoolAccount$_fun_notify
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_notify((slice, slice, (cell, int), int, int, slice) $self, cell $body) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_notify((slice, slice, (cell, int), int, int, slice, int) $self, cell $body) impure inline;
 
 ;; $PoolAccount$_fun_require_draw
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_require_draw((slice, slice, (cell, int), int, int, slice) $self, int $period) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_require_draw((slice, slice, (cell, int), int, int, slice, int) $self, int $period) impure inline;
 
 ;; $PoolAccount$_fun_require_unlocked
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_require_unlocked((slice, slice, (cell, int), int, int, slice) $self) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_require_unlocked((slice, slice, (cell, int), int, int, slice, int) $self) impure inline;
 
 ;; $PoolAccount$_fun_require_master
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_require_master((slice, slice, (cell, int), int, int, slice) $self) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_require_master((slice, slice, (cell, int), int, int, slice, int) $self) impure inline;
 
 ;; $PoolAccount$_fun_requireOwner
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_requireOwner((slice, slice, (cell, int), int, int, slice) $self) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_requireOwner((slice, slice, (cell, int), int, int, slice, int) $self) impure inline;
 
 ;; $PoolAccount$_fun_owner
-((slice, slice, (cell, int), int, int, slice), slice) $PoolAccount$_fun_owner((slice, slice, (cell, int), int, int, slice) $self) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), slice) $PoolAccount$_fun_owner((slice, slice, (cell, int), int, int, slice, int) $self) impure inline;
 
 ;; $PoolAccount$_fun_msg_value
-((slice, slice, (cell, int), int, int, slice), int) $PoolAccount$_fun_msg_value((slice, slice, (cell, int), int, int, slice) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline;
+((slice, slice, (cell, int), int, int, slice, int), int) $PoolAccount$_fun_msg_value((slice, slice, (cell, int), int, int, slice, int) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline;
 
-;; $InitTicketInternal$_constructor_draw_avg_balance_user_avg_balance
-((int, int)) $InitTicketInternal$_constructor_draw_avg_balance_user_avg_balance(int draw_avg_balance, int user_avg_balance) inline;
+;; $InitTicketInternal$_constructor_winning_number_draw_avg_balance_user_avg_balance
+((int, int, int)) $InitTicketInternal$_constructor_winning_number_draw_avg_balance_user_avg_balance(int winning_number, int draw_avg_balance, int user_avg_balance) inline;
+
+;; $ClaimPrizeDebtInternal$_constructor_amount_user
+((int, slice)) $ClaimPrizeDebtInternal$_constructor_amount_user(int amount, slice user) inline;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;

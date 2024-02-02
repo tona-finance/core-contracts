@@ -10,152 +10,159 @@
 ;; Contract Ticket functions
 ;;
 
-(slice, int, slice, slice, int, int, cell, int) $Ticket$_contract_init(slice $owner, slice $pool_account, slice $draw, int $period) impure inline_ref {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = (null(), false, null(), null(), null(), 0, null(), 0);
+(int, int, int, int) $global_empty_winning_split() impure inline {
+    return $WinningSplit$_constructor_n0_n1_n2_n3(0, 0, 0, 0);
+}
+
+(slice, int, slice, slice, int, (int, int, int, int), int, cell) $Ticket$_contract_init(slice $owner, slice $pool_account, slice $draw, int $period) impure inline_ref {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = (null(), false, null(), null(), null(), null(), 0, null());
     $self'owner = $owner;
     $self'pool_account = $pool_account;
     $self'draw = $draw;
     $self'period = $period;
+    ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3) = $global_empty_winning_split();
     $self'used_indexes = null();
-    return ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount);
+    return ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes);
 }
 
-((slice, int, slice, slice, int, int, cell, int), (int, slice, slice, slice, int, int, int)) $Ticket$_fun_get_core_data((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount($self'active, $self'owner, $self'pool_account, $self'draw, $self'period, $self'picks, $self'debt_amount));
+((int, int, int, int), ()) $WinningSplit$_fun_apply((int, int, int, int) $self, int $winning_number) impure inline {
+    var (($self'n0, $self'n1, $self'n2, $self'n3)) = $self;
+    var (($self'n0, $self'n1, $self'n2, $self'n3)) = $self;
+    $self'n0 = ($winning_number % 16);
+    $winning_number = ($winning_number / 16);
+    $self'n1 = ($winning_number % 16);
+    $winning_number = ($winning_number / 16);
+    $self'n2 = ($winning_number % 16);
+    $winning_number = ($winning_number / 16);
+    $self'n3 = ($winning_number % 16);
+    return (($self'n0, $self'n1, $self'n2, $self'n3), ());
 }
 
-((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_get_index_status((slice, int, slice, slice, int, int, cell, int) $self, int $index) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), __tact_dict_get_int_int($self'used_indexes, 257, $index, 1));
+int $WinningSplit$_fun_compute_prize_scale((int, int, int, int) $self, int $pick_number) impure inline {
+    var (($self'n0, $self'n1, $self'n2, $self'n3)) = $self;
+    var (($self'n0, $self'n1, $self'n2, $self'n3)) = $self;
+    int $num = ($pick_number % 16);
+    if (($num != $self'n0)) {
+        return 0;
+    }
+    $pick_number = ($pick_number / 16);
+    $num = ($pick_number % 16);
+    if (($num != $self'n1)) {
+        return 6750;
+    }
+    $pick_number = ($pick_number / 16);
+    $num = ($pick_number % 16);
+    if (($num != $self'n2)) {
+        return 36000;
+    }
+    $pick_number = ($pick_number / 16);
+    $num = ($pick_number % 16);
+    if (($num != $self'n3)) {
+        return 192000;
+    }
+    return 960000;
 }
 
-((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_compute_pick_number((slice, int, slice, slice, int, int, cell, int) $self, int $index) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), cell_hash(end_cell(store_uint(__tact_store_address(begin_cell(), my_address()), $index, 20))));
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), (int, slice, slice, slice, int, int)) $Ticket$_fun_get_core_data((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), $TicketData$_constructor_active_owner_pool_account_draw_period_picks($self'active, $self'owner, $self'pool_account, $self'draw, $self'period, $self'picks));
 }
 
-((slice, int, slice, slice, int, int, cell, int), cell) $Ticket$_fun_compute_pick_payload((slice, int, slice, slice, int, int, cell, int) $self, slice $index_payload) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
-    int $size = (slice_bits($index_payload) / 20);
-    throw_unless(13788, ($size <= 51));
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), int) $Ticket$_fun_get_index_status((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, int $index) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), __tact_dict_get_int_int($self'used_indexes, 257, $index, 1));
+}
+
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), int) $Ticket$_fun_compute_pick_number((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, int $index) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
+    int $hash = cell_hash(end_cell(store_uint(__tact_store_address(begin_cell(), my_address()), $index, 16)));
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ($hash % 65536));
+}
+
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), int) $Ticket$_fun_compute_prize_scale((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, slice $index_payload) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
+    int $size = (slice_bits($index_payload) / 16);
     $self'picks = ($self'picks - $size);
     throw_unless(16022, ($self'picks >= 0));
-    builder $pick_payload = begin_cell();
+    int $scale = 0;
     repeat ($size) {
-        int $pick_index = $index_payload~load_uint(20);
+        int $pick_index = $index_payload~load_uint(16);
         int $pick_used = __tact_dict_get_int_int($self'used_indexes, 257, $pick_index, 1);
-        throw_unless(60931, null?($pick_used));
+        throw_unless(46002, null?($pick_used));
         $self'used_indexes~__tact_dict_set_int_int(257, $pick_index, true, 1);
-        int $pick_number = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_number($pick_index);
-        store_uint($pick_payload, ($pick_number % 1048576), 20);
+        int $pick_number = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_compute_pick_number($pick_index);
+        $scale = ($scale + $WinningSplit$_fun_compute_prize_scale(($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $pick_number));
     }
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), end_cell($pick_payload));
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), $scale);
 }
 
-((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_require_draw((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
-    throw_unless(4429, ( __tact_slice_eq_bits($self'draw, __tact_context_get_sender()) ));
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
-}
-
-((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_require_pool_account((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), ()) $Ticket$_fun_require_pool_account((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
     throw_unless(4429, ( __tact_slice_eq_bits($self'pool_account, __tact_context_get_sender()) ));
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
-((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_require_active((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), ()) $Ticket$_fun_require_active((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
     throw_unless(49516, $self'active);
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
-((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_require_inactive((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), ()) $Ticket$_fun_require_inactive((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
     throw_unless(30919, (~ $self'active));
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
-((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_requireOwner((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), ()) $Ticket$_fun_requireOwner((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
     throw_unless(132, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
-((slice, int, slice, slice, int, int, cell, int), slice) $Ticket$_fun_owner((slice, int, slice, slice, int, int, cell, int) $self) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), $self'owner);
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), slice) $Ticket$_fun_owner((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), $self'owner);
 }
 
-((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_fun_msg_value((slice, int, slice, slice, int, int, cell, int) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), int) $Ticket$_fun_msg_value((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, (int, slice, int, slice) $ctx, int $gas_consumption) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
     var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
     int $balance_before_msg = (__tact_my_balance() - $ctx'value);
     int $storage_fee = (100000000 - min($balance_before_msg, 100000000));
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ($ctx'value - ($storage_fee + $gas_consumption)));
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ($ctx'value - ($storage_fee + $gas_consumption)));
 }
 
 ;;
 ;; Receivers of a Contract Ticket
 ;;
 
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_InitTicketInternal((slice, int, slice, slice, int, int, cell, int) $self, (int, int) $msg) impure inline {
-    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
-    var ($msg'draw_avg_balance, $msg'user_avg_balance) = $msg;
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_inactive();
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_pool_account();
+(((slice, int, slice, slice, int, (int, int, int, int), int, cell)), ()) $Ticket$_internal_binary_InitTicketInternal((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, (int, int, int) $msg) impure inline {
+    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes) = $self;
+    var ($msg'winning_number, $msg'draw_avg_balance, $msg'user_avg_balance) = $msg;
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_require_inactive();
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_require_pool_account();
     $self'active = true;
-    $self'picks = ((1048576 * $msg'user_avg_balance) / $msg'draw_avg_balance);
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'owner, null(), false, null());
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3)~$WinningSplit$_fun_apply($msg'winning_number);
+    $self'picks = ((65536 * $msg'user_avg_balance) / $msg'draw_avg_balance);
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_forward($self'owner, null(), false, null());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_ClaimPrize((slice, int, slice, slice, int, int, cell, int) $self, (slice) $msg) impure inline {
-    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
+(((slice, int, slice, slice, int, (int, int, int, int), int, cell)), ()) $Ticket$_internal_binary_ClaimPrize((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, (slice) $msg) impure inline {
+    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes) = $self;
     var ($msg'index_payload) = $msg;
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_active();
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_requireOwner();
-    int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_msg_value(__tact_context_get(), 1000000000);
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_require_active();
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_requireOwner();
+    int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_msg_value(__tact_context_get(), 800000000);
     throw_unless(2805, ($rest_value >= 0));
-    builder $pick_builder = begin_cell();
-    repeat (3) {
+    int $prize_scale = 0;
+    repeat (2) {
         slice $index_payload = begin_parse($msg'index_payload~load_ref());
-        cell $pick_payload = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_compute_pick_payload($index_payload);
-        $pick_builder = store_ref($pick_builder, $pick_payload);
+        $prize_scale = ($prize_scale + ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_compute_prize_scale($index_payload));
     }
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_pick_payload($self'owner, $self'pool_account, $Builder$_fun_asSlice($pick_builder))), false, null());
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
-}
-
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_ClaimPrizeDebt((slice, int, slice, slice, int, int, cell, int) $self, (int, slice) $msg) impure inline {
-    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
-    var ($msg'amount, $msg'reserve) = $msg;
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_active();
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_requireOwner();
-    throw_unless(16960, ($msg'amount <= $self'debt_amount));
-    int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_msg_value(__tact_context_get(), 100000000);
-    throw_unless(2805, ($rest_value >= 0));
-    $self'debt_amount = ($self'debt_amount - $msg'amount);
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($msg'reserve, $ClaimPrizeDebtInternal$_store_cell($ClaimPrizeDebtInternal$_constructor_amount_user_draw_period($msg'amount, $self'owner, $self'draw, $self'period)), true, null());
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
-}
-
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_internal_binary_PayPrizeDebtInternal((slice, int, slice, slice, int, int, cell, int) $self, (slice, int) $msg) impure inline {
-    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
-    var ($msg'user, $msg'amount) = $msg;
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_active();
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_require_draw();
-    $self'debt_amount = ($self'debt_amount + $msg'amount);
-    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)~$Ticket$_fun_forward($msg'user, null(), false, null());
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
-}
-
-(((slice, int, slice, slice, int, int, cell, int)), ()) $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal((slice, int, slice, slice, int, int, cell, int) $self, (int) $src) impure inline {
-    var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount) = $self;
-    var ($src'amount) = $src;
-    $self'debt_amount = ($self'debt_amount + $src'amount);
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_prize_scale($self'owner, $self'pool_account, $prize_scale)), false, null());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
 ;;
@@ -192,7 +199,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmfLRqVMffDrtSKiHKqYPhvhq7MRW1rZcuxpm7BkX8L4aT";
+    return "ipfs://QmRHWu3FxWfb5CV4cau36xaWBzF9CcpWoA9zR1K2ihbu6p";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -203,26 +210,9 @@ _ lazy_deployment_completed() method_id {
 ;; Routing of a Contract Ticket
 ;;
 
-((slice, int, slice, slice, int, int, cell, int), int) $Ticket$_contract_router_internal((slice, int, slice, slice, int, int, cell, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), int) $Ticket$_contract_router_internal((slice, int, slice, slice, int, (int, int, int, int), int, cell) self, int msg_bounced, slice in_msg) impure inline_ref {
     ;; Handle bounced messages
     if (msg_bounced) {
-        
-        ;; Skip 0xFFFFFFFF
-        in_msg~skip_bits(32);
-        
-        ;; Parse op
-        int op = 0;
-        if (slice_bits(in_msg) >= 32) {
-            op = in_msg.preload_uint(32);
-        }
-        
-        ;; Bounced handler for ClaimPrizeDebtInternal message
-        if (op == 1036077356) {
-            var msg = in_msg~$ClaimPrizeDebtInternal$_load_bounced();
-            self~$Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal(msg);
-            return (self, true);
-        }
-        
         return (self, true);
     }
     
@@ -234,7 +224,7 @@ _ lazy_deployment_completed() method_id {
     
     
     ;; Receive InitTicketInternal message
-    if (op == 2970604814) {
+    if (op == 1186322253) {
         var msg = in_msg~$InitTicketInternal$_load();
         self~$Ticket$_internal_binary_InitTicketInternal(msg);
         return (self, true);
@@ -244,20 +234,6 @@ _ lazy_deployment_completed() method_id {
     if (op == 3150229583) {
         var msg = in_msg~$ClaimPrize$_load();
         self~$Ticket$_internal_binary_ClaimPrize(msg);
-        return (self, true);
-    }
-    
-    ;; Receive ClaimPrizeDebt message
-    if (op == 1998527298) {
-        var msg = in_msg~$ClaimPrizeDebt$_load();
-        self~$Ticket$_internal_binary_ClaimPrizeDebt(msg);
-        return (self, true);
-    }
-    
-    ;; Receive PayPrizeDebtInternal message
-    if (op == 1506985886) {
-        var msg = in_msg~$PayPrizeDebtInternal$_load();
-        self~$Ticket$_internal_binary_PayPrizeDebtInternal(msg);
         return (self, true);
     }
     

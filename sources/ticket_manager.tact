@@ -3,7 +3,7 @@ import "./messages";
 import "./base_pool_account";
 
 
-trait TicketInitializer with BasePoolAccount {
+trait TicketManager with BasePoolAccount {
 
     // from BasePoolAccount
     // ---------------------
@@ -14,6 +14,8 @@ trait TicketInitializer with BasePoolAccount {
     share_amount: Int;
     lock: Bool;
     // ---------------------
+
+    debt_amount: Int;
 
     receive(msg: PrepareInitTicket) {
         self.require_draw(msg.period);
@@ -28,12 +30,46 @@ trait TicketInitializer with BasePoolAccount {
         self.forward(
             contractAddress(sinit),
             InitTicketInternal {
+                winning_number: msg.winning_number,
                 draw_avg_balance: msg.avg_balance,
                 user_avg_balance: avg_balance
             }.toCell(),
             false,
             sinit
         );
+    }
+
+    receive(msg: PayPrizeDebtInternal) {
+        self.require_draw(msg.period);
+
+        self.debt_amount = self.debt_amount + msg.amount;
+
+        // refund gas
+        self.forward(msg.user, null, false, null);
+    }
+
+    receive(msg: ClaimPrizeDebt) {
+        self.requireOwner();
+        require(msg.amount <= self.debt_amount, "Invalid claim amount");
+
+        // claim prize debt gas fee 0.1
+        let rest_value: Int = self.msg_value(context(), ton("0.1"));
+        require(rest_value >= 0, "Insufficient value");
+
+        self.debt_amount = self.debt_amount - msg.amount;
+        self.forward(
+            msg.reserve,
+            ClaimPrizeDebtInternal {
+                amount: msg.amount,
+                user: self.owner
+            }.toCell(),
+            true, // bounce this message
+            null
+        );
+    }
+
+    bounced(src: bounced<ClaimPrizeDebtInternal>) {
+        self.debt_amount = self.debt_amount + src.amount;
     }
 
     inline fun require_draw(period: Int) {

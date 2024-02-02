@@ -10,6 +10,16 @@
 }
 
 ;;
+;; Type: Context
+;; TLB: _ bounced:bool sender:address value:int257 raw:^slice = Context
+;;
+
+_ $Context$_get_value((int, slice, int, slice) v) inline {
+    var (v'bounced, v'sender, v'value, v'raw) = v;
+    return v'value;
+}
+
+;;
 ;; Type: SendParameters
 ;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
 ;;
@@ -76,26 +86,27 @@ tuple $Twab$_to_opt_tuple(tuple v) inline {
 
 ;;
 ;; Type: PrepareInitTicket
-;; Header: 0xfd2a75d9
-;; TLB: prepare_init_ticket#fd2a75d9 period:uint32 start:uint64 end:uint64 avg_balance:coins = PrepareInitTicket
+;; Header: 0x46b9f6cb
+;; TLB: prepare_init_ticket#46b9f6cb period:uint32 winning_number:uint32 start:uint64 end:uint64 avg_balance:coins = PrepareInitTicket
 ;;
 
-builder $PrepareInitTicket$_store(builder build_0, (int, int, int, int) v) inline {
-    var (v'period, v'start, v'end, v'avg_balance) = v;
-    build_0 = store_uint(build_0, 4247418329, 32);
+builder $PrepareInitTicket$_store(builder build_0, (int, int, int, int, int) v) inline {
+    var (v'period, v'winning_number, v'start, v'end, v'avg_balance) = v;
+    build_0 = store_uint(build_0, 1186592459, 32);
     build_0 = build_0.store_uint(v'period, 32);
+    build_0 = build_0.store_uint(v'winning_number, 32);
     build_0 = build_0.store_uint(v'start, 64);
     build_0 = build_0.store_uint(v'end, 64);
     build_0 = build_0.store_coins(v'avg_balance);
     return build_0;
 }
 
-cell $PrepareInitTicket$_store_cell((int, int, int, int) v) inline {
+cell $PrepareInitTicket$_store_cell((int, int, int, int, int) v) inline {
     return $PrepareInitTicket$_store(begin_cell(), v).end_cell();
 }
 
-((int, int, int, int)) $PrepareInitTicket$_constructor_period_start_end_avg_balance(int period, int start, int end, int avg_balance) inline {
-    return (period, start, end, avg_balance);
+((int, int, int, int, int)) $PrepareInitTicket$_constructor_period_winning_number_start_end_avg_balance(int period, int winning_number, int start, int end, int avg_balance) inline {
+    return (period, winning_number, start, end, avg_balance);
 }
 
 ;;
@@ -113,18 +124,17 @@ cell $PrepareInitTicket$_store_cell((int, int, int, int) v) inline {
 }
 
 ;;
-;; Type: OpenDraw
-;; Header: 0xd0953867
-;; TLB: open_draw#d0953867 twab_timestamp:uint64 twab_amount:uint128 prize_amount:coins refund_address:address = OpenDraw
+;; Type: OpenDrawInternal
+;; Header: 0x8c567c19
+;; TLB: open_draw_internal#8c567c19 twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDrawInternal
 ;;
 
-(slice, ((int, int, int, slice))) $OpenDraw$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3499440231);
+(slice, ((int, int, slice))) $OpenDrawInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2354478105);
     var v'twab_timestamp = sc_0~load_uint(64);
     var v'twab_amount = sc_0~load_uint(128);
-    var v'prize_amount = sc_0~load_coins();
     var v'refund_address = sc_0~__tact_load_address();
-    return (sc_0, (v'twab_timestamp, v'twab_amount, v'prize_amount, v'refund_address));
+    return (sc_0, (v'twab_timestamp, v'twab_amount, v'refund_address));
 }
 
 ;;
@@ -141,60 +151,61 @@ cell $PrepareInitTicket$_store_cell((int, int, int, int) v) inline {
 
 ;;
 ;; Type: ClaimPrizeInternal
-;; Header: 0xaad107a3
-;; TLB: claim_prize_internal#aad107a3 user:address pool_account:address pick_payload:remainder<slice> = ClaimPrizeInternal
+;; Header: 0x8e3ba93f
+;; TLB: claim_prize_internal#8e3ba93f user:address pool_account:address prize_scale:uint32 = ClaimPrizeInternal
 ;;
 
-(slice, ((slice, slice, slice))) $ClaimPrizeInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2865825699);
+(slice, ((slice, slice, int))) $ClaimPrizeInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2386274623);
     var v'user = sc_0~__tact_load_address();
     var v'pool_account = sc_0~__tact_load_address();
-    var v'pick_payload = sc_0;
-    return (sc_0, (v'user, v'pool_account, v'pick_payload));
+    var v'prize_scale = sc_0~load_uint(32);
+    return (sc_0, (v'user, v'pool_account, v'prize_scale));
 }
 
 ;;
 ;; Type: PayPrizeDebtInternal
-;; Header: 0x59d2c79e
-;; TLB: pay_prize_debt_internal#59d2c79e user:address amount:coins = PayPrizeDebtInternal
+;; Header: 0x54cb9090
+;; TLB: pay_prize_debt_internal#54cb9090 user:address amount:coins period:uint32 = PayPrizeDebtInternal
 ;;
 
-builder $PayPrizeDebtInternal$_store(builder build_0, (slice, int) v) inline {
-    var (v'user, v'amount) = v;
-    build_0 = store_uint(build_0, 1506985886, 32);
+builder $PayPrizeDebtInternal$_store(builder build_0, (slice, int, int) v) inline {
+    var (v'user, v'amount, v'period) = v;
+    build_0 = store_uint(build_0, 1422626960, 32);
     build_0 = __tact_store_address(build_0, v'user);
     build_0 = build_0.store_coins(v'amount);
+    build_0 = build_0.store_uint(v'period, 32);
     return build_0;
 }
 
-cell $PayPrizeDebtInternal$_store_cell((slice, int) v) inline {
+cell $PayPrizeDebtInternal$_store_cell((slice, int, int) v) inline {
     return $PayPrizeDebtInternal$_store(begin_cell(), v).end_cell();
 }
 
-((slice, int)) $PayPrizeDebtInternal$_constructor_user_amount(slice user, int amount) inline {
-    return (user, amount);
+((slice, int, int)) $PayPrizeDebtInternal$_constructor_user_amount_period(slice user, int amount, int period) inline {
+    return (user, amount, period);
 }
 
 ;;
 ;; Type: DrawData
-;; TLB: _ active:bool pool_master:address prize_reserve:address period:uint32 start:Maybe Twab{timestamp:uint64,amount:uint128} end:Maybe Twab{timestamp:uint64,amount:uint128} prize_amount:coins avail_prize_amount:coins winning_number:uint32 deadline:uint64 prize_percentage_0:uint16 prize_percentage_1:uint16 prize_percentage_2:uint16 prize_percentage_3:uint16 prize_percentage_4:uint16 = DrawData
+;; TLB: _ active:bool pool_master:address prize_reserve:address period:uint32 start:Maybe Twab{timestamp:uint64,amount:uint128} end:Maybe Twab{timestamp:uint64,amount:uint128} prize_amount:coins avail_prize_amount:coins winning_number:uint32 deadline:uint64 = DrawData
 ;;
 
-(int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int) $DrawData$_to_external(((int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int)) v) inline {
-    var (v'active, v'pool_master, v'prize_reserve, v'period, v'start, v'end, v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline, v'prize_percentage_0, v'prize_percentage_1, v'prize_percentage_2, v'prize_percentage_3, v'prize_percentage_4) = v; 
-    return (v'active, v'pool_master, v'prize_reserve, v'period, $Twab$_to_opt_tuple(v'start), $Twab$_to_opt_tuple(v'end), v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline, v'prize_percentage_0, v'prize_percentage_1, v'prize_percentage_2, v'prize_percentage_3, v'prize_percentage_4);
+(int, slice, slice, int, tuple, tuple, int, int, int, int) $DrawData$_to_external(((int, slice, slice, int, tuple, tuple, int, int, int, int)) v) inline {
+    var (v'active, v'pool_master, v'prize_reserve, v'period, v'start, v'end, v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline) = v; 
+    return (v'active, v'pool_master, v'prize_reserve, v'period, $Twab$_to_opt_tuple(v'start), $Twab$_to_opt_tuple(v'end), v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline);
 }
 
-((int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int)) $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline_prize_percentage_0_prize_percentage_1_prize_percentage_2_prize_percentage_3_prize_percentage_4(int active, slice pool_master, slice prize_reserve, int period, tuple start, tuple end, int prize_amount, int avail_prize_amount, int winning_number, int deadline, int prize_percentage_0, int prize_percentage_1, int prize_percentage_2, int prize_percentage_3, int prize_percentage_4) inline {
-    return (active, pool_master, prize_reserve, period, start, end, prize_amount, avail_prize_amount, winning_number, deadline, prize_percentage_0, prize_percentage_1, prize_percentage_2, prize_percentage_3, prize_percentage_4);
+((int, slice, slice, int, tuple, tuple, int, int, int, int)) $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline(int active, slice pool_master, slice prize_reserve, int period, tuple start, tuple end, int prize_amount, int avail_prize_amount, int winning_number, int deadline) inline {
+    return (active, pool_master, prize_reserve, period, start, end, prize_amount, avail_prize_amount, winning_number, deadline);
 }
 
 ;;
 ;; Type: Draw
 ;;
 
-builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int) v) inline {
-    var (v'active, v'pool_master, v'prize_reserve, v'period, v'start, v'end, v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline, v'prize_percentage_0, v'prize_percentage_1, v'prize_percentage_2, v'prize_percentage_3, v'prize_percentage_4) = v;
+builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int, int, int, int) v) inline {
+    var (v'active, v'pool_master, v'prize_reserve, v'period, v'start, v'end, v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline) = v;
     build_0 = build_0.store_int(v'active, 1);
     build_0 = __tact_store_address(build_0, v'pool_master);
     build_0 = __tact_store_address(build_0, v'prize_reserve);
@@ -206,16 +217,11 @@ builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int
     build_1 = build_1.store_coins(v'avail_prize_amount);
     build_1 = build_1.store_uint(v'winning_number, 32);
     build_1 = build_1.store_uint(v'deadline, 64);
-    build_1 = build_1.store_uint(v'prize_percentage_0, 16);
-    build_1 = build_1.store_uint(v'prize_percentage_1, 16);
-    build_1 = build_1.store_uint(v'prize_percentage_2, 16);
-    build_1 = build_1.store_uint(v'prize_percentage_3, 16);
-    build_1 = build_1.store_uint(v'prize_percentage_4, 16);
     build_0 = store_ref(build_0, build_1.end_cell());
     return build_0;
 }
 
-(slice, ((int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int))) $Draw$_load(slice sc_0) inline {
+(slice, ((int, slice, slice, int, tuple, tuple, int, int, int, int))) $Draw$_load(slice sc_0) inline {
     var v'active = sc_0~load_int(1);
     var v'pool_master = sc_0~__tact_load_address();
     var v'prize_reserve = sc_0~__tact_load_address();
@@ -227,12 +233,7 @@ builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int
     var v'avail_prize_amount = sc_1~load_coins();
     var v'winning_number = sc_1~load_uint(32);
     var v'deadline = sc_1~load_uint(64);
-    var v'prize_percentage_0 = sc_1~load_uint(16);
-    var v'prize_percentage_1 = sc_1~load_uint(16);
-    var v'prize_percentage_2 = sc_1~load_uint(16);
-    var v'prize_percentage_3 = sc_1~load_uint(16);
-    var v'prize_percentage_4 = sc_1~load_uint(16);
-    return (sc_0, (v'active, v'pool_master, v'prize_reserve, v'period, v'start, v'end, v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline, v'prize_percentage_0, v'prize_percentage_1, v'prize_percentage_2, v'prize_percentage_3, v'prize_percentage_4));
+    return (sc_0, (v'active, v'pool_master, v'prize_reserve, v'period, v'start, v'end, v'prize_amount, v'avail_prize_amount, v'winning_number, v'deadline));
 }
 
 (slice, ((slice, slice, int))) $Draw$init$_load(slice sc_0) inline {
@@ -242,7 +243,7 @@ builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int
     return (sc_0, (v'pool_master, v'prize_reserve, v'period));
 }
 
-(int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int) $Draw$_contract_load() impure inline_ref {
+(int, slice, slice, int, tuple, tuple, int, int, int, int) $Draw$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -257,7 +258,7 @@ builder $Draw$_store(builder build_0, (int, slice, slice, int, tuple, tuple, int
     }
 }
 
-() $Draw$_contract_store((int, slice, slice, int, tuple, tuple, int, int, int, int, int, int, int, int, int) v) impure inline {
+() $Draw$_contract_store((int, slice, slice, int, tuple, tuple, int, int, int, int) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);

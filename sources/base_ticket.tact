@@ -1,11 +1,9 @@
 import "@stdlib/ownable";
 import "./library/helper";
+import "./library/prize_calculator";
 import "./messages";
 
 trait BaseTicket with Ownable, MsgValueHelper {
-
-    const PICK_BITS: Int = 4 * 5;
-    const TOTAL_PICKS: Int = 1 << (4 * 5);
 
     owner: Address;
 
@@ -13,16 +11,17 @@ trait BaseTicket with Ownable, MsgValueHelper {
     pool_account: Address;
     draw: Address;
     period: Int;
+    winning_split: WinningSplit;
     picks: Int;
     used_indexes: map<Int, Bool>;
-    debt_amount: Int;
 
     receive(msg: InitTicketInternal) {
         self.require_inactive();
         self.require_pool_account();
 
         self.active = true;
-        self.picks = self.TOTAL_PICKS * msg.user_avg_balance / msg.draw_avg_balance;
+        self.winning_split.apply(msg.winning_number);
+        self.picks = TOTAL_PICKS * msg.user_avg_balance / msg.draw_avg_balance;
 
         // refund gas
         self.forward(self.owner, null, false, null);
@@ -32,17 +31,16 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.require_active();
         self.requireOwner();
 
-        // claim prize gas fee 1.0
-        let rest_value: Int = self.msg_value(context(), ton("1.0"));
+        // claim prize gas fee 0.8
+        let rest_value: Int = self.msg_value(context(), ton("0.8"));
         require(rest_value >= 0, "Insufficient value");
 
-        let pick_builder: Builder = beginCell();
-        // Every cell has up to 4 references to other cells, but currently 
-        // max gas = 1.0 limit this to 3 references.
-        repeat(3) {
+        // Every cell has up to 4 references to other cells, but cause of the 
+        // max gas limit, we set it to 2 references.
+        let prize_scale: Int = 0;
+        repeat(2) {
             let index_payload: Slice = msg.index_payload.loadRef().beginParse();
-            let pick_payload: Cell = self.compute_pick_payload(index_payload);
-            pick_builder = pick_builder.storeRef(pick_payload);
+            prize_scale = prize_scale + self.compute_prize_scale(index_payload);
         }
     
         self.forward(
@@ -50,84 +48,42 @@ trait BaseTicket with Ownable, MsgValueHelper {
             ClaimPrizeInternal {
                 user: self.owner,
                 pool_account: self.pool_account,
-                pick_payload: pick_builder.asSlice()
+                prize_scale: prize_scale
             }.toCell(),
             false,
             null
         );
     }
 
-    receive(msg: ClaimPrizeDebt) {
-        self.require_active();
-        self.requireOwner();
-        require(msg.amount <= self.debt_amount, "Invalid claim amount");
-
-        // claim prize debt gas fee 0.1
-        let rest_value: Int = self.msg_value(context(), ton("0.1"));
-        require(rest_value >= 0, "Insufficient value");
-
-        self.debt_amount = self.debt_amount - msg.amount;
-        self.forward(
-            msg.reserve,
-            ClaimPrizeDebtInternal {
-                amount: msg.amount,
-                user: self.owner,
-                draw: self.draw,
-                period: self.period
-            }.toCell(),
-            true, // bounce this message
-            null
-        );
-    }
-
-    receive(msg: PayPrizeDebtInternal) {
-        self.require_active();
-        self.require_draw();
-
-        self.debt_amount = self.debt_amount + msg.amount;
-
-        // refund gas
-        self.forward(msg.user, null, false, null);
-    }
-
-    bounced(src: bounced<ClaimPrizeDebtInternal>) {
-        self.debt_amount = self.debt_amount + src.amount;
-    }
-
-    fun compute_pick_payload(index_payload: Slice): Cell {
-        let size: Int = index_payload.bits() / self.PICK_BITS;
-        // 51 * 20 = 1020
-        require(size <= 51, "Invalid pick size");
+    fun compute_prize_scale(index_payload: Slice): Int {
+        let size: Int = index_payload.bits() / PICK_BITS;
         self.picks = self.picks - size;
         require(self.picks >= 0, "Insufficient picks");
 
-        // 20 + 20 + ... + 20
+        // 16 + 16 + ... + 16
         // \______  _______/
         //        \/
-        //       <=51
-        let pick_payload: Builder = beginCell();
+        //       <=63
+        let scale: Int = 0;
         repeat(size) {
-            let pick_index: Int = index_payload.loadUint(self.PICK_BITS);
+            let pick_index: Int = index_payload.loadUint(PICK_BITS);
             let pick_used: Bool? = self.used_indexes.get(pick_index);
-            require(pick_used == null, "Pick is used");
+            require(pick_used == null, "Pick used");
             self.used_indexes.set(pick_index, true);
 
             let pick_number: Int = self.compute_pick_number(pick_index);
-            pick_payload.storeUint(pick_number % self.TOTAL_PICKS, self.PICK_BITS);
+            scale = scale + self.winning_split.compute_prize_scale(pick_number);
         }
-        return pick_payload.endCell();
+        return scale;
     }
 
     inline fun compute_pick_number(index: Int): Int {
-        return beginCell()
+        let hash: Int = beginCell()
             .storeAddress(myAddress())
-            .storeUint(index, self.PICK_BITS)
+            .storeUint(index, PICK_BITS)
             .endCell()
             .hash();
-    }
-
-    inline fun require_draw() {
-        require(sender() == self.draw, "Invalid sender");
+        return hash % TOTAL_PICKS;
     }
 
     inline fun require_pool_account() {

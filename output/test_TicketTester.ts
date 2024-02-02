@@ -321,6 +321,61 @@ function dictValueParserFactoryDeploy(): DictionaryValue<FactoryDeploy> {
     }
 }
 
+export type WinningSplit = {
+    $$type: 'WinningSplit';
+    n0: bigint;
+    n1: bigint;
+    n2: bigint;
+    n3: bigint;
+}
+
+export function storeWinningSplit(src: WinningSplit) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.n0, 8);
+        b_0.storeUint(src.n1, 8);
+        b_0.storeUint(src.n2, 8);
+        b_0.storeUint(src.n3, 8);
+    };
+}
+
+export function loadWinningSplit(slice: Slice) {
+    let sc_0 = slice;
+    let _n0 = sc_0.loadUintBig(8);
+    let _n1 = sc_0.loadUintBig(8);
+    let _n2 = sc_0.loadUintBig(8);
+    let _n3 = sc_0.loadUintBig(8);
+    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2, n3: _n3 };
+}
+
+function loadTupleWinningSplit(source: TupleReader) {
+    let _n0 = source.readBigNumber();
+    let _n1 = source.readBigNumber();
+    let _n2 = source.readBigNumber();
+    let _n3 = source.readBigNumber();
+    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2, n3: _n3 };
+}
+
+function storeTupleWinningSplit(source: WinningSplit) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.n0);
+    builder.writeNumber(source.n1);
+    builder.writeNumber(source.n2);
+    builder.writeNumber(source.n3);
+    return builder.build();
+}
+
+function dictValueParserWinningSplit(): DictionaryValue<WinningSplit> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeWinningSplit(src)).endCell());
+        },
+        parse: (src) => {
+            return loadWinningSplit(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type ComputePickNumber = {
     $$type: 'ComputePickNumber';
     index: bigint;
@@ -368,81 +423,39 @@ function dictValueParserComputePickNumber(): DictionaryValue<ComputePickNumber> 
     }
 }
 
-export type ComputePickPayload = {
-    $$type: 'ComputePickPayload';
-    prize_tester: Address;
-    index_payload: Cell;
-}
-
-export function storeComputePickPayload(src: ComputePickPayload) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(849587341, 32);
-        b_0.storeAddress(src.prize_tester);
-        b_0.storeBuilder(src.index_payload.asBuilder());
-    };
-}
-
-export function loadComputePickPayload(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 849587341) { throw Error('Invalid prefix'); }
-    let _prize_tester = sc_0.loadAddress();
-    let _index_payload = sc_0.asCell();
-    return { $$type: 'ComputePickPayload' as const, prize_tester: _prize_tester, index_payload: _index_payload };
-}
-
-function loadTupleComputePickPayload(source: TupleReader) {
-    let _prize_tester = source.readAddress();
-    let _index_payload = source.readCell();
-    return { $$type: 'ComputePickPayload' as const, prize_tester: _prize_tester, index_payload: _index_payload };
-}
-
-function storeTupleComputePickPayload(source: ComputePickPayload) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.prize_tester);
-    builder.writeSlice(source.index_payload);
-    return builder.build();
-}
-
-function dictValueParserComputePickPayload(): DictionaryValue<ComputePickPayload> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeComputePickPayload(src)).endCell());
-        },
-        parse: (src) => {
-            return loadComputePickPayload(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type ComputePrizeAmount = {
     $$type: 'ComputePrizeAmount';
-    pick_payload: Cell;
+    expected_amount: bigint;
+    index_payload: Cell;
 }
 
 export function storeComputePrizeAmount(src: ComputePrizeAmount) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(3641436076, 32);
-        b_0.storeBuilder(src.pick_payload.asBuilder());
+        b_0.storeUint(1143834034, 32);
+        b_0.storeCoins(src.expected_amount);
+        b_0.storeBuilder(src.index_payload.asBuilder());
     };
 }
 
 export function loadComputePrizeAmount(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 3641436076) { throw Error('Invalid prefix'); }
-    let _pick_payload = sc_0.asCell();
-    return { $$type: 'ComputePrizeAmount' as const, pick_payload: _pick_payload };
+    if (sc_0.loadUint(32) !== 1143834034) { throw Error('Invalid prefix'); }
+    let _expected_amount = sc_0.loadCoins();
+    let _index_payload = sc_0.asCell();
+    return { $$type: 'ComputePrizeAmount' as const, expected_amount: _expected_amount, index_payload: _index_payload };
 }
 
 function loadTupleComputePrizeAmount(source: TupleReader) {
-    let _pick_payload = source.readCell();
-    return { $$type: 'ComputePrizeAmount' as const, pick_payload: _pick_payload };
+    let _expected_amount = source.readBigNumber();
+    let _index_payload = source.readCell();
+    return { $$type: 'ComputePrizeAmount' as const, expected_amount: _expected_amount, index_payload: _index_payload };
 }
 
 function storeTupleComputePrizeAmount(source: ComputePrizeAmount) {
     let builder = new TupleBuilder();
-    builder.writeSlice(source.pick_payload);
+    builder.writeNumber(source.expected_amount);
+    builder.writeSlice(source.index_payload);
     return builder.build();
 }
 
@@ -460,24 +473,26 @@ function dictValueParserComputePrizeAmount(): DictionaryValue<ComputePrizeAmount
  type TicketTester_init_args = {
     $$type: 'TicketTester_init_args';
     owner: Address;
-    size: bigint;
+    picks: bigint;
+    prize_amount: bigint;
 }
 
 function initTicketTester_init_args(src: TicketTester_init_args) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeAddress(src.owner);
-        b_0.storeInt(src.size, 257);
+        b_0.storeInt(src.picks, 257);
+        b_0.storeInt(src.prize_amount, 257);
     };
 }
 
-async function TicketTester_init(owner: Address, size: bigint) {
-    const __code = Cell.fromBase64('te6ccgECEgEABA8AART/APSkE/S88sgLAQIBYgIDAt7QAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVEts88uCCyPhDAcx/AcoAVSBaINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WEssf9ADJ7VQEBQIBWA4PAdbtRNDUAfhj0gABjij6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdMf9ARVIGwT4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXAFkC0QHbPAYD9gGSMH/gcCHXScIflTAg1wsf3iCCECi1rju6jksw0x8BghAota47uvLggdMf0x9ZbBJVMMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssTyfkAqTgTggCeyAW6FPL0WH/gIIIQMqOsjbrjAoIQlGqYtrrjAgcICQACbQL2MNMfAYIQMqOsjbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIIWwSyHOOrwHUAdAQNkVAINdJgBSpBIE13CHBNPL0UTOhgT6WIcL/8vTIBIrkMQLJUAXMRUAT5DHJ0MgBghDZC+esWMsfAc8WyXBt2zx/CgsBTtMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8n4QgFwbds8fwsABDBwAMoB0xMjgQEBI3FBM/QMb6GUAdcAMJJbbeKCAO4DAW7y9AOBAQEif3EhbpVbWfRaMJjIAc8AQTP0QuIQNQHI+Cgg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbLE8n5ADBARAE2bW0ibrOZWyBu8tCAbyIBkTLiECRwAwSAQlAjDAHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wANAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnAb1J3vlUWW8cdT094FWcMmgnCdl05as07LczoOlm2UZuikgCAUgQEQARsK+7UTQ0gABgAHWybuNDVpcGZzOi8vUW1aaFJRdmRnQ1dLYUhtaG1NOWdDdWhiNXFGdm5GVGc3RW13N2ZVWFZ1TVhaZIIA==');
-    const __system = Cell.fromBase64('te6cckECFAEABBkAAQHAAQEFoZ09AgEU/wD0pBP0vPLICwMCAWIJBAIBWAgFAgFIBwYAdbJu40NWlwZnM6Ly9RbVpoUlF2ZGdDV0thSG1obU05Z0N1aGI1cUZ2bkZUZzdFbXc3ZlVYVnVNWFpkggABGwr7tRNDSAAGAAubu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOCcBvUne+VRZbxx1PT3gVZwyaCcJ2XTlqzTstzOg6WbZRm6KSALe0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRLbPPLggsj4QwHMfwHKAFUgWiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFhLLH/QAye1UEgoD9gGSMH/gcCHXScIflTAg1wsf3iCCECi1rju6jksw0x8BghAota47uvLggdMf0x9ZbBJVMMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssTyfkAqTgTggCeyAW6FPL0WH/gIIIQMqOsjbrjAoIQlGqYtrrjAg0MCwAEMHABTtMfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8n4QgFwbds8fw4C9jDTHwGCEDKjrI268uCB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiCFsEshzjq8B1AHQEDZFQCDXSYAUqQSBNdwhwTTy9FEzoYE+liHC//L0yASK5DECyVAFzEVAE+QxydDIAYIQ2QvnrFjLHwHPFslwbds8fxEOATZtbSJus5lbIG7y0IBvIgGRMuIQJHADBIBCUCMPAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7ABAAmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwAygHTEyOBAQEjcUEz9AxvoZQB1wAwkltt4oIA7gMBbvL0A4EBASJ/cSFulVtZ9FowmMgBzwBBM/RC4hA1Acj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssTyfkAMEBEAdbtRNDUAfhj0gABjij6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdMf9ARVIGwT4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXAFkC0QHbPBMAAm1kWlS+');
+async function TicketTester_init(owner: Address, picks: bigint, prize_amount: bigint) {
+    const __code = Cell.fromBase64('te6ccgECFAEABIUAART/APSkE/S88sgLAQIBYgIDA3rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVF9s88uCCBAUGAgFYEBEBoO1E0NQB+GPSAAGOOPpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0x/6ANMH0wfTB9MHVTAE9AQIBwZQVWwY4Pgo1wsKgwm68uCJBwL2AZIwf+BwIddJwh+VMCDXCx/eIIIQKLWuO7qOTjDTHwGCECi1rju68uCB0x/TH1lsElWAyPgoINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wyw/J+QCpOA+pOA+BCK0Kuhny9FUGf+AgghBELYWyuuMCghCUapi2CQoAiMj4QwHMfwHKAFVwUIcg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYVyx9QA/oCBFA1UDTLB8sHywfLB/QAye1UAWL6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAYEBAdcAgQEB1wBVIAPRWNs8CAAKcFRwAG0BxjDTHwGCEEQthbK68uCB+gBmbBJwco63AdQB0BCLEHoQaRBbEEoQOUugINdJqwNRiKGBPpYhwv/y9HAJiuQxBxugEHoQaRBYEEcQNkVAE+QxUnCoggpJ8ACpBIIA7YMCuvL0fwsBWrqOp9MfAYIQlGqYtrry4IHTPwExyAGCEK/5D1dYyx/LP8n4QgFwbds8f+AwcA0B7AHTDyOBAQEjcUEz9AxvoZQB1wAwkltt4oIAs7IBbvL0A4EBASJ/cSFulVtZ9FowmMgBzwBBM/RC4hCKECcQahAlEEoQI0oAyPgoINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wyw/J+QCpOA9UZVBUZVAMAJAgqTgDUAW9k18EcI4zA6sDIKk4A1ADvZVfA4EaXuABqwMgqTgDWL2VW4IAjKDgqwOpOAMBvZSCAu4A4IIIDqYA4hmgEHkIVRUBNm1tIm6zmVsgbvLQgG8iAZEy4hAkcAMEgEJQIw4ByshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsADwCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwG9Sd75VFlvHHU9PeBVnDJoJwnZdOWrNOy3M6DpZtlGbopIAgFIEhMAEbCvu1E0NIAAYAB1sm7jQ1aXBmczovL1FtU3d3WW45eXZiNXhwWWtxclA1emd5amFHMzdiUlJ6M2ExN2VHUk43cHlrUnqCA=');
+    const __system = Cell.fromBase64('te6cckECFgEABI8AAQHAAQEFoZ09AgEU/wD0pBP0vPLICwMCAWIJBAIBWAgFAgFIBwYAdbJu40NWlwZnM6Ly9RbVN3d1luOXl2YjV4cFlrcXJQNXpneWphRzM3YlJSejNhMTdlR1JON3B5a1J6ggABGwr7tRNDSAAGAAubu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOCcBvUne+VRZbxx1PT3gVZwyaCcJ2XTlqzTstzOg6WbZRm6KSAN60AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRfbPPLgghMLCgCIyPhDAcx/AcoAVXBQhyDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFhXLH1AD+gIEUDVQNMsHywfLB8sH9ADJ7VQC9gGSMH/gcCHXScIflTAg1wsf3iCCECi1rju6jk4w0x8BghAota47uvLggdMf0x9ZbBJVgMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssPyfkAqTgPqTgPgQitCroZ8vRVBn/gIIIQRC2FsrrjAoIQlGqYthAMAVq6jqfTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J+EIBcG3bPH/gMHANATZtbSJus5lbIG7y0IBvIgGRMuIQJHADBIBCUCMOAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA8AmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwBxjDTHwGCEEQthbK68uCB+gBmbBJwco63AdQB0BCLEHoQaRBbEEoQOUugINdJqwNRiKGBPpYhwv/y9HAJiuQxBxugEHoQaRBYEEcQNkVAE+QxUnCoggpJ8ACpBIIA7YMCuvL0fxEB7AHTDyOBAQEjcUEz9AxvoZQB1wAwkltt4oIAs7IBbvL0A4EBASJ/cSFulVtZ9FowmMgBzwBBM/RC4hCKECcQahAlEEoQI0oAyPgoINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wyw/J+QCpOA9UZVBUZVASAJAgqTgDUAW9k18EcI4zA6sDIKk4A1ADvZVfA4EaXuABqwMgqTgDWL2VW4IAjKDgqwOpOAMBvZSCAu4A4IIIDqYA4hmgEHkIVRUBoO1E0NQB+GPSAAGOOPpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0x/6ANMH0wfTB9MHVTAE9AQIBwZQVWwY4Pgo1wsKgwm68uCJFAFi+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXAIEBAdcAVSAD0VjbPBUACnBUcABtH2eTCg==');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
-    initTicketTester_init_args({ $$type: 'TicketTester_init_args', owner, size })(builder);
+    initTicketTester_init_args({ $$type: 'TicketTester_init_args', owner, picks, prize_amount })(builder);
     const __data = builder.endCell();
     return { code: __code, data: __data };
 }
@@ -507,10 +522,10 @@ const TicketTester_errors: { [key: number]: { message: string } } = {
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
     137: { message: `Masterchain support is not enabled for this contract` },
-    13788: { message: `Invalid pick size` },
+    2221: { message: `Unmatched pick number` },
     16022: { message: `Insufficient picks` },
-    40648: { message: `Invalid pick number` },
-    60931: { message: `Pick is used` },
+    46002: { message: `Pick used` },
+    60803: { message: `Unmatched prize amount` },
 }
 
 const TicketTester_types: ABIType[] = [
@@ -520,9 +535,9 @@ const TicketTester_types: ABIType[] = [
     {"name":"Deploy","header":2490013878,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"DeployOk","header":2952335191,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"FactoryDeploy","header":1829761339,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"cashback","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"WinningSplit","header":null,"fields":[{"name":"n0","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n1","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n2","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n3","type":{"kind":"simple","type":"uint","optional":false,"format":8}}]},
     {"name":"ComputePickNumber","header":682995259,"fields":[{"name":"index","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"expected_number","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
-    {"name":"ComputePickPayload","header":849587341,"fields":[{"name":"prize_tester","type":{"kind":"simple","type":"address","optional":false}},{"name":"index_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
-    {"name":"ComputePrizeAmount","header":3641436076,"fields":[{"name":"pick_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
+    {"name":"ComputePrizeAmount","header":1143834034,"fields":[{"name":"expected_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"index_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
 ]
 
 const TicketTester_getters: ABIGetter[] = [
@@ -530,18 +545,18 @@ const TicketTester_getters: ABIGetter[] = [
 
 const TicketTester_receivers: ABIReceiver[] = [
     {"receiver":"internal","message":{"kind":"typed","type":"ComputePickNumber"}},
-    {"receiver":"internal","message":{"kind":"typed","type":"ComputePickPayload"}},
+    {"receiver":"internal","message":{"kind":"typed","type":"ComputePrizeAmount"}},
     {"receiver":"internal","message":{"kind":"typed","type":"Deploy"}},
 ]
 
 export class TicketTester implements Contract {
     
-    static async init(owner: Address, size: bigint) {
-        return await TicketTester_init(owner, size);
+    static async init(owner: Address, picks: bigint, prize_amount: bigint) {
+        return await TicketTester_init(owner, picks, prize_amount);
     }
     
-    static async fromInit(owner: Address, size: bigint) {
-        const init = await TicketTester_init(owner, size);
+    static async fromInit(owner: Address, picks: bigint, prize_amount: bigint) {
+        const init = await TicketTester_init(owner, picks, prize_amount);
         const address = contractAddress(0, init);
         return new TicketTester(address, init);
     }
@@ -564,14 +579,14 @@ export class TicketTester implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: ComputePickNumber | ComputePickPayload | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: ComputePickNumber | ComputePrizeAmount | Deploy) {
         
         let body: Cell | null = null;
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ComputePickNumber') {
             body = beginCell().store(storeComputePickNumber(message)).endCell();
         }
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ComputePickPayload') {
-            body = beginCell().store(storeComputePickPayload(message)).endCell();
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ComputePrizeAmount') {
+            body = beginCell().store(storeComputePrizeAmount(message)).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
             body = beginCell().store(storeDeploy(message)).endCell();

@@ -15,6 +15,16 @@ tuple $StateInit$_as_optional((cell, cell) v) inline {
 }
 
 ;;
+;; Type: Context
+;; TLB: _ bounced:bool sender:address value:int257 raw:^slice = Context
+;;
+
+_ $Context$_get_value((int, slice, int, slice) v) inline {
+    var (v'bounced, v'sender, v'value, v'raw) = v;
+    return v'value;
+}
+
+;;
 ;; Type: SendParameters
 ;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
 ;;
@@ -23,12 +33,12 @@ tuple $StateInit$_as_optional((cell, cell) v) inline {
     return (bounce, to, value, mode, body, code, data);
 }
 
-((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline {
-    return (bounce, to, value, mode, body, null(), null());
-}
-
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline {
     return (bounce, to, value, mode, null(), null(), null());
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline {
+    return (bounce, to, value, mode, body, null(), null());
 }
 
 ;;
@@ -92,6 +102,42 @@ tuple $Twab$_to_tuple(((int, int)) v) inline {
 }
 
 ;;
+;; Type: OpenDraw
+;; Header: 0xc4e969c3
+;; TLB: open_draw#c4e969c3 prize_amount:coins = OpenDraw
+;;
+
+(slice, ((int))) $OpenDraw$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3303631299);
+    var v'prize_amount = sc_0~load_coins();
+    return (sc_0, (v'prize_amount));
+}
+
+;;
+;; Type: Borrow
+;; Header: 0x44d2eb3f
+;; TLB: borrow#44d2eb3f amount:coins = Borrow
+;;
+
+(slice, ((int))) $Borrow$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1154673471);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
+}
+
+;;
+;; Type: Repay
+;; Header: 0xcda0bc81
+;; TLB: repay#cda0bc81 amount:coins = Repay
+;;
+
+(slice, ((int))) $Repay$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3449863297);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
+}
+
+;;
 ;; Type: DepositInternal
 ;; Header: 0xa152ad13
 ;; TLB: deposit_internal#a152ad13 amount:coins user:address = DepositInternal
@@ -115,18 +161,6 @@ tuple $Twab$_to_tuple(((int, int)) v) inline {
     var v'amount = sc_0~load_coins();
     var v'user = sc_0~__tact_load_address();
     return (sc_0, (v'amount, v'user));
-}
-
-;;
-;; Type: Borrow
-;; Header: 0x44d2eb3f
-;; TLB: borrow#44d2eb3f amount:coins = Borrow
-;;
-
-(slice, ((int))) $Borrow$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1154673471);
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'amount));
 }
 
 ;;
@@ -197,27 +231,26 @@ cell $InitDraw$_store_cell((int, int, slice) v) inline {
 }
 
 ;;
-;; Type: OpenDraw
-;; Header: 0xd0953867
-;; TLB: open_draw#d0953867 twab_timestamp:uint64 twab_amount:uint128 prize_amount:coins refund_address:address = OpenDraw
+;; Type: OpenDrawInternal
+;; Header: 0x8c567c19
+;; TLB: open_draw_internal#8c567c19 twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDrawInternal
 ;;
 
-builder $OpenDraw$_store(builder build_0, (int, int, int, slice) v) inline {
-    var (v'twab_timestamp, v'twab_amount, v'prize_amount, v'refund_address) = v;
-    build_0 = store_uint(build_0, 3499440231, 32);
+builder $OpenDrawInternal$_store(builder build_0, (int, int, slice) v) inline {
+    var (v'twab_timestamp, v'twab_amount, v'refund_address) = v;
+    build_0 = store_uint(build_0, 2354478105, 32);
     build_0 = build_0.store_uint(v'twab_timestamp, 64);
     build_0 = build_0.store_uint(v'twab_amount, 128);
-    build_0 = build_0.store_coins(v'prize_amount);
     build_0 = __tact_store_address(build_0, v'refund_address);
     return build_0;
 }
 
-cell $OpenDraw$_store_cell((int, int, int, slice) v) inline {
-    return $OpenDraw$_store(begin_cell(), v).end_cell();
+cell $OpenDrawInternal$_store_cell((int, int, slice) v) inline {
+    return $OpenDrawInternal$_store(begin_cell(), v).end_cell();
 }
 
-((int, int, int, slice)) $OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address(int twab_timestamp, int twab_amount, int prize_amount, slice refund_address) inline {
-    return (twab_timestamp, twab_amount, prize_amount, refund_address);
+((int, int, slice)) $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline {
+    return (twab_timestamp, twab_amount, refund_address);
 }
 
 ;;
@@ -415,13 +448,13 @@ builder $PrizeReserve$init$_store(builder build_0, (slice) v) inline {
     cell code_23481 = __tact_dict_get_code(source, 23481);
     contracts = __tact_dict_set_code(contracts, 23481, code_23481);
     
-    ;; Contract Code: Ticket
-    cell code_42189 = __tact_dict_get_code(source, 42189);
-    contracts = __tact_dict_set_code(contracts, 42189, code_42189);
-    
     ;; Contract Code: Draw
     cell code_9326 = __tact_dict_get_code(source, 9326);
     contracts = __tact_dict_set_code(contracts, 9326, code_9326);
+    
+    ;; Contract Code: Ticket
+    cell code_42189 = __tact_dict_get_code(source, 42189);
+    contracts = __tact_dict_set_code(contracts, 42189, code_42189);
     
     ;; Build cell
     builder b = begin_cell();

@@ -1,13 +1,14 @@
 import "@stdlib/deploy";
 import "./library/twab";
 import "./library/timestamp";
+import "./library/prize_calculator";
 import "./messages";
 import "./data";
 import "./base_ticket.tact";
 import "./base_prize_reserve";
 import "./base_pool_master";
 import "./prize_distributor";
-import "./ticket_initializer";
+import "./ticket_manager";
 
 // === Pool Master Contract ===
 
@@ -70,10 +71,10 @@ contract PoolMaster with BasePoolMaster, Deployable {
 
 // === Pool Account Contract ===
 
-contract PoolAccount with TicketInitializer, Deployable {
+contract PoolAccount with TicketManager, Deployable {
     override const storageReserve: Int = ton("0.1"); // from base trait
 
-    // from TicketInitializer
+    // from TicketManager
     // ---------------------
     owner: Address;
 
@@ -84,6 +85,7 @@ contract PoolAccount with TicketInitializer, Deployable {
     // ---------------------
 
     prize_reserve: Address;
+    debt_amount: Int as coins = 0;
 
     init(owner: Address, master: Address, prize_reserve: Address) {
         self.owner = owner;
@@ -108,7 +110,8 @@ contract PoolAccount with TicketInitializer, Deployable {
             owner: self.owner,
             master: self.master,
             prize_reserve: self.prize_reserve,
-            share_amount: self.share_amount
+            share_amount: self.share_amount,
+            debt_amount: self.debt_amount
         };
     }
 
@@ -142,24 +145,12 @@ contract Draw with PrizeDistributor {
     avail_prize_amount: Int as coins = 0;
     winning_number: Int as uint32 = 0;
     deadline: Int as uint64 = 0;
-
-    prize_percentage_0: Int as uint16;
-    prize_percentage_1: Int as uint16;
-    prize_percentage_2: Int as uint16;
-    prize_percentage_3: Int as uint16;
-    prize_percentage_4: Int as uint16;
     // ---------------------
 
     init(pool_master: Address, prize_reserve: Address, period: Int) {
         self.pool_master = pool_master;
         self.prize_reserve = prize_reserve;
-        self.period = period;        
-
-        self.prize_percentage_0 = 100;
-        self.prize_percentage_1 = 300;
-        self.prize_percentage_2 = 800;
-        self.prize_percentage_3 = 2300;
-        self.prize_percentage_4 = 6500;
+        self.period = period;
     }
 
     override inline fun _get_ticket_init(user: Address, pool_account: Address): StateInit {
@@ -179,12 +170,7 @@ contract Draw with PrizeDistributor {
             prize_amount: self.prize_amount,
             avail_prize_amount: self.avail_prize_amount,
             winning_number: self.winning_number,
-            deadline: self.deadline,
-            prize_percentage_0: self.prize_percentage_0,
-            prize_percentage_1: self.prize_percentage_1,
-            prize_percentage_2: self.prize_percentage_2,
-            prize_percentage_3: self.prize_percentage_3,
-            prize_percentage_4: self.prize_percentage_4
+            deadline: self.deadline
         };
     }
 }
@@ -202,9 +188,9 @@ contract Ticket with BaseTicket {
     pool_account: Address;
     draw: Address;
     period: Int as uint32;
+    winning_split: WinningSplit;
     picks: Int as uint32 = 0;
     used_indexes: map<Int, Bool>;
-    debt_amount: Int as coins = 0;
     // ----------------
 
     init(owner: Address, pool_account: Address, draw: Address, period: Int) {
@@ -212,6 +198,7 @@ contract Ticket with BaseTicket {
         self.pool_account = pool_account;
         self.draw = draw;
         self.period = period;
+        self.winning_split = empty_winning_split();
         self.used_indexes = emptyMap();
     }
 
@@ -224,8 +211,7 @@ contract Ticket with BaseTicket {
             pool_account: self.pool_account,
             draw: self.draw,
             period: self.period,
-            picks: self.picks,
-            debt_amount: self.debt_amount
+            picks: self.picks
         };
     }
 
@@ -245,14 +231,8 @@ contract PrizeReserve with BasePrizeReserve, Deployable {
         self.pool_master = pool_master;
     }
 
-    inline fun _get_pool_account_address(user: Address): Address {
-        let sinit: StateInit = initOf PoolAccount(user, self.pool_master, myAddress());
-        return contractAddress(sinit);
-    }
-
-    override inline fun _get_ticket_init(user: Address, draw: Address, period: Int): StateInit {
-        let pool_account: Address = self._get_pool_account_address(user);
-        return initOf Ticket(user, pool_account, draw, period);
+    override inline fun _get_pool_account_init(user: Address): StateInit {
+        return initOf PoolAccount(user, self.pool_master, myAddress());
     }
 
     // === get functions ===

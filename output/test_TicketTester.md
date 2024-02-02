@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: TicketTester
-BOC Size: 1051 bytes
+BOC Size: 1169 bytes
 
 # Types
 Total Types: 9
@@ -29,17 +29,17 @@ Signature: `DeployOk{queryId:uint64}`
 TLB: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
 Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
 
+## WinningSplit
+TLB: `_ n0:uint8 n1:uint8 n2:uint8 n3:uint8 = WinningSplit`
+Signature: `WinningSplit{n0:uint8,n1:uint8,n2:uint8,n3:uint8}`
+
 ## ComputePickNumber
 TLB: `compute_pick_number#28b5ae3b index:uint32 expected_number:uint32 = ComputePickNumber`
 Signature: `ComputePickNumber{index:uint32,expected_number:uint32}`
 
-## ComputePickPayload
-TLB: `compute_pick_payload#32a3ac8d prize_tester:address index_payload:remainder<slice> = ComputePickPayload`
-Signature: `ComputePickPayload{prize_tester:address,index_payload:remainder<slice>}`
-
 ## ComputePrizeAmount
-TLB: `compute_prize_amount#d90be7ac pick_payload:remainder<slice> = ComputePrizeAmount`
-Signature: `ComputePrizeAmount{pick_payload:remainder<slice>}`
+TLB: `compute_prize_amount#442d85b2 expected_amount:coins index_payload:remainder<slice> = ComputePrizeAmount`
+Signature: `ComputePrizeAmount{expected_amount:coins,index_payload:remainder<slice>}`
 
 # Get Methods
 Total Get Methods: 0
@@ -69,7 +69,7 @@ Total Get Methods: 0
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
-13788: Invalid pick size
+2221: Unmatched pick number
 16022: Insufficient picks
-40648: Invalid pick number
-60931: Pick is used
+46002: Pick used
+60803: Unmatched prize amount

@@ -18,7 +18,7 @@ PROGRAM{
   DECLPROC $PrepareInitTicket$_store
   DECLPROC $PrepareInitTicket$_store_cell
   DECLPROC $InitDraw$_load
-  DECLPROC $OpenDraw$_load
+  DECLPROC $OpenDrawInternal$_load
   DECLPROC $InitTicket$_load
   DECLPROC $ClaimPrizeInternal$_load
   DECLPROC $PayPrizeDebtInternal$_store
@@ -28,6 +28,7 @@ PROGRAM{
   DECLPROC $Twab$_as_optional
   DECLPROC $Draw$_load
   DECLPROC $StateInit$_not_null
+  DECLPROC $Context$_get_value
   DECLPROC $Twab$_get_timestamp
   DECLPROC $Twab$_to_tuple
   DECLPROC $Twab$_to_opt_tuple
@@ -45,11 +46,9 @@ PROGRAM{
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $Ticket$_init_child
   DECLPROC $Draw$_fun__get_ticket_init
-  DECLPROC $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline_prize_percentage_0_prize_percentage_1_prize_percentage_2_prize_percentage_3_prize_percentage_4
+  DECLPROC $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline
   DECLPROC $Draw$_fun_get_core_data
   DECLPROC $Draw$_fun_forward
-  DECLPROC $Draw$_fun_prize_amount_per_pick
-  DECLPROC $Draw$_fun_compute_tier
   DECLPROC $Draw$_fun_compute_prize_amount
   DECLPROC $Draw$_fun__get_ticket_address
   DECLPROC $Draw$_fun_require_ticket
@@ -60,12 +59,12 @@ PROGRAM{
   DECLPROC $Draw$_fun_require_pool_master
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
-  DECLPROC $PayPrizeDebtInternal$_constructor_user_amount
-  DECLPROC $PrepareInitTicket$_constructor_period_start_end_avg_balance
+  DECLPROC $PayPrizeDebtInternal$_constructor_user_amount_period
+  DECLPROC $PrepareInitTicket$_constructor_period_winning_number_start_end_avg_balance
   DECLPROC $Draw$_internal_binary_ClaimPrizeInternal
   DECLPROC $Draw$_internal_text_22eaa037e87e6cf8bf9be7426929531aaa3cb9eedd0b22580427438ad19043f0
   DECLPROC $Draw$_internal_binary_InitDraw
-  DECLPROC $Draw$_internal_binary_OpenDraw
+  DECLPROC $Draw$_internal_binary_OpenDrawInternal
   DECLPROC $Draw$_internal_binary_InitTicket
   119856 DECLMETHOD %get_core_data
   113617 DECLMETHOD supported_interfaces
@@ -191,10 +190,12 @@ PROGRAM{
     -ROT
   }>
   $PrepareInitTicket$_store PROCINLINE:<{
-    4247418329 PUSHINT
-    s0 s5 XCHG2
+    1186592459 PUSHINT
+    s0 s6 XCHG2
     32 STU
-    s1 s3 XCHG
+    s1 s4 XCHG
+    32 STU
+    s1 s2 XCHG
     32 STU
     64 STU
     64 STU
@@ -203,7 +204,7 @@ PROGRAM{
   }>
   $PrepareInitTicket$_store_cell PROCINLINE:<{
     NEWC
-    4 -ROLL
+    5 -ROLL
     $PrepareInitTicket$_store INLINECALLDICT
     ENDC
   }>
@@ -218,17 +219,15 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     s3 s3 s0 XCHG3
   }>
-  $OpenDraw$_load PROCINLINE:<{
+  $OpenDrawInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
-    3499440231 PUSHINT
+    2354478105 PUSHINT
     EQUAL
     129 THROWIFNOT
     64 LDU
     128 LDU
-    LDGRAMS
     __tact_load_address INLINECALLDICT
-    s1 s4 XCHG
     s3 s3 s0 XCHG3
   }>
   $InitTicket$_load PROCINLINE:<{
@@ -242,26 +241,29 @@ PROGRAM{
   $ClaimPrizeInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
-    2865825699 PUSHINT
+    2386274623 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
     SWAP
     __tact_load_address INLINECALLDICT
-    s2 s0 s2 XC2PU
+    SWAP
+    32 LDU
+    3 -ROLL
   }>
   $PayPrizeDebtInternal$_store PROCINLINE:<{
-    1506985886 PUSHINT
-    s0 s3 XCHG2
+    1422626960 PUSHINT
+    s0 s4 XCHG2
     32 STU
-    SWAP
+    ROT
     __tact_store_address INLINECALLDICT
     SWAP
     STGRAMS
+    32 STU
   }>
   $PayPrizeDebtInternal$_store_cell PROCINLINE:<{
     NEWC
-    -ROT
+    3 -ROLL
     $PayPrizeDebtInternal$_store INLINECALLDICT
     ENDC
   }>
@@ -272,67 +274,53 @@ PROGRAM{
     2 UNTUPLE
   }>
   $Draw$_store PROCINLINE:<{
-    s14 s15 XCHG2
+    s9 s10 XCHG2
     1 STI
-    s0 s12 XCHG2
+    s0 s7 XCHG2
     __tact_store_address INLINECALLDICT
-    s0 s10 XCHG2
+    s0 s5 XCHG2
     __tact_store_address INLINECALLDICT
-    s1 s8 XCHG
+    s1 s3 XCHG
     32 STU
-    s6 PUSH
+    OVER
     ISNULL
     NOT
     IF:<{
       TRUE
       SWAP
       1 STI
-      s0 s6 XCHG
+      SWAP
       $Twab$_not_null INLINECALLDICT
-      s2 s7 XCHG
       $Twab$_store INLINECALLDICT
     }>ELSE<{
-      s6 POP
       FALSE
-      s0 s6 XCHG2
+      s2 POP
       1 STI
     }>
-    s4 PUSH
+    OVER
     ISNULL
     NOT
     IF:<{
       TRUE
       SWAP
       1 STI
-      s0 s4 XCHG
+      SWAP
       $Twab$_not_null INLINECALLDICT
-      s2 s5 XCHG
       $Twab$_store INLINECALLDICT
     }>ELSE<{
-      s4 POP
       FALSE
-      s0 s4 XCHG2
+      s2 POP
       1 STI
     }>
     NEWC
-    s0 s3 XCHG2
+    ROT
     STGRAMS
-    SWAP
+    ROT
     STGRAMS
     s1 s2 XCHG
     32 STU
     s1 s2 XCHG
     64 STU
-    s1 s2 XCHG
-    16 STU
-    s1 s2 XCHG
-    16 STU
-    s1 s2 XCHG
-    16 STU
-    s1 s2 XCHG
-    16 STU
-    s1 s2 XCHG
-    16 STU
     ENDC
     SWAP
     STREF
@@ -372,24 +360,23 @@ PROGRAM{
     LDGRAMS
     32 LDU
     64 LDU
-    16 LDU
-    16 LDU
-    16 LDU
-    16 LDU
-    16 LDU
     DROP
-    s9 s15 XCHG
-    s9 s14 XCHG
-    s9 s13 XCHG
-    s9 s12 XCHG
-    s9 s11 XCHG
-    s9 s10 XCHG
+    s4 s10 XCHG
+    s4 s9 XCHG
+    s4 s8 XCHG
+    s4 s7 XCHG
+    s4 s6 XCHG
+    s4 s5 XCHG
   }>
   $StateInit$_not_null PROCINLINE:<{
     DUP
     ISNULL
     128 THROWIF
     2 UNTUPLE
+  }>
+  $Context$_get_value PROCINLINE:<{
+    s1 s3 XCHG
+    3 BLKDROP
   }>
   $Twab$_get_timestamp PROCINLINE:<{
     DROP
@@ -409,12 +396,12 @@ PROGRAM{
     }>
   }>
   $DrawData$_to_external PROCINLINE:<{
-    s0 s10 XCHG
+    s0 s5 XCHG
     $Twab$_to_opt_tuple INLINECALLDICT
-    s0 s9 XCHG
+    s0 s4 XCHG
     $Twab$_to_opt_tuple INLINECALLDICT
-    s0 s9 XCHG
-    s0 s10 XCHG
+    s0 s4 XCHG
+    s0 s5 XCHG
   }>
   $Draw$init$_load PROCINLINE:<{
     __tact_load_address INLINECALLDICT
@@ -449,11 +436,6 @@ PROGRAM{
     s6 s9 XCHG
     s6 s8 XCHG
     s6 s7 XCHG
-    100 PUSHINT
-    300 PUSHINT
-    800 PUSHINT
-    2300 PUSHINT
-    6500 PUSHINT
   }>
   $Draw$_contract_load PROCREF:<{
     c4 PUSH
@@ -465,7 +447,7 @@ PROGRAM{
     SWAP
     IFJMP:<{
       $Draw$_load INLINECALLDICT
-      1 15 BLKDROP2
+      1 10 BLKDROP2
     }>
     MYADDR
     11 PLDU
@@ -486,7 +468,7 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    15 -ROLL
+    10 -ROLL
     $Draw$_store INLINECALLDICT
     ENDC
     c4 POP
@@ -649,18 +631,17 @@ PROGRAM{
     __tact_context_sys GETGLOB
     MYADDR
     s3 s3 s0 XCHG3
-    s15 PUSH
+    s10 PUSH
     $Ticket$_init_child INLINECALLDICT
   }>
-  $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline_prize_percentage_0_prize_percentage_1_prize_percentage_2_prize_percentage_3_prize_percentage_4 PROCINLINE:<{
+  $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline PROCINLINE:<{
   }>
   $Draw$_fun_get_core_data PROCINLINE:<{
-    s14 s13 s12 PUSH3
-    s14 s13 s12 PUSH3
-    s14 s13 s12 PUSH3
-    s14 s13 s12 PUSH3
-    s14 s13 s12 PUSH3
-    $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline_prize_percentage_0_prize_percentage_1_prize_percentage_2_prize_percentage_3_prize_percentage_4 INLINECALLDICT
+    s9 s8 s7 PUSH3
+    s9 s8 s7 PUSH3
+    s9 s8 s7 PUSH3
+    s9 PUSH
+    $DrawData$_constructor_active_pool_master_prize_reserve_period_start_end_prize_amount_avail_prize_amount_winning_number_deadline INLINECALLDICT
   }>
   $Draw$_fun_forward PROCINLINE:<{
     PUSHNULL
@@ -706,163 +687,36 @@ PROGRAM{
       $global_send INLINECALLDICT
     }>
   }>
-  $Draw$_fun_prize_amount_per_pick PROCINLINE:<{
-    DUP
-    0 EQINT
-    IF:<{
-      DROP
-      s8 s4 PUSH2
-      MUL
-      10000 PUSHINT
-      DIV
-    }>ELSE<{
-      DUP
-      1 EQINT
-      IFJMP:<{
-        DROP
-        s8 s3 PUSH2
-        MUL
-        150000 PUSHINT
-        DIV
-      }>
-      DUP
-      2 EQINT
-      IFJMP:<{
-        DROP
-        s8 s2 PUSH2
-        MUL
-        2400000 PUSHINT
-        DIV
-      }>
-      DUP
-      3 EQINT
-      IFJMP:<{
-        DROP
-        s8 s1 PUSH2
-        MUL
-        38400000 PUSHINT
-        DIV
-      }>
-      4 EQINT
-      IFJMP:<{
-        s8 s0 PUSH2
-        MUL
-        614400000 PUSHINT
-        DIV
-      }>
-      0 PUSHINT
-    }>
-  }>
-  $Draw$_fun_compute_tier PROCINLINE:<{
-    s7 PUSH
-    5 PUSHINT
-    s2 PUSH
-    4 MODPOW2#
-    s2 PUSH
-    4 MODPOW2#
-    WHILE:<{
-      NEQ
-      IF:<{
-        DUP
-        0 GTINT
-      }>ELSE<{
-        FALSE
-      }>
-    }>DO<{
-      DEC
-      s0 s2 XCHG
-      4 RSHIFT#
-      SWAP
-      4 RSHIFT#
-      OVER
-      4 MODPOW2#
-      OVER
-      4 MODPOW2#
-      s3 s4 XCHG
-      s2 s3 XCHG
-    }>
-    2 1 BLKDROP2
-  }>
   $Draw$_fun_compute_prize_amount PROCINLINE:<{
-    0 PUSHINT
-    OVER
-    SBITS
-    20 PUSHINT
+    s4 s(-1) PUXC
+    MUL
+    38400000 PUSHINT
     DIV
-    REPEAT:<{
-      SWAP
-      20 LDU
-      s15 17 s() XCHG
-      5 13 REVERSE
-      s12 16 s() XCHG
-      s11 17 s() XCHG
-      s10 16 s() XCHG
-      s9 17 s() XCHG
-      s8 16 s() XCHG
-      s7 17 s() XCHG
-      s6 16 s() XCHG
-      s5 17 s() XCHG
-      s4 16 s() XCHG
-      s3 17 s() XCHG
-      s2 16 s() XCHG
-      s0 17 s() XCHG
-      SWAP
-      $Draw$_fun_compute_tier INLINECALLDICT
-      $Draw$_fun_prize_amount_per_pick INLINECALLDICT
-      s1 16 s() XCHG
-      ADD
-      s14 16 s() XCHG
-      s13 s15 XCHG
-      s12 s14 XCHG
-      s11 s13 XCHG
-      s10 s12 XCHG
-      s9 s11 XCHG
-      s8 s10 XCHG
-      s7 s9 XCHG
-      s6 s8 XCHG
-      s5 s7 XCHG
-      s4 s6 XCHG
-      s3 s5 XCHG
-      s4 s3 s0 XCHG3
-      s1 s2 XCHG
-    }>
-    NIP
   }>
   $Draw$_fun__get_ticket_address PROCINLINE:<{
     $Draw$_fun__get_ticket_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
   $Draw$_fun_require_ticket PROCINLINE:<{
-    s15 16 s() XCHG
-    s14 16 s() XCHG
-    s13 16 s() XCHG
-    s12 16 s() XCHG
-    s11 16 s() XCHG
-    s10 16 s() XCHG
-    s9 16 s() XCHG
-    s0 16 s() XCHG
-    s0 s8 XCHG
-    s0 s7 XCHG
-    s0 s6 XCHG
-    5 -ROLL
+    11 -ROLL
     4429 PUSHINT
-    s0 17 s() XCHG
+    s0 s12 XCHG
     $Draw$_fun__get_ticket_address INLINECALLDICT
     __tact_context_get_sender INLINECALLDICT
     __tact_slice_eq_bits INLINECALLDICT
-    s1 16 s() XCHG
+    s1 s11 XCHG
     THROWANYIFNOT
-    14 ROLL
+    9 ROLL
   }>
   $Draw$_fun_require_not_over PROCINLINE:<{
     47849 PUSHINT
     NOW
-    s7 PUSH
+    s2 PUSH
     LESS
     THROWANYIFNOT
   }>
   $Draw$_fun_native_reserve PROCINLINE:<{
-    s7 PUSH
+    s2 PUSH
     100000000 PUSHINT
     ADD
     0 PUSHINT
@@ -870,20 +724,20 @@ PROGRAM{
   }>
   $Draw$_fun_require_active PROCINLINE:<{
     54665 PUSHINT
-    s15 PUSH
+    s10 PUSH
     THROWANYIFNOT
   }>
   $Draw$_fun_require_over PROCINLINE:<{
     6571 PUSHINT
     NOW
-    s7 PUSH
+    s2 PUSH
     GEQ
     THROWANYIFNOT
   }>
   $Draw$_fun_require_pool_master PROCINLINE:<{
     24632 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s15 s(-1) PUXC
+    s10 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
     THROWANYIFNOT
   }>
@@ -896,157 +750,93 @@ PROGRAM{
     PUSHNULL
     PUSHNULL
   }>
-  $PayPrizeDebtInternal$_constructor_user_amount PROCINLINE:<{
+  $PayPrizeDebtInternal$_constructor_user_amount_period PROCINLINE:<{
   }>
-  $PrepareInitTicket$_constructor_period_start_end_avg_balance PROCINLINE:<{
+  $PrepareInitTicket$_constructor_period_winning_number_start_end_avg_balance PROCINLINE:<{
   }>
   $Draw$_internal_binary_ClaimPrizeInternal PROCINLINE:<{
     CONT:<{
       c2 SAVE
       SAMEALTSAVE
-      s14 17 s() XCHG
-      s13 16 s() XCHG
-      s12 s15 XCHG
-      s11 17 s() XCHG
-      s10 16 s() XCHG
-      s9 s15 XCHG
-      s8 17 s() XCHG
-      s7 16 s() XCHG
-      s6 s15 XCHG
-      s5 17 s() XCHG
-      s4 16 s() XCHG
-      s3 s15 XCHG
-      s2 17 s() XCHG
-      s1 16 s() XCHG
-      s0 s15 XCHG
+      s9 s12 XCHG
+      s8 s11 XCHG
+      s7 s10 XCHG
+      s6 s12 XCHG
+      s5 s11 XCHG
+      s4 s10 XCHG
+      s3 s12 XCHG
+      s11 s10 s12 XCHG3
       $Draw$_fun_require_active INLINECALLDICT
       $Draw$_fun_require_not_over INLINECALLDICT
-      15 ROLL
-      17 s() PUSH
-      SWAP
-      s0 17 s() XCHG
+      s11 s10 PUSH2
       $Draw$_fun_require_ticket INLINECALLDICT
-      0 PUSHINT
-      4 PUSHINT
-      REPEAT:<{
-        s0 16 s() XCHG
-        LDREF
-        SWAP
-        CTOS
-        s15 16 s() XCHG
-        s14 16 s() XCHG
-        s13 16 s() XCHG
-        s12 16 s() XCHG
-        s11 16 s() XCHG
-        s10 16 s() XCHG
-        s9 16 s() XCHG
-        s8 16 s() XCHG
-        s7 16 s() XCHG
-        s6 16 s() XCHG
-        s5 16 s() XCHG
-        s4 16 s() XCHG
-        s3 16 s() XCHG
-        s2 16 s() XCHG
-        s1 16 s() XCHG
-        $Draw$_fun_compute_prize_amount INLINECALLDICT
-        s1 17 s() XCHG
-        ADD
-        s15 16 s() XCHG
-        s14 s15 XCHG
-        s13 s14 XCHG
-        s12 s13 XCHG
-        s11 s12 XCHG
-        s10 s11 XCHG
-        s9 s10 XCHG
-        s8 s9 XCHG
-        s7 s8 XCHG
-        s6 s7 XCHG
-        s5 s6 XCHG
-        s4 s5 XCHG
-        s3 s4 XCHG
-        s1 s3 s0 XCHG3
-      }>
-      16 s() POP
-      s15 s7 PUSH2
+      10 ROLL
+      s0 s12 XCHG
+      $Draw$_fun_compute_prize_amount INLINECALLDICT
+      s0 s3 PUSH2
       MIN
-      16 s() PUSH
-      OVER
+      2DUP
       SUB
-      s9 s1 XCPU
+      s5 s1 XCPU
       SUB
-      s14 16 s() XCHG
-      5 12 REVERSE
-      s11 s15 XCHG
-      s10 16 s() XCHG
-      s9 s15 XCHG
-      s8 16 s() XCHG
-      s0 s7 XCHG
-      s6 16 s() XCHG
-      s0 s5 XCHG
-      s4 16 s() XCHG
-      s0 s3 XCHG
-      s2 16 s() XCHG
-      SWAP
-      s0 16 s() XCHG
+      s9 s12 XCHG
+      s8 s11 XCHG
+      s7 s10 XCHG
+      s6 s12 XCHG
+      s5 s11 XCHG
+      s4 s10 XCHG
+      s3 s12 XCHG
+      s0 s10 s12 XCHG3
       $Draw$_fun_native_reserve INLINECALLDICT
-      s0 17 s() XCHG
+      s0 s12 XCHG
       0 GTINT
       IF:<{
-        s14 PUSH
+        s10 PUSH
         0 GTINT
         IFJMP:<{
           FALSE
-          SWAP
-          18 s() PUSH
-          SWAP
-          s0 17 s() XCHG
+          s0 s13 s10 XCPUXC
           3 PUSHINT
           $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
           $global_send INLINECALLDICT
           FALSE
-          __tact_context_get_sender INLINECALLDICT
           0 PUSHINT
-          s0 19 s() XCHG
-          130 PUSHINT
-          s0 17 s() XCHG
-          $PayPrizeDebtInternal$_constructor_user_amount INLINECALLDICT
+          s0 s13 XCHG
+          7 PUSHPOW2
+          s12 s7 XCPU
+          $PayPrizeDebtInternal$_constructor_user_amount_period INLINECALLDICT
           $PayPrizeDebtInternal$_store_cell INLINECALLDICT
-          s4 s3 s0 XCHG3
-          s2 19 s() XCHG
-          s1 16 s() XCHG
+          s1 s4 XCHG
+          s3 s14 XCHG
+          s13 s11 s0 XCHG3
           $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
           $global_send INLINECALLDICT
-          s10 s14 XCHG
-          s9 s13 XCHG
-          s8 s12 XCHG
-          4 8 BLKSWAP
-          s3 s0 s0 XCHG3
+          s4 s9 XCHG
+          s3 s8 XCHG
+          s7 s5 s5 XCHG3
+          s0 s6 XCHG
+          s0 s4 XCHG
+          s3 s1 s3 XCHG3
           RETALT
         }>
-        s14 POP
-        s14 POP
+        s9 POP
+        s9 POP
+        s11 POP
       }>ELSE<{
-        s14 POP
-        s14 POP
+        s2 s13 XCHG
+        s9 POP
+        s9 POP
+        DROP
       }>
       FALSE
-      SWAP
-      s0 16 s() XCHG
+      s0 s10 XCHG2
       0 PUSHINT
       130 PUSHINT
       $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
       $global_send INLINECALLDICT
-      s10 s14 XCHG
-      s9 s13 XCHG
-      s8 s12 XCHG
-      s7 s11 XCHG
-      s6 s10 XCHG
-      s5 s9 XCHG
-      s4 s8 XCHG
-      s3 s7 XCHG
-      s6 s1 s4 XCHG3
-      s0 s3 s3 XCHG3
-      s0 s5 XCHG
+      5 5 BLKSWAP
+      s3 s4 XCHG
+      ROT
     }>
     EXECUTE
   }>
@@ -1054,129 +844,103 @@ PROGRAM{
     $Draw$_fun_require_active INLINECALLDICT
     $Draw$_fun_require_over INLINECALLDICT
     0 PUSHINT
-    s8 POP
+    s3 POP
     $Draw$_fun_native_reserve INLINECALLDICT
     FALSE
-    s13 PUSH
+    s8 PUSH
     0 PUSHINT
     7 PUSHPOW2
     $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
     $global_send INLINECALLDICT
   }>
   $Draw$_internal_binary_InitDraw PROCINLINE:<{
-    s14 17 s() XCHG
-    s13 16 s() XCHG
-    s12 s15 XCHG
-    s11 17 s() XCHG
-    s10 16 s() XCHG
-    s9 s15 XCHG
-    s8 17 s() XCHG
-    s7 16 s() XCHG
-    s6 s15 XCHG
-    s5 17 s() XCHG
-    s4 16 s() XCHG
-    s3 s15 XCHG
-    s2 17 s() XCHG
-    s1 16 s() XCHG
-    s0 s15 XCHG
+    s9 s12 XCHG
+    s8 s11 XCHG
+    s7 s10 XCHG
+    s6 s12 XCHG
+    s5 s11 XCHG
+    s4 s10 XCHG
+    s3 s12 XCHG
+    s11 s10 s12 XCHG3
     $Draw$_fun_require_pool_master INLINECALLDICT
-    s10 POP
-    s1 16 s() XCHG
-    s0 s15 XCHG
+    s5 POP
+    s10 s9 XCHG2
     $Twab$_constructor_timestamp_amount INLINECALLDICT
     $Twab$_as_optional INLINECALLDICT
-    s12 s15 XCHG
-    s11 s14 XCHG
-    s10 s13 XCHG
-    s9 s12 XCHG
-    s0 s11 XCHG
     s7 s10 XCHG
     s6 s9 XCHG
     s5 s8 XCHG
     s4 s7 XCHG
-    s3 s6 XCHG
-    s0 s5 s5 XCHG3
+    s5 s1 s6 XCHG3
+    s3 s3 XCHG2
     s0 s4 XCHG
     PUSHNULL
     FALSE
     PUSHNULL
     $Draw$_fun_forward INLINECALLDICT
   }>
-  $Draw$_internal_binary_OpenDraw PROCINLINE:<{
-    s14 18 s() XCHG
-    s13 17 s() XCHG
-    s12 16 s() XCHG
-    s11 s15 XCHG
-    s10 18 s() XCHG
-    s9 17 s() XCHG
-    s8 16 s() XCHG
-    s7 s15 XCHG
-    s6 18 s() XCHG
-    s5 17 s() XCHG
-    s4 16 s() XCHG
-    s3 s15 XCHG
-    s2 18 s() XCHG
-    s1 17 s() XCHG
-    s0 16 s() XCHG
-    $Draw$_fun_require_pool_master INLINECALLDICT
-    5 5 BLKDROP2
-    s9 POP
-    8459 PUSHINT
-    s5 PUSH
-    $Twab$_not_null INLINECALLDICT
-    $Twab$_get_timestamp INLINECALLDICT
-    s11 s(-1) PUXC
-    GREATER
-    THROWANYIFNOT
-    s0 s9 XCHG
-    TRUE
-    s0 s13 XCHG
-    $Twab$_constructor_timestamp_amount INLINECALLDICT
-    $Twab$_as_optional INLINECALLDICT
-    s11 PUSH
-    $global_randomInt INLINECALLDICT
-    20 MODPOW2#
-    NOW
-    1209600 PUSHINT
-    ADD
-    s14 s15 XCHG
-    s10 s13 XCHG
+  $Draw$_internal_binary_OpenDrawInternal PROCINLINE:<{
     s9 s12 XCHG
     s8 s11 XCHG
     s7 s10 XCHG
-    s3 s9 XCHG
-    s2 s8 XCHG
-    s7 s15 XCHG
-    5 2 BLKSWAP
+    s6 s12 XCHG
+    s5 s11 XCHG
+    s4 s10 XCHG
+    s3 s12 XCHG
+    s11 s10 s12 XCHG3
+    $Draw$_fun_require_pool_master INLINECALLDICT
+    5 BLKDROP
+    s4 POP
+    8459 PUSHINT
+    s4 PUSH
+    $Twab$_not_null INLINECALLDICT
+    $Twab$_get_timestamp INLINECALLDICT
+    s7 s(-1) PUXC
+    GREATER
+    THROWANYIFNOT
+    s0 s5 XCHG
+    TRUE
+    s0 s5 XCHG
+    $Twab$_constructor_timestamp_amount INLINECALLDICT
+    $Twab$_as_optional INLINECALLDICT
+    $global_randomInt INLINECALLDICT
+    16 MODPOW2#
+    NOW
+    1209600 PUSHINT
+    ADD
+    __tact_context_get INLINECALLDICT
+    $Context$_get_value INLINECALLDICT
+    100000000 PUSHINT
+    SUB
+    DUP
+    s8 s9 XCHG
+    s6 s8 XCHG
+    s5 s7 XCHG
+    s1 s3 s3 XCHG3
     $Draw$_fun_native_reserve INLINECALLDICT
     FALSE
-    SWAP
-    s0 16 s() XCHG
+    s0 s11 XCHG2
     0 PUSHINT
     130 PUSHINT
     $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
     $global_send INLINECALLDICT
-    14 ROLL
+    9 ROLL
   }>
   $Draw$_internal_binary_InitTicket PROCINLINE:<{
-    15 -ROLL
+    10 -ROLL
     $Draw$_fun_require_active INLINECALLDICT
-    s10 PUSH
+    s5 PUSH
     $Twab$_not_null INLINECALLDICT
-    s11 PUSH
+    s6 PUSH
     $Twab$_not_null INLINECALLDICT
     s3 s2 s(-1) PUXC2
     s0 s3 PUXC
     $global_average_balance INLINECALLDICT
-    s14 PUSH
-    3 -ROLL
-    $PrepareInitTicket$_constructor_period_start_end_avg_balance INLINECALLDICT
+    s9 PUSH
+    s3 s5 XCPU
+    s1 s3 s3 XCHG3
+    $PrepareInitTicket$_constructor_period_winning_number_start_end_avg_balance INLINECALLDICT
     $PrepareInitTicket$_store_cell INLINECALLDICT
-    s15 16 s() XCHG
-    s14 s15 XCHG
-    s13 s14 XCHG
-    s12 s13 XCHG
-    s11 s12 XCHG
     s10 s11 XCHG
     s9 s10 XCHG
     s8 s9 XCHG
@@ -1193,7 +957,7 @@ PROGRAM{
   %get_core_data PROC:<{
     $Draw$_contract_load INLINECALLDICT
     $Draw$_fun_get_core_data INLINECALLDICT
-    15 15 BLKDROP2
+    10 10 BLKDROP2
     $DrawData$_to_external INLINECALLDICT
   }>
   supported_interfaces PROC:<{
@@ -1203,7 +967,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d533662666563427971553752797034334148634455316f47366663366242734e474e466a7371546e6a786473} PUSHSLICE
+    x{697066733a2f2f516d5170785862734668777345724542316172744155366a6d39783656584139396d337556507250597669484773} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1229,7 +993,7 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    2865825699 PUSHINT
+    2386274623 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
@@ -1249,13 +1013,13 @@ PROGRAM{
       TRUE
     }>
     DUP
-    3499440231 PUSHINT
+    2354478105 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
-      $OpenDraw$_load INLINECALLDICT
-      1 4 BLKDROP2
-      $Draw$_internal_binary_OpenDraw INLINECALLDICT
+      $OpenDrawInternal$_load INLINECALLDICT
+      1 3 BLKDROP2
+      $Draw$_internal_binary_OpenDrawInternal INLINECALLDICT
       TRUE
     }>
     DUP
@@ -1302,9 +1066,7 @@ PROGRAM{
     s0 s2 XCHG
     __tact_context_sender SETGLOB
     $Draw$_contract_load INLINECALLDICT
-    s14 16 s() XCHG
-    s13 s15 XCHG
-    2 13 BLKSWAP
+    2 10 BLKSWAP
     $Draw$_contract_router_internal INLINECALLDICT
     130 THROWIFNOT
     $Draw$_contract_store INLINECALLDICT

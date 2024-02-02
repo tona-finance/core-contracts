@@ -57,17 +57,15 @@ cell $DeployOk$_store_cell((int) v) inline {
 
 ;;
 ;; Type: ClaimPrizeDebtInternal
-;; Header: 0x3dc1492c
-;; TLB: claim_prize_debt_internal#3dc1492c amount:coins user:address draw:address period:uint32 = ClaimPrizeDebtInternal
+;; Header: 0x342cd755
+;; TLB: claim_prize_debt_internal#342cd755 amount:coins user:address = ClaimPrizeDebtInternal
 ;;
 
-(slice, ((int, slice, slice, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1036077356);
+(slice, ((int, slice))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 875353941);
     var v'amount = sc_0~load_coins();
     var v'user = sc_0~__tact_load_address();
-    var v'draw = sc_0~__tact_load_address();
-    var v'period = sc_0~load_uint(32);
-    return (sc_0, (v'amount, v'user, v'draw, v'period));
+    return (sc_0, (v'amount, v'user));
 }
 
 ;;
@@ -118,38 +116,6 @@ builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice) v) inlin
     b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
     b = b.store_int(false, 1);
     b = $PoolAccount$init$_store(b, ($owner, $master, $prize_reserve));
-    return (mine, b.end_cell());
-}
-
-;;
-;; Type: Ticket
-;;
-
-builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inline {
-    var (v'owner, v'pool_account, v'draw, v'period) = v;
-    build_0 = __tact_store_address(build_0, v'owner);
-    build_0 = __tact_store_address(build_0, v'pool_account);
-    build_0 = __tact_store_address(build_0, v'draw);
-    var build_1 = begin_cell();
-    build_1 = build_1.store_int(v'period, 257);
-    build_0 = store_ref(build_0, build_1.end_cell());
-    return build_0;
-}
-
-(cell, cell) $Ticket$_init_child(cell sys', slice $owner, slice $pool_account, slice $draw, int $period) inline {
-    slice sc' = sys'.begin_parse();
-    cell source = sc'~load_dict();
-    cell contracts = new_dict();
-    
-    ;; Contract Code: Ticket
-    cell mine = __tact_dict_get_code(source, 42189);
-    contracts = __tact_dict_set_code(contracts, 42189, mine);
-    
-    ;; Build cell
-    builder b = begin_cell();
-    b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
-    b = b.store_int(false, 1);
-    b = $Ticket$init$_store(b, ($owner, $pool_account, $draw, $period));
     return (mine, b.end_cell());
 }
 

@@ -42,62 +42,65 @@ builder $DeployOk$_store(builder build_0, (int) v) inline;
 ;; $DeployOk$_store_cell
 cell $DeployOk$_store_cell((int) v) inline;
 
+;; $WinningSplit$_store
+builder $WinningSplit$_store(builder build_0, (int, int, int, int) v) inline;
+
+;; $WinningSplit$_load
+(slice, ((int, int, int, int))) $WinningSplit$_load(slice sc_0) inline;
+
 ;; $ComputePickNumber$_load
 (slice, ((int, int))) $ComputePickNumber$_load(slice sc_0) inline;
 
-;; $ComputePickPayload$_load
-(slice, ((slice, slice))) $ComputePickPayload$_load(slice sc_0) inline;
-
-;; $ComputePrizeAmount$_store
-builder $ComputePrizeAmount$_store(builder build_0, (slice) v) inline;
-
-;; $ComputePrizeAmount$_store_cell
-cell $ComputePrizeAmount$_store_cell((slice) v) inline;
+;; $ComputePrizeAmount$_load
+(slice, ((int, slice))) $ComputePrizeAmount$_load(slice sc_0) inline;
 
 ;; $TicketTester$_store
-builder $TicketTester$_store(builder build_0, (slice, int, cell) v) inline;
+builder $TicketTester$_store(builder build_0, (slice, int, int, (int, int, int, int), cell) v) inline;
 
 ;; $TicketTester$_load
-(slice, ((slice, int, cell))) $TicketTester$_load(slice sc_0) inline;
+(slice, ((slice, int, int, (int, int, int, int), cell))) $TicketTester$_load(slice sc_0) inline;
 
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
 ;; $TicketTester$init$_load
-(slice, ((slice, int))) $TicketTester$init$_load(slice sc_0) inline;
+(slice, ((slice, int, int))) $TicketTester$init$_load(slice sc_0) inline;
+
+;; $WinningSplit$_constructor_n0_n1_n2_n3
+((int, int, int, int)) $WinningSplit$_constructor_n0_n1_n2_n3(int n0, int n1, int n2, int n3) inline;
+
+;; $global_empty_winning_split
+(int, int, int, int) $global_empty_winning_split() impure inline;
 
 ;; $TicketTester$_contract_init
-(slice, int, cell) $TicketTester$_contract_init(slice $owner, int $size) impure inline_ref;
+(slice, int, int, (int, int, int, int), cell) $TicketTester$_contract_init(slice $owner, int $picks, int $prize_amount) impure inline_ref;
 
 ;; $TicketTester$_contract_load
-(slice, int, cell) $TicketTester$_contract_load() impure inline_ref;
+(slice, int, int, (int, int, int, int), cell) $TicketTester$_contract_load() impure inline_ref;
 
 ;; $TicketTester$_contract_store
-() $TicketTester$_contract_store((slice, int, cell) v) impure inline;
+() $TicketTester$_contract_store((slice, int, int, (int, int, int, int), cell) v) impure inline;
 
 ;; $global_send
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline;
 
-;; $Builder$_fun_asSlice
-slice $Builder$_fun_asSlice(builder $self) impure inline;
+;; $WinningSplit$_fun_compute_prize_scale
+int $WinningSplit$_fun_compute_prize_scale((int, int, int, int) $self, int $pick_number) impure inline;
 
 ;; $TicketTester$_fun_compute_pick_number
-((slice, int, cell), int) $TicketTester$_fun_compute_pick_number((slice, int, cell) $self, int $index) impure inline;
+((slice, int, int, (int, int, int, int), cell), int) $TicketTester$_fun_compute_pick_number((slice, int, int, (int, int, int, int), cell) $self, int $index) impure inline;
 
-;; $TicketTester$_fun_compute_pick_payload
-((slice, int, cell), cell) $TicketTester$_fun_compute_pick_payload((slice, int, cell) $self, slice $index_payload) impure inline;
+;; $TicketTester$_fun_compute_prize_scale
+((slice, int, int, (int, int, int, int), cell), int) $TicketTester$_fun_compute_prize_scale((slice, int, int, (int, int, int, int), cell) $self, slice $index_payload) impure inline;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
 ;; $TicketTester$_fun_forward
-((slice, int, cell), ()) $TicketTester$_fun_forward((slice, int, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
+((slice, int, int, (int, int, int, int), cell), ()) $TicketTester$_fun_forward((slice, int, int, (int, int, int, int), cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline;
 
 ;; $TicketTester$_fun_notify
-((slice, int, cell), ()) $TicketTester$_fun_notify((slice, int, cell) $self, cell $body) impure inline;
-
-;; $ComputePrizeAmount$_constructor_pick_payload
-((slice)) $ComputePrizeAmount$_constructor_pick_payload(slice pick_payload) inline;
+((slice, int, int, (int, int, int, int), cell), ()) $TicketTester$_fun_notify((slice, int, int, (int, int, int, int), cell) $self, cell $body) impure inline;
 
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int queryId) inline;

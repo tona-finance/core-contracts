@@ -52,7 +52,7 @@ builder $DeployOk$_store(builder build_0, (int) v) inline;
 cell $DeployOk$_store_cell((int) v) inline;
 
 ;; $ClaimPrizeDebtInternal$_load
-(slice, ((int, slice, slice, int))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline;
+(slice, ((int, slice))) $ClaimPrizeDebtInternal$_load(slice sc_0) inline;
 
 ;; $PrizeReserve$_store
 builder $PrizeReserve$_store(builder build_0, (slice) v) inline;
@@ -68,9 +68,6 @@ builder $PrizeReserve$_store(builder build_0, (slice) v) inline;
 
 ;; $PoolAccount$init$_store
 builder $PoolAccount$init$_store(builder build_0, (slice, slice, slice) v) inline;
-
-;; $Ticket$init$_store
-builder $Ticket$init$_store(builder build_0, (slice, slice, slice, int) v) inline;
 
 ;; $PrizeReserve$init$_load
 (slice, ((slice))) $PrizeReserve$init$_load(slice sc_0) inline;
@@ -99,14 +96,8 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $PoolAccount$_init_child
 (cell, cell) $PoolAccount$_init_child(cell sys', slice $owner, slice $master, slice $prize_reserve) inline;
 
-;; $Ticket$_init_child
-(cell, cell) $Ticket$_init_child(cell sys', slice $owner, slice $pool_account, slice $draw, int $period) inline;
-
-;; $PrizeReserve$_fun__get_pool_account_address
-((slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice) $self, slice $user) impure inline;
-
-;; $PrizeReserve$_fun__get_ticket_init
-((slice), (cell, cell)) $PrizeReserve$_fun__get_ticket_init((slice) $self, slice $user, slice $draw, int $period) impure inline;
+;; $PrizeReserve$_fun__get_pool_account_init
+((slice), (cell, cell)) $PrizeReserve$_fun__get_pool_account_init((slice) $self, slice $user) impure inline;
 
 ;; $PrizeReserveData$_constructor_pool_master_balance
 ((slice, int)) $PrizeReserveData$_constructor_pool_master_balance(slice pool_master, int balance) inline;
@@ -120,11 +111,11 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline;
 ;; $PrizeReserve$_fun_notify
 ((slice), ()) $PrizeReserve$_fun_notify((slice) $self, cell $body) impure inline;
 
-;; $PrizeReserve$_fun__get_ticket_address
-((slice), slice) $PrizeReserve$_fun__get_ticket_address((slice) $self, slice $user, slice $draw, int $period) impure inline;
+;; $PrizeReserve$_fun__get_pool_account_address
+((slice), slice) $PrizeReserve$_fun__get_pool_account_address((slice) $self, slice $user) impure inline;
 
-;; $PrizeReserve$_fun_require_ticket
-((slice), ()) $PrizeReserve$_fun_require_ticket((slice) $self, slice $user, slice $draw, int $period) impure inline;
+;; $PrizeReserve$_fun_require_pool_account
+((slice), ()) $PrizeReserve$_fun_require_pool_account((slice) $self, slice $user) impure inline;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline;

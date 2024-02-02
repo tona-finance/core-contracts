@@ -1,167 +1,135 @@
 import "@stdlib/deploy";
 
+
+const CARDINALITY: Int = 4;
+const PICK_BITS: Int = 4 * 4;
+const TOTAL_PICKS: Int = 1 << (4 * 4);
+const CHOICES: Int = 16;
+const PRIZE_SCALE_0: Int = 16 * 16 * 15 * 250;
+const PRIZE_SCALE_1: Int = 16 * 16 * 750;
+const PRIZE_SCALE_2: Int = 16 * 2250;
+const PRIZE_SCALE_3: Int = 1 * 6750;
+const TOTAL_PRIZE_SCALE: Int = 16 * 16 * 15 * 10000;
+
+
+struct WinningSplit {
+    n0: Int as uint8;
+    n1: Int as uint8;
+    n2: Int as uint8;
+    n3: Int as uint8;
+}
+
+fun empty_winning_split(): WinningSplit {
+    return WinningSplit {
+        n0: 0,
+        n1: 0,
+        n2: 0,
+        n3: 0
+    };
+}
+
+extends mutates fun apply(self: WinningSplit, winning_number: Int) {
+    self.n0 = winning_number % CHOICES;
+    winning_number = winning_number / CHOICES;
+    self.n1 = winning_number % CHOICES;
+    winning_number = winning_number / CHOICES;
+    self.n2 = winning_number % CHOICES;
+    winning_number = winning_number / CHOICES;
+    self.n3 = winning_number % CHOICES;
+}
+
+extends fun compute_prize_scale(self: WinningSplit, pick_number: Int): Int {
+    let num: Int = pick_number % CHOICES;
+    if (num != self.n0) {
+        return 0;
+    }
+    pick_number = pick_number / CHOICES;
+    num = pick_number % CHOICES;
+    if (num != self.n1) {
+        return PRIZE_SCALE_3;
+    }
+    pick_number = pick_number / CHOICES;
+    num = pick_number % CHOICES;
+    if (num != self.n2) {
+        return PRIZE_SCALE_2;
+    }
+    pick_number = pick_number / CHOICES;
+    num = pick_number % CHOICES;
+    if (num != self.n3) {
+        return PRIZE_SCALE_1;
+    }
+    return PRIZE_SCALE_0;
+}
+
 message ComputePickNumber {
     index: Int as uint32;
     expected_number: Int as uint32;
 }
 
-message ComputePickPayload {
-    prize_tester: Address;
+message ComputePrizeAmount {
+    expected_amount: Int as coins;
     index_payload: Slice as remaining;
 }
 
 contract TicketTester with Deployable {
 
-    const PICK_BITS: Int = 4 * 5;
-    const TOTAL_PICKS: Int = 1 << (4 * 5);
-
     owner: Address;
     picks: Int as uint32 = 0;
+    prize_amount: Int as coins = 0;
+    winning_split: WinningSplit;
     used_indexes: map<Int, Bool>;
 
-    init(owner: Address, size: Int) {
+    init(owner: Address, picks: Int, prize_amount: Int) {
         self.owner = owner;
-        self.picks = size;
+        self.picks = picks;
+        self.prize_amount = prize_amount;
+        self.winning_split = empty_winning_split();
         self.used_indexes = emptyMap();
     }
 
     receive(msg: ComputePickNumber) {
-        let pick_number: Int = self.compute_pick_number(msg.index) % self.TOTAL_PICKS;
-        require(pick_number == msg.expected_number, "Invalid pick number");
-    }
-
-    receive(msg: ComputePickPayload) {
-        let pick_builder: Builder = beginCell();
-        // Every cell has up to 4 references to other cells, but currently 
-        // max gas (1.0) limit to 3 references.
-        repeat(3) {
-            let index_payload: Slice = msg.index_payload.loadRef().beginParse();
-            let pick_payload: Cell = self.compute_pick_payload(index_payload);
-            pick_builder = pick_builder.storeRef(pick_payload);
-        }
-
-        self.forward(
-            msg.prize_tester,
-            ComputePrizeAmount {
-                pick_payload: pick_builder.asSlice()
-            }.toCell(),
-            false,
-            null
-        );
-    }
-
-    fun compute_pick_payload(index_payload: Slice): Cell {
-        let size: Int = index_payload.bits() / self.PICK_BITS;
-        // 51 * 20 = 1020
-        require(size <= 51, "Invalid pick size");
-        self.picks = self.picks - size;
-        require(self.picks >= 0, "Insufficient picks");
-
-        // 20 + 20 + ... + 20
-        // \______  _______/
-        //        \/
-        //       <=51
-        let pick_payload: Builder = beginCell();
-        repeat(size) {
-            let pick_index: Int = index_payload.loadUint(self.PICK_BITS);
-            let pick_used: Bool? = self.used_indexes.get(pick_index);
-            require(pick_used == null, "Pick is used");
-            self.used_indexes.set(pick_index, true);
-
-            let pick_number: Int = self.compute_pick_number(pick_index);
-            pick_payload.storeUint(pick_number % self.TOTAL_PICKS, self.PICK_BITS);
-        }
-        return pick_payload.endCell();
-    }
-
-    inline fun compute_pick_number(index: Int): Int {
-        return beginCell()
-            .storeAddress(myAddress())
-            .storeUint(index, self.PICK_BITS)
-            .endCell()
-            .hash();
-    }
-}
-
-
-message ComputePrizeAmount {
-    pick_payload: Slice as remaining;
-}
-
-contract PrizeTester with Deployable {
-
-    const PICK_BITS: Int = 4 * 5;
-    const TOTAL_PICKS: Int = 1 << (4 * 5);
-    const CARDINALITY: Int = 5;
-    const CHOICES: Int = 16;
-    
-    winning_number: Int as uint32;
-    prize_amount: Int as coins;
-    prize_percentage_0: Int as uint8;
-    prize_percentage_1: Int as uint8;
-    prize_percentage_2: Int as uint8;
-    prize_percentage_3: Int as uint8;
-    prize_percentage_4: Int as uint8;
-
-    init(prize_amount: Int) {
-        self.winning_number = randomInt() % self.TOTAL_PICKS;
-        self.prize_amount = prize_amount;
-        self.prize_percentage_0 = 1;
-        self.prize_percentage_1 = 3;
-        self.prize_percentage_2 = 8;
-        self.prize_percentage_3 = 23;
-        self.prize_percentage_4 = 65;
+        let pick_number: Int = self.compute_pick_number(msg.index) % TOTAL_PICKS;
+        require(pick_number == msg.expected_number, "Unmatched pick number");
     }
 
     receive(msg: ComputePrizeAmount) {
-        let prize_amount: Int = 0;
-        repeat(3) {
-            let pick_payload: Slice = msg.pick_payload.loadRef().beginParse();
-            let amount: Int = self.compute_prize_amount(pick_payload);
-            prize_amount = prize_amount + amount;
+        let prize_scale: Int = 0;
+        repeat(2) {
+            let index_payload: Slice = msg.index_payload.loadRef().beginParse();
+            prize_scale = prize_scale + self.compute_prize_scale(index_payload);
         }
+        let prize_amount: Int = self.prize_amount * prize_scale / TOTAL_PRIZE_SCALE;
+        require(prize_amount == msg.expected_amount, "Unmatched prize amount");
     }
 
-    fun compute_prize_amount(pick_payload: Slice): Int {
-        let prize_amount: Int = 0;
-        let size: Int = pick_payload.bits() / self.PICK_BITS;
+    fun compute_prize_scale(index_payload: Slice): Int {
+        let size: Int = index_payload.bits() / PICK_BITS;
+        self.picks = self.picks - size;
+        require(self.picks >= 0, "Insufficient picks");
+
+        // 16 + 16 + ... + 16
+        // \______  _______/
+        //        \/
+        //       <=63
+        let scale: Int = 0;
         repeat(size) {
-            let pick_number: Int = pick_payload.loadUint(self.PICK_BITS);
-            let tier: Int = self.compute_tier(pick_number);
-            let amount: Int = self.prize_amount_per_pick(tier);
-            prize_amount = prize_amount + amount;
+            let pick_index: Int = index_payload.loadUint(PICK_BITS);
+            let pick_used: Bool? = self.used_indexes.get(pick_index);
+            require(pick_used == null, "Pick used");
+            self.used_indexes.set(pick_index, true);
+
+            let pick_number: Int = self.compute_pick_number(pick_index);
+            scale = scale + self.winning_split.compute_prize_scale(pick_number);
         }
-        return prize_amount;
+        return scale;
     }
 
-    fun compute_tier(pick_number: Int): Int {
-        let winning_number: Int = self.winning_number;
-        let tier: Int = self.CARDINALITY;
-        let user_num: Int = pick_number % self.CHOICES;
-        let win_num: Int = winning_number % self.CHOICES;
-        while(user_num != win_num && tier > 0) {
-            tier = tier - 1;
-            pick_number = pick_number / self.CHOICES;
-            winning_number = winning_number / self.CHOICES;
-            user_num = pick_number % self.CHOICES;
-            win_num = winning_number % self.CHOICES;
-        }
-        return tier;
-    }
-
-    inline fun prize_amount_per_pick(tier: Int): Int {
-        if (tier == 0) {
-            return self.prize_amount * self.prize_percentage_0 / 100;
-        } else if (tier == 1) {
-            return self.prize_amount * self.prize_percentage_1 / 1500;
-        } else if (tier == 2) {
-            return self.prize_amount * self.prize_percentage_2 / 24000;
-        } else if (tier == 3) {
-            return self.prize_amount * self.prize_percentage_3 / 384000;
-        } else if (tier == 4) {
-            return self.prize_amount * self.prize_percentage_4 / 6144000;
-        } else {
-            return 0;
-        }
+    inline fun compute_pick_number(index: Int): Int {
+        let hash: Int = beginCell()
+            .storeAddress(myAddress())
+            .storeUint(index, PICK_BITS)
+            .endCell()
+            .hash();
+        return hash % TOTAL_PICKS;
     }
 }

@@ -145,8 +145,8 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
     send_raw_message($c, $params'mode);
 }
 
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_forward((slice, slice, (cell, int), int, int, slice) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
-    var (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)) = $self;
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_forward((slice, slice, (cell, int), int, int, slice, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
+    var (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve, $self'debt_amount)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -162,15 +162,15 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
         if (($balanceBeforeMessage < 100000000)) {
             raw_reserve(100000000, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve), ());
+            return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve, $self'debt_amount), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve), ());
+    return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve, $self'debt_amount), ());
 }
 
-((slice, slice, (cell, int), int, int, slice), ()) $PoolAccount$_fun_notify((slice, slice, (cell, int), int, int, slice) $self, cell $body) impure inline {
-    var (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)) = $self;
-    ($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve)~$PoolAccount$_fun_forward(__tact_context_get_sender(), $body, false, null());
-    return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve), ());
+((slice, slice, (cell, int), int, int, slice, int), ()) $PoolAccount$_fun_notify((slice, slice, (cell, int), int, int, slice, int) $self, cell $body) impure inline {
+    var (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve, $self'debt_amount)) = $self;
+    ($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve, $self'debt_amount)~$PoolAccount$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return (($self'owner, $self'master, ($self'twab_store'store, $self'twab_store'size), $self'share_amount, $self'lock, $self'prize_reserve, $self'debt_amount), ());
 }

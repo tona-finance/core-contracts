@@ -10,46 +10,41 @@ PROGRAM{
   DECLPROC __tact_dict_set_int_int
   DECLPROC __tact_dict_get_int_int
   DECLPROC __tact_slice_eq_bits
+  DECLPROC $WinningSplit$_store
+  DECLPROC $WinningSplit$_load
   DECLPROC $ClaimPrizeInternal$_store
   DECLPROC $ClaimPrizeInternal$_store_cell
   DECLPROC $InitTicketInternal$_load
-  DECLPROC $PayPrizeDebtInternal$_load
   DECLPROC $ClaimPrize$_load
-  DECLPROC $ClaimPrizeDebt$_load
-  DECLPROC $ClaimPrizeDebtInternal$_store
-  DECLPROC $ClaimPrizeDebtInternal$_store_cell
-  DECLPROC $ClaimPrizeDebtInternal$_load_bounced
   DECLPROC $Ticket$_store
   DECLPROC $Ticket$_load
   DECLPROC $StateInit$_not_null
   DECLPROC $TicketData$_to_external
   DECLPROC $Ticket$init$_load
+  DECLPROC $WinningSplit$_constructor_n0_n1_n2_n3
+  DECLPROC $global_empty_winning_split
   DECLPROC $Ticket$_contract_init
   DECLPROC $Ticket$_contract_load
   DECLPROC $Ticket$_contract_store
   DECLPROC $global_send
-  DECLPROC $Builder$_fun_asSlice
+  DECLPROC $WinningSplit$_fun_apply
+  DECLPROC $WinningSplit$_fun_compute_prize_scale
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
-  DECLPROC $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount
+  DECLPROC $TicketData$_constructor_active_owner_pool_account_draw_period_picks
   DECLPROC $Ticket$_fun_get_core_data
   DECLPROC $Ticket$_fun_get_index_status
   DECLPROC $Ticket$_fun_forward
   DECLPROC $Ticket$_fun_compute_pick_number
-  DECLPROC $Ticket$_fun_compute_pick_payload
-  DECLPROC $Ticket$_fun_require_draw
+  DECLPROC $Ticket$_fun_compute_prize_scale
   DECLPROC $Ticket$_fun_require_pool_account
   DECLPROC $Ticket$_fun_require_active
   DECLPROC $Ticket$_fun_require_inactive
   DECLPROC $Ticket$_fun_requireOwner
   DECLPROC $Ticket$_fun_owner
   DECLPROC $Ticket$_fun_msg_value
-  DECLPROC $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload
-  DECLPROC $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period
+  DECLPROC $ClaimPrizeInternal$_constructor_user_pool_account_prize_scale
   DECLPROC $Ticket$_internal_binary_InitTicketInternal
   DECLPROC $Ticket$_internal_binary_ClaimPrize
-  DECLPROC $Ticket$_internal_binary_ClaimPrizeDebt
-  DECLPROC $Ticket$_internal_binary_PayPrizeDebtInternal
-  DECLPROC $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal
   119856 DECLMETHOD %get_core_data
   72805 DECLMETHOD %get_index_status
   83229 DECLMETHOD %owner
@@ -139,16 +134,29 @@ PROGRAM{
   __tact_slice_eq_bits PROCINLINE:<{
     SDEQ
   }>
+  $WinningSplit$_store PROCINLINE:<{
+    s3 s4 XCHG2
+    8 STU
+    8 STU
+    8 STU
+    8 STU
+  }>
+  $WinningSplit$_load PROCINLINE:<{
+    8 LDU
+    8 LDU
+    8 LDU
+    8 LDU
+    4 -ROLL
+  }>
   $ClaimPrizeInternal$_store PROCINLINE:<{
-    2865825699 PUSHINT
+    2386274623 PUSHINT
     s0 s4 XCHG2
     32 STU
     ROT
     __tact_store_address INLINECALLDICT
     SWAP
     __tact_store_address INLINECALLDICT
-    SWAP
-    STSLICER
+    32 STU
   }>
   $ClaimPrizeInternal$_store_cell PROCINLINE:<{
     NEWC
@@ -159,23 +167,13 @@ PROGRAM{
   $InitTicketInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
-    2970604814 PUSHINT
+    1186322253 PUSHINT
     EQUAL
     129 THROWIFNOT
-    LDGRAMS
-    LDGRAMS
-    -ROT
-  }>
-  $PayPrizeDebtInternal$_load PROCINLINE:<{
     32 LDU
-    SWAP
-    1506985886 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
     LDGRAMS
-    -ROT
+    LDGRAMS
+    3 -ROLL
   }>
   $ClaimPrize$_load PROCINLINE:<{
     32 LDU
@@ -185,58 +183,22 @@ PROGRAM{
     129 THROWIFNOT
     DUP
   }>
-  $ClaimPrizeDebt$_load PROCINLINE:<{
-    32 LDU
-    SWAP
-    1998527298 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    LDGRAMS
-    __tact_load_address INLINECALLDICT
-    s1 s2 XCHG
-  }>
-  $ClaimPrizeDebtInternal$_store PROCINLINE:<{
-    1036077356 PUSHINT
-    s0 s5 XCHG2
-    32 STU
-    s0 s3 XCHG2
-    STGRAMS
-    SWAP
-    __tact_store_address INLINECALLDICT
-    SWAP
-    __tact_store_address INLINECALLDICT
-    32 STU
-  }>
-  $ClaimPrizeDebtInternal$_store_cell PROCINLINE:<{
-    NEWC
-    4 -ROLL
-    $ClaimPrizeDebtInternal$_store INLINECALLDICT
-    ENDC
-  }>
-  $ClaimPrizeDebtInternal$_load_bounced PROCINLINE:<{
-    32 LDU
-    SWAP
-    1036077356 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    LDGRAMS
-    SWAP
-  }>
   $Ticket$_store PROCINLINE:<{
-    s8 s7 XCHG2
+    s11 s10 XCHG2
     __tact_store_address INLINECALLDICT
-    s1 s5 XCHG
+    s1 s8 XCHG
     1 STI
-    s0 s3 XCHG2
+    s0 s6 XCHG2
     __tact_store_address INLINECALLDICT
-    SWAP
+    s0 s4 XCHG2
     __tact_store_address INLINECALLDICT
-    32 STU
-    32 STU
     s1 s2 XCHG
+    32 STU
+    s3 s4 XCHG2
+    $WinningSplit$_store INLINECALLDICT
+    s1 s2 XCHG
+    32 STU
     STDICT
-    SWAP
-    STGRAMS
   }>
   $Ticket$_load PROCINLINE:<{
     __tact_load_address INLINECALLDICT
@@ -247,10 +209,16 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     SWAP
     32 LDU
+    $WinningSplit$_load INLINECALLDICT
+    s0 s4 XCHG
     32 LDU
     LDDICT
-    LDGRAMS
-    8 -ROLL
+    s0 s11 XCHG
+    s0 s10 XCHG
+    s0 s9 XCHG
+    s0 s8 XCHG
+    s0 s7 XCHG
+    s6 s6 s6 XCHG3
   }>
   $StateInit$_not_null PROCINLINE:<{
     DUP
@@ -276,14 +244,22 @@ PROGRAM{
     s1 s4 XCHG
     s3 s3 s0 XCHG3
   }>
+  $WinningSplit$_constructor_n0_n1_n2_n3 PROCINLINE:<{
+  }>
+  $global_empty_winning_split PROCINLINE:<{
+    0 PUSHINT
+    s0 s0 s0 PUSH3
+    $WinningSplit$_constructor_n0_n1_n2_n3 INLINECALLDICT
+  }>
   $Ticket$_contract_init PROCREF:<{
     FALSE
     0 PUSHINT
-    s4 s0 s0 XC2PU
-    s2 s4 XCHG
-    s2 s3 XCHG
+    $global_empty_winning_split INLINECALLDICT
+    s5 s8 XCHG
+    s5 s7 XCHG
+    s5 s6 XCHG
+    4 ROLL
     PUSHNULL
-    SWAP
   }>
   $Ticket$_contract_load PROCREF:<{
     c4 PUSH
@@ -295,7 +271,7 @@ PROGRAM{
     SWAP
     IFJMP:<{
       $Ticket$_load INLINECALLDICT
-      1 8 BLKDROP2
+      1 11 BLKDROP2
     }>
     MYADDR
     11 PLDU
@@ -316,7 +292,7 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    8 -ROLL
+    11 -ROLL
     $Ticket$_store INLINECALLDICT
     ENDC
     c4 POP
@@ -423,23 +399,73 @@ PROGRAM{
     SWAP
     SENDRAWMSG
   }>
-  $Builder$_fun_asSlice PROCINLINE:<{
-    ENDC
-    CTOS
+  $WinningSplit$_fun_apply PROCINLINE:<{
+    4 1 BLKDROP2
+    DUP
+    4 MODPOW2#
+    SWAP
+    4 RSHIFT#
+    DUP
+    4 MODPOW2#
+    SWAP
+    4 RSHIFT#
+    DUP
+    4 MODPOW2#
+    SWAP
+    4 RSHIFT#
+    4 MODPOW2#
+  }>
+  $WinningSplit$_fun_compute_prize_scale PROCINLINE:<{
+    DUP
+    4 MODPOW2#
+    s0 s5 XCHG2
+    NEQ
+    IF:<{
+      4 BLKDROP
+      0 PUSHINT
+    }>ELSE<{
+      s0 s3 XCHG
+      4 RSHIFT#
+      DUP
+      4 MODPOW2#
+      s0 s3 XCHG2
+      NEQ
+      IFJMP:<{
+        3 BLKDROP
+        6750 PUSHINT
+      }>
+      SWAP
+      4 RSHIFT#
+      DUP
+      4 MODPOW2#
+      ROT
+      NEQ
+      IFJMP:<{
+        2DROP
+        36000 PUSHINT
+      }>
+      4 RSHIFT#
+      4 MODPOW2#
+      SWAP
+      NEQ
+      IFJMP:<{
+        192000 PUSHINT
+      }>
+      960000 PUSHINT
+    }>
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
-  $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount PROCINLINE:<{
+  $TicketData$_constructor_active_owner_pool_account_draw_period_picks PROCINLINE:<{
   }>
   $Ticket$_fun_get_core_data PROCINLINE:<{
-    s6 s7 s5 PUSH3
-    s7 s6 s5 PUSH3
-    s6 PUSH
-    $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount INLINECALLDICT
+    s9 s10 s8 PUSH3
+    s10 s9 s4 PUSH3
+    $TicketData$_constructor_active_owner_pool_account_draw_period_picks INLINECALLDICT
   }>
   $Ticket$_fun_get_index_status PROCINLINE:<{
     257 PUSHINT
-    s3 PUSH
+    s2 PUSH
     s0 s2 XCHG
     1 PUSHINT
     __tact_dict_get_int_int INLINECALLDICT
@@ -492,96 +518,96 @@ PROGRAM{
     NEWC
     MYADDR
     __tact_store_address INLINECALLDICT
-    20 STU
+    16 STU
     ENDC
     HASHCU
+    16 MODPOW2#
   }>
-  $Ticket$_fun_compute_pick_payload PROCINLINE:<{
+  $Ticket$_fun_compute_prize_scale PROCINLINE:<{
     DUP
     SBITS
-    20 PUSHINT
-    DIV
-    13788 PUSHINT
-    OVER
-    52 LESSINT
-    THROWANYIFNOT
-    s4 s4 XCPU
+    4 RSHIFT#
+    s3 s3 XCPU
     SUB
     16022 PUSHINT
     OVER
     -1 GTINT
     THROWANYIFNOT
-    NEWC
-    s0 s5 XCHG
+    0 PUSHINT
+    s0 s4 XCHG
     REPEAT:<{
       SWAP
-      20 LDU
-      s4 PUSH
+      16 LDU
+      s3 PUSH
       257 PUSHINT
       s3 PUSH
       1 PUSHINT
       __tact_dict_get_int_int INLINECALLDICT
-      60931 PUSHINT
+      46002 PUSHINT
       SWAP
       ISNULL
       THROWANYIFNOT
-      s0 s4 XCHG
+      s0 s3 XCHG
       257 PUSHINT
       s2 PUSH
       TRUE
       1 PUSHINT
       __tact_dict_set_int_int INLINECALLDICT
-      s8 s10 XCHG
-      5 6 REVERSE
-      s5 s9 XCHG
-      s4 s10 XCHG
-      s0 s3 s3 XCHG3
+      s11 s13 XCHG
+      5 9 REVERSE
+      s8 s12 XCHG
+      s7 s13 XCHG
+      s6 s12 XCHG
+      s5 s13 XCHG
+      s4 s12 XCHG
+      s3 s13 XCHG
+      SWAP
       $Ticket$_fun_compute_pick_number INLINECALLDICT
-      DROP
+      s6 s5 s(-2) PU2XC
+      s6 s5 s(-2) PU2XC
+      $WinningSplit$_fun_compute_prize_scale INLINECALLDICT
+      s1 s12 XCHG
+      ADD
+      s10 s12 XCHG
+      s9 s11 XCHG
+      s8 s10 XCHG
       s7 s9 XCHG
       s6 s8 XCHG
       s5 s7 XCHG
       s4 s6 XCHG
-      2SWAP
-      s1 s5 XCHG
+      s3 s5 XCHG
+      s4 s1 s3 XCHG3
+      -ROT
     }>
     NIP
-    s0 s3 XCHG
-    ENDC
-  }>
-  $Ticket$_fun_require_draw PROCINLINE:<{
-    4429 PUSHINT
-    __tact_context_get_sender INLINECALLDICT
-    s6 s(-1) PUXC
-    __tact_slice_eq_bits INLINECALLDICT
-    THROWANYIFNOT
+    s0 s2 XCHG
   }>
   $Ticket$_fun_require_pool_account PROCINLINE:<{
     4429 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s7 s(-1) PUXC
+    s10 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
     THROWANYIFNOT
   }>
   $Ticket$_fun_require_active PROCINLINE:<{
     49516 PUSHINT
-    s7 PUSH
+    s10 PUSH
     THROWANYIFNOT
   }>
   $Ticket$_fun_require_inactive PROCINLINE:<{
     30919 PUSHINT
-    s7 PUSH
+    s10 PUSH
     NOT
     THROWANYIFNOT
   }>
   $Ticket$_fun_requireOwner PROCINLINE:<{
     __tact_context_get_sender INLINECALLDICT
-    s8 s(-1) PUXC
+    s11 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
     132 THROWIFNOT
   }>
   $Ticket$_fun_owner PROCINLINE:<{
-    s7 PUSH
+    s10 PUSH
   }>
   $Ticket$_fun_msg_value PROCINLINE:<{
     NIP
@@ -597,26 +623,37 @@ PROGRAM{
     ADD
     SUB
   }>
-  $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload PROCINLINE:<{
-  }>
-  $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period PROCINLINE:<{
+  $ClaimPrizeInternal$_constructor_user_pool_account_prize_scale PROCINLINE:<{
   }>
   $Ticket$_internal_binary_InitTicketInternal PROCINLINE:<{
-    8 2 BLKSWAP
+    s10 s13 XCHG
+    s9 s12 XCHG
+    s8 s11 XCHG
+    s7 s13 XCHG
+    s6 s12 XCHG
+    s5 s11 XCHG
+    s4 s13 XCHG
+    s3 s12 XCHG
+    s11 s13 s12 XCHG3
     $Ticket$_fun_require_inactive INLINECALLDICT
     $Ticket$_fun_require_pool_account INLINECALLDICT
-    s2 POP
-    s5 POP
+    NIP
+    s8 POP
     TRUE
-    s0 s7 XCHG
-    20 LSHIFT#
-    s0 s8 XCHG2
+    s0 s10 XCHG
+    $WinningSplit$_fun_apply INLINECALLDICT
+    s0 s10 XCHG
+    16 LSHIFT#
+    s0 s11 XCHG2
     DIV
-    s5 PUSH
-    s0 s8 XCHG
-    s4 s6 XCHG
-    s3 s5 XCHG
-    s4 s0 s3 XCHG3
+    s7 PUSH
+    s0 s11 XCHG
+    s9 s10 XCHG
+    s6 s9 XCHG
+    s5 s8 XCHG
+    s4 s7 XCHG
+    s3 s6 XCHG
+    s5 s4 s4 XCHG3
     s0 s2 XCHG
     PUSHNULL
     FALSE
@@ -624,23 +661,26 @@ PROGRAM{
     $Ticket$_fun_forward INLINECALLDICT
   }>
   $Ticket$_internal_binary_ClaimPrize PROCINLINE:<{
-    8 -ROLL
+    11 -ROLL
     $Ticket$_fun_require_active INLINECALLDICT
     $Ticket$_fun_requireOwner INLINECALLDICT
     __tact_context_get INLINECALLDICT
-    1000000000 PUSHINT
+    800000000 PUSHINT
     $Ticket$_fun_msg_value INLINECALLDICT
     2805 PUSHINT
     SWAP
     -1 GTINT
     THROWANYIFNOT
-    NEWC
-    3 PUSHINT
+    0 PUSHINT
+    2 PUSHINT
     REPEAT:<{
-      s0 s9 XCHG
+      s0 s12 XCHG
       LDREF
       SWAP
       CTOS
+      s11 s12 XCHG
+      s10 s12 XCHG
+      s1 s12 XCHG
       s1 s9 XCHG
       s1 s8 XCHG
       s1 s7 XCHG
@@ -648,9 +688,12 @@ PROGRAM{
       s1 s5 XCHG
       s1 s4 XCHG
       s3 s3 s0 XCHG3
-      $Ticket$_fun_compute_pick_payload INLINECALLDICT
-      s0 s10 XCHG2
-      STREF
+      $Ticket$_fun_compute_prize_scale INLINECALLDICT
+      s1 s13 XCHG
+      ADD
+      s11 s12 XCHG
+      s10 s11 XCHG
+      s9 s10 XCHG
       s8 s9 XCHG
       s7 s8 XCHG
       s6 s7 XCHG
@@ -659,17 +702,18 @@ PROGRAM{
       s3 s4 XCHG
       s1 s3 s0 XCHG3
     }>
-    s9 POP
-    s0 s8 XCHG
-    $Builder$_fun_asSlice INLINECALLDICT
-    s7 s5 s(-2) PU2XC
-    $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload INLINECALLDICT
+    s12 POP
+    s10 s8 s11 PU2XC
+    $ClaimPrizeInternal$_constructor_user_pool_account_prize_scale INLINECALLDICT
     $ClaimPrizeInternal$_store_cell INLINECALLDICT
-    s4 PUSH
-    s8 s9 XCHG
+    s7 PUSH
+    s11 s12 XCHG
+    s10 s11 XCHG
+    s0 s9 XCHG
+    s0 s10 XCHG
     s7 s8 XCHG
-    s0 s6 XCHG
-    s0 s7 XCHG
+    s6 s7 XCHG
+    s5 s6 XCHG
     s4 s5 XCHG
     s3 s4 XCHG
     s0 s3 s3 XCHG3
@@ -677,74 +721,22 @@ PROGRAM{
     PUSHNULL
     $Ticket$_fun_forward INLINECALLDICT
   }>
-  $Ticket$_internal_binary_ClaimPrizeDebt PROCINLINE:<{
-    8 2 BLKSWAP
-    $Ticket$_fun_require_active INLINECALLDICT
-    $Ticket$_fun_requireOwner INLINECALLDICT
-    16960 PUSHINT
-    s10 s1 PUSH2
-    LEQ
-    THROWANYIFNOT
-    __tact_context_get INLINECALLDICT
-    100000000 PUSHINT
-    $Ticket$_fun_msg_value INLINECALLDICT
-    2805 PUSHINT
-    SWAP
-    -1 GTINT
-    THROWANYIFNOT
-    s9 PUSH
-    SUB
-    s9 s7 s4 XCPU2
-    s5 PUSH
-    $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period INLINECALLDICT
-    $ClaimPrizeDebtInternal$_store_cell INLINECALLDICT
-    s7 s9 XCHG
-    s6 s8 XCHG
-    s5 s7 XCHG
-    s4 s6 XCHG
-    s3 s5 XCHG
-    s4 s3 s0 XCHG3
-    s1 s2 XCHG
-    TRUE
-    PUSHNULL
-    $Ticket$_fun_forward INLINECALLDICT
-  }>
-  $Ticket$_internal_binary_PayPrizeDebtInternal PROCINLINE:<{
-    8 2 BLKSWAP
-    $Ticket$_fun_require_active INLINECALLDICT
-    $Ticket$_fun_require_draw INLINECALLDICT
-    s0 s8 XCHG2
-    ADD
-    s6 s8 XCHG
-    s5 s7 XCHG
-    s4 s6 XCHG
-    s3 s5 XCHG
-    s4 s0 s3 XCHG3
-    s0 s2 XCHG
-    PUSHNULL
-    FALSE
-    PUSHNULL
-    $Ticket$_fun_forward INLINECALLDICT
-  }>
-  $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal PROCINLINE:<{
-    ADD
-  }>
   %get_core_data PROC:<{
     $Ticket$_contract_load INLINECALLDICT
     $Ticket$_fun_get_core_data INLINECALLDICT
-    8 7 BLKDROP2
+    11 6 BLKDROP2
     $TicketData$_to_external INLINECALLDICT
   }>
   %get_index_status PROC:<{
     $Ticket$_contract_load INLINECALLDICT
-    8 ROLL
+    11 ROLL
     $Ticket$_fun_get_index_status INLINECALLDICT
-    8 1 BLKDROP2
+    11 1 BLKDROP2
   }>
   %owner PROC:<{
     $Ticket$_contract_load INLINECALLDICT
     $Ticket$_fun_owner INLINECALLDICT
-    8 1 BLKDROP2
+    11 1 BLKDROP2
   }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
@@ -754,7 +746,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d664c5271564d6666447274534b69484b71595068766871374d525731725a637578706d37426b58384c346154} PUSHSLICE
+    x{697066733a2f2f516d52485775334678576662354356346361753336786157427a4639436370576f41397a52314b32696862753670} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -765,25 +757,6 @@ PROGRAM{
   $Ticket$_contract_router_internal PROCREF:<{
     SWAP
     IFJMP:<{
-      32 PUSHINT
-      SDSKIPFIRST
-      0 PUSHINT
-      OVER
-      SBITS
-      31 GTINT
-      IF:<{
-        DROP
-        DUP
-        32 PLDU
-      }>
-      1036077356 PUSHINT
-      EQUAL
-      IFJMP:<{
-        $ClaimPrizeDebtInternal$_load_bounced INLINECALLDICT
-        NIP
-        $Ticket$_receive_binary_bounce_ClaimPrizeDebtInternal INLINECALLDICT
-        TRUE
-      }>
       DROP
       TRUE
     }>
@@ -797,41 +770,21 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    2970604814 PUSHINT
+    1186322253 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
       $InitTicketInternal$_load INLINECALLDICT
-      1 2 BLKDROP2
+      1 3 BLKDROP2
       $Ticket$_internal_binary_InitTicketInternal INLINECALLDICT
       TRUE
     }>
-    DUP
     3150229583 PUSHINT
     EQUAL
     IFJMP:<{
-      DROP
       $ClaimPrize$_load INLINECALLDICT
       NIP
       $Ticket$_internal_binary_ClaimPrize INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    1998527298 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $ClaimPrizeDebt$_load INLINECALLDICT
-      1 2 BLKDROP2
-      $Ticket$_internal_binary_ClaimPrizeDebt INLINECALLDICT
-      TRUE
-    }>
-    1506985886 PUSHINT
-    EQUAL
-    IFJMP:<{
-      $PayPrizeDebtInternal$_load INLINECALLDICT
-      1 2 BLKDROP2
-      $Ticket$_internal_binary_PayPrizeDebtInternal INLINECALLDICT
       TRUE
     }>
     DROP
@@ -856,7 +809,7 @@ PROGRAM{
     s0 s2 XCHG
     __tact_context_sender SETGLOB
     $Ticket$_contract_load INLINECALLDICT
-    2 8 BLKSWAP
+    2 11 BLKSWAP
     $Ticket$_contract_router_internal INLINECALLDICT
     130 THROWIFNOT
     $Ticket$_contract_store INLINECALLDICT

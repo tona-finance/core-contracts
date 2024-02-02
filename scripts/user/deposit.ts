@@ -12,7 +12,7 @@ async function main() {
     const account_client = Client.open(account);
     await account_client.send(
         sender,
-        { value: toNano("1.0") },
+        { value: toNano("2.0") },
         "deposit"
     );
 }

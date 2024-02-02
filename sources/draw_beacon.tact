@@ -1,9 +1,9 @@
 import "./library/twab";
+import "./library/prize_calculator";
 import "./messages";
 
 trait DrawBeacon {
 
-    const TOTAL_PICKS: Int = 1 << (4 * 5);
     const EXPIRATION_INTERVAL: Int = 60 * 60 * 24 * 14; // 14 days
 
     active: Bool;
@@ -43,7 +43,7 @@ trait DrawBeacon {
         self.forward(msg.refund_address, null, false, null);
     }
 
-    receive(msg: OpenDraw) {
+    receive(msg: OpenDrawInternal) {
         self.require_pool_master();
         require(msg.twab_timestamp > (self.start!!).timestamp, "Invalid twab timestamp");
 
@@ -52,10 +52,12 @@ trait DrawBeacon {
             timestamp: msg.twab_timestamp,
             amount: msg.twab_amount
         };
-        self.prize_amount = msg.prize_amount;
-        self.avail_prize_amount = msg.prize_amount;
-        self.winning_number = randomInt() % self.TOTAL_PICKS;
+        self.winning_number = randomInt() % TOTAL_PICKS;
         self.deadline = now() + self.EXPIRATION_INTERVAL;
+
+        let prize_amount: Int = context().value - ton("0.1");
+        self.prize_amount = prize_amount;
+        self.avail_prize_amount = prize_amount;
 
         self.native_reserve();
         // refund gas
@@ -78,6 +80,7 @@ trait DrawBeacon {
             msg.pool_account,
             PrepareInitTicket {
                 period: self.period,
+                winning_number: self.winning_number,
                 start: start.timestamp,
                 end: end.timestamp,
                 avg_balance: avg_balance

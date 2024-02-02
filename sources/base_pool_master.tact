@@ -1,10 +1,9 @@
 import "@stdlib/ownable";
 import "./library/timestamp";
 import "./library/twab";
-import "./library/helper";
 import "./messages";
 
-trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
+trait BasePoolMaster with OwnableTransferable {
 
     owner: Address; // from OwnableTransferable
 
@@ -14,27 +13,12 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
     prize_amount: Int;
     next_period: Int;
 
-    receive() {
-        let ctx: Context = context();
-        let amount: Int = ctx.value - ton("0.01");
-        if (amount > 0) {
-            if (amount <= self.borrow_amount) {
-                self.borrow_amount = self.borrow_amount - amount;
-            } else {
-                amount = amount - self.borrow_amount;
-                self.borrow_amount = 0;
-                self.prize_amount = self.prize_amount + amount;
-            }
-        }
-    }
-
     receive("init draw") {
         self.requireOwner();
         require(self.next_period == 0, "Draw already initialized");
 
-        let ctx: Context = context();
         // deploy fee 0.3
-        require(ctx.value >= ton("0.3"), "Insufficient value");
+        require(context().value >= ton("0.3"), "Insufficient value");
 
         let twab: Twab = self.twab.next_twab(self.share_amount, now());
         let sinit: StateInit = self._get_draw_init(self.next_period);
@@ -51,29 +35,62 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         );
     }
 
-    receive("open draw") {
+    receive(msg: Repay) {
+        require(msg.amount > 0, "Invalid repay amount");
+
+        if (msg.amount <= self.borrow_amount) {
+            self.borrow_amount = self.borrow_amount - msg.amount;
+        } else {
+            let amount: Int = msg.amount - self.borrow_amount;
+            self.borrow_amount = 0;
+            self.prize_amount = self.prize_amount + msg.amount;
+        }
+
+        self.native_reserve();
+        send(SendParameters {
+            bounce: false,
+            to: sender(),
+            value: 0,
+            mode: SendRemainingBalance + SendIgnoreErrors
+        });
+    }
+
+    receive(msg: Borrow) {
+        self.requireOwner();
+        require(msg.amount > 0, "Invalid borrow amount");
+
+        self.borrow_amount = self.borrow_amount + msg.amount;
+
+        self.native_reserve();
+        send(SendParameters {
+            bounce: false,
+            to: self.owner,
+            value: 0,
+            mode: SendRemainingBalance + SendIgnoreErrors
+        });
+    }
+
+    receive(msg: OpenDraw) {
         self.requireOwner();
         require(self.next_period > 0, "Draw not initialized");
-        require(self.prize_amount > 0, "No prize");
+        require(msg.prize_amount > 0 && msg.prize_amount <= self.prize_amount, "Invalid prize amount");
+        self.prize_amount = self.prize_amount - msg.prize_amount;
 
-        let ctx: Context = context();
         // set prize fee 0.4
-        require(ctx.value >= ton("0.4"), "Insufficient value");
+        require(context().value >= ton("0.4"), "Insufficient value");
 
         let twab: Twab = self.twab.next_twab(self.share_amount, now());
         send(SendParameters {
             bounce: false,
             to: self._get_draw_address(self.next_period - 1),
-            value: self.prize_amount + ton("0.1"),
-            mode: SendIgnoreErrors,
-            body: OpenDraw {
+            value: msg.prize_amount + ton("0.1"),
+            mode: SendPayGasSeparately,
+            body: OpenDrawInternal {
                 twab_timestamp: twab.timestamp,
                 twab_amount: twab.amount,
-                prize_amount: self.prize_amount,
                 refund_address: self.owner
             }.toCell()
         });
-        self.prize_amount = 0;
 
         // deploy next draw
         let sinit: StateInit = self._get_draw_init(self.next_period);
@@ -84,7 +101,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
             bounce: false,
             to: contractAddress(sinit),
             value: 0,
-            mode: SendRemainingBalance + SendIgnoreErrors,
+            mode: SendRemainingBalance,
             body: InitDraw {
                 twab_timestamp: twab.timestamp,
                 twab_amount: twab.amount,
@@ -107,7 +124,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
             bounce: false,
             to: sender(),
             value: 0,
-            mode: SendRemainingBalance + SendIgnoreErrors,
+            mode: SendRemainingBalance,
             body: DepositFinish {
                 timestamp: timestamp,
                 amount: msg.amount
@@ -128,7 +145,7 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
             bounce: false,
             to: sender(),
             value: 0,
-            mode: SendRemainingBalance + SendIgnoreErrors,
+            mode: SendRemainingBalance,
             body: WithdrawFinish {
                 timestamp: timestamp,
                 amount: msg.amount
@@ -136,22 +153,8 @@ trait BasePoolMaster with MsgValueHelper, OwnableTransferable {
         });
     }
 
-    receive(msg: Borrow) {
-        self.requireOwner();
-
-        self.borrow_amount = self.borrow_amount + msg.amount;
-
-        self.native_reserve();
-        send(SendParameters {
-            bounce: false,
-            to: self.owner,
-            value: 0,
-            mode: SendRemainingBalance
-        });
-    }
-
     inline fun native_reserve() {
-        nativeReserve(self.share_amount + self.prize_amount + self.storageReserve - self.borrow_amount, 0);
+        nativeReserve(self.storageReserve + self.share_amount + self.prize_amount - self.borrow_amount, 0);
     }
 
     inline fun require_account(user: Address) {

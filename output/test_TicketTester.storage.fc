@@ -52,6 +52,32 @@ cell $DeployOk$_store_cell((int) v) inline {
 }
 
 ;;
+;; Type: WinningSplit
+;; TLB: _ n0:uint8 n1:uint8 n2:uint8 n3:uint8 = WinningSplit
+;;
+
+builder $WinningSplit$_store(builder build_0, (int, int, int, int) v) inline {
+    var (v'n0, v'n1, v'n2, v'n3) = v;
+    build_0 = build_0.store_uint(v'n0, 8);
+    build_0 = build_0.store_uint(v'n1, 8);
+    build_0 = build_0.store_uint(v'n2, 8);
+    build_0 = build_0.store_uint(v'n3, 8);
+    return build_0;
+}
+
+(slice, ((int, int, int, int))) $WinningSplit$_load(slice sc_0) inline {
+    var v'n0 = sc_0~load_uint(8);
+    var v'n1 = sc_0~load_uint(8);
+    var v'n2 = sc_0~load_uint(8);
+    var v'n3 = sc_0~load_uint(8);
+    return (sc_0, (v'n0, v'n1, v'n2, v'n3));
+}
+
+((int, int, int, int)) $WinningSplit$_constructor_n0_n1_n2_n3(int n0, int n1, int n2, int n3) inline {
+    return (n0, n1, n2, n3);
+}
+
+;;
 ;; Type: ComputePickNumber
 ;; Header: 0x28b5ae3b
 ;; TLB: compute_pick_number#28b5ae3b index:uint32 expected_number:uint32 = ComputePickNumber
@@ -65,65 +91,49 @@ cell $DeployOk$_store_cell((int) v) inline {
 }
 
 ;;
-;; Type: ComputePickPayload
-;; Header: 0x32a3ac8d
-;; TLB: compute_pick_payload#32a3ac8d prize_tester:address index_payload:remainder<slice> = ComputePickPayload
-;;
-
-(slice, ((slice, slice))) $ComputePickPayload$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 849587341);
-    var v'prize_tester = sc_0~__tact_load_address();
-    var v'index_payload = sc_0;
-    return (sc_0, (v'prize_tester, v'index_payload));
-}
-
-;;
 ;; Type: ComputePrizeAmount
-;; Header: 0xd90be7ac
-;; TLB: compute_prize_amount#d90be7ac pick_payload:remainder<slice> = ComputePrizeAmount
+;; Header: 0x442d85b2
+;; TLB: compute_prize_amount#442d85b2 expected_amount:coins index_payload:remainder<slice> = ComputePrizeAmount
 ;;
 
-builder $ComputePrizeAmount$_store(builder build_0, (slice) v) inline {
-    var (v'pick_payload) = v;
-    build_0 = store_uint(build_0, 3641436076, 32);
-    build_0 = build_0.store_slice(v'pick_payload);
-    return build_0;
-}
-
-cell $ComputePrizeAmount$_store_cell((slice) v) inline {
-    return $ComputePrizeAmount$_store(begin_cell(), v).end_cell();
-}
-
-((slice)) $ComputePrizeAmount$_constructor_pick_payload(slice pick_payload) inline {
-    return (pick_payload);
+(slice, ((int, slice))) $ComputePrizeAmount$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1143834034);
+    var v'expected_amount = sc_0~load_coins();
+    var v'index_payload = sc_0;
+    return (sc_0, (v'expected_amount, v'index_payload));
 }
 
 ;;
 ;; Type: TicketTester
 ;;
 
-builder $TicketTester$_store(builder build_0, (slice, int, cell) v) inline {
-    var (v'owner, v'picks, v'used_indexes) = v;
+builder $TicketTester$_store(builder build_0, (slice, int, int, (int, int, int, int), cell) v) inline {
+    var (v'owner, v'picks, v'prize_amount, (v'winning_split'n0, v'winning_split'n1, v'winning_split'n2, v'winning_split'n3), v'used_indexes) = v;
     build_0 = __tact_store_address(build_0, v'owner);
     build_0 = build_0.store_uint(v'picks, 32);
+    build_0 = build_0.store_coins(v'prize_amount);
+    build_0 = $WinningSplit$_store(build_0, (v'winning_split'n0, v'winning_split'n1, v'winning_split'n2, v'winning_split'n3));
     build_0 = build_0.store_dict(v'used_indexes);
     return build_0;
 }
 
-(slice, ((slice, int, cell))) $TicketTester$_load(slice sc_0) inline {
+(slice, ((slice, int, int, (int, int, int, int), cell))) $TicketTester$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'picks = sc_0~load_uint(32);
+    var v'prize_amount = sc_0~load_coins();
+    var v'winning_split = sc_0~$WinningSplit$_load();
     var v'used_indexes = sc_0~load_dict();
-    return (sc_0, (v'owner, v'picks, v'used_indexes));
+    return (sc_0, (v'owner, v'picks, v'prize_amount, v'winning_split, v'used_indexes));
 }
 
-(slice, ((slice, int))) $TicketTester$init$_load(slice sc_0) inline {
+(slice, ((slice, int, int))) $TicketTester$init$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
-    var v'size = sc_0~load_int(257);
-    return (sc_0, (v'owner, v'size));
+    var v'picks = sc_0~load_int(257);
+    var v'prize_amount = sc_0~load_int(257);
+    return (sc_0, (v'owner, v'picks, v'prize_amount));
 }
 
-(slice, int, cell) $TicketTester$_contract_load() impure inline_ref {
+(slice, int, int, (int, int, int, int), cell) $TicketTester$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -132,13 +142,13 @@ builder $TicketTester$_store(builder build_0, (slice, int, cell) v) inline {
     } else {
         ;; Allow only workchain deployments
         throw_unless(137, my_address().preload_uint(11) == 1024);
-        (slice owner, int size) = $sc~$TicketTester$init$_load();
+        (slice owner, int picks, int prize_amount) = $sc~$TicketTester$init$_load();
         $sc.end_parse();
-        return $TicketTester$_contract_init(owner, size);
+        return $TicketTester$_contract_init(owner, picks, prize_amount);
     }
 }
 
-() $TicketTester$_contract_store((slice, int, cell) v) impure inline {
+() $TicketTester$_contract_store((slice, int, int, (int, int, int, int), cell) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);

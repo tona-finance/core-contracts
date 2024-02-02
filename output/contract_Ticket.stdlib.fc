@@ -107,13 +107,8 @@ forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm "2 UNTUPLE";
     send_raw_message($c, $params'mode);
 }
 
-slice $Builder$_fun_asSlice(builder $self) impure inline {
-    var ($self) = $self;
-    return begin_parse(end_cell($self));
-}
-
-((slice, int, slice, slice, int, int, cell, int), ()) $Ticket$_fun_forward((slice, int, slice, slice, int, int, cell, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
-    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount)) = $self;
+((slice, int, slice, slice, int, (int, int, int, int), int, cell), ()) $Ticket$_fun_forward((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline {
+    var (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -129,9 +124,9 @@ slice $Builder$_fun_asSlice(builder $self) impure inline {
         if (($balanceBeforeMessage < 100000000)) {
             raw_reserve(100000000, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+            return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, $self'picks, $self'used_indexes, $self'debt_amount), ());
+    return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }

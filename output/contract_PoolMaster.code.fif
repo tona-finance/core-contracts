@@ -17,17 +17,19 @@ PROGRAM{
   DECLPROC $DeployOk$_store_cell
   DECLPROC $Twab$_store
   DECLPROC $Twab$_load
+  DECLPROC $OpenDraw$_load
+  DECLPROC $Borrow$_load
+  DECLPROC $Repay$_load
   DECLPROC $DepositInternal$_load
   DECLPROC $WithdrawInternal$_load
-  DECLPROC $Borrow$_load
   DECLPROC $DepositFinish$_store
   DECLPROC $DepositFinish$_store_cell
   DECLPROC $WithdrawFinish$_store
   DECLPROC $WithdrawFinish$_store_cell
   DECLPROC $InitDraw$_store
   DECLPROC $InitDraw$_store_cell
-  DECLPROC $OpenDraw$_store
-  DECLPROC $OpenDraw$_store_cell
+  DECLPROC $OpenDrawInternal$_store
+  DECLPROC $OpenDrawInternal$_store_cell
   DECLPROC $ChangeOwner$_load
   DECLPROC $ChangeOwnerOk$_store
   DECLPROC $ChangeOwnerOk$_store_cell
@@ -35,6 +37,7 @@ PROGRAM{
   DECLPROC $PoolMaster$_load
   DECLPROC $StateInit$_not_null
   DECLPROC $StateInit$_as_optional
+  DECLPROC $Context$_get_value
   DECLPROC $Twab$_to_tuple
   DECLPROC $PoolMasterData$_to_external
   DECLPROC $PoolMaster$init$_load
@@ -70,19 +73,19 @@ PROGRAM{
   DECLPROC $PoolMaster$_fun_requireOwner
   DECLPROC $PoolMaster$_fun_owner
   DECLPROC $InitDraw$_constructor_twab_timestamp_twab_amount_refund_address
+  DECLPROC $SendParameters$_constructor_bounce_to_value_mode
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body
-  DECLPROC $OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address
+  DECLPROC $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address
   DECLPROC $DepositFinish$_constructor_timestamp_amount
   DECLPROC $WithdrawFinish$_constructor_timestamp_amount
-  DECLPROC $SendParameters$_constructor_bounce_to_value_mode
   DECLPROC $ChangeOwnerOk$_constructor_queryId_newOwner
   DECLPROC $DeployOk$_constructor_queryId
-  DECLPROC %$PoolMaster$_internal_empty
   DECLPROC $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2
-  DECLPROC $PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e
+  DECLPROC $PoolMaster$_internal_binary_Repay
+  DECLPROC $PoolMaster$_internal_binary_Borrow
+  DECLPROC $PoolMaster$_internal_binary_OpenDraw
   DECLPROC $PoolMaster$_internal_binary_DepositInternal
   DECLPROC $PoolMaster$_internal_binary_WithdrawInternal
-  DECLPROC $PoolMaster$_internal_binary_Borrow
   DECLPROC $PoolMaster$_internal_binary_ChangeOwner
   DECLPROC $PoolMaster$_internal_binary_Deploy
   119856 DECLMETHOD %get_core_data
@@ -222,6 +225,33 @@ PROGRAM{
     128 LDU
     -ROT
   }>
+  $OpenDraw$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3303631299 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDGRAMS
+    SWAP
+  }>
+  $Borrow$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1154673471 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDGRAMS
+    SWAP
+  }>
+  $Repay$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3449863297 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDGRAMS
+    SWAP
+  }>
   $DepositInternal$_load PROCINLINE:<{
     32 LDU
     SWAP
@@ -241,15 +271,6 @@ PROGRAM{
     LDGRAMS
     __tact_load_address INLINECALLDICT
     s1 s2 XCHG
-  }>
-  $Borrow$_load PROCINLINE:<{
-    32 LDU
-    SWAP
-    1154673471 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    LDGRAMS
-    SWAP
   }>
   $DepositFinish$_store PROCINLINE:<{
     3488820906 PUSHINT
@@ -295,22 +316,20 @@ PROGRAM{
     $InitDraw$_store INLINECALLDICT
     ENDC
   }>
-  $OpenDraw$_store PROCINLINE:<{
-    3499440231 PUSHINT
-    s0 s5 XCHG2
+  $OpenDrawInternal$_store PROCINLINE:<{
+    2354478105 PUSHINT
+    s0 s4 XCHG2
     32 STU
-    s1 s3 XCHG
+    s1 s2 XCHG
     64 STU
     128 STU
     SWAP
-    STGRAMS
-    SWAP
     __tact_store_address INLINECALLDICT
   }>
-  $OpenDraw$_store_cell PROCINLINE:<{
+  $OpenDrawInternal$_store_cell PROCINLINE:<{
     NEWC
-    4 -ROLL
-    $OpenDraw$_store INLINECALLDICT
+    3 -ROLL
+    $OpenDrawInternal$_store INLINECALLDICT
     ENDC
   }>
   $ChangeOwner$_load PROCINLINE:<{
@@ -371,6 +390,10 @@ PROGRAM{
   }>
   $StateInit$_as_optional PROCINLINE:<{
     2 TUPLE
+  }>
+  $Context$_get_value PROCINLINE:<{
+    s1 s3 XCHG
+    3 BLKDROP
   }>
   $Twab$_to_tuple PROCINLINE:<{
     2 TUPLE
@@ -590,16 +613,16 @@ PROGRAM{
     SWAP
     __tact_dict_set_code INLINECALLDICT
     s2 PUSH
-    42189 PUSHINT
+    9326 PUSHINT
     __tact_dict_get_code INLINECALLDICT
-    42189 PUSHINT
+    9326 PUSHINT
     SWAP
     __tact_dict_set_code INLINECALLDICT
     s0 s2 XCHG
-    9326 PUSHINT
+    42189 PUSHINT
     __tact_dict_get_code INLINECALLDICT
     s1 s2 XCHG
-    9326 PUSHINT
+    42189 PUSHINT
     SWAP
     __tact_dict_set_code INLINECALLDICT
     NEWC
@@ -855,9 +878,10 @@ PROGRAM{
     $PoolMaster$_fun_forward INLINECALLDICT
   }>
   $PoolMaster$_fun_native_reserve PROCINLINE:<{
-    s3 s1 PUSH2
-    ADD
     100000000 PUSHINT
+    s4 PUSH
+    ADD
+    s2 PUSH
     ADD
     s3 PUSH
     SUB
@@ -886,52 +910,24 @@ PROGRAM{
   }>
   $InitDraw$_constructor_twab_timestamp_twab_amount_refund_address PROCINLINE:<{
   }>
-  $SendParameters$_constructor_bounce_to_value_mode_body PROCINLINE:<{
-    PUSHNULL
-    PUSHNULL
-  }>
-  $OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address PROCINLINE:<{
-  }>
-  $DepositFinish$_constructor_timestamp_amount PROCINLINE:<{
-  }>
-  $WithdrawFinish$_constructor_timestamp_amount PROCINLINE:<{
-  }>
   $SendParameters$_constructor_bounce_to_value_mode PROCINLINE:<{
     PUSHNULL
     PUSHNULL
     PUSHNULL
   }>
+  $SendParameters$_constructor_bounce_to_value_mode_body PROCINLINE:<{
+    PUSHNULL
+    PUSHNULL
+  }>
+  $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address PROCINLINE:<{
+  }>
+  $DepositFinish$_constructor_timestamp_amount PROCINLINE:<{
+  }>
+  $WithdrawFinish$_constructor_timestamp_amount PROCINLINE:<{
+  }>
   $ChangeOwnerOk$_constructor_queryId_newOwner PROCINLINE:<{
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
-  }>
-  %$PoolMaster$_internal_empty PROCINLINE:<{
-    __tact_context_get INLINECALLDICT
-    s1 s3 XCHG
-    3 BLKDROP
-    10000000 PUSHINT
-    SUB
-    DUP
-    0 GTINT
-    IF:<{
-      s0 s3 PUSH2
-      LEQ
-      IF:<{
-        s1 s3 XCHG
-        SUB
-      }>ELSE<{
-        s0 s3 XCHG2
-        SUB
-        SWAP
-        0 PUSHINT
-        s0 s2 XCHG
-        ADD
-        SWAP
-      }>
-      s0 s2 XCHG
-    }>ELSE<{
-      DROP
-    }>
   }>
   $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2 PROCINLINE:<{
     $PoolMaster$_fun_requireOwner INLINECALLDICT
@@ -939,11 +935,9 @@ PROGRAM{
     OVER
     0 EQINT
     THROWANYIFNOT
-    __tact_context_get INLINECALLDICT
-    DROP
-    NIP
     2805 PUSHINT
-    s2 POP
+    __tact_context_get INLINECALLDICT
+    $Context$_get_value INLINECALLDICT
     300000000 PUSHINT
     GEQ
     THROWANYIFNOT
@@ -977,21 +971,76 @@ PROGRAM{
     s1 s2 XCHG
     $PoolMaster$_fun_forward INLINECALLDICT
   }>
-  $PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e PROCINLINE:<{
+  $PoolMaster$_internal_binary_Repay PROCINLINE:<{
+    30347 PUSHINT
+    OVER
+    0 GTINT
+    THROWANYIFNOT
+    s0 s3 PUSH2
+    LEQ
+    IF:<{
+      s1 s3 XCHG
+      SUB
+    }>ELSE<{
+      s3 POP
+      SWAP
+      0 PUSHINT
+      s0 s3 XCHG
+      ADD
+      ROT
+    }>
+    s0 s2 XCHG
+    $PoolMaster$_fun_native_reserve INLINECALLDICT
+    FALSE
+    __tact_context_get_sender INLINECALLDICT
+    0 PUSHINT
+    130 PUSHINT
+    $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
+    $global_send INLINECALLDICT
+  }>
+  $PoolMaster$_internal_binary_Borrow PROCINLINE:<{
+    7 -ROLL
+    $PoolMaster$_fun_requireOwner INLINECALLDICT
+    47447 PUSHINT
+    s8 PUSH
+    0 GTINT
+    THROWANYIFNOT
+    s2 s7 XCHG2
+    ADD
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s0 s1 s3 XCHG3
+    $PoolMaster$_fun_native_reserve INLINECALLDICT
+    FALSE
+    s7 PUSH
+    0 PUSHINT
+    130 PUSHINT
+    $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
+    $global_send INLINECALLDICT
+  }>
+  $PoolMaster$_internal_binary_OpenDraw PROCINLINE:<{
+    7 -ROLL
     $PoolMaster$_fun_requireOwner INLINECALLDICT
     3556 PUSHINT
     OVER
     0 GTINT
     THROWANYIFNOT
-    51181 PUSHINT
-    s2 PUSH
+    28129 PUSHINT
+    s8 PUSH
     0 GTINT
+    IF:<{
+      s8 s2 PUSH2
+      LEQ
+    }>ELSE<{
+      FALSE
+    }>
     THROWANYIFNOT
-    __tact_context_get INLINECALLDICT
-    DROP
-    NIP
+    s1 s7 XCPU
+    SUB
     2805 PUSHINT
-    s2 POP
+    __tact_context_get INLINECALLDICT
+    $Context$_get_value INLINECALLDICT
     400000000 PUSHINT
     GEQ
     THROWANYIFNOT
@@ -999,31 +1048,29 @@ PROGRAM{
     NOW
     $Twab$_fun_next_twab INLINECALLDICT
     FALSE
-    s3 PUSH
+    s4 PUSH
     DEC
     s7 s10 XCHG
     s6 s9 XCHG
     s5 s8 XCHG
     s4 s10 XCHG
     s3 s9 XCHG
-    s8 s10 s0 XCHG3
+    s10 s8 s0 XCHG3
     $PoolMaster$_fun__get_draw_address INLINECALLDICT
-    s2 PUSH
+    s0 s11 XCHG
     100000000 PUSHINT
     ADD
-    s10 s9 PUSH2
-    2 PUSHINT
-    s6 s11 XCPU
-    $OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address INLINECALLDICT
-    $OpenDraw$_store_cell INLINECALLDICT
-    s4 s12 XCHG
-    s1 s3 s0 XCHG3
-    s1 s12 XCHG
+    1 PUSHINT
+    s10 s11 s8 PUSH3
+    $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address INLINECALLDICT
+    $OpenDrawInternal$_store_cell INLINECALLDICT
+    s4 s10 XCHG
+    s3 s13 XCHG
     $SendParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
     $global_send INLINECALLDICT
-    5 ROLL
-    0 PUSHINT
-    s0 s8 s0 XC2PU
+    s4 s6 XCHG
+    2 4 BLKSWAP
+    s8 s0 XCPU
     $PoolMaster$_fun__get_draw_init INLINECALLDICT
     s0 s2 XCHG
     INC
@@ -1036,19 +1083,20 @@ PROGRAM{
     s8 s9 PUSH2
     $global_contractAddress INLINECALLDICT
     0 PUSHINT
-    s0 s12 XCHG
-    130 PUSHINT
-    s14 s10 XCPU
+    s0 s13 XCHG
+    7 PUSHPOW2
+    s13 s10 XCPU
     $InitDraw$_constructor_twab_timestamp_twab_amount_refund_address INLINECALLDICT
     $InitDraw$_store_cell INLINECALLDICT
     s6 s5 s0 XCHG3
-    s4 s12 XCHG
-    s3 s13 XCHG
+    s4 s13 XCHG
+    s3 s12 XCHG
     s0 s10 s11 XCHG3
     $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
     $global_send INLINECALLDICT
     s6 s1 s4 XCHG3
-    s3 s5 s3 XCHG3
+    3 -ROLL
+    s0 s5 XCHG
   }>
   $PoolMaster$_internal_binary_DepositInternal PROCINLINE:<{
     s1 s8 XCHG
@@ -1073,7 +1121,7 @@ PROGRAM{
     __tact_context_get_sender INLINECALLDICT
     0 PUSHINT
     s0 s10 XCHG
-    130 PUSHINT
+    7 PUSHPOW2
     s0 s12 XCHG
     $DepositFinish$_constructor_timestamp_amount INLINECALLDICT
     $DepositFinish$_store_cell INLINECALLDICT
@@ -1113,7 +1161,7 @@ PROGRAM{
     __tact_context_get_sender INLINECALLDICT
     0 PUSHINT
     s0 s10 XCHG
-    130 PUSHINT
+    7 PUSHPOW2
     s0 s12 XCHG
     $WithdrawFinish$_constructor_timestamp_amount INLINECALLDICT
     $WithdrawFinish$_store_cell INLINECALLDICT
@@ -1123,23 +1171,6 @@ PROGRAM{
     $global_send INLINECALLDICT
     s4 s6 XCHG
     2 4 BLKSWAP
-  }>
-  $PoolMaster$_internal_binary_Borrow PROCINLINE:<{
-    7 -ROLL
-    $PoolMaster$_fun_requireOwner INLINECALLDICT
-    s2 s7 XCHG2
-    ADD
-    s5 s6 XCHG
-    s4 s5 XCHG
-    s3 s4 XCHG
-    s0 s1 s3 XCHG3
-    $PoolMaster$_fun_native_reserve INLINECALLDICT
-    FALSE
-    s7 PUSH
-    0 PUSHINT
-    7 PUSHPOW2
-    $SendParameters$_constructor_bounce_to_value_mode INLINECALLDICT
-    $global_send INLINECALLDICT
   }>
   $PoolMaster$_internal_binary_ChangeOwner PROCINLINE:<{
     s6 s8 XCHG
@@ -1194,7 +1225,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d54367559625a774b414c425062473876767334515169735a436a474341456b7338535071516b6164736f5838} PUSHSLICE
+    x{697066733a2f2f516d66364576384e624470614865416d5439363532734e785145374256773264744c375169466e3859534e575943} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1220,14 +1251,33 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    0 EQINT
-    s2 PUSH
-    SBITS
-    33 LESSINT
-    AND
+    3449863297 PUSHINT
+    EQUAL
     IFJMP:<{
-      2DROP
-      %$PoolMaster$_internal_empty INLINECALLDICT
+      DROP
+      $Repay$_load INLINECALLDICT
+      NIP
+      $PoolMaster$_internal_binary_Repay INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1154673471 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $Borrow$_load INLINECALLDICT
+      NIP
+      $PoolMaster$_internal_binary_Borrow INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3303631299 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $OpenDraw$_load INLINECALLDICT
+      NIP
+      $PoolMaster$_internal_binary_OpenDraw INLINECALLDICT
       TRUE
     }>
     DUP
@@ -1248,16 +1298,6 @@ PROGRAM{
       $WithdrawInternal$_load INLINECALLDICT
       1 2 BLKDROP2
       $PoolMaster$_internal_binary_WithdrawInternal INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    1154673471 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $Borrow$_load INLINECALLDICT
-      NIP
-      $PoolMaster$_internal_binary_Borrow INLINECALLDICT
       TRUE
     }>
     DUP
@@ -1283,19 +1323,10 @@ PROGRAM{
     0 EQINT
     IF:<{
       HASHSU
-      DUP
       63112914226139486450175388854194155415692667133303230034238535823845133332898 PUSHINT
       EQUAL
       IFJMP:<{
-        DROP
         $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2 INLINECALLDICT
-        TRUE
-        RETALT
-      }>
-      7355887613630043900682757600507104083690372373500063367514930908532725626478 PUSHINT
-      EQUAL
-      IFJMP:<{
-        $PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e INLINECALLDICT
         TRUE
         RETALT
       }>

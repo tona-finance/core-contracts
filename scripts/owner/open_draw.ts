@@ -9,10 +9,14 @@ async function main() {
     const sender = Client.open(wallet).sender(keypair.secretKey);
 
     const pool = PoolMaster.fromAddress(Deployments.PoolMaster);    // Create initial data for our contract
+    const prize_amount = toNano("1.0");
     await Client.open(pool).send(
         sender,
         { value: toNano("0.41") },
-        "open draw"
+        {
+            $$type: "OpenDraw",
+            prize_amount,
+        }
     );
 }
 

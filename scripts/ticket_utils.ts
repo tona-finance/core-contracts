@@ -1,43 +1,44 @@
 import { Address, beginCell, Cell } from "@ton/core";
-import { assert } from "console";
 
-export const PICK_BITS: number = 4 * 5;
-export const TOTAL_PICKS: bigint = BigInt(1 << PICK_BITS);
-export const CARDINALITY: number = 5;
-export const CHOICES: bigint = BigInt(16);
+export const CARDINALITY: number = 4;
+export const PICK_BITS: number = 4 * 4;
+export const TOTAL_PICKS: number = 1 << PICK_BITS;
+export const CHOICES: number = 16;
+
+const PRIZE_SCALE_0: number = 16 * 16 * 15 * 250;
+const PRIZE_SCALE_1: number = 16 * 16 * 750;
+const PRIZE_SCALE_2: number = 16 * 2250;
+const PRIZE_SCALE_3: number = 1 * 6750;
+const TOTAL_PRIZE_SCALE: number = 16 * 16 * 15 * 10000;
+
 
 export type WinningPick = {
     index: bigint;
     tier: number;
 }
 
-export type PrizePercentage = {
-    percent0: bigint;
-    percent1: bigint;
-    percent2: bigint;
-    percent3: bigint;
-    percent4: bigint;
-}
-
-export function prizeAmountPerPick(
-    tier: number,
+export function computePrizeAmount(
     total_prize_amount: bigint,
-    percentage: PrizePercentage,
+    winning_picks: WinningPick[],
 ): bigint {
-    switch (tier) {
-    case 0:
-        return (total_prize_amount * percentage.percent0) / 100n;
-    case 1:
-        return (total_prize_amount * percentage.percent1) / 1500n;
-    case 2:
-        return (total_prize_amount * percentage.percent2) / 24000n;
-    case 3:
-        return (total_prize_amount * percentage.percent3) / 384000n;
-    case 4:
-        return (total_prize_amount * percentage.percent4) / 6144000n;
-    default:
-        return 0n;
+    let scale = 0;
+    for (let pick of winning_picks) {
+        switch (pick.tier) {
+        case 0:
+            scale += PRIZE_SCALE_0;
+            break;
+        case 1:
+            scale += PRIZE_SCALE_1;
+            break;
+        case 2:
+            scale += PRIZE_SCALE_2;
+            break;
+        case 3:
+            scale += PRIZE_SCALE_3;
+            break;
+        }
     }
+    return (total_prize_amount * BigInt(scale)) / BigInt(TOTAL_PRIZE_SCALE);
 }
 
 export function computeWinningPicks(
@@ -56,38 +57,42 @@ export function computeWinningPicks(
     return winning_picks;
 }
 
-export function packWinningPicksIndex(batch_picks: WinningPick[][]): Cell {
+export function packWinningPicks(picks: WinningPick[]): Cell {
     let builder = beginCell();
-    batch_picks.forEach((picks) => {
-        assert(picks.length <= 51, "Picks length > 51");
-        let builder_internal = beginCell();
-        picks.forEach((pick) => {
-            builder_internal.storeUint(pick.index, PICK_BITS);
-        });
-        builder.storeRef(builder_internal.endCell());
-    });
+    for (let i = 0; i < 2; i++) {
+        let inner_builder = beginCell();
+        for (let j = 0; j < 63; j++) {
+            const pick = picks.pop();
+            if (typeof pick === "undefined") {
+                break;
+            } else {
+                inner_builder.storeUint(pick.index, PICK_BITS);
+            }
+        }
+        builder.storeRef(inner_builder.endCell());
+    }
     return builder.endCell();
 }
 
-function computePickNumber(address: Address, index: bigint): bigint {
+export function computePickNumber(address: Address, index: bigint): bigint {
     let digest = beginCell()
         .storeAddress(address)
         .storeUint(index, PICK_BITS)
         .endCell()
         .hash();
-    return BigInt(`0x${digest.toString("hex")}`) % TOTAL_PICKS;
+    return BigInt(`0x${digest.toString("hex")}`) % BigInt(TOTAL_PICKS);
 }
 
 function computePrizeTier(pick_number: bigint, winning_number: bigint): number {
     let tier = CARDINALITY;
-    let user_num = pick_number % CHOICES;
-    let win_num = winning_number % CHOICES;
-    while (user_num !== win_num && tier > 0) {
+    let user_num = pick_number % BigInt(CHOICES);
+    let win_num = winning_number % BigInt(CHOICES);
+    while (user_num === win_num && tier > 0) {
         tier -= 1;
-        pick_number = pick_number / CHOICES;
-        winning_number = winning_number / CHOICES;
-        user_num = pick_number % CHOICES;
-        win_num = winning_number % CHOICES;
+        pick_number = pick_number / BigInt(CHOICES);
+        winning_number = winning_number / BigInt(CHOICES);
+        user_num = pick_number % BigInt(CHOICES);
+        win_num = winning_number % BigInt(CHOICES);
     }
     return tier;
 }

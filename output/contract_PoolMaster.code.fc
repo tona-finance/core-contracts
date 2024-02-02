@@ -75,7 +75,7 @@
 
 ((slice, (int, int), int, int, int, int), ()) $PoolMaster$_fun_native_reserve((slice, (int, int), int, int, int, int) $self) impure inline {
     var (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)) = $self;
-    raw_reserve(((($self'share_amount + $self'prize_amount) + 100000000) - $self'borrow_amount), 0);
+    raw_reserve((((100000000 + $self'share_amount) + $self'prize_amount) - $self'borrow_amount), 0);
     return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
 }
 
@@ -100,28 +100,11 @@
 ;; Receivers of a Contract PoolMaster
 ;;
 
-(((slice, (int, int), int, int, int, int)), ()) %$PoolMaster$_internal_empty((slice, (int, int), int, int, int, int) $self) impure inline {
-    var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    int $amount = ($ctx'value - 10000000);
-    if (($amount > 0)) {
-        if (($amount <= $self'borrow_amount)) {
-            $self'borrow_amount = ($self'borrow_amount - $amount);
-        } else {
-            $amount = ($amount - $self'borrow_amount);
-            $self'borrow_amount = 0;
-            $self'prize_amount = ($self'prize_amount + $amount);
-        }
-    }
-    return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
-}
-
 ((slice, (int, int), int, int, int, int), ()) $PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2((slice, (int, int), int, int, int, int) $self) impure inline {
     var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_requireOwner();
     throw_unless(17110, ($self'next_period == 0));
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    throw_unless(2805, ($ctx'value >= 300000000));
+    throw_unless(2805, ($Context$_get_value(__tact_context_get()) >= 300000000));
     var ($twab'timestamp, $twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
     var ($sinit'code, $sinit'data) = ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_init($self'next_period);
     $self'next_period = ($self'next_period + 1);
@@ -129,20 +112,47 @@
     return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
 }
 
-((slice, (int, int), int, int, int, int), ()) $PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e((slice, (int, int), int, int, int, int) $self) impure inline {
+(((slice, (int, int), int, int, int, int)), ()) $PoolMaster$_internal_binary_Repay((slice, (int, int), int, int, int, int) $self, (int) $msg) impure inline {
     var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
+    var ($msg'amount) = $msg;
+    throw_unless(30347, ($msg'amount > 0));
+    if (($msg'amount <= $self'borrow_amount)) {
+        $self'borrow_amount = ($self'borrow_amount - $msg'amount);
+    } else {
+        int $amount = ($msg'amount - $self'borrow_amount);
+        $self'borrow_amount = 0;
+        $self'prize_amount = ($self'prize_amount + $msg'amount);
+    }
+    ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
+    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, __tact_context_get_sender(), 0, (128 + 2)));
+    return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
+}
+
+(((slice, (int, int), int, int, int, int)), ()) $PoolMaster$_internal_binary_Borrow((slice, (int, int), int, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
+    var ($msg'amount) = $msg;
+    ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_requireOwner();
+    throw_unless(47447, ($msg'amount > 0));
+    $self'borrow_amount = ($self'borrow_amount + $msg'amount);
+    ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
+    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, $self'owner, 0, (128 + 2)));
+    return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
+}
+
+(((slice, (int, int), int, int, int, int)), ()) $PoolMaster$_internal_binary_OpenDraw((slice, (int, int), int, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
+    var ($msg'prize_amount) = $msg;
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_requireOwner();
     throw_unless(3556, ($self'next_period > 0));
-    throw_unless(51181, ($self'prize_amount > 0));
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    throw_unless(2805, ($ctx'value >= 400000000));
+    throw_unless(28129, ( (($msg'prize_amount > 0)) ? (($msg'prize_amount <= $self'prize_amount)) : (false) ));
+    $self'prize_amount = ($self'prize_amount - $msg'prize_amount);
+    throw_unless(2805, ($Context$_get_value(__tact_context_get()) >= 400000000));
     var ($twab'timestamp, $twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_address(($self'next_period - 1)), ($self'prize_amount + 100000000), 2, $OpenDraw$_store_cell($OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address($twab'timestamp, $twab'amount, $self'prize_amount, $self'owner))));
-    $self'prize_amount = 0;
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_address(($self'next_period - 1)), ($msg'prize_amount + 100000000), 1, $OpenDrawInternal$_store_cell($OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address($twab'timestamp, $twab'amount, $self'owner))));
     var ($sinit'code, $sinit'data) = ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_init($self'next_period);
     $self'next_period = ($self'next_period + 1);
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data(false, $global_contractAddress(($sinit'code, $sinit'data)), 0, (128 + 2), $InitDraw$_store_cell($InitDraw$_constructor_twab_timestamp_twab_amount_refund_address($twab'timestamp, $twab'amount, $self'owner)), $sinit'code, $sinit'data));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data(false, $global_contractAddress(($sinit'code, $sinit'data)), 0, 128, $InitDraw$_store_cell($InitDraw$_constructor_twab_timestamp_twab_amount_refund_address($twab'timestamp, $twab'amount, $self'owner)), $sinit'code, $sinit'data));
     return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
 }
 
@@ -154,7 +164,7 @@
     ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount + $msg'amount);
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_context_get_sender(), 0, (128 + 2), $DepositFinish$_store_cell($DepositFinish$_constructor_timestamp_amount($timestamp, $msg'amount))));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_context_get_sender(), 0, 128, $DepositFinish$_store_cell($DepositFinish$_constructor_timestamp_amount($timestamp, $msg'amount))));
     return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
 }
 
@@ -167,17 +177,7 @@
     ($self'twab'timestamp, $self'twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, $timestamp);
     $self'share_amount = ($self'share_amount - $msg'amount);
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_context_get_sender(), 0, (128 + 2), $WithdrawFinish$_store_cell($WithdrawFinish$_constructor_timestamp_amount($timestamp, $msg'amount))));
-    return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
-}
-
-(((slice, (int, int), int, int, int, int)), ()) $PoolMaster$_internal_binary_Borrow((slice, (int, int), int, int, int, int) $self, (int) $msg) impure inline {
-    var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
-    var ($msg'amount) = $msg;
-    ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_requireOwner();
-    $self'borrow_amount = ($self'borrow_amount + $msg'amount);
-    ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
-    $global_send($SendParameters$_constructor_bounce_to_value_mode(false, $self'owner, 0, 128));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, __tact_context_get_sender(), 0, 128, $WithdrawFinish$_store_cell($WithdrawFinish$_constructor_timestamp_amount($timestamp, $msg'amount))));
     return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
 }
 
@@ -239,7 +239,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmT6uYbZwKALBPbG8vvs4QQisZCjGCAEks8SPqQkadsoX8";
+    return "ipfs://Qmf6Ev8NbDpaHeAmT9652sNxQE7BVw2dtL7QiFn8YSNWYC";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -263,9 +263,24 @@ _ lazy_deployment_completed() method_id {
     }
     
     
-    ;; Receive empty message
-    if ((op == 0) & (slice_bits(in_msg) <= 32)) {
-        self~%$PoolMaster$_internal_empty();
+    ;; Receive Repay message
+    if (op == 3449863297) {
+        var msg = in_msg~$Repay$_load();
+        self~$PoolMaster$_internal_binary_Repay(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Borrow message
+    if (op == 1154673471) {
+        var msg = in_msg~$Borrow$_load();
+        self~$PoolMaster$_internal_binary_Borrow(msg);
+        return (self, true);
+    }
+    
+    ;; Receive OpenDraw message
+    if (op == 3303631299) {
+        var msg = in_msg~$OpenDraw$_load();
+        self~$PoolMaster$_internal_binary_OpenDraw(msg);
         return (self, true);
     }
     
@@ -280,13 +295,6 @@ _ lazy_deployment_completed() method_id {
     if (op == 4279924659) {
         var msg = in_msg~$WithdrawInternal$_load();
         self~$PoolMaster$_internal_binary_WithdrawInternal(msg);
-        return (self, true);
-    }
-    
-    ;; Receive Borrow message
-    if (op == 1154673471) {
-        var msg = in_msg~$Borrow$_load();
-        self~$PoolMaster$_internal_binary_Borrow(msg);
         return (self, true);
     }
     
@@ -311,12 +319,6 @@ _ lazy_deployment_completed() method_id {
         ;; Receive "init draw" message
         if (text_op == 0x8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2) {
             self~$PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2();
-            return (self, true);
-        }
-        
-        ;; Receive "open draw" message
-        if (text_op == 0x104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e) {
-            self~$PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e();
             return (self, true);
         }
     }

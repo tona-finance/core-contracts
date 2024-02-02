@@ -19,52 +19,66 @@
 }
 
 ;;
-;; Type: ClaimPrizeInternal
-;; Header: 0xaad107a3
-;; TLB: claim_prize_internal#aad107a3 user:address pool_account:address pick_payload:remainder<slice> = ClaimPrizeInternal
+;; Type: WinningSplit
+;; TLB: _ n0:uint8 n1:uint8 n2:uint8 n3:uint8 = WinningSplit
 ;;
 
-builder $ClaimPrizeInternal$_store(builder build_0, (slice, slice, slice) v) inline {
-    var (v'user, v'pool_account, v'pick_payload) = v;
-    build_0 = store_uint(build_0, 2865825699, 32);
-    build_0 = __tact_store_address(build_0, v'user);
-    build_0 = __tact_store_address(build_0, v'pool_account);
-    build_0 = build_0.store_slice(v'pick_payload);
+builder $WinningSplit$_store(builder build_0, (int, int, int, int) v) inline {
+    var (v'n0, v'n1, v'n2, v'n3) = v;
+    build_0 = build_0.store_uint(v'n0, 8);
+    build_0 = build_0.store_uint(v'n1, 8);
+    build_0 = build_0.store_uint(v'n2, 8);
+    build_0 = build_0.store_uint(v'n3, 8);
     return build_0;
 }
 
-cell $ClaimPrizeInternal$_store_cell((slice, slice, slice) v) inline {
+(slice, ((int, int, int, int))) $WinningSplit$_load(slice sc_0) inline {
+    var v'n0 = sc_0~load_uint(8);
+    var v'n1 = sc_0~load_uint(8);
+    var v'n2 = sc_0~load_uint(8);
+    var v'n3 = sc_0~load_uint(8);
+    return (sc_0, (v'n0, v'n1, v'n2, v'n3));
+}
+
+((int, int, int, int)) $WinningSplit$_constructor_n0_n1_n2_n3(int n0, int n1, int n2, int n3) inline {
+    return (n0, n1, n2, n3);
+}
+
+;;
+;; Type: ClaimPrizeInternal
+;; Header: 0x8e3ba93f
+;; TLB: claim_prize_internal#8e3ba93f user:address pool_account:address prize_scale:uint32 = ClaimPrizeInternal
+;;
+
+builder $ClaimPrizeInternal$_store(builder build_0, (slice, slice, int) v) inline {
+    var (v'user, v'pool_account, v'prize_scale) = v;
+    build_0 = store_uint(build_0, 2386274623, 32);
+    build_0 = __tact_store_address(build_0, v'user);
+    build_0 = __tact_store_address(build_0, v'pool_account);
+    build_0 = build_0.store_uint(v'prize_scale, 32);
+    return build_0;
+}
+
+cell $ClaimPrizeInternal$_store_cell((slice, slice, int) v) inline {
     return $ClaimPrizeInternal$_store(begin_cell(), v).end_cell();
 }
 
-((slice, slice, slice)) $ClaimPrizeInternal$_constructor_user_pool_account_pick_payload(slice user, slice pool_account, slice pick_payload) inline {
-    return (user, pool_account, pick_payload);
+((slice, slice, int)) $ClaimPrizeInternal$_constructor_user_pool_account_prize_scale(slice user, slice pool_account, int prize_scale) inline {
+    return (user, pool_account, prize_scale);
 }
 
 ;;
 ;; Type: InitTicketInternal
-;; Header: 0xb10fd50e
-;; TLB: init_ticket_internal#b10fd50e draw_avg_balance:coins user_avg_balance:coins = InitTicketInternal
+;; Header: 0x46b5d74d
+;; TLB: init_ticket_internal#46b5d74d winning_number:uint32 draw_avg_balance:coins user_avg_balance:coins = InitTicketInternal
 ;;
 
-(slice, ((int, int))) $InitTicketInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2970604814);
+(slice, ((int, int, int))) $InitTicketInternal$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1186322253);
+    var v'winning_number = sc_0~load_uint(32);
     var v'draw_avg_balance = sc_0~load_coins();
     var v'user_avg_balance = sc_0~load_coins();
-    return (sc_0, (v'draw_avg_balance, v'user_avg_balance));
-}
-
-;;
-;; Type: PayPrizeDebtInternal
-;; Header: 0x59d2c79e
-;; TLB: pay_prize_debt_internal#59d2c79e user:address amount:coins = PayPrizeDebtInternal
-;;
-
-(slice, ((slice, int))) $PayPrizeDebtInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1506985886);
-    var v'user = sc_0~__tact_load_address();
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'user, v'amount));
+    return (sc_0, (v'winning_number, v'draw_avg_balance, v'user_avg_balance));
 }
 
 ;;
@@ -80,89 +94,46 @@ cell $ClaimPrizeInternal$_store_cell((slice, slice, slice) v) inline {
 }
 
 ;;
-;; Type: ClaimPrizeDebt
-;; Header: 0x771f1b42
-;; TLB: claim_prize_debt#771f1b42 amount:coins reserve:address = ClaimPrizeDebt
-;;
-
-(slice, ((int, slice))) $ClaimPrizeDebt$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1998527298);
-    var v'amount = sc_0~load_coins();
-    var v'reserve = sc_0~__tact_load_address();
-    return (sc_0, (v'amount, v'reserve));
-}
-
-;;
-;; Type: ClaimPrizeDebtInternal
-;; Header: 0x3dc1492c
-;; TLB: claim_prize_debt_internal#3dc1492c amount:coins user:address draw:address period:uint32 = ClaimPrizeDebtInternal
-;;
-
-builder $ClaimPrizeDebtInternal$_store(builder build_0, (int, slice, slice, int) v) inline {
-    var (v'amount, v'user, v'draw, v'period) = v;
-    build_0 = store_uint(build_0, 1036077356, 32);
-    build_0 = build_0.store_coins(v'amount);
-    build_0 = __tact_store_address(build_0, v'user);
-    build_0 = __tact_store_address(build_0, v'draw);
-    build_0 = build_0.store_uint(v'period, 32);
-    return build_0;
-}
-
-cell $ClaimPrizeDebtInternal$_store_cell((int, slice, slice, int) v) inline {
-    return $ClaimPrizeDebtInternal$_store(begin_cell(), v).end_cell();
-}
-
-(slice, ((int))) $ClaimPrizeDebtInternal$_load_bounced(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1036077356);
-    var v'amount = sc_0~load_coins();
-    return (sc_0, (v'amount));
-}
-
-((int, slice, slice, int)) $ClaimPrizeDebtInternal$_constructor_amount_user_draw_period(int amount, slice user, slice draw, int period) inline {
-    return (amount, user, draw, period);
-}
-
-;;
 ;; Type: TicketData
-;; TLB: _ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 debt_amount:coins = TicketData
+;; TLB: _ active:bool owner:address pool_account:address draw:address period:uint32 picks:uint32 = TicketData
 ;;
 
-(int, slice, slice, slice, int, int, int) $TicketData$_to_external(((int, slice, slice, slice, int, int, int)) v) inline {
-    var (v'active, v'owner, v'pool_account, v'draw, v'period, v'picks, v'debt_amount) = v; 
-    return (v'active, v'owner, v'pool_account, v'draw, v'period, v'picks, v'debt_amount);
+(int, slice, slice, slice, int, int) $TicketData$_to_external(((int, slice, slice, slice, int, int)) v) inline {
+    var (v'active, v'owner, v'pool_account, v'draw, v'period, v'picks) = v; 
+    return (v'active, v'owner, v'pool_account, v'draw, v'period, v'picks);
 }
 
-((int, slice, slice, slice, int, int, int)) $TicketData$_constructor_active_owner_pool_account_draw_period_picks_debt_amount(int active, slice owner, slice pool_account, slice draw, int period, int picks, int debt_amount) inline {
-    return (active, owner, pool_account, draw, period, picks, debt_amount);
+((int, slice, slice, slice, int, int)) $TicketData$_constructor_active_owner_pool_account_draw_period_picks(int active, slice owner, slice pool_account, slice draw, int period, int picks) inline {
+    return (active, owner, pool_account, draw, period, picks);
 }
 
 ;;
 ;; Type: Ticket
 ;;
 
-builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, int, cell, int) v) inline {
-    var (v'owner, v'active, v'pool_account, v'draw, v'period, v'picks, v'used_indexes, v'debt_amount) = v;
+builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, (int, int, int, int), int, cell) v) inline {
+    var (v'owner, v'active, v'pool_account, v'draw, v'period, (v'winning_split'n0, v'winning_split'n1, v'winning_split'n2, v'winning_split'n3), v'picks, v'used_indexes) = v;
     build_0 = __tact_store_address(build_0, v'owner);
     build_0 = build_0.store_int(v'active, 1);
     build_0 = __tact_store_address(build_0, v'pool_account);
     build_0 = __tact_store_address(build_0, v'draw);
     build_0 = build_0.store_uint(v'period, 32);
+    build_0 = $WinningSplit$_store(build_0, (v'winning_split'n0, v'winning_split'n1, v'winning_split'n2, v'winning_split'n3));
     build_0 = build_0.store_uint(v'picks, 32);
     build_0 = build_0.store_dict(v'used_indexes);
-    build_0 = build_0.store_coins(v'debt_amount);
     return build_0;
 }
 
-(slice, ((slice, int, slice, slice, int, int, cell, int))) $Ticket$_load(slice sc_0) inline {
+(slice, ((slice, int, slice, slice, int, (int, int, int, int), int, cell))) $Ticket$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'active = sc_0~load_int(1);
     var v'pool_account = sc_0~__tact_load_address();
     var v'draw = sc_0~__tact_load_address();
     var v'period = sc_0~load_uint(32);
+    var v'winning_split = sc_0~$WinningSplit$_load();
     var v'picks = sc_0~load_uint(32);
     var v'used_indexes = sc_0~load_dict();
-    var v'debt_amount = sc_0~load_coins();
-    return (sc_0, (v'owner, v'active, v'pool_account, v'draw, v'period, v'picks, v'used_indexes, v'debt_amount));
+    return (sc_0, (v'owner, v'active, v'pool_account, v'draw, v'period, v'winning_split, v'picks, v'used_indexes));
 }
 
 (slice, ((slice, slice, slice, int))) $Ticket$init$_load(slice sc_0) inline {
@@ -174,7 +145,7 @@ builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, int, cel
     return (sc_0, (v'owner, v'pool_account, v'draw, v'period));
 }
 
-(slice, int, slice, slice, int, int, cell, int) $Ticket$_contract_load() impure inline_ref {
+(slice, int, slice, slice, int, (int, int, int, int), int, cell) $Ticket$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -189,7 +160,7 @@ builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, int, cel
     }
 }
 
-() $Ticket$_contract_store((slice, int, slice, slice, int, int, cell, int) v) impure inline {
+() $Ticket$_contract_store((slice, int, slice, slice, int, (int, int, int, int), int, cell) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);

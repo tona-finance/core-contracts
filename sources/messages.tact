@@ -1,6 +1,18 @@
 
 // === Pool messages ===
 
+message OpenDraw {
+    prize_amount: Int as coins;
+}
+
+message Borrow {
+    amount: Int as coins;
+}
+
+message Repay {
+    amount: Int as coins;
+}
+
 message DepositInternal {
     amount: Int as coins;
     user: Address;
@@ -9,10 +21,6 @@ message DepositInternal {
 message WithdrawInternal {
     amount: Int as coins;
     user: Address;
-}
-
-message Borrow {
-    amount: Int as coins;
 }
 
 // === pool account messages ===
@@ -33,9 +41,15 @@ message WithdrawFinish {
 
 message PrepareInitTicket {
     period: Int as uint32;
+    winning_number: Int as uint32;
     start: Int as uint64;
     end: Int as uint64;
     avg_balance: Int as coins;
+}
+
+message ClaimPrizeDebt {
+    amount: Int as coins;
+    reserve: Address;
 }
 
 // === Draw messages ===
@@ -46,10 +60,9 @@ message InitDraw {
     refund_address: Address;
 }
 
-message OpenDraw {
+message OpenDrawInternal {
     twab_timestamp: Int as uint64;
     twab_amount: Int as uint128;
-    prize_amount: Int as coins;
     refund_address: Address;
 }
 
@@ -60,12 +73,13 @@ message InitTicket {
 message ClaimPrizeInternal {
     user: Address;
     pool_account: Address;
-    pick_payload: Slice as remaining;
+    prize_scale: Int as uint32;
 }
 
 // === Ticket messages ===
 
 message InitTicketInternal {
+    winning_number: Int as uint32;
     draw_avg_balance: Int as coins;
     user_avg_balance: Int as coins;
 }
@@ -73,15 +87,11 @@ message InitTicketInternal {
 message PayPrizeDebtInternal {
     user: Address;
     amount: Int as coins;
+    period: Int as uint32;
 }
 
 message ClaimPrize {
     index_payload: Slice as remaining;
-}
-
-message ClaimPrizeDebt {
-    amount: Int as coins;
-    reserve: Address;
 }
 
 // === Reserve messages ===
@@ -89,6 +99,4 @@ message ClaimPrizeDebt {
 message ClaimPrizeDebtInternal {
     amount: Int as coins;
     user: Address;
-    draw: Address;
-    period: Int as uint32;
 }

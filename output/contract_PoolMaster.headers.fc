@@ -57,14 +57,20 @@ builder $Twab$_store(builder build_0, (int, int) v) inline;
 ;; $Twab$_load
 (slice, ((int, int))) $Twab$_load(slice sc_0) inline;
 
+;; $OpenDraw$_load
+(slice, ((int))) $OpenDraw$_load(slice sc_0) inline;
+
+;; $Borrow$_load
+(slice, ((int))) $Borrow$_load(slice sc_0) inline;
+
+;; $Repay$_load
+(slice, ((int))) $Repay$_load(slice sc_0) inline;
+
 ;; $DepositInternal$_load
 (slice, ((int, slice))) $DepositInternal$_load(slice sc_0) inline;
 
 ;; $WithdrawInternal$_load
 (slice, ((int, slice))) $WithdrawInternal$_load(slice sc_0) inline;
-
-;; $Borrow$_load
-(slice, ((int))) $Borrow$_load(slice sc_0) inline;
 
 ;; $DepositFinish$_store
 builder $DepositFinish$_store(builder build_0, (int, int) v) inline;
@@ -84,11 +90,11 @@ builder $InitDraw$_store(builder build_0, (int, int, slice) v) inline;
 ;; $InitDraw$_store_cell
 cell $InitDraw$_store_cell((int, int, slice) v) inline;
 
-;; $OpenDraw$_store
-builder $OpenDraw$_store(builder build_0, (int, int, int, slice) v) inline;
+;; $OpenDrawInternal$_store
+builder $OpenDrawInternal$_store(builder build_0, (int, int, slice) v) inline;
 
-;; $OpenDraw$_store_cell
-cell $OpenDraw$_store_cell((int, int, int, slice) v) inline;
+;; $OpenDrawInternal$_store_cell
+cell $OpenDrawInternal$_store_cell((int, int, slice) v) inline;
 
 ;; $ChangeOwner$_load
 (slice, ((int, slice))) $ChangeOwner$_load(slice sc_0) inline;
@@ -110,6 +116,9 @@ builder $PoolMaster$_store(builder build_0, (slice, (int, int), int, int, int, i
 
 ;; $StateInit$_as_optional
 tuple $StateInit$_as_optional((cell, cell) v) inline;
+
+;; $Context$_get_value
+_ $Context$_get_value((int, slice, int, slice) v) inline;
 
 ;; $Twab$_to_tuple
 tuple $Twab$_to_tuple(((int, int)) v) inline;
@@ -216,20 +225,20 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $InitDraw$_constructor_twab_timestamp_twab_amount_refund_address
 ((int, int, slice)) $InitDraw$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline;
 
+;; $SendParameters$_constructor_bounce_to_value_mode
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline;
+
 ;; $SendParameters$_constructor_bounce_to_value_mode_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
-;; $OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address
-((int, int, int, slice)) $OpenDraw$_constructor_twab_timestamp_twab_amount_prize_amount_refund_address(int twab_timestamp, int twab_amount, int prize_amount, slice refund_address) inline;
+;; $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address
+((int, int, slice)) $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline;
 
 ;; $DepositFinish$_constructor_timestamp_amount
 ((int, int)) $DepositFinish$_constructor_timestamp_amount(int timestamp, int amount) inline;
 
 ;; $WithdrawFinish$_constructor_timestamp_amount
 ((int, int)) $WithdrawFinish$_constructor_timestamp_amount(int timestamp, int amount) inline;
-
-;; $SendParameters$_constructor_bounce_to_value_mode
-((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode(int bounce, slice to, int value, int mode) inline;
 
 ;; $ChangeOwnerOk$_constructor_queryId_newOwner
 ((int, slice)) $ChangeOwnerOk$_constructor_queryId_newOwner(int queryId, slice newOwner) inline;
