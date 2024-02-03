@@ -70,11 +70,10 @@ trait BasePoolMaster with OwnableTransferable {
         });
     }
 
-    receive(msg: OpenDraw) {
+    receive("open draw") {
         self.requireOwner();
         require(self.next_period > 0, "Draw not initialized");
-        require(msg.prize_amount > 0 && msg.prize_amount <= self.prize_amount, "Invalid prize amount");
-        self.prize_amount = self.prize_amount - msg.prize_amount;
+        require(self.prize_amount > 0, "Insufficient prize amount");
 
         // set prize fee 0.4
         require(context().value >= ton("0.4"), "Insufficient value");
@@ -83,14 +82,16 @@ trait BasePoolMaster with OwnableTransferable {
         send(SendParameters {
             bounce: false,
             to: self._get_draw_address(self.next_period - 1),
-            value: msg.prize_amount + ton("0.1"),
+            value: self.prize_amount + ton("0.1"),
             mode: SendPayGasSeparately,
-            body: OpenDrawInternal {
+            body: OpenDraw {
                 twab_timestamp: twab.timestamp,
                 twab_amount: twab.amount,
                 refund_address: self.owner
             }.toCell()
         });
+        // reset prize amount
+        self.prize_amount = 0;
 
         // deploy next draw
         let sinit: StateInit = self._get_draw_init(self.next_period);

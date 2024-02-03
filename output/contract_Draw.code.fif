@@ -18,7 +18,7 @@ PROGRAM{
   DECLPROC $PrepareInitTicket$_store
   DECLPROC $PrepareInitTicket$_store_cell
   DECLPROC $InitDraw$_load
-  DECLPROC $OpenDrawInternal$_load
+  DECLPROC $OpenDraw$_load
   DECLPROC $InitTicket$_load
   DECLPROC $ClaimPrizeInternal$_load
   DECLPROC $PayPrizeDebtInternal$_store
@@ -64,7 +64,7 @@ PROGRAM{
   DECLPROC $Draw$_internal_binary_ClaimPrizeInternal
   DECLPROC $Draw$_internal_text_22eaa037e87e6cf8bf9be7426929531aaa3cb9eedd0b22580427438ad19043f0
   DECLPROC $Draw$_internal_binary_InitDraw
-  DECLPROC $Draw$_internal_binary_OpenDrawInternal
+  DECLPROC $Draw$_internal_binary_OpenDraw
   DECLPROC $Draw$_internal_binary_InitTicket
   119856 DECLMETHOD %get_core_data
   113617 DECLMETHOD supported_interfaces
@@ -219,10 +219,10 @@ PROGRAM{
     __tact_load_address INLINECALLDICT
     s3 s3 s0 XCHG3
   }>
-  $OpenDrawInternal$_load PROCINLINE:<{
+  $OpenDraw$_load PROCINLINE:<{
     32 LDU
     SWAP
-    2354478105 PUSHINT
+    2109770718 PUSHINT
     EQUAL
     129 THROWIFNOT
     64 LDU
@@ -879,7 +879,7 @@ PROGRAM{
     PUSHNULL
     $Draw$_fun_forward INLINECALLDICT
   }>
-  $Draw$_internal_binary_OpenDrawInternal PROCINLINE:<{
+  $Draw$_internal_binary_OpenDraw PROCINLINE:<{
     s9 s12 XCHG
     s8 s11 XCHG
     s7 s10 XCHG
@@ -967,7 +967,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d5170785862734668777345724542316172744155366a6d39783656584139396d337556507250597669484773} PUSHSLICE
+    x{697066733a2f2f516d63706a45484a32317a706d6f353658766759757275776b655653334b6d3351517644386b474c575346687661} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1013,13 +1013,13 @@ PROGRAM{
       TRUE
     }>
     DUP
-    2354478105 PUSHINT
+    2109770718 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
-      $OpenDrawInternal$_load INLINECALLDICT
+      $OpenDraw$_load INLINECALLDICT
       1 3 BLKDROP2
-      $Draw$_internal_binary_OpenDrawInternal INLINECALLDICT
+      $Draw$_internal_binary_OpenDraw INLINECALLDICT
       TRUE
     }>
     DUP

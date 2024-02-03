@@ -33,6 +33,8 @@ async function main() {
     // get prize amount
     const prize_amount = computePrizeAmount(draw_data.prize_amount, winning_picks);
     console.log("Obtain prize amount:", fromNano(prize_amount));
+
+    // console.log(await ticket_contract.getGetIndexStatus(winning_picks[1].index));
 }
 
 main().catch((error) => {

@@ -127,7 +127,7 @@ int $global_average_balance((int, int) $start, (int, int) $end) impure inline {
     return (($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline), ());
 }
 
-(((int, slice, slice, int, tuple, tuple, int, int, int, int)), ()) $Draw$_internal_binary_OpenDrawInternal((int, slice, slice, int, tuple, tuple, int, int, int, int) $self, (int, int, slice) $msg) impure inline {
+(((int, slice, slice, int, tuple, tuple, int, int, int, int)), ()) $Draw$_internal_binary_OpenDraw((int, slice, slice, int, tuple, tuple, int, int, int, int) $self, (int, int, slice) $msg) impure inline {
     var ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline) = $self;
     var ($msg'twab_timestamp, $msg'twab_amount, $msg'refund_address) = $msg;
     ($self'active, $self'pool_master, $self'prize_reserve, $self'period, $self'start, $self'end, $self'prize_amount, $self'avail_prize_amount, $self'winning_number, $self'deadline)~$Draw$_fun_require_pool_master();
@@ -175,7 +175,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmQpxXbsFhwsErEB1artAU6jm9x6VXA99m3uVPrPYviHGs";
+    return "ipfs://QmcpjEHJ21zpmo56XvgYuruwkeVS3Km3QQvD8kGLWSFhva";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -213,10 +213,10 @@ _ lazy_deployment_completed() method_id {
         return (self, true);
     }
     
-    ;; Receive OpenDrawInternal message
-    if (op == 2354478105) {
-        var msg = in_msg~$OpenDrawInternal$_load();
-        self~$Draw$_internal_binary_OpenDrawInternal(msg);
+    ;; Receive OpenDraw message
+    if (op == 2109770718) {
+        var msg = in_msg~$OpenDraw$_load();
+        self~$Draw$_internal_binary_OpenDraw(msg);
         return (self, true);
     }
     

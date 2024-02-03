@@ -84,14 +84,10 @@ int $WinningSplit$_fun_compute_prize_scale((int, int, int, int) $self, int $pick
     return (($self'owner, $self'picks, $self'prize_amount, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'used_indexes), ());
 }
 
-(((slice, int, int, (int, int, int, int), cell)), ()) $TicketTester$_internal_binary_ComputePrizeAmount((slice, int, int, (int, int, int, int), cell) $self, (int, slice) $msg) impure inline {
+(((slice, int, int, (int, int, int, int), cell)), ()) $TicketTester$_internal_binary_ComputePrizeAmount((slice, int, int, (int, int, int, int), cell) $self, (int, cell) $msg) impure inline {
     var ($self'owner, $self'picks, $self'prize_amount, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'used_indexes) = $self;
     var ($msg'expected_amount, $msg'index_payload) = $msg;
-    int $prize_scale = 0;
-    repeat (2) {
-        slice $index_payload = begin_parse($msg'index_payload~load_ref());
-        $prize_scale = ($prize_scale + ($self'owner, $self'picks, $self'prize_amount, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'used_indexes)~$TicketTester$_fun_compute_prize_scale($index_payload));
-    }
+    int $prize_scale = ($self'owner, $self'picks, $self'prize_amount, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'used_indexes)~$TicketTester$_fun_compute_prize_scale(begin_parse($msg'index_payload));
     int $prize_amount = (($self'prize_amount * $prize_scale) / 38400000);
     throw_unless(60803, ($prize_amount == $msg'expected_amount));
     return (($self'owner, $self'picks, $self'prize_amount, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'used_indexes), ());
@@ -119,7 +115,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmSwwYn9yvb5xpYkqrP5zgyjaG37bRRz3a17eGRN7pykRz";
+    return "ipfs://QmRvmeGn3SbDrdfWgcCJxiLYubfa5Ndea4ibQg2BKcYrAM";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -151,7 +147,7 @@ _ lazy_deployment_completed() method_id {
     }
     
     ;; Receive ComputePrizeAmount message
-    if (op == 1143834034) {
+    if (op == 3199286491) {
         var msg = in_msg~$ComputePrizeAmount$_load();
         self~$TicketTester$_internal_binary_ComputePrizeAmount(msg);
         return (self, true);

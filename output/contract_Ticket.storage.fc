@@ -83,13 +83,13 @@ cell $ClaimPrizeInternal$_store_cell((slice, slice, int) v) inline {
 
 ;;
 ;; Type: ClaimPrize
-;; Header: 0xbbc4b04f
-;; TLB: claim_prize#bbc4b04f index_payload:remainder<slice> = ClaimPrize
+;; Header: 0x8a4b50d9
+;; TLB: claim_prize#8a4b50d9 index_payload:^cell = ClaimPrize
 ;;
 
-(slice, ((slice))) $ClaimPrize$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3150229583);
-    var v'index_payload = sc_0;
+(slice, ((cell))) $ClaimPrize$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2320191705);
+    var v'index_payload = sc_0~load_ref();
     return (sc_0, (v'index_payload));
 }
 

@@ -3,7 +3,7 @@ Contract: Draw
 BOC Size: 2806 bytes
 
 # Types
-Total Types: 34
+Total Types: 33
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -40,10 +40,6 @@ Signature: `TwabStore{store:dict<int, ^Twab{timestamp:uint64,amount:uint128}>,si
 ## WinningSplit
 TLB: `_ n0:uint8 n1:uint8 n2:uint8 n3:uint8 = WinningSplit`
 Signature: `WinningSplit{n0:uint8,n1:uint8,n2:uint8,n3:uint8}`
-
-## OpenDraw
-TLB: `open_draw#c4e969c3 prize_amount:coins = OpenDraw`
-Signature: `OpenDraw{prize_amount:coins}`
 
 ## Borrow
 TLB: `borrow#44d2eb3f amount:coins = Borrow`
@@ -85,9 +81,9 @@ Signature: `ClaimPrizeDebt{amount:coins,reserve:address}`
 TLB: `init_draw#b956078d twab_timestamp:uint64 twab_amount:uint128 refund_address:address = InitDraw`
 Signature: `InitDraw{twab_timestamp:uint64,twab_amount:uint128,refund_address:address}`
 
-## OpenDrawInternal
-TLB: `open_draw_internal#8c567c19 twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDrawInternal`
-Signature: `OpenDrawInternal{twab_timestamp:uint64,twab_amount:uint128,refund_address:address}`
+## OpenDraw
+TLB: `open_draw#7dc08bde twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDraw`
+Signature: `OpenDraw{twab_timestamp:uint64,twab_amount:uint128,refund_address:address}`
 
 ## InitTicket
 TLB: `init_ticket#94b4cb51 pool_account:address = InitTicket`
@@ -106,8 +102,8 @@ TLB: `pay_prize_debt_internal#54cb9090 user:address amount:coins period:uint32 =
 Signature: `PayPrizeDebtInternal{user:address,amount:coins,period:uint32}`
 
 ## ClaimPrize
-TLB: `claim_prize#bbc4b04f index_payload:remainder<slice> = ClaimPrize`
-Signature: `ClaimPrize{index_payload:remainder<slice>}`
+TLB: `claim_prize#8a4b50d9 index_payload:^cell = ClaimPrize`
+Signature: `ClaimPrize{index_payload:^cell}`
 
 ## ClaimPrizeDebtInternal
 TLB: `claim_prize_debt_internal#342cd755 amount:coins user:address = ClaimPrizeDebtInternal`
@@ -188,7 +184,7 @@ Total Get Methods: 1
 19317: Invalid timestamp
 23432: timestamp >= End time
 24632: Only from pool master
-28129: Invalid prize amount
+27755: Insufficient prize amount
 30347: Invalid repay amount
 30919: Ticket is active
 31206: Start time >= End time

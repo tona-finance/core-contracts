@@ -102,18 +102,6 @@ tuple $Twab$_to_tuple(((int, int)) v) inline {
 }
 
 ;;
-;; Type: OpenDraw
-;; Header: 0xc4e969c3
-;; TLB: open_draw#c4e969c3 prize_amount:coins = OpenDraw
-;;
-
-(slice, ((int))) $OpenDraw$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 3303631299);
-    var v'prize_amount = sc_0~load_coins();
-    return (sc_0, (v'prize_amount));
-}
-
-;;
 ;; Type: Borrow
 ;; Header: 0x44d2eb3f
 ;; TLB: borrow#44d2eb3f amount:coins = Borrow
@@ -231,25 +219,25 @@ cell $InitDraw$_store_cell((int, int, slice) v) inline {
 }
 
 ;;
-;; Type: OpenDrawInternal
-;; Header: 0x8c567c19
-;; TLB: open_draw_internal#8c567c19 twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDrawInternal
+;; Type: OpenDraw
+;; Header: 0x7dc08bde
+;; TLB: open_draw#7dc08bde twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDraw
 ;;
 
-builder $OpenDrawInternal$_store(builder build_0, (int, int, slice) v) inline {
+builder $OpenDraw$_store(builder build_0, (int, int, slice) v) inline {
     var (v'twab_timestamp, v'twab_amount, v'refund_address) = v;
-    build_0 = store_uint(build_0, 2354478105, 32);
+    build_0 = store_uint(build_0, 2109770718, 32);
     build_0 = build_0.store_uint(v'twab_timestamp, 64);
     build_0 = build_0.store_uint(v'twab_amount, 128);
     build_0 = __tact_store_address(build_0, v'refund_address);
     return build_0;
 }
 
-cell $OpenDrawInternal$_store_cell((int, int, slice) v) inline {
-    return $OpenDrawInternal$_store(begin_cell(), v).end_cell();
+cell $OpenDraw$_store_cell((int, int, slice) v) inline {
+    return $OpenDraw$_store(begin_cell(), v).end_cell();
 }
 
-((int, int, slice)) $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline {
+((int, int, slice)) $OpenDraw$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline {
     return (twab_timestamp, twab_amount, refund_address);
 }
 

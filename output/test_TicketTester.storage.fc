@@ -92,14 +92,14 @@ builder $WinningSplit$_store(builder build_0, (int, int, int, int) v) inline {
 
 ;;
 ;; Type: ComputePrizeAmount
-;; Header: 0x442d85b2
-;; TLB: compute_prize_amount#442d85b2 expected_amount:coins index_payload:remainder<slice> = ComputePrizeAmount
+;; Header: 0xbeb13cdb
+;; TLB: compute_prize_amount#beb13cdb expected_amount:coins index_payload:^cell = ComputePrizeAmount
 ;;
 
-(slice, ((int, slice))) $ComputePrizeAmount$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1143834034);
+(slice, ((int, cell))) $ComputePrizeAmount$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3199286491);
     var v'expected_amount = sc_0~load_coins();
-    var v'index_payload = sc_0;
+    var v'index_payload = sc_0~load_ref();
     return (sc_0, (v'expected_amount, v'index_payload));
 }
 

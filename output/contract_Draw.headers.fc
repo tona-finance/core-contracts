@@ -60,8 +60,8 @@ cell $PrepareInitTicket$_store_cell((int, int, int, int, int) v) inline;
 ;; $InitDraw$_load
 (slice, ((int, int, slice))) $InitDraw$_load(slice sc_0) inline;
 
-;; $OpenDrawInternal$_load
-(slice, ((int, int, slice))) $OpenDrawInternal$_load(slice sc_0) inline;
+;; $OpenDraw$_load
+(slice, ((int, int, slice))) $OpenDraw$_load(slice sc_0) inline;
 
 ;; $InitTicket$_load
 (slice, ((slice))) $InitTicket$_load(slice sc_0) inline;

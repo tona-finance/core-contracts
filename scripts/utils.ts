@@ -1,5 +1,5 @@
 import { Address } from "@ton/core";
-import { TonClient4, WalletContractV4, Sender } from "@ton/ton";
+import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { KeyPair, mnemonicToWalletKey } from "@ton/crypto";
 
 import * as dotenv from "dotenv";
@@ -11,11 +11,11 @@ export const Client = new TonClient4({
 });
 
 export const Deployments = {
-    PoolMaster: Address.parse("kQAQWDnkU9o8KRzOhgCrqg4zLHt18Fhwu20VJSFQQKjNRc8p"),
-    PrizeReserve: Address.parse("kQBlePqGZR2N3feXu2m_sHbRqVH_kxZHxaXRyN3SqVOcFByk"),
+    PoolMaster: Address.parse("kQC5-pl45WSCcHHQu8GqiJH-LysQDXNVqsJtor-eAkcfwRhz"),
+    PrizeReserve: Address.parse("kQDoFWTI81TBrjXDKuu_7iCUqZTZrhBXPtDtL2_DQ4EIBZjJ"),
 }
 
-export const TestPeriod = 2n;
+export const TestPeriod = 0n;
 
 export async function getKeyPair(): Promise<KeyPair> {
     const mnemonics = (process.env.MNEMONICS || "").toString();

@@ -31,17 +31,12 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.require_active();
         self.requireOwner();
 
-        // claim prize gas fee 0.8
-        let rest_value: Int = self.msg_value(context(), ton("0.8"));
+        // claim prize gas fee 0.5
+        let rest_value: Int = self.msg_value(context(), ton("0.5"));
         require(rest_value >= 0, "Insufficient value");
 
-        // Every cell has up to 4 references to other cells, but cause of the 
-        // max gas limit, we set it to 2 references.
-        let prize_scale: Int = 0;
-        repeat(2) {
-            let index_payload: Slice = msg.index_payload.loadRef().beginParse();
-            prize_scale = prize_scale + self.compute_prize_scale(index_payload);
-        }
+        let index_payload: Slice = msg.index_payload.beginParse();
+        let prize_scale: Int = self.compute_prize_scale(index_payload);
     
         self.forward(
             self.draw,

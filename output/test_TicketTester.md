@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: TicketTester
-BOC Size: 1169 bytes
+BOC Size: 1143 bytes
 
 # Types
 Total Types: 9
@@ -38,8 +38,8 @@ TLB: `compute_pick_number#28b5ae3b index:uint32 expected_number:uint32 = Compute
 Signature: `ComputePickNumber{index:uint32,expected_number:uint32}`
 
 ## ComputePrizeAmount
-TLB: `compute_prize_amount#442d85b2 expected_amount:coins index_payload:remainder<slice> = ComputePrizeAmount`
-Signature: `ComputePrizeAmount{expected_amount:coins,index_payload:remainder<slice>}`
+TLB: `compute_prize_amount#beb13cdb expected_amount:coins index_payload:^cell = ComputePrizeAmount`
+Signature: `ComputePrizeAmount{expected_amount:coins,index_payload:^cell}`
 
 # Get Methods
 Total Get Methods: 0

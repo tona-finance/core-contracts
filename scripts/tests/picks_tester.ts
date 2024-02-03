@@ -1,4 +1,4 @@
-import { Address, beginCell, fromNano, toNano, Cell } from "@ton/core";
+import { fromNano, toNano } from "@ton/core";
 import { ContractSystem } from "@tact-lang/emulator";
 import { TicketTester } from "../../output/test_TicketTester";
 import { computeWinningPicks, packWinningPicks, computePrizeAmount } from "../ticket_utils";
@@ -10,7 +10,7 @@ async function main() {
     const system = await ContractSystem.create();
     const owner = system.treasure("owner", 0);
 
-    const picks = 1800n;
+    const picks = 900n;
     const winning_number = 0n;
     const prize_amount = toNano("1000");
     const ticket_tester = await TicketTester.fromInit(owner.address, picks, prize_amount);
@@ -54,7 +54,7 @@ async function main() {
         picks,
         winning_number,
     );
-    assert(winning_picks.length > 0 && winning_picks.length <= 126, "Unexpected winning picks");
+    assert(winning_picks.length > 0 && winning_picks.length <= 63, "Unexpected winning picks");
     winning_picks.sort((a, b) => a.tier - b.tier);
     // get prize amount
     let expected_amount = computePrizeAmount(prize_amount, winning_picks);

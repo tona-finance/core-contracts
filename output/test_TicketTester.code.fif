@@ -167,11 +167,12 @@ PROGRAM{
   $ComputePrizeAmount$_load PROCINLINE:<{
     32 LDU
     SWAP
-    1143834034 PUSHINT
+    3199286491 PUSHINT
     EQUAL
     129 THROWIFNOT
     LDGRAMS
-    TUCK
+    LDREF
+    -ROT
   }>
   $TicketTester$_store PROCINLINE:<{
     s8 s7 XCHG2
@@ -505,40 +506,25 @@ PROGRAM{
     7 ROLL
   }>
   $TicketTester$_internal_binary_ComputePrizeAmount PROCINLINE:<{
-    0 PUSHINT
-    2 PUSHINT
-    REPEAT:<{
-      SWAP
-      LDREF
-      SWAP
-      CTOS
-      s8 s11 XCHG
-      s7 s10 XCHG
-      s6 s9 XCHG
-      s5 s11 XCHG
-      s4 s10 XCHG
-      s3 s9 XCHG
-      s11 s10 s0 XCHG3
-      $TicketTester$_fun_compute_prize_scale INLINECALLDICT
-      s1 s11 XCHG
-      ADD
-      s7 s10 XCHG
-      s6 s9 XCHG
-      s5 s8 XCHG
-      s4 s7 XCHG
-      s3 s6 XCHG
-      s5 s4 s0 XCHG3
-      s1 s3 XCHG
-    }>
-    NIP
-    s7 s(-1) PUXC
+    CTOS
+    s1 s9 XCHG
+    s1 s8 XCHG
+    s1 s7 XCHG
+    s1 s6 XCHG
+    s1 s5 XCHG
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
+    $TicketTester$_fun_compute_prize_scale INLINECALLDICT
+    s6 s(-1) PUXC
     MUL
     38400000 PUSHINT
     DIV
     60803 PUSHINT
-    s0 s2 XCHG
+    s0 s10 XCHG
     EQUAL
+    s1 s9 XCHG
     THROWANYIFNOT
+    7 ROLL
   }>
   $TicketTester$_internal_binary_Deploy PROCINLINE:<{
     $DeployOk$_constructor_queryId INLINECALLDICT
@@ -553,7 +539,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d537777596e39797662357870596b717250357a67796a614733376252527a336131376547524e3770796b527a} PUSHSLICE
+    x{697066733a2f2f516d52766d65476e33536244726466576763434a78694c5975626661354e646561346962516732424b635972414d} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -587,7 +573,7 @@ PROGRAM{
       TRUE
     }>
     DUP
-    1143834034 PUSHINT
+    3199286491 PUSHINT
     EQUAL
     IFJMP:<{
       DROP

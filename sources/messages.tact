@@ -1,10 +1,6 @@
 
 // === Pool messages ===
 
-message OpenDraw {
-    prize_amount: Int as coins;
-}
-
 message Borrow {
     amount: Int as coins;
 }
@@ -60,7 +56,7 @@ message InitDraw {
     refund_address: Address;
 }
 
-message OpenDrawInternal {
+message OpenDraw {
     twab_timestamp: Int as uint64;
     twab_amount: Int as uint128;
     refund_address: Address;
@@ -91,7 +87,7 @@ message PayPrizeDebtInternal {
 }
 
 message ClaimPrize {
-    index_payload: Slice as remaining;
+    index_payload: Cell;
 }
 
 // === Reserve messages ===

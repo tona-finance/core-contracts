@@ -139,16 +139,15 @@
     return (($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period), ());
 }
 
-(((slice, (int, int), int, int, int, int)), ()) $PoolMaster$_internal_binary_OpenDraw((slice, (int, int), int, int, int, int) $self, (int) $msg) impure inline {
+((slice, (int, int), int, int, int, int), ()) $PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e((slice, (int, int), int, int, int, int) $self) impure inline {
     var ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period) = $self;
-    var ($msg'prize_amount) = $msg;
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_requireOwner();
     throw_unless(3556, ($self'next_period > 0));
-    throw_unless(28129, ( (($msg'prize_amount > 0)) ? (($msg'prize_amount <= $self'prize_amount)) : (false) ));
-    $self'prize_amount = ($self'prize_amount - $msg'prize_amount);
+    throw_unless(27755, ($self'prize_amount > 0));
     throw_unless(2805, ($Context$_get_value(__tact_context_get()) >= 400000000));
     var ($twab'timestamp, $twab'amount) = $Twab$_fun_next_twab(($self'twab'timestamp, $self'twab'amount), $self'share_amount, now());
-    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_address(($self'next_period - 1)), ($msg'prize_amount + 100000000), 1, $OpenDrawInternal$_store_cell($OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address($twab'timestamp, $twab'amount, $self'owner))));
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body(false, ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_address(($self'next_period - 1)), ($self'prize_amount + 100000000), 1, $OpenDraw$_store_cell($OpenDraw$_constructor_twab_timestamp_twab_amount_refund_address($twab'timestamp, $twab'amount, $self'owner))));
+    $self'prize_amount = 0;
     var ($sinit'code, $sinit'data) = ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun__get_draw_init($self'next_period);
     $self'next_period = ($self'next_period + 1);
     ($self'owner, ($self'twab'timestamp, $self'twab'amount), $self'share_amount, $self'borrow_amount, $self'prize_amount, $self'next_period)~$PoolMaster$_fun_native_reserve();
@@ -239,7 +238,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://Qmf6Ev8NbDpaHeAmT9652sNxQE7BVw2dtL7QiFn8YSNWYC";
+    return "ipfs://QmQXxJB7fN1DJgQuBy5qvkNZgnJN5aGhHFDQrDmqBnBhwh";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -274,13 +273,6 @@ _ lazy_deployment_completed() method_id {
     if (op == 1154673471) {
         var msg = in_msg~$Borrow$_load();
         self~$PoolMaster$_internal_binary_Borrow(msg);
-        return (self, true);
-    }
-    
-    ;; Receive OpenDraw message
-    if (op == 3303631299) {
-        var msg = in_msg~$OpenDraw$_load();
-        self~$PoolMaster$_internal_binary_OpenDraw(msg);
         return (self, true);
     }
     
@@ -319,6 +311,12 @@ _ lazy_deployment_completed() method_id {
         ;; Receive "init draw" message
         if (text_op == 0x8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2) {
             self~$PoolMaster$_internal_text_8b88a4c05aa285f6109e02ad26f6a96999f061987f3790b9484fc0566d9331a2();
+            return (self, true);
+        }
+        
+        ;; Receive "open draw" message
+        if (text_op == 0x104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e) {
+            self~$PoolMaster$_internal_text_104348ebcd6b61d2dfe8922e378059a8807e35b84a8b54b66e554ea818a5b66e();
             return (self, true);
         }
     }

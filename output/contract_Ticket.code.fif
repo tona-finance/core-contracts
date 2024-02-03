@@ -178,10 +178,11 @@ PROGRAM{
   $ClaimPrize$_load PROCINLINE:<{
     32 LDU
     SWAP
-    3150229583 PUSHINT
+    2320191705 PUSHINT
     EQUAL
     129 THROWIFNOT
-    DUP
+    LDREF
+    SWAP
   }>
   $Ticket$_store PROCINLINE:<{
     s11 s10 XCHG2
@@ -665,58 +666,28 @@ PROGRAM{
     $Ticket$_fun_require_active INLINECALLDICT
     $Ticket$_fun_requireOwner INLINECALLDICT
     __tact_context_get INLINECALLDICT
-    800000000 PUSHINT
+    500000000 PUSHINT
     $Ticket$_fun_msg_value INLINECALLDICT
     2805 PUSHINT
     SWAP
     -1 GTINT
     THROWANYIFNOT
-    0 PUSHINT
-    2 PUSHINT
-    REPEAT:<{
-      s0 s12 XCHG
-      LDREF
-      SWAP
-      CTOS
-      s11 s12 XCHG
-      s10 s12 XCHG
-      s1 s12 XCHG
-      s1 s9 XCHG
-      s1 s8 XCHG
-      s1 s7 XCHG
-      s1 s6 XCHG
-      s1 s5 XCHG
-      s1 s4 XCHG
-      s3 s3 s0 XCHG3
-      $Ticket$_fun_compute_prize_scale INLINECALLDICT
-      s1 s13 XCHG
-      ADD
-      s11 s12 XCHG
-      s10 s11 XCHG
-      s9 s10 XCHG
-      s8 s9 XCHG
-      s7 s8 XCHG
-      s6 s7 XCHG
-      s5 s6 XCHG
-      s4 s5 XCHG
-      s3 s4 XCHG
-      s1 s3 s0 XCHG3
-    }>
-    s12 POP
-    s10 s8 s11 PU2XC
-    $ClaimPrizeInternal$_constructor_user_pool_account_prize_scale INLINECALLDICT
-    $ClaimPrizeInternal$_store_cell INLINECALLDICT
-    s7 PUSH
-    s11 s12 XCHG
+    s0 s11 XCHG
+    CTOS
     s10 s11 XCHG
-    s0 s9 XCHG
-    s0 s10 XCHG
+    s9 s10 XCHG
+    s8 s9 XCHG
     s7 s8 XCHG
     s6 s7 XCHG
     s5 s6 XCHG
     s4 s5 XCHG
     s3 s4 XCHG
-    s0 s3 s3 XCHG3
+    s1 s3 s0 XCHG3
+    $Ticket$_fun_compute_prize_scale INLINECALLDICT
+    s11 s9 s(-2) PU2XC
+    $ClaimPrizeInternal$_constructor_user_pool_account_prize_scale INLINECALLDICT
+    $ClaimPrizeInternal$_store_cell INLINECALLDICT
+    s8 s(-1) PUXC
     FALSE
     PUSHNULL
     $Ticket$_fun_forward INLINECALLDICT
@@ -746,7 +717,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d52485775334678576662354356346361753336786157427a4639436370576f41397a52314b32696862753670} PUSHSLICE
+    x{697066733a2f2f516d59735133417073675369696a6637474e4b5867416771644e45517a7957536d50474a37797071655162455a59} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -779,7 +750,7 @@ PROGRAM{
       $Ticket$_internal_binary_InitTicketInternal INLINECALLDICT
       TRUE
     }>
-    3150229583 PUSHINT
+    2320191705 PUSHINT
     EQUAL
     IFJMP:<{
       $ClaimPrize$_load INLINECALLDICT

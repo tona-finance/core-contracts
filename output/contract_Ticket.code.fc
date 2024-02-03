@@ -149,18 +149,15 @@ int $WinningSplit$_fun_compute_prize_scale((int, int, int, int) $self, int $pick
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
 
-(((slice, int, slice, slice, int, (int, int, int, int), int, cell)), ()) $Ticket$_internal_binary_ClaimPrize((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, (slice) $msg) impure inline {
+(((slice, int, slice, slice, int, (int, int, int, int), int, cell)), ()) $Ticket$_internal_binary_ClaimPrize((slice, int, slice, slice, int, (int, int, int, int), int, cell) $self, (cell) $msg) impure inline {
     var ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes) = $self;
     var ($msg'index_payload) = $msg;
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_require_active();
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_requireOwner();
-    int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_msg_value(__tact_context_get(), 800000000);
+    int $rest_value = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_msg_value(__tact_context_get(), 500000000);
     throw_unless(2805, ($rest_value >= 0));
-    int $prize_scale = 0;
-    repeat (2) {
-        slice $index_payload = begin_parse($msg'index_payload~load_ref());
-        $prize_scale = ($prize_scale + ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_compute_prize_scale($index_payload));
-    }
+    slice $index_payload = begin_parse($msg'index_payload);
+    int $prize_scale = ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_compute_prize_scale($index_payload);
     ($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes)~$Ticket$_fun_forward($self'draw, $ClaimPrizeInternal$_store_cell($ClaimPrizeInternal$_constructor_user_pool_account_prize_scale($self'owner, $self'pool_account, $prize_scale)), false, null());
     return (($self'owner, $self'active, $self'pool_account, $self'draw, $self'period, ($self'winning_split'n0, $self'winning_split'n1, $self'winning_split'n2, $self'winning_split'n3), $self'picks, $self'used_indexes), ());
 }
@@ -199,7 +196,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmRHWu3FxWfb5CV4cau36xaWBzF9CcpWoA9zR1K2ihbu6p";
+    return "ipfs://QmYsQ3ApsgSiijf7GNKXgAgqdNEQzyWSmPGJ7ypqeQbEZY";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -231,7 +228,7 @@ _ lazy_deployment_completed() method_id {
     }
     
     ;; Receive ClaimPrize message
-    if (op == 3150229583) {
+    if (op == 2320191705) {
         var msg = in_msg~$ClaimPrize$_load();
         self~$Ticket$_internal_binary_ClaimPrize(msg);
         return (self, true);

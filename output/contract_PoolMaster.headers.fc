@@ -57,9 +57,6 @@ builder $Twab$_store(builder build_0, (int, int) v) inline;
 ;; $Twab$_load
 (slice, ((int, int))) $Twab$_load(slice sc_0) inline;
 
-;; $OpenDraw$_load
-(slice, ((int))) $OpenDraw$_load(slice sc_0) inline;
-
 ;; $Borrow$_load
 (slice, ((int))) $Borrow$_load(slice sc_0) inline;
 
@@ -90,11 +87,11 @@ builder $InitDraw$_store(builder build_0, (int, int, slice) v) inline;
 ;; $InitDraw$_store_cell
 cell $InitDraw$_store_cell((int, int, slice) v) inline;
 
-;; $OpenDrawInternal$_store
-builder $OpenDrawInternal$_store(builder build_0, (int, int, slice) v) inline;
+;; $OpenDraw$_store
+builder $OpenDraw$_store(builder build_0, (int, int, slice) v) inline;
 
-;; $OpenDrawInternal$_store_cell
-cell $OpenDrawInternal$_store_cell((int, int, slice) v) inline;
+;; $OpenDraw$_store_cell
+cell $OpenDraw$_store_cell((int, int, slice) v) inline;
 
 ;; $ChangeOwner$_load
 (slice, ((int, slice))) $ChangeOwner$_load(slice sc_0) inline;
@@ -231,8 +228,8 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $SendParameters$_constructor_bounce_to_value_mode_body
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body(int bounce, slice to, int value, int mode, cell body) inline;
 
-;; $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address
-((int, int, slice)) $OpenDrawInternal$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline;
+;; $OpenDraw$_constructor_twab_timestamp_twab_amount_refund_address
+((int, int, slice)) $OpenDraw$_constructor_twab_timestamp_twab_amount_refund_address(int twab_timestamp, int twab_amount, slice refund_address) inline;
 
 ;; $DepositFinish$_constructor_timestamp_amount
 ((int, int)) $DepositFinish$_constructor_timestamp_amount(int timestamp, int amount) inline;

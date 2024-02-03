@@ -52,7 +52,7 @@ builder $WinningSplit$_store(builder build_0, (int, int, int, int) v) inline;
 (slice, ((int, int))) $ComputePickNumber$_load(slice sc_0) inline;
 
 ;; $ComputePrizeAmount$_load
-(slice, ((int, slice))) $ComputePrizeAmount$_load(slice sc_0) inline;
+(slice, ((int, cell))) $ComputePrizeAmount$_load(slice sc_0) inline;
 
 ;; $TicketTester$_store
 builder $TicketTester$_store(builder build_0, (slice, int, int, (int, int, int, int), cell) v) inline;

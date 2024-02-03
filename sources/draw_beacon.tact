@@ -43,7 +43,7 @@ trait DrawBeacon {
         self.forward(msg.refund_address, null, false, null);
     }
 
-    receive(msg: OpenDrawInternal) {
+    receive(msg: OpenDraw) {
         self.require_pool_master();
         require(msg.twab_timestamp > (self.start!!).timestamp, "Invalid twab timestamp");
 

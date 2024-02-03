@@ -124,13 +124,13 @@ cell $PrepareInitTicket$_store_cell((int, int, int, int, int) v) inline {
 }
 
 ;;
-;; Type: OpenDrawInternal
-;; Header: 0x8c567c19
-;; TLB: open_draw_internal#8c567c19 twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDrawInternal
+;; Type: OpenDraw
+;; Header: 0x7dc08bde
+;; TLB: open_draw#7dc08bde twab_timestamp:uint64 twab_amount:uint128 refund_address:address = OpenDraw
 ;;
 
-(slice, ((int, int, slice))) $OpenDrawInternal$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 2354478105);
+(slice, ((int, int, slice))) $OpenDraw$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2109770718);
     var v'twab_timestamp = sc_0~load_uint(64);
     var v'twab_amount = sc_0~load_uint(128);
     var v'refund_address = sc_0~__tact_load_address();

@@ -59,17 +59,13 @@ export function computeWinningPicks(
 
 export function packWinningPicks(picks: WinningPick[]): Cell {
     let builder = beginCell();
-    for (let i = 0; i < 2; i++) {
-        let inner_builder = beginCell();
-        for (let j = 0; j < 63; j++) {
-            const pick = picks.pop();
-            if (typeof pick === "undefined") {
-                break;
-            } else {
-                inner_builder.storeUint(pick.index, PICK_BITS);
-            }
+    for (let i = 0; i < 63; i++) {
+        const pick = picks.pop();
+        if (typeof pick === "undefined") {
+            break;
+        } else {
+            builder.storeUint(pick.index, PICK_BITS);
         }
-        builder.storeRef(inner_builder.endCell());
     }
     return builder.endCell();
 }

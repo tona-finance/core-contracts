@@ -25,10 +25,13 @@ async function main() {
     );
     winning_picks.sort((a, b) => a.tier - b.tier);
     // console.log(winning_picks);
+    // packWinningPicks(winning_picks);
+    // packWinningPicks(winning_picks);
+    // packWinningPicks(winning_picks);
     const payload = packWinningPicks(winning_picks);
     ticket_client.send(
         sender,
-        { value: toNano("0.81") },
+        { value: toNano("1.0") },
         {
             $$type: "ClaimPrize",
             index_payload: payload

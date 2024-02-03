@@ -68,7 +68,7 @@ message ComputePickNumber {
 
 message ComputePrizeAmount {
     expected_amount: Int as coins;
-    index_payload: Slice as remaining;
+    index_payload: Cell;
 }
 
 contract TicketTester with Deployable {
@@ -93,11 +93,7 @@ contract TicketTester with Deployable {
     }
 
     receive(msg: ComputePrizeAmount) {
-        let prize_scale: Int = 0;
-        repeat(2) {
-            let index_payload: Slice = msg.index_payload.loadRef().beginParse();
-            prize_scale = prize_scale + self.compute_prize_scale(index_payload);
-        }
+        let prize_scale: Int = self.compute_prize_scale(msg.index_payload.beginParse());
         let prize_amount: Int = self.prize_amount * prize_scale / TOTAL_PRIZE_SCALE;
         require(prize_amount == msg.expected_amount, "Unmatched prize amount");
     }

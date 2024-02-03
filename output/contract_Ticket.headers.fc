@@ -52,7 +52,7 @@ cell $ClaimPrizeInternal$_store_cell((slice, slice, int) v) inline;
 (slice, ((int, int, int))) $InitTicketInternal$_load(slice sc_0) inline;
 
 ;; $ClaimPrize$_load
-(slice, ((slice))) $ClaimPrize$_load(slice sc_0) inline;
+(slice, ((cell))) $ClaimPrize$_load(slice sc_0) inline;
 
 ;; $Ticket$_store
 builder $Ticket$_store(builder build_0, (slice, int, slice, slice, int, (int, int, int, int), int, cell) v) inline;
