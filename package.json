@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "tact --config ./tact.config.json",
+    "clean": "rm -rf ./output/*",
     "test": "jest",
     "deploy_pool_master": "ts-node ./scripts/deploy_pool_master.ts",
     "deploy_prize_reserve": "ts-node ./scripts/deploy_prize_reserve.ts"
