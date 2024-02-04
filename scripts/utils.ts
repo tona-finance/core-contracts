@@ -6,13 +6,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const Client = new TonClient4({
-    endpoint: "https://sandbox-v4.tonhubapi.com",
+    endpoint: "https://mainnet-v4.tonhubapi.com",
     timeout: 30000,
 });
 
 export const Deployments = {
-    PoolMaster: Address.parse("kQBsM6HW2-ufkdx6n2JcAVvx5QL7NasqSWOlQ-3-TCrYeHkQ"),
-    PrizeReserve: Address.parse("kQDCqwbu4VwVqBexYkdRWrHDlqKmwB8O3Xt8pfnRolLrEYHE"),
+    PoolMaster: Address.parse("kQB3tIttfUco2gLAHYZMpbnEAvp98pYFKVn_252FCmIqaYr8"),
+    PrizeReserve: Address.parse("kQBvZ1CJ026mTvcE_y5axYJFMyGDdtynGR_x-T7DsZN8neQ5"),
 }
 
 export const TestPeriod = 0n;

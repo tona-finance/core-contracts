@@ -8,7 +8,6 @@ async function main() {
     // get pool account address
     const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
     const pool_account_contract = Client.open(pool_account);
-    console.log(pool_account.address.toString({testOnly: true}));
     // get pool account data
     console.log("Pool account data:", await pool_account_contract.getGetCoreData());
     // console.log("Pool account twab size:", await pool_account_contract.getGetTwabSize());

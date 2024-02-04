@@ -54,6 +54,7 @@ async function main() {
         picks,
         winning_number,
     );
+    // console.log(fromNano(computePrizeAmount(prize_amount, winning_picks)));
     assert(winning_picks.length > 0 && winning_picks.length <= 63, "Unexpected winning picks");
     winning_picks.sort((a, b) => a.tier - b.tier);
     // get prize amount

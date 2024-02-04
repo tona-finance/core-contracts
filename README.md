@@ -29,5 +29,5 @@ MIT
 
 ||testnet|mainnet|
 |-|-|-|
-|Pool Master|kQBicKoHvXJ7g12K2IM_WDc3Av5vz3VBX0w8NjSx5EGWdxkf|-|
-|Prize Reserve|kQBHbMPRUa-FmXu9xeqdVIUeTJuXbN_SQf0o8P7oLEiWhsCA|-|
+|Pool Master|-|-|
+|Prize Reserve|-|-|
