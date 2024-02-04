@@ -11,8 +11,8 @@ export const Client = new TonClient4({
 });
 
 export const Deployments = {
-    PoolMaster: Address.parse("kQC5-pl45WSCcHHQu8GqiJH-LysQDXNVqsJtor-eAkcfwRhz"),
-    PrizeReserve: Address.parse("kQDoFWTI81TBrjXDKuu_7iCUqZTZrhBXPtDtL2_DQ4EIBZjJ"),
+    PoolMaster: Address.parse("kQBsM6HW2-ufkdx6n2JcAVvx5QL7NasqSWOlQ-3-TCrYeHkQ"),
+    PrizeReserve: Address.parse("kQDCqwbu4VwVqBexYkdRWrHDlqKmwB8O3Xt8pfnRolLrEYHE"),
 }
 
 export const TestPeriod = 0n;
