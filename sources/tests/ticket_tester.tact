@@ -19,23 +19,20 @@ struct WinningSplit {
     n3: Int as uint8;
 }
 
-fun empty_winning_split(): WinningSplit {
+inline fun new_winning_split(winning_number: Int): WinningSplit {
+    let n0: Int = winning_number % CHOICES;
+    winning_number = winning_number / CHOICES;
+    let n1: Int = winning_number % CHOICES;
+    winning_number = winning_number / CHOICES;
+    let n2: Int = winning_number % CHOICES;
+    winning_number = winning_number / CHOICES;
+    let n3: Int = winning_number % CHOICES;
     return WinningSplit {
-        n0: 0,
-        n1: 0,
-        n2: 0,
-        n3: 0
+        n0: n0,
+        n1: n1,
+        n2: n2,
+        n3: n3
     };
-}
-
-extends mutates fun apply(self: WinningSplit, winning_number: Int) {
-    self.n0 = winning_number % CHOICES;
-    winning_number = winning_number / CHOICES;
-    self.n1 = winning_number % CHOICES;
-    winning_number = winning_number / CHOICES;
-    self.n2 = winning_number % CHOICES;
-    winning_number = winning_number / CHOICES;
-    self.n3 = winning_number % CHOICES;
 }
 
 extends fun compute_prize_scale(self: WinningSplit, pick_number: Int): Int {
@@ -79,11 +76,11 @@ contract TicketTester with Deployable {
     winning_split: WinningSplit;
     used_indexes: map<Int, Bool>;
 
-    init(owner: Address, picks: Int, prize_amount: Int) {
+    init(owner: Address, picks: Int, prize_amount: Int, winning_number: Int) {
         self.owner = owner;
         self.picks = picks;
         self.prize_amount = prize_amount;
-        self.winning_split = empty_winning_split();
+        self.winning_split = new_winning_split(winning_number);
         self.used_indexes = emptyMap();
     }
 

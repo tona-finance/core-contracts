@@ -11,7 +11,7 @@ trait BaseTicket with Ownable, MsgValueHelper {
     pool_account: Address;
     draw: Address;
     period: Int;
-    winning_split: WinningSplit;
+    winning_split: WinningSplit?;
     picks: Int;
     used_indexes: map<Int, Bool>;
 
@@ -20,7 +20,7 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.require_pool_account();
 
         self.active = true;
-        self.winning_split.apply(msg.winning_number);
+        self.winning_split = new_winning_split(msg.winning_number);
         self.picks = TOTAL_PICKS * msg.user_avg_balance / msg.draw_avg_balance;
 
         // refund gas
@@ -60,6 +60,7 @@ trait BaseTicket with Ownable, MsgValueHelper {
         //        \/
         //       <=63
         let scale: Int = 0;
+        let winning_split: WinningSplit = self.winning_split!!;
         repeat(size) {
             let pick_index: Int = index_payload.loadUint(PICK_BITS);
             let pick_used: Bool? = self.used_indexes.get(pick_index);
@@ -67,7 +68,7 @@ trait BaseTicket with Ownable, MsgValueHelper {
             self.used_indexes.set(pick_index, true);
 
             let pick_number: Int = self.compute_pick_number(pick_index);
-            scale = scale + self.winning_split.compute_prize_scale(pick_number);
+            scale = scale + winning_split.compute_prize_scale(pick_number);
         }
         return scale;
     }

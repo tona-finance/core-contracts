@@ -188,7 +188,7 @@ contract Ticket with BaseTicket {
     pool_account: Address;
     draw: Address;
     period: Int as uint32;
-    winning_split: WinningSplit;
+    winning_split: WinningSplit?;
     picks: Int as uint32 = 0;
     used_indexes: map<Int, Bool>;
     // ----------------
@@ -198,7 +198,6 @@ contract Ticket with BaseTicket {
         self.pool_account = pool_account;
         self.draw = draw;
         self.period = period;
-        self.winning_split = empty_winning_split();
         self.used_indexes = emptyMap();
     }
 

@@ -7,8 +7,7 @@ struct Twab {
 }
 
 inline extends fun storeTwab(self: Builder, twab: Twab): Builder {
-    return self.storeTimestamp(twab.timestamp)
-        .storeUint(twab.amount, 128);
+    return self.storeTimestamp(twab.timestamp).storeUint(twab.amount, 128);
 }
 
 inline extends mutates fun loadTwab(self: Slice): Twab {
