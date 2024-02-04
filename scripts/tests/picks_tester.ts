@@ -13,7 +13,7 @@ async function main() {
     const picks = 900n;
     const winning_number = 0n;
     const prize_amount = toNano("1000");
-    const ticket_tester = await TicketTester.fromInit(owner.address, picks, prize_amount);
+    const ticket_tester = await TicketTester.fromInit(owner.address, picks, prize_amount, winning_number);
     const ticket_contract = system.open(ticket_tester);
     system.name(ticket_contract.address, "ticket");
     // let track = system.track(contract);

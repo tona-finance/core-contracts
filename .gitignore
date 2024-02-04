@@ -1,8 +1,6 @@
 node_modules
 .vscode
 .env
-/output/*.abi
-/output/.boc
-/output/*.fc
-/output/*.fif
-/output/*.pkg
+output/*
+!output/*.ts
+!output/*.md
