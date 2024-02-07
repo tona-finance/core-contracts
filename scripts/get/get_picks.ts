@@ -7,10 +7,10 @@ async function main() {
     const keypair = await getKeyPair();
     const wallet = await getWallet(keypair);
 
-    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
+    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PrizeReserve);
     const pool_account_contract = Client.open(pool_account);
 
-    const draw = await Draw.fromInit(Deployments.PoolMaster, Deployments.PrizeReserve, TestPeriod);
+    const draw = await Draw.fromInit(Deployments.PoolMaster, TestPeriod);
     const draw_contract = Client.open(draw);
     
     const draw_data = await draw_contract.getGetCoreData();
@@ -22,6 +22,8 @@ async function main() {
     const user_avg_balance = (user_end.amount - user_start.amount) / (user_end.timestamp - user_start.timestamp);
     const picks = BigInt(TOTAL_PICKS) * user_avg_balance / draw_avg_balance;
     console.log("Compute picks:", picks);
+    const jetton_amount = draw_data.jetton_amount * user_avg_balance / draw_avg_balance;
+    console.log("Compute jetton amount:", jetton_amount);
 }
 
 main().catch((error) => {

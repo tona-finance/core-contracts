@@ -14,7 +14,7 @@ async function main() {
     const account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster);
     await Client.open(account).send(
         sender,
-        { value: toNano("0.11") },
+        { value: toNano("0.21") },
         {
             $$type: "Withdraw",
             amount: toNano("0.2")

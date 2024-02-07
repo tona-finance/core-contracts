@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: PoolMaster
-BOC Size: 5520 bytes
+BOC Size: 5581 bytes
 
 # Types
 Total Types: 37
@@ -154,9 +154,11 @@ TLB: `_ n0:uint8 n1:uint8 n2:uint8 = WinningSplit`
 Signature: `WinningSplit{n0:uint8,n1:uint8,n2:uint8}`
 
 # Get Methods
-Total Get Methods: 4
+Total Get Methods: 5
 
 ## get_core_data
+
+## get_jetton_wallet_address
 
 ## get_account_address
 Argument: user

@@ -64,6 +64,10 @@ contract PoolMaster with BasePoolMaster, Deployable {
         };
     }
 
+    get fun get_jetton_wallet_address(): Address {
+        return self._get_jetton_wallet_address();
+    }
+
     get fun get_account_address(user: Address): Address {
         return self._get_account_address(user);
     }
