@@ -20,8 +20,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         self.require_unlocked();
         self.requireOwner();
 
-        // fee 0.1
-        let deposit_amount: Int = self.msg_value(context(), ton("0.1"));
+        // fee 0.2
+        let deposit_amount: Int = self.msg_value(context(), ton("0.2"));
         require(deposit_amount > 0, "Invalid deposit amount");
         self.lock = true;
 
@@ -54,8 +54,8 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
         self.requireOwner();
         require(msg.amount > 0 && msg.amount <= self.share_amount, "Invalid withdraw amount");
 
-        // fee 0.1
-        let rest_value: Int = self.msg_value(context(), ton("0.1"));
+        // fee 0.2
+        let rest_value: Int = self.msg_value(context(), ton("0.2"));
         require(rest_value >= 0, "Insufficient value");
         self.lock = true;
 

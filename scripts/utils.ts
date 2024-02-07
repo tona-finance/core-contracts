@@ -1,4 +1,4 @@
-import { Address } from "@ton/core";
+import { Address, Cell } from "@ton/core";
 import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { KeyPair, mnemonicToWalletKey } from "@ton/crypto";
 
@@ -9,6 +9,11 @@ export const Client = new TonClient4({
     endpoint: "https://sandbox-v4.tonhubapi.com",
     timeout: 30000,
 });
+
+export const JettonData = {
+    Master: Address.parse("kQDcqwbu"),
+    WalletCode: Cell.fromBase64("kQDcqwbu"),
+}
 
 export const Deployments = {
     PoolMaster: Address.parse("kQBsM6HW2-ufkdx6n2JcAVvx5QL7NasqSWOlQ-3-TCrYeHkQ"),

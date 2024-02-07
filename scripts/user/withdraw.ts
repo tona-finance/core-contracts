@@ -11,7 +11,7 @@ async function main() {
     const wallet = await getWallet(keypair);
     const sender = Client.open(wallet).sender(keypair.secretKey);
 
-    const account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
+    const account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster);
     await Client.open(account).send(
         sender,
         { value: toNano("0.11") },

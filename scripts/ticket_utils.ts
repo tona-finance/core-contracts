@@ -1,15 +1,14 @@
 import { Address, beginCell, Cell } from "@ton/core";
 
-export const CARDINALITY: number = 4;
-export const PICK_BITS: number = 4 * 4;
+export const CARDINALITY: number = 3;
+export const PICK_BITS: number = CARDINALITY * 4;
 export const TOTAL_PICKS: number = 1 << PICK_BITS;
 export const CHOICES: number = 16;
 
-const PRIZE_SCALE_0: number = 16 * 16 * 15 * 250;
-const PRIZE_SCALE_1: number = 16 * 16 * 750;
-const PRIZE_SCALE_2: number = 16 * 2250;
-const PRIZE_SCALE_3: number = 1 * 6750;
-const TOTAL_PRIZE_SCALE: number = 16 * 16 * 15 * 10000;
+const PRIZE_SCALE_0: number = 16 * 15 * 5;
+const PRIZE_SCALE_1: number = 16 * 20;
+const PRIZE_SCALE_2: number = 1 * 75;
+const BASE_PRIZE_SCALE: number = 16 * 15 * 100;
 
 
 export type WinningPick = {
@@ -33,12 +32,9 @@ export function computePrizeAmount(
         case 2:
             scale += PRIZE_SCALE_2;
             break;
-        case 3:
-            scale += PRIZE_SCALE_3;
-            break;
         }
     }
-    return (total_prize_amount * BigInt(scale)) / BigInt(TOTAL_PRIZE_SCALE);
+    return (total_prize_amount * BigInt(scale)) / BigInt(BASE_PRIZE_SCALE);
 }
 
 export function computeWinningPicks(
@@ -59,7 +55,7 @@ export function computeWinningPicks(
 
 export function packWinningPicks(picks: WinningPick[]): Cell {
     let builder = beginCell();
-    for (let i = 0; i < 63; i++) {
+    for (let i = 0; i < 85; i++) {
         const pick = picks.pop();
         if (typeof pick === "undefined") {
             break;

@@ -326,7 +326,6 @@ export type WinningSplit = {
     n0: bigint;
     n1: bigint;
     n2: bigint;
-    n3: bigint;
 }
 
 export function storeWinningSplit(src: WinningSplit) {
@@ -335,7 +334,6 @@ export function storeWinningSplit(src: WinningSplit) {
         b_0.storeUint(src.n0, 8);
         b_0.storeUint(src.n1, 8);
         b_0.storeUint(src.n2, 8);
-        b_0.storeUint(src.n3, 8);
     };
 }
 
@@ -344,16 +342,14 @@ export function loadWinningSplit(slice: Slice) {
     let _n0 = sc_0.loadUintBig(8);
     let _n1 = sc_0.loadUintBig(8);
     let _n2 = sc_0.loadUintBig(8);
-    let _n3 = sc_0.loadUintBig(8);
-    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2, n3: _n3 };
+    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2 };
 }
 
 function loadTupleWinningSplit(source: TupleReader) {
     let _n0 = source.readBigNumber();
     let _n1 = source.readBigNumber();
     let _n2 = source.readBigNumber();
-    let _n3 = source.readBigNumber();
-    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2, n3: _n3 };
+    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2 };
 }
 
 function storeTupleWinningSplit(source: WinningSplit) {
@@ -361,7 +357,6 @@ function storeTupleWinningSplit(source: WinningSplit) {
     builder.writeNumber(source.n0);
     builder.writeNumber(source.n1);
     builder.writeNumber(source.n2);
-    builder.writeNumber(source.n3);
     return builder.build();
 }
 
@@ -385,17 +380,17 @@ export type ComputePickNumber = {
 export function storeComputePickNumber(src: ComputePickNumber) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(682995259, 32);
-        b_0.storeUint(src.index, 32);
-        b_0.storeUint(src.expected_number, 32);
+        b_0.storeUint(4267843536, 32);
+        b_0.storeUint(src.index, 16);
+        b_0.storeUint(src.expected_number, 16);
     };
 }
 
 export function loadComputePickNumber(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 682995259) { throw Error('Invalid prefix'); }
-    let _index = sc_0.loadUintBig(32);
-    let _expected_number = sc_0.loadUintBig(32);
+    if (sc_0.loadUint(32) !== 4267843536) { throw Error('Invalid prefix'); }
+    let _index = sc_0.loadUintBig(16);
+    let _expected_number = sc_0.loadUintBig(16);
     return { $$type: 'ComputePickNumber' as const, index: _index, expected_number: _expected_number };
 }
 
@@ -491,8 +486,8 @@ function initTicketTester_init_args(src: TicketTester_init_args) {
 }
 
 async function TicketTester_init(owner: Address, picks: bigint, prize_amount: bigint, winning_number: bigint) {
-    const __code = Cell.fromBase64('te6ccgECFAEABIoAART/APSkE/S88sgLAQIBYgIDA3rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVF9s88uCCBAUGAgFYEBEBoO1E0NQB+GPSAAGOOPpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0x/6ANMH0wfTB9MHVTAE9AQIBwZQVWwY4Pgo1wsKgwm68uCJBwL2AZIwf+BwIddJwh+VMCDXCx/eIIIQKLWuO7qOTjDTHwGCECi1rju68uCB0x/TH1lsElWAyPgoINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wyw/J+QCpOA+pOA+BCK0Kuhny9FUGf+AgghC+sTzbuuMCghCUapi2CQoAiMj4QwHMfwHKAFVwUIcg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYVyx9QA/oCBFA1UDTLB8sHywfLB/QAye1UAXj6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAYEBAdcAgQEB1wDUAdCBAQHXADAUQzAE0VUC2zwIADIgqTgDAasDIKk4AwGrAyCpOAMBqwOpOANtAZIw0x8BghC+sTzbuvLggfoA1FlsEtAZGBcWFRRDMCDXSasDUYihgT6WIcL/8vRwCYrkMQdSYKiCCknwAKkEggDtgwq6GfL0VQZ/CwFauo6n0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yfhCAXBt2zx/4DBwDQHsAdMPI4EBASNxQTP0DG+hlAHXADCSW23iggCzsgFu8vQDgQEBIn9xIW6VW1n0WjCYyAHPAEEz9ELiEIoQJxBqECUQShAjSgDI+Cgg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbLD8n5AKk4D1RlUFRlUAwAkCCpOANQBb2TXwRwjjMDqwMgqTgDUAO9lV8DgRpe4AGrAyCpOANYvZVbggCMoOCrA6k4AwG9lIIC7gDggggOpgDiGaAQeQhVFQE2bW0ibrOZWyBu8tCAbyIBkTLiECRwAwSAQlAjDgHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAPAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnAb1J3vlUWW8cdT094FWcMmgnCdl05as07LczoOlm2UZuikgCAUgSEwARsK+7UTQ0gABgAHWybuNDVpcGZzOi8vUW1Sdm1lR24zU2JEcmRmV2djQ0p4aUxZdWJmYTVOZGVhNGliUWcyQktjWXJBTYIA==');
-    const __system = Cell.fromBase64('te6cckECFgEABJQAAQHAAQEFoZ09AgEU/wD0pBP0vPLICwMCAWIJBAIBWAgFAgFIBwYAdbJu40NWlwZnM6Ly9RbVJ2bWVHbjNTYkRyZGZXZ2NDSnhpTFl1YmZhNU5kZWE0aWJRZzJCS2NZckFNggABGwr7tRNDSAAGAAubu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOCcBvUne+VRZbxx1PT3gVZwyaCcJ2XTlqzTstzOg6WbZRm6KSAN60AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRfbPPLgghMLCgCIyPhDAcx/AcoAVXBQhyDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFhXLH1AD+gIEUDVQNMsHywfLB8sH9ADJ7VQC9gGSMH/gcCHXScIflTAg1wsf3iCCECi1rju6jk4w0x8BghAota47uvLggdMf0x9ZbBJVgMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssPyfkAqTgPqTgPgQitCroZ8vRVBn/gIIIQvrE827rjAoIQlGqYthAMAVq6jqfTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J+EIBcG3bPH/gMHANATZtbSJus5lbIG7y0IBvIgGRMuIQJHADBIBCUCMOAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA8AmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwBkjDTHwGCEL6xPNu68uCB+gDUWWwS0BkYFxYVFEMwINdJqwNRiKGBPpYhwv/y9HAJiuQxB1JgqIIKSfAAqQSCAO2DCroZ8vRVBn8RAewB0w8jgQEBI3FBM/QMb6GUAdcAMJJbbeKCALOyAW7y9AOBAQEif3EhbpVbWfRaMJjIAc8AQTP0QuIQihAnEGoQJRBKECNKAMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssPyfkAqTgPVGVQVGVQEgCQIKk4A1AFvZNfBHCOMwOrAyCpOANQA72VXwOBGl7gAasDIKk4A1i9lVuCAIyg4KsDqTgDAb2UggLuAOCCCA6mAOIZoBB5CFUVAaDtRNDUAfhj0gABjjj6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdMf+gDTB9MH0wfTB1UwBPQECAcGUFVsGOD4KNcLCoMJuvLgiRQBePpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgBgQEB1wCBAQHXANQB0IEBAdcAMBRDMATRVQLbPBUAMiCpOAMBqwMgqTgDAasDIKk4AwGrA6k4A22Q0uis');
+    const __code = Cell.fromBase64('te6ccgECFAEABGMAART/APSkE/S88sgLAQIBYgIDA3rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVFts88uCCBAUGAgFYEBEBnO1E0NQB+GPSAAGONvpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0w/6ANMH0wfTB1UgA/QEBwYFUERsF+D4KNcLCoMJuvLgiQcC9gGSMH/gcCHXScIflTAg1wsf3iCCEP5iH9C6jk4w0x8BghD+Yh/QuvLggdMP0w9ZbBJVcMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssLyfkAqTgLqTgLgQitCboY8vRVBX/gIIIQvrE827rjAoIQlGqYtgkKAILI+EMBzH8BygBVYFB2INdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WFMsPWPoCA1AkUCPLB8sHywf0AMntVAF4+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXAIEBAdcA1AHQgQEB1wAwFEMwBNFVAts8CAAkIKk4AwGrAyCpOAMBqwOpOANtAZAw0x8BghC+sTzbuvLggfoA1FlsEtAYFxYVFEMwINdJgAypBFF3oYE+liHC//L0cAiK5DEGUlCogV3AqQSCAO2DCboY8vRVBX8LAVq6jqfTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J+EIBcG3bPH/gMHANAeQB0wsjgQEBI3FBM/QMb6GUAdcAMJJbbeKCALOyAW7y9AOBAQEif3EhbpVbWfRaMJjIAc8AQTP0QuIQeRAmEFkQJBA5Acj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssLyfkAqTgLVGRAUkAMAGQgqTgDUAS9k18DcI4dAqsDIKk4A1i9k1uAS+CrA6k4AwG9k4EBQOCBBLDiGKAQaAdVFAE2bW0ibrOZWyBu8tCAbyIBkTLiECRwAwSAQlAjDgHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAPAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnAb1J3vlUWW8cdT094FWcMmgnCdl05as07LczoOlm2UZuikgCAUgSEwARsK+7UTQ0gABgAHWybuNDVpcGZzOi8vUW1UY3JBcER6UDdtY29wa1c5c1RZM2NXOGFkOE1qbmhVR2sxc0NXNks1ZUo5M4IA==');
+    const __system = Cell.fromBase64('te6cckECFgEABG0AAQHAAQEFoZ09AgEU/wD0pBP0vPLICwMCAWIJBAIBWAgFAgFIBwYAdbJu40NWlwZnM6Ly9RbVRjckFwRHpQN21jb3BrVzlzVFkzY1c4YWQ4TWpuaFVHazFzQ1c2SzVlSjkzggABGwr7tRNDSAAGAAubu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOCcBvUne+VRZbxx1PT3gVZwyaCcJ2XTlqzTstzOg6WbZRm6KSAN60AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRbbPPLgghMLCgCCyPhDAcx/AcoAVWBQdiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFhTLD1j6AgNQJFAjywfLB8sH9ADJ7VQC9gGSMH/gcCHXScIflTAg1wsf3iCCEP5iH9C6jk4w0x8BghD+Yh/QuvLggdMP0w9ZbBJVcMj4KCDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFssLyfkAqTgLqTgLgQitCboY8vRVBX/gIIIQvrE827rjAoIQlGqYthAMAVq6jqfTHwGCEJRqmLa68uCB0z8BMcgBghCv+Q9XWMsfyz/J+EIBcG3bPH/gMHANATZtbSJus5lbIG7y0IBvIgGRMuIQJHADBIBCUCMOAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA8AmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwBkDDTHwGCEL6xPNu68uCB+gDUWWwS0BgXFhUUQzAg10mADKkEUXehgT6WIcL/8vRwCIrkMQZSUKiBXcCpBIIA7YMJuhjy9FUFfxEB5AHTCyOBAQEjcUEz9AxvoZQB1wAwkltt4oIAs7IBbvL0A4EBASJ/cSFulVtZ9FowmMgBzwBBM/RC4hB5ECYQWRAkEDkByPgoINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WywvJ+QCpOAtUZEBSQBIAZCCpOANQBL2TXwNwjh0CqwMgqTgDWL2TW4BL4KsDqTgDAb2TgQFA4IEEsOIYoBBoB1UUAZztRNDUAfhj0gABjjb6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdMP+gDTB9MH0wdVIAP0BAcGBVBEbBfg+CjXCwqDCbry4IkUAXj6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAYEBAdcAgQEB1wDUAdCBAQHXADAUQzAE0VUC2zwVACQgqTgDAasDIKk4AwGrA6k4A21N1BU9');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -539,8 +534,8 @@ const TicketTester_types: ABIType[] = [
     {"name":"Deploy","header":2490013878,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"DeployOk","header":2952335191,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
     {"name":"FactoryDeploy","header":1829761339,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"cashback","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"WinningSplit","header":null,"fields":[{"name":"n0","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n1","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n2","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n3","type":{"kind":"simple","type":"uint","optional":false,"format":8}}]},
-    {"name":"ComputePickNumber","header":682995259,"fields":[{"name":"index","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"expected_number","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
+    {"name":"WinningSplit","header":null,"fields":[{"name":"n0","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n1","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n2","type":{"kind":"simple","type":"uint","optional":false,"format":8}}]},
+    {"name":"ComputePickNumber","header":4267843536,"fields":[{"name":"index","type":{"kind":"simple","type":"uint","optional":false,"format":16}},{"name":"expected_number","type":{"kind":"simple","type":"uint","optional":false,"format":16}}]},
     {"name":"ComputePrizeAmount","header":3199286491,"fields":[{"name":"expected_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"index_payload","type":{"kind":"simple","type":"cell","optional":false}}]},
 ]
 

@@ -10,8 +10,8 @@ async function main() {
     const system = await ContractSystem.create();
     const owner = system.treasure("owner", 0);
 
-    const picks = 900n;
-    const winning_number = 0n;
+    const picks = 1000n;
+    const winning_number = 0xFn;
     const prize_amount = toNano("1000");
     const ticket_tester = await TicketTester.fromInit(owner.address, picks, prize_amount, winning_number);
     const ticket_contract = system.open(ticket_tester);
@@ -48,13 +48,12 @@ async function main() {
     // })
 
 
-
     let winning_picks = computeWinningPicks(
         ticket_contract.address,
         picks,
         winning_number,
     );
-    assert(winning_picks.length > 0 && winning_picks.length <= 63, "Unexpected winning picks");
+    assert(winning_picks.length > 0 && winning_picks.length <= 85, "Unexpected winning picks");
     winning_picks.sort((a, b) => a.tier - b.tier);
     // get prize amount
     let expected_amount = computePrizeAmount(prize_amount, winning_picks);

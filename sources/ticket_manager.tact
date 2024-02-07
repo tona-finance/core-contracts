@@ -1,4 +1,5 @@
 import "./library/twab";
+import "./library/prize_calculator";
 import "./messages";
 import "./base_pool_account";
 
@@ -25,14 +26,18 @@ trait TicketManager with BasePoolAccount {
         let avg_balance: Int = average_balance(start, end);
         require(avg_balance > 0, "Zero average balance");
 
-        let sinit: StateInit = self._get_ticket_init(msg.period);
         // deploy and init ticket
+        let sinit: StateInit = StateInit {
+            code: msg.ticket_code,
+            data: msg.ticket_data
+        };
         self.forward(
             contractAddress(sinit),
             InitTicketInternal {
                 winning_number: msg.winning_number,
-                draw_avg_balance: msg.avg_balance,
-                user_avg_balance: avg_balance
+                total_prize_amount: msg.prize_amount,
+                picks: TOTAL_PICKS * avg_balance / msg.avg_balance,
+                jetton_amount: msg.jetton_amount * avg_balance / msg.avg_balance
             }.toCell(),
             false,
             sinit
@@ -40,7 +45,7 @@ trait TicketManager with BasePoolAccount {
     }
 
     receive(msg: PayPrizeDebtInternal) {
-        self.require_draw(msg.period);
+        self.require_master();
 
         self.debt_amount = self.debt_amount + msg.amount;
 
@@ -52,13 +57,9 @@ trait TicketManager with BasePoolAccount {
         self.requireOwner();
         require(msg.amount <= self.debt_amount, "Invalid claim amount");
 
-        // claim prize debt gas fee 0.1
-        let rest_value: Int = self.msg_value(context(), ton("0.1"));
-        require(rest_value >= 0, "Insufficient value");
-
         self.debt_amount = self.debt_amount - msg.amount;
         self.forward(
-            msg.reserve,
+            msg.prize_reserve,
             ClaimPrizeDebtInternal {
                 amount: msg.amount,
                 user: self.owner
@@ -73,7 +74,7 @@ trait TicketManager with BasePoolAccount {
     }
 
     inline fun require_draw(period: Int) {
-        require(sender() == self._get_draw_address(period), "Only from draw");
+        require(sender() == self._get_draw_address(period), "Only draw");
     }
 
     inline fun _get_draw_address(period: Int): Address {
@@ -81,12 +82,5 @@ trait TicketManager with BasePoolAccount {
         return contractAddress(sinit);
     }
 
-    inline fun _get_ticket_address(period: Int): Address {
-        let sinit: StateInit = self._get_ticket_init(period);
-        return contractAddress(sinit);
-    }
-
     abstract fun _get_draw_init(period: Int): StateInit;
-
-    abstract fun _get_ticket_init(period: Int): StateInit;
 }

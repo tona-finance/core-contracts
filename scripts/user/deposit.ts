@@ -8,7 +8,7 @@ async function main() {
     const wallet = await getWallet(keypair);
     const sender = Client.open(wallet).sender(keypair.secretKey);
 
-    const account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
+    const account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster);
     const account_client = Client.open(account);
     await account_client.send(
         sender,

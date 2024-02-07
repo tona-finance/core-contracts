@@ -1,7 +1,7 @@
 import { toNano } from "@ton/core";
 import { PoolMaster } from "../output/contract_PoolMaster";
 import { PrizeReserve } from "../output/contract_PrizeReserve";
-import { Client, getKeyPair, getWallet } from "./utils";
+import { Client, JettonData, getKeyPair, getWallet } from "./utils";
 
 async function main() {
     // Parameters
@@ -9,7 +9,7 @@ async function main() {
     const wallet = await getWallet(keypair);
     const sender = Client.open(wallet).sender(keypair.secretKey);
 
-    const pool_master = await PoolMaster.fromInit(wallet.address);
+    const pool_master = await PoolMaster.fromInit(wallet.address, JettonData.Master, JettonData.WalletCode);
     const prize_reserve = await PrizeReserve.fromInit(pool_master.address);
     await Client.open(prize_reserve).send(
         sender,

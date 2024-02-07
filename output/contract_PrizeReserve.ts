@@ -411,61 +411,6 @@ function dictValueParserTwabStore(): DictionaryValue<TwabStore> {
     }
 }
 
-export type WinningSplit = {
-    $$type: 'WinningSplit';
-    n0: bigint;
-    n1: bigint;
-    n2: bigint;
-    n3: bigint;
-}
-
-export function storeWinningSplit(src: WinningSplit) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(src.n0, 8);
-        b_0.storeUint(src.n1, 8);
-        b_0.storeUint(src.n2, 8);
-        b_0.storeUint(src.n3, 8);
-    };
-}
-
-export function loadWinningSplit(slice: Slice) {
-    let sc_0 = slice;
-    let _n0 = sc_0.loadUintBig(8);
-    let _n1 = sc_0.loadUintBig(8);
-    let _n2 = sc_0.loadUintBig(8);
-    let _n3 = sc_0.loadUintBig(8);
-    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2, n3: _n3 };
-}
-
-function loadTupleWinningSplit(source: TupleReader) {
-    let _n0 = source.readBigNumber();
-    let _n1 = source.readBigNumber();
-    let _n2 = source.readBigNumber();
-    let _n3 = source.readBigNumber();
-    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2, n3: _n3 };
-}
-
-function storeTupleWinningSplit(source: WinningSplit) {
-    let builder = new TupleBuilder();
-    builder.writeNumber(source.n0);
-    builder.writeNumber(source.n1);
-    builder.writeNumber(source.n2);
-    builder.writeNumber(source.n3);
-    return builder.build();
-}
-
-function dictValueParserWinningSplit(): DictionaryValue<WinningSplit> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeWinningSplit(src)).endCell());
-        },
-        parse: (src) => {
-            return loadWinningSplit(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type Borrow = {
     $$type: 'Borrow';
     amount: bigint;
@@ -644,6 +589,58 @@ function dictValueParserWithdrawInternal(): DictionaryValue<WithdrawInternal> {
     }
 }
 
+export type ClaimPrizeInternal = {
+    $$type: 'ClaimPrizeInternal';
+    amount: bigint;
+    period: bigint;
+    user: Address;
+}
+
+export function storeClaimPrizeInternal(src: ClaimPrizeInternal) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2692664058, 32);
+        b_0.storeCoins(src.amount);
+        b_0.storeUint(src.period, 32);
+        b_0.storeAddress(src.user);
+    };
+}
+
+export function loadClaimPrizeInternal(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2692664058) { throw Error('Invalid prefix'); }
+    let _amount = sc_0.loadCoins();
+    let _period = sc_0.loadUintBig(32);
+    let _user = sc_0.loadAddress();
+    return { $$type: 'ClaimPrizeInternal' as const, amount: _amount, period: _period, user: _user };
+}
+
+function loadTupleClaimPrizeInternal(source: TupleReader) {
+    let _amount = source.readBigNumber();
+    let _period = source.readBigNumber();
+    let _user = source.readAddress();
+    return { $$type: 'ClaimPrizeInternal' as const, amount: _amount, period: _period, user: _user };
+}
+
+function storeTupleClaimPrizeInternal(source: ClaimPrizeInternal) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.period);
+    builder.writeAddress(source.user);
+    return builder.build();
+}
+
+function dictValueParserClaimPrizeInternal(): DictionaryValue<ClaimPrizeInternal> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeClaimPrizeInternal(src)).endCell());
+        },
+        parse: (src) => {
+            return loadClaimPrizeInternal(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type Withdraw = {
     $$type: 'Withdraw';
     amount: bigint;
@@ -783,51 +780,71 @@ function dictValueParserWithdrawFinish(): DictionaryValue<WithdrawFinish> {
 export type PrepareInitTicket = {
     $$type: 'PrepareInitTicket';
     period: bigint;
-    winning_number: bigint;
     start: bigint;
     end: bigint;
+    winning_number: bigint;
+    prize_amount: bigint;
+    jetton_amount: bigint;
     avg_balance: bigint;
+    ticket_code: Cell;
+    ticket_data: Cell;
 }
 
 export function storePrepareInitTicket(src: PrepareInitTicket) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(1186592459, 32);
+        b_0.storeUint(2292165562, 32);
         b_0.storeUint(src.period, 32);
-        b_0.storeUint(src.winning_number, 32);
         b_0.storeUint(src.start, 64);
         b_0.storeUint(src.end, 64);
+        b_0.storeUint(src.winning_number, 16);
+        b_0.storeCoins(src.prize_amount);
+        b_0.storeCoins(src.jetton_amount);
         b_0.storeCoins(src.avg_balance);
+        b_0.storeRef(src.ticket_code);
+        b_0.storeRef(src.ticket_data);
     };
 }
 
 export function loadPrepareInitTicket(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1186592459) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2292165562) { throw Error('Invalid prefix'); }
     let _period = sc_0.loadUintBig(32);
-    let _winning_number = sc_0.loadUintBig(32);
     let _start = sc_0.loadUintBig(64);
     let _end = sc_0.loadUintBig(64);
+    let _winning_number = sc_0.loadUintBig(16);
+    let _prize_amount = sc_0.loadCoins();
+    let _jetton_amount = sc_0.loadCoins();
     let _avg_balance = sc_0.loadCoins();
-    return { $$type: 'PrepareInitTicket' as const, period: _period, winning_number: _winning_number, start: _start, end: _end, avg_balance: _avg_balance };
+    let _ticket_code = sc_0.loadRef();
+    let _ticket_data = sc_0.loadRef();
+    return { $$type: 'PrepareInitTicket' as const, period: _period, start: _start, end: _end, winning_number: _winning_number, prize_amount: _prize_amount, jetton_amount: _jetton_amount, avg_balance: _avg_balance, ticket_code: _ticket_code, ticket_data: _ticket_data };
 }
 
 function loadTuplePrepareInitTicket(source: TupleReader) {
     let _period = source.readBigNumber();
-    let _winning_number = source.readBigNumber();
     let _start = source.readBigNumber();
     let _end = source.readBigNumber();
+    let _winning_number = source.readBigNumber();
+    let _prize_amount = source.readBigNumber();
+    let _jetton_amount = source.readBigNumber();
     let _avg_balance = source.readBigNumber();
-    return { $$type: 'PrepareInitTicket' as const, period: _period, winning_number: _winning_number, start: _start, end: _end, avg_balance: _avg_balance };
+    let _ticket_code = source.readCell();
+    let _ticket_data = source.readCell();
+    return { $$type: 'PrepareInitTicket' as const, period: _period, start: _start, end: _end, winning_number: _winning_number, prize_amount: _prize_amount, jetton_amount: _jetton_amount, avg_balance: _avg_balance, ticket_code: _ticket_code, ticket_data: _ticket_data };
 }
 
 function storeTuplePrepareInitTicket(source: PrepareInitTicket) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.period);
-    builder.writeNumber(source.winning_number);
     builder.writeNumber(source.start);
     builder.writeNumber(source.end);
+    builder.writeNumber(source.winning_number);
+    builder.writeNumber(source.prize_amount);
+    builder.writeNumber(source.jetton_amount);
     builder.writeNumber(source.avg_balance);
+    builder.writeCell(source.ticket_code);
+    builder.writeCell(source.ticket_data);
     return builder.build();
 }
 
@@ -842,39 +859,86 @@ function dictValueParserPrepareInitTicket(): DictionaryValue<PrepareInitTicket> 
     }
 }
 
+export type PayPrizeDebtInternal = {
+    $$type: 'PayPrizeDebtInternal';
+    amount: bigint;
+    user: Address;
+}
+
+export function storePayPrizeDebtInternal(src: PayPrizeDebtInternal) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1233654330, 32);
+        b_0.storeCoins(src.amount);
+        b_0.storeAddress(src.user);
+    };
+}
+
+export function loadPayPrizeDebtInternal(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1233654330) { throw Error('Invalid prefix'); }
+    let _amount = sc_0.loadCoins();
+    let _user = sc_0.loadAddress();
+    return { $$type: 'PayPrizeDebtInternal' as const, amount: _amount, user: _user };
+}
+
+function loadTuplePayPrizeDebtInternal(source: TupleReader) {
+    let _amount = source.readBigNumber();
+    let _user = source.readAddress();
+    return { $$type: 'PayPrizeDebtInternal' as const, amount: _amount, user: _user };
+}
+
+function storeTuplePayPrizeDebtInternal(source: PayPrizeDebtInternal) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.amount);
+    builder.writeAddress(source.user);
+    return builder.build();
+}
+
+function dictValueParserPayPrizeDebtInternal(): DictionaryValue<PayPrizeDebtInternal> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storePayPrizeDebtInternal(src)).endCell());
+        },
+        parse: (src) => {
+            return loadPayPrizeDebtInternal(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type ClaimPrizeDebt = {
     $$type: 'ClaimPrizeDebt';
     amount: bigint;
-    reserve: Address;
+    prize_reserve: Address;
 }
 
 export function storeClaimPrizeDebt(src: ClaimPrizeDebt) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(1998527298, 32);
+        b_0.storeUint(738691372, 32);
         b_0.storeCoins(src.amount);
-        b_0.storeAddress(src.reserve);
+        b_0.storeAddress(src.prize_reserve);
     };
 }
 
 export function loadClaimPrizeDebt(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1998527298) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 738691372) { throw Error('Invalid prefix'); }
     let _amount = sc_0.loadCoins();
-    let _reserve = sc_0.loadAddress();
-    return { $$type: 'ClaimPrizeDebt' as const, amount: _amount, reserve: _reserve };
+    let _prize_reserve = sc_0.loadAddress();
+    return { $$type: 'ClaimPrizeDebt' as const, amount: _amount, prize_reserve: _prize_reserve };
 }
 
 function loadTupleClaimPrizeDebt(source: TupleReader) {
     let _amount = source.readBigNumber();
-    let _reserve = source.readAddress();
-    return { $$type: 'ClaimPrizeDebt' as const, amount: _amount, reserve: _reserve };
+    let _prize_reserve = source.readAddress();
+    return { $$type: 'ClaimPrizeDebt' as const, amount: _amount, prize_reserve: _prize_reserve };
 }
 
 function storeTupleClaimPrizeDebt(source: ClaimPrizeDebt) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.amount);
-    builder.writeAddress(source.reserve);
+    builder.writeAddress(source.prize_reserve);
     return builder.build();
 }
 
@@ -945,39 +1009,49 @@ export type OpenDraw = {
     $$type: 'OpenDraw';
     twab_timestamp: bigint;
     twab_amount: bigint;
+    prize_amount: bigint;
+    jetton_amount: bigint;
     refund_address: Address;
 }
 
 export function storeOpenDraw(src: OpenDraw) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2109770718, 32);
+        b_0.storeUint(2194139508, 32);
         b_0.storeUint(src.twab_timestamp, 64);
         b_0.storeUint(src.twab_amount, 128);
+        b_0.storeCoins(src.prize_amount);
+        b_0.storeCoins(src.jetton_amount);
         b_0.storeAddress(src.refund_address);
     };
 }
 
 export function loadOpenDraw(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2109770718) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2194139508) { throw Error('Invalid prefix'); }
     let _twab_timestamp = sc_0.loadUintBig(64);
     let _twab_amount = sc_0.loadUintBig(128);
+    let _prize_amount = sc_0.loadCoins();
+    let _jetton_amount = sc_0.loadCoins();
     let _refund_address = sc_0.loadAddress();
-    return { $$type: 'OpenDraw' as const, twab_timestamp: _twab_timestamp, twab_amount: _twab_amount, refund_address: _refund_address };
+    return { $$type: 'OpenDraw' as const, twab_timestamp: _twab_timestamp, twab_amount: _twab_amount, prize_amount: _prize_amount, jetton_amount: _jetton_amount, refund_address: _refund_address };
 }
 
 function loadTupleOpenDraw(source: TupleReader) {
     let _twab_timestamp = source.readBigNumber();
     let _twab_amount = source.readBigNumber();
+    let _prize_amount = source.readBigNumber();
+    let _jetton_amount = source.readBigNumber();
     let _refund_address = source.readAddress();
-    return { $$type: 'OpenDraw' as const, twab_timestamp: _twab_timestamp, twab_amount: _twab_amount, refund_address: _refund_address };
+    return { $$type: 'OpenDraw' as const, twab_timestamp: _twab_timestamp, twab_amount: _twab_amount, prize_amount: _prize_amount, jetton_amount: _jetton_amount, refund_address: _refund_address };
 }
 
 function storeTupleOpenDraw(source: OpenDraw) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.twab_timestamp);
     builder.writeNumber(source.twab_amount);
+    builder.writeNumber(source.prize_amount);
+    builder.writeNumber(source.jetton_amount);
     builder.writeAddress(source.refund_address);
     return builder.build();
 }
@@ -996,31 +1070,41 @@ function dictValueParserOpenDraw(): DictionaryValue<OpenDraw> {
 export type InitTicket = {
     $$type: 'InitTicket';
     pool_account: Address;
+    code: Cell;
+    data: Cell;
 }
 
 export function storeInitTicket(src: InitTicket) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2494876497, 32);
+        b_0.storeUint(518518837, 32);
         b_0.storeAddress(src.pool_account);
+        b_0.storeRef(src.code);
+        b_0.storeRef(src.data);
     };
 }
 
 export function loadInitTicket(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2494876497) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 518518837) { throw Error('Invalid prefix'); }
     let _pool_account = sc_0.loadAddress();
-    return { $$type: 'InitTicket' as const, pool_account: _pool_account };
+    let _code = sc_0.loadRef();
+    let _data = sc_0.loadRef();
+    return { $$type: 'InitTicket' as const, pool_account: _pool_account, code: _code, data: _data };
 }
 
 function loadTupleInitTicket(source: TupleReader) {
     let _pool_account = source.readAddress();
-    return { $$type: 'InitTicket' as const, pool_account: _pool_account };
+    let _code = source.readCell();
+    let _data = source.readCell();
+    return { $$type: 'InitTicket' as const, pool_account: _pool_account, code: _code, data: _data };
 }
 
 function storeTupleInitTicket(source: InitTicket) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.pool_account);
+    builder.writeCell(source.code);
+    builder.writeCell(source.data);
     return builder.build();
 }
 
@@ -1035,54 +1119,54 @@ function dictValueParserInitTicket(): DictionaryValue<InitTicket> {
     }
 }
 
-export type ClaimPrizeInternal = {
-    $$type: 'ClaimPrizeInternal';
+export type ClaimJettonInternal = {
+    $$type: 'ClaimJettonInternal';
+    amount: bigint;
+    period: bigint;
     user: Address;
-    pool_account: Address;
-    prize_scale: bigint;
 }
 
-export function storeClaimPrizeInternal(src: ClaimPrizeInternal) {
+export function storeClaimJettonInternal(src: ClaimJettonInternal) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2386274623, 32);
+        b_0.storeUint(3910874751, 32);
+        b_0.storeCoins(src.amount);
+        b_0.storeUint(src.period, 32);
         b_0.storeAddress(src.user);
-        b_0.storeAddress(src.pool_account);
-        b_0.storeUint(src.prize_scale, 32);
     };
 }
 
-export function loadClaimPrizeInternal(slice: Slice) {
+export function loadClaimJettonInternal(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2386274623) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 3910874751) { throw Error('Invalid prefix'); }
+    let _amount = sc_0.loadCoins();
+    let _period = sc_0.loadUintBig(32);
     let _user = sc_0.loadAddress();
-    let _pool_account = sc_0.loadAddress();
-    let _prize_scale = sc_0.loadUintBig(32);
-    return { $$type: 'ClaimPrizeInternal' as const, user: _user, pool_account: _pool_account, prize_scale: _prize_scale };
+    return { $$type: 'ClaimJettonInternal' as const, amount: _amount, period: _period, user: _user };
 }
 
-function loadTupleClaimPrizeInternal(source: TupleReader) {
+function loadTupleClaimJettonInternal(source: TupleReader) {
+    let _amount = source.readBigNumber();
+    let _period = source.readBigNumber();
     let _user = source.readAddress();
-    let _pool_account = source.readAddress();
-    let _prize_scale = source.readBigNumber();
-    return { $$type: 'ClaimPrizeInternal' as const, user: _user, pool_account: _pool_account, prize_scale: _prize_scale };
+    return { $$type: 'ClaimJettonInternal' as const, amount: _amount, period: _period, user: _user };
 }
 
-function storeTupleClaimPrizeInternal(source: ClaimPrizeInternal) {
+function storeTupleClaimJettonInternal(source: ClaimJettonInternal) {
     let builder = new TupleBuilder();
+    builder.writeNumber(source.amount);
+    builder.writeNumber(source.period);
     builder.writeAddress(source.user);
-    builder.writeAddress(source.pool_account);
-    builder.writeNumber(source.prize_scale);
     return builder.build();
 }
 
-function dictValueParserClaimPrizeInternal(): DictionaryValue<ClaimPrizeInternal> {
+function dictValueParserClaimJettonInternal(): DictionaryValue<ClaimJettonInternal> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeClaimPrizeInternal(src)).endCell());
+            buidler.storeRef(beginCell().store(storeClaimJettonInternal(src)).endCell());
         },
         parse: (src) => {
-            return loadClaimPrizeInternal(src.loadRef().beginParse());
+            return loadClaimJettonInternal(src.loadRef().beginParse());
         }
     }
 }
@@ -1090,41 +1174,46 @@ function dictValueParserClaimPrizeInternal(): DictionaryValue<ClaimPrizeInternal
 export type InitTicketInternal = {
     $$type: 'InitTicketInternal';
     winning_number: bigint;
-    draw_avg_balance: bigint;
-    user_avg_balance: bigint;
+    total_prize_amount: bigint;
+    picks: bigint;
+    jetton_amount: bigint;
 }
 
 export function storeInitTicketInternal(src: InitTicketInternal) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(1186322253, 32);
-        b_0.storeUint(src.winning_number, 32);
-        b_0.storeCoins(src.draw_avg_balance);
-        b_0.storeCoins(src.user_avg_balance);
+        b_0.storeUint(2551503563, 32);
+        b_0.storeUint(src.winning_number, 16);
+        b_0.storeCoins(src.total_prize_amount);
+        b_0.storeUint(src.picks, 16);
+        b_0.storeCoins(src.jetton_amount);
     };
 }
 
 export function loadInitTicketInternal(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1186322253) { throw Error('Invalid prefix'); }
-    let _winning_number = sc_0.loadUintBig(32);
-    let _draw_avg_balance = sc_0.loadCoins();
-    let _user_avg_balance = sc_0.loadCoins();
-    return { $$type: 'InitTicketInternal' as const, winning_number: _winning_number, draw_avg_balance: _draw_avg_balance, user_avg_balance: _user_avg_balance };
+    if (sc_0.loadUint(32) !== 2551503563) { throw Error('Invalid prefix'); }
+    let _winning_number = sc_0.loadUintBig(16);
+    let _total_prize_amount = sc_0.loadCoins();
+    let _picks = sc_0.loadUintBig(16);
+    let _jetton_amount = sc_0.loadCoins();
+    return { $$type: 'InitTicketInternal' as const, winning_number: _winning_number, total_prize_amount: _total_prize_amount, picks: _picks, jetton_amount: _jetton_amount };
 }
 
 function loadTupleInitTicketInternal(source: TupleReader) {
     let _winning_number = source.readBigNumber();
-    let _draw_avg_balance = source.readBigNumber();
-    let _user_avg_balance = source.readBigNumber();
-    return { $$type: 'InitTicketInternal' as const, winning_number: _winning_number, draw_avg_balance: _draw_avg_balance, user_avg_balance: _user_avg_balance };
+    let _total_prize_amount = source.readBigNumber();
+    let _picks = source.readBigNumber();
+    let _jetton_amount = source.readBigNumber();
+    return { $$type: 'InitTicketInternal' as const, winning_number: _winning_number, total_prize_amount: _total_prize_amount, picks: _picks, jetton_amount: _jetton_amount };
 }
 
 function storeTupleInitTicketInternal(source: InitTicketInternal) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.winning_number);
-    builder.writeNumber(source.draw_avg_balance);
-    builder.writeNumber(source.user_avg_balance);
+    builder.writeNumber(source.total_prize_amount);
+    builder.writeNumber(source.picks);
+    builder.writeNumber(source.jetton_amount);
     return builder.build();
 }
 
@@ -1139,86 +1228,39 @@ function dictValueParserInitTicketInternal(): DictionaryValue<InitTicketInternal
     }
 }
 
-export type PayPrizeDebtInternal = {
-    $$type: 'PayPrizeDebtInternal';
-    user: Address;
-    amount: bigint;
-    period: bigint;
-}
-
-export function storePayPrizeDebtInternal(src: PayPrizeDebtInternal) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(1422626960, 32);
-        b_0.storeAddress(src.user);
-        b_0.storeCoins(src.amount);
-        b_0.storeUint(src.period, 32);
-    };
-}
-
-export function loadPayPrizeDebtInternal(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1422626960) { throw Error('Invalid prefix'); }
-    let _user = sc_0.loadAddress();
-    let _amount = sc_0.loadCoins();
-    let _period = sc_0.loadUintBig(32);
-    return { $$type: 'PayPrizeDebtInternal' as const, user: _user, amount: _amount, period: _period };
-}
-
-function loadTuplePayPrizeDebtInternal(source: TupleReader) {
-    let _user = source.readAddress();
-    let _amount = source.readBigNumber();
-    let _period = source.readBigNumber();
-    return { $$type: 'PayPrizeDebtInternal' as const, user: _user, amount: _amount, period: _period };
-}
-
-function storeTuplePayPrizeDebtInternal(source: PayPrizeDebtInternal) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.user);
-    builder.writeNumber(source.amount);
-    builder.writeNumber(source.period);
-    return builder.build();
-}
-
-function dictValueParserPayPrizeDebtInternal(): DictionaryValue<PayPrizeDebtInternal> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storePayPrizeDebtInternal(src)).endCell());
-        },
-        parse: (src) => {
-            return loadPayPrizeDebtInternal(src.loadRef().beginParse());
-        }
-    }
-}
-
 export type ClaimPrize = {
     $$type: 'ClaimPrize';
     index_payload: Cell;
+    pool_master: Address;
 }
 
 export function storeClaimPrize(src: ClaimPrize) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2320191705, 32);
+        b_0.storeUint(2348973855, 32);
         b_0.storeRef(src.index_payload);
+        b_0.storeAddress(src.pool_master);
     };
 }
 
 export function loadClaimPrize(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2320191705) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 2348973855) { throw Error('Invalid prefix'); }
     let _index_payload = sc_0.loadRef();
-    return { $$type: 'ClaimPrize' as const, index_payload: _index_payload };
+    let _pool_master = sc_0.loadAddress();
+    return { $$type: 'ClaimPrize' as const, index_payload: _index_payload, pool_master: _pool_master };
 }
 
 function loadTupleClaimPrize(source: TupleReader) {
     let _index_payload = source.readCell();
-    return { $$type: 'ClaimPrize' as const, index_payload: _index_payload };
+    let _pool_master = source.readAddress();
+    return { $$type: 'ClaimPrize' as const, index_payload: _index_payload, pool_master: _pool_master };
 }
 
 function storeTupleClaimPrize(source: ClaimPrize) {
     let builder = new TupleBuilder();
     builder.writeCell(source.index_payload);
+    builder.writeAddress(source.pool_master);
     return builder.build();
 }
 
@@ -1229,6 +1271,48 @@ function dictValueParserClaimPrize(): DictionaryValue<ClaimPrize> {
         },
         parse: (src) => {
             return loadClaimPrize(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type ClaimJetton = {
+    $$type: 'ClaimJetton';
+    pool_master: Address;
+}
+
+export function storeClaimJetton(src: ClaimJetton) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(866039975, 32);
+        b_0.storeAddress(src.pool_master);
+    };
+}
+
+export function loadClaimJetton(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 866039975) { throw Error('Invalid prefix'); }
+    let _pool_master = sc_0.loadAddress();
+    return { $$type: 'ClaimJetton' as const, pool_master: _pool_master };
+}
+
+function loadTupleClaimJetton(source: TupleReader) {
+    let _pool_master = source.readAddress();
+    return { $$type: 'ClaimJetton' as const, pool_master: _pool_master };
+}
+
+function storeTupleClaimJetton(source: ClaimJetton) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.pool_master);
+    return builder.build();
+}
+
+function dictValueParserClaimJetton(): DictionaryValue<ClaimJetton> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeClaimJetton(src)).endCell());
+        },
+        parse: (src) => {
+            return loadClaimJetton(src.loadRef().beginParse());
         }
     }
 }
@@ -1280,28 +1364,163 @@ function dictValueParserClaimPrizeDebtInternal(): DictionaryValue<ClaimPrizeDebt
     }
 }
 
+export type JettonNotification = {
+    $$type: 'JettonNotification';
+    query_id: bigint;
+    amount: bigint;
+    from: Address;
+    forward_payload: Cell;
+}
+
+export function storeJettonNotification(src: JettonNotification) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(1935855772, 32);
+        b_0.storeUint(src.query_id, 64);
+        b_0.storeCoins(src.amount);
+        b_0.storeAddress(src.from);
+        b_0.storeBuilder(src.forward_payload.asBuilder());
+    };
+}
+
+export function loadJettonNotification(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 1935855772) { throw Error('Invalid prefix'); }
+    let _query_id = sc_0.loadUintBig(64);
+    let _amount = sc_0.loadCoins();
+    let _from = sc_0.loadAddress();
+    let _forward_payload = sc_0.asCell();
+    return { $$type: 'JettonNotification' as const, query_id: _query_id, amount: _amount, from: _from, forward_payload: _forward_payload };
+}
+
+function loadTupleJettonNotification(source: TupleReader) {
+    let _query_id = source.readBigNumber();
+    let _amount = source.readBigNumber();
+    let _from = source.readAddress();
+    let _forward_payload = source.readCell();
+    return { $$type: 'JettonNotification' as const, query_id: _query_id, amount: _amount, from: _from, forward_payload: _forward_payload };
+}
+
+function storeTupleJettonNotification(source: JettonNotification) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.query_id);
+    builder.writeNumber(source.amount);
+    builder.writeAddress(source.from);
+    builder.writeSlice(source.forward_payload);
+    return builder.build();
+}
+
+function dictValueParserJettonNotification(): DictionaryValue<JettonNotification> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeJettonNotification(src)).endCell());
+        },
+        parse: (src) => {
+            return loadJettonNotification(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type JettonTransfer = {
+    $$type: 'JettonTransfer';
+    query_id: bigint;
+    amount: bigint;
+    destination: Address;
+    response_destination: Address;
+    custom_payload: Cell | null;
+    forward_ton_amount: bigint;
+    forward_payload: Cell;
+}
+
+export function storeJettonTransfer(src: JettonTransfer) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(260734629, 32);
+        b_0.storeUint(src.query_id, 64);
+        b_0.storeCoins(src.amount);
+        b_0.storeAddress(src.destination);
+        b_0.storeAddress(src.response_destination);
+        if (src.custom_payload !== null && src.custom_payload !== undefined) { b_0.storeBit(true).storeRef(src.custom_payload); } else { b_0.storeBit(false); }
+        b_0.storeCoins(src.forward_ton_amount);
+        b_0.storeBuilder(src.forward_payload.asBuilder());
+    };
+}
+
+export function loadJettonTransfer(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 260734629) { throw Error('Invalid prefix'); }
+    let _query_id = sc_0.loadUintBig(64);
+    let _amount = sc_0.loadCoins();
+    let _destination = sc_0.loadAddress();
+    let _response_destination = sc_0.loadAddress();
+    let _custom_payload = sc_0.loadBit() ? sc_0.loadRef() : null;
+    let _forward_ton_amount = sc_0.loadCoins();
+    let _forward_payload = sc_0.asCell();
+    return { $$type: 'JettonTransfer' as const, query_id: _query_id, amount: _amount, destination: _destination, response_destination: _response_destination, custom_payload: _custom_payload, forward_ton_amount: _forward_ton_amount, forward_payload: _forward_payload };
+}
+
+function loadTupleJettonTransfer(source: TupleReader) {
+    let _query_id = source.readBigNumber();
+    let _amount = source.readBigNumber();
+    let _destination = source.readAddress();
+    let _response_destination = source.readAddress();
+    let _custom_payload = source.readCellOpt();
+    let _forward_ton_amount = source.readBigNumber();
+    let _forward_payload = source.readCell();
+    return { $$type: 'JettonTransfer' as const, query_id: _query_id, amount: _amount, destination: _destination, response_destination: _response_destination, custom_payload: _custom_payload, forward_ton_amount: _forward_ton_amount, forward_payload: _forward_payload };
+}
+
+function storeTupleJettonTransfer(source: JettonTransfer) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.query_id);
+    builder.writeNumber(source.amount);
+    builder.writeAddress(source.destination);
+    builder.writeAddress(source.response_destination);
+    builder.writeCell(source.custom_payload);
+    builder.writeNumber(source.forward_ton_amount);
+    builder.writeSlice(source.forward_payload);
+    return builder.build();
+}
+
+function dictValueParserJettonTransfer(): DictionaryValue<JettonTransfer> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeJettonTransfer(src)).endCell());
+        },
+        parse: (src) => {
+            return loadJettonTransfer(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type PoolMasterData = {
     $$type: 'PoolMasterData';
     owner: Address;
-    prize_reserve: Address;
+    jetton_master: Address;
+    jetton_wallet_code: Cell;
     twab: Twab;
+    next_period: bigint;
     share_amount: bigint;
     borrow_amount: bigint;
     prize_amount: bigint;
-    next_period: bigint;
+    avail_prize_amount: bigint;
+    jetton_amount: bigint;
 }
 
 export function storePoolMasterData(src: PoolMasterData) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeAddress(src.owner);
-        b_0.storeAddress(src.prize_reserve);
+        b_0.storeAddress(src.jetton_master);
+        b_0.storeRef(src.jetton_wallet_code);
         b_0.store(storeTwab(src.twab));
+        b_0.storeUint(src.next_period, 32);
         b_0.storeCoins(src.share_amount);
         b_0.storeCoins(src.borrow_amount);
         let b_1 = new Builder();
         b_1.storeCoins(src.prize_amount);
-        b_1.storeUint(src.next_period, 32);
+        b_1.storeCoins(src.avail_prize_amount);
+        b_1.storeCoins(src.jetton_amount);
         b_0.storeRef(b_1.endCell());
     };
 }
@@ -1309,36 +1528,45 @@ export function storePoolMasterData(src: PoolMasterData) {
 export function loadPoolMasterData(slice: Slice) {
     let sc_0 = slice;
     let _owner = sc_0.loadAddress();
-    let _prize_reserve = sc_0.loadAddress();
+    let _jetton_master = sc_0.loadAddress();
+    let _jetton_wallet_code = sc_0.loadRef();
     let _twab = loadTwab(sc_0);
+    let _next_period = sc_0.loadUintBig(32);
     let _share_amount = sc_0.loadCoins();
     let _borrow_amount = sc_0.loadCoins();
     let sc_1 = sc_0.loadRef().beginParse();
     let _prize_amount = sc_1.loadCoins();
-    let _next_period = sc_1.loadUintBig(32);
-    return { $$type: 'PoolMasterData' as const, owner: _owner, prize_reserve: _prize_reserve, twab: _twab, share_amount: _share_amount, borrow_amount: _borrow_amount, prize_amount: _prize_amount, next_period: _next_period };
+    let _avail_prize_amount = sc_1.loadCoins();
+    let _jetton_amount = sc_1.loadCoins();
+    return { $$type: 'PoolMasterData' as const, owner: _owner, jetton_master: _jetton_master, jetton_wallet_code: _jetton_wallet_code, twab: _twab, next_period: _next_period, share_amount: _share_amount, borrow_amount: _borrow_amount, prize_amount: _prize_amount, avail_prize_amount: _avail_prize_amount, jetton_amount: _jetton_amount };
 }
 
 function loadTuplePoolMasterData(source: TupleReader) {
     let _owner = source.readAddress();
-    let _prize_reserve = source.readAddress();
+    let _jetton_master = source.readAddress();
+    let _jetton_wallet_code = source.readCell();
     const _twab = loadTupleTwab(source.readTuple());
+    let _next_period = source.readBigNumber();
     let _share_amount = source.readBigNumber();
     let _borrow_amount = source.readBigNumber();
     let _prize_amount = source.readBigNumber();
-    let _next_period = source.readBigNumber();
-    return { $$type: 'PoolMasterData' as const, owner: _owner, prize_reserve: _prize_reserve, twab: _twab, share_amount: _share_amount, borrow_amount: _borrow_amount, prize_amount: _prize_amount, next_period: _next_period };
+    let _avail_prize_amount = source.readBigNumber();
+    let _jetton_amount = source.readBigNumber();
+    return { $$type: 'PoolMasterData' as const, owner: _owner, jetton_master: _jetton_master, jetton_wallet_code: _jetton_wallet_code, twab: _twab, next_period: _next_period, share_amount: _share_amount, borrow_amount: _borrow_amount, prize_amount: _prize_amount, avail_prize_amount: _avail_prize_amount, jetton_amount: _jetton_amount };
 }
 
 function storeTuplePoolMasterData(source: PoolMasterData) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.owner);
-    builder.writeAddress(source.prize_reserve);
+    builder.writeAddress(source.jetton_master);
+    builder.writeCell(source.jetton_wallet_code);
     builder.writeTuple(storeTupleTwab(source.twab));
+    builder.writeNumber(source.next_period);
     builder.writeNumber(source.share_amount);
     builder.writeNumber(source.borrow_amount);
     builder.writeNumber(source.prize_amount);
-    builder.writeNumber(source.next_period);
+    builder.writeNumber(source.avail_prize_amount);
+    builder.writeNumber(source.jetton_amount);
     return builder.build();
 }
 
@@ -1357,7 +1585,6 @@ export type PoolAccountData = {
     $$type: 'PoolAccountData';
     owner: Address;
     master: Address;
-    prize_reserve: Address;
     share_amount: bigint;
     debt_amount: bigint;
 }
@@ -1367,11 +1594,8 @@ export function storePoolAccountData(src: PoolAccountData) {
         let b_0 = builder;
         b_0.storeAddress(src.owner);
         b_0.storeAddress(src.master);
-        b_0.storeAddress(src.prize_reserve);
         b_0.storeCoins(src.share_amount);
-        let b_1 = new Builder();
-        b_1.storeCoins(src.debt_amount);
-        b_0.storeRef(b_1.endCell());
+        b_0.storeCoins(src.debt_amount);
     };
 }
 
@@ -1379,27 +1603,23 @@ export function loadPoolAccountData(slice: Slice) {
     let sc_0 = slice;
     let _owner = sc_0.loadAddress();
     let _master = sc_0.loadAddress();
-    let _prize_reserve = sc_0.loadAddress();
     let _share_amount = sc_0.loadCoins();
-    let sc_1 = sc_0.loadRef().beginParse();
-    let _debt_amount = sc_1.loadCoins();
-    return { $$type: 'PoolAccountData' as const, owner: _owner, master: _master, prize_reserve: _prize_reserve, share_amount: _share_amount, debt_amount: _debt_amount };
+    let _debt_amount = sc_0.loadCoins();
+    return { $$type: 'PoolAccountData' as const, owner: _owner, master: _master, share_amount: _share_amount, debt_amount: _debt_amount };
 }
 
 function loadTuplePoolAccountData(source: TupleReader) {
     let _owner = source.readAddress();
     let _master = source.readAddress();
-    let _prize_reserve = source.readAddress();
     let _share_amount = source.readBigNumber();
     let _debt_amount = source.readBigNumber();
-    return { $$type: 'PoolAccountData' as const, owner: _owner, master: _master, prize_reserve: _prize_reserve, share_amount: _share_amount, debt_amount: _debt_amount };
+    return { $$type: 'PoolAccountData' as const, owner: _owner, master: _master, share_amount: _share_amount, debt_amount: _debt_amount };
 }
 
 function storeTuplePoolAccountData(source: PoolAccountData) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.owner);
     builder.writeAddress(source.master);
-    builder.writeAddress(source.prize_reserve);
     builder.writeNumber(source.share_amount);
     builder.writeNumber(source.debt_amount);
     return builder.build();
@@ -1420,14 +1640,12 @@ export type DrawData = {
     $$type: 'DrawData';
     active: boolean;
     pool_master: Address;
-    prize_reserve: Address;
     period: bigint;
     start: Twab | null;
     end: Twab | null;
     prize_amount: bigint;
-    avail_prize_amount: bigint;
+    jetton_amount: bigint;
     winning_number: bigint;
-    deadline: bigint;
 }
 
 export function storeDrawData(src: DrawData) {
@@ -1435,16 +1653,12 @@ export function storeDrawData(src: DrawData) {
         let b_0 = builder;
         b_0.storeBit(src.active);
         b_0.storeAddress(src.pool_master);
-        b_0.storeAddress(src.prize_reserve);
         b_0.storeUint(src.period, 32);
         if (src.start !== null && src.start !== undefined) { b_0.storeBit(true); b_0.store(storeTwab(src.start)); } else { b_0.storeBit(false); }
         if (src.end !== null && src.end !== undefined) { b_0.storeBit(true); b_0.store(storeTwab(src.end)); } else { b_0.storeBit(false); }
-        let b_1 = new Builder();
-        b_1.storeCoins(src.prize_amount);
-        b_1.storeCoins(src.avail_prize_amount);
-        b_1.storeUint(src.winning_number, 32);
-        b_1.storeUint(src.deadline, 64);
-        b_0.storeRef(b_1.endCell());
+        b_0.storeCoins(src.prize_amount);
+        b_0.storeCoins(src.jetton_amount);
+        b_0.storeUint(src.winning_number, 16);
     };
 }
 
@@ -1452,39 +1666,33 @@ export function loadDrawData(slice: Slice) {
     let sc_0 = slice;
     let _active = sc_0.loadBit();
     let _pool_master = sc_0.loadAddress();
-    let _prize_reserve = sc_0.loadAddress();
     let _period = sc_0.loadUintBig(32);
     let _start = sc_0.loadBit() ? loadTwab(sc_0) : null;
     let _end = sc_0.loadBit() ? loadTwab(sc_0) : null;
-    let sc_1 = sc_0.loadRef().beginParse();
-    let _prize_amount = sc_1.loadCoins();
-    let _avail_prize_amount = sc_1.loadCoins();
-    let _winning_number = sc_1.loadUintBig(32);
-    let _deadline = sc_1.loadUintBig(64);
-    return { $$type: 'DrawData' as const, active: _active, pool_master: _pool_master, prize_reserve: _prize_reserve, period: _period, start: _start, end: _end, prize_amount: _prize_amount, avail_prize_amount: _avail_prize_amount, winning_number: _winning_number, deadline: _deadline };
+    let _prize_amount = sc_0.loadCoins();
+    let _jetton_amount = sc_0.loadCoins();
+    let _winning_number = sc_0.loadUintBig(16);
+    return { $$type: 'DrawData' as const, active: _active, pool_master: _pool_master, period: _period, start: _start, end: _end, prize_amount: _prize_amount, jetton_amount: _jetton_amount, winning_number: _winning_number };
 }
 
 function loadTupleDrawData(source: TupleReader) {
     let _active = source.readBoolean();
     let _pool_master = source.readAddress();
-    let _prize_reserve = source.readAddress();
     let _period = source.readBigNumber();
     const _start_p = source.readTupleOpt();
     const _start = _start_p ? loadTupleTwab(_start_p) : null;
     const _end_p = source.readTupleOpt();
     const _end = _end_p ? loadTupleTwab(_end_p) : null;
     let _prize_amount = source.readBigNumber();
-    let _avail_prize_amount = source.readBigNumber();
+    let _jetton_amount = source.readBigNumber();
     let _winning_number = source.readBigNumber();
-    let _deadline = source.readBigNumber();
-    return { $$type: 'DrawData' as const, active: _active, pool_master: _pool_master, prize_reserve: _prize_reserve, period: _period, start: _start, end: _end, prize_amount: _prize_amount, avail_prize_amount: _avail_prize_amount, winning_number: _winning_number, deadline: _deadline };
+    return { $$type: 'DrawData' as const, active: _active, pool_master: _pool_master, period: _period, start: _start, end: _end, prize_amount: _prize_amount, jetton_amount: _jetton_amount, winning_number: _winning_number };
 }
 
 function storeTupleDrawData(source: DrawData) {
     let builder = new TupleBuilder();
     builder.writeBoolean(source.active);
     builder.writeAddress(source.pool_master);
-    builder.writeAddress(source.prize_reserve);
     builder.writeNumber(source.period);
     if (source.start !== null && source.start !== undefined) {
         builder.writeTuple(storeTupleTwab(source.start));
@@ -1497,9 +1705,8 @@ function storeTupleDrawData(source: DrawData) {
         builder.writeTuple(null);
     }
     builder.writeNumber(source.prize_amount);
-    builder.writeNumber(source.avail_prize_amount);
+    builder.writeNumber(source.jetton_amount);
     builder.writeNumber(source.winning_number);
-    builder.writeNumber(source.deadline);
     return builder.build();
 }
 
@@ -1518,10 +1725,10 @@ export type TicketData = {
     $$type: 'TicketData';
     active: boolean;
     owner: Address;
-    pool_account: Address;
-    draw: Address;
+    pool_master: Address;
     period: bigint;
     picks: bigint;
+    jetton_amount: bigint;
 }
 
 export function storeTicketData(src: TicketData) {
@@ -1529,10 +1736,10 @@ export function storeTicketData(src: TicketData) {
         let b_0 = builder;
         b_0.storeBit(src.active);
         b_0.storeAddress(src.owner);
-        b_0.storeAddress(src.pool_account);
-        b_0.storeAddress(src.draw);
+        b_0.storeAddress(src.pool_master);
         b_0.storeUint(src.period, 32);
-        b_0.storeUint(src.picks, 32);
+        b_0.storeUint(src.picks, 16);
+        b_0.storeCoins(src.jetton_amount);
     };
 }
 
@@ -1540,31 +1747,31 @@ export function loadTicketData(slice: Slice) {
     let sc_0 = slice;
     let _active = sc_0.loadBit();
     let _owner = sc_0.loadAddress();
-    let _pool_account = sc_0.loadAddress();
-    let _draw = sc_0.loadAddress();
+    let _pool_master = sc_0.loadAddress();
     let _period = sc_0.loadUintBig(32);
-    let _picks = sc_0.loadUintBig(32);
-    return { $$type: 'TicketData' as const, active: _active, owner: _owner, pool_account: _pool_account, draw: _draw, period: _period, picks: _picks };
+    let _picks = sc_0.loadUintBig(16);
+    let _jetton_amount = sc_0.loadCoins();
+    return { $$type: 'TicketData' as const, active: _active, owner: _owner, pool_master: _pool_master, period: _period, picks: _picks, jetton_amount: _jetton_amount };
 }
 
 function loadTupleTicketData(source: TupleReader) {
     let _active = source.readBoolean();
     let _owner = source.readAddress();
-    let _pool_account = source.readAddress();
-    let _draw = source.readAddress();
+    let _pool_master = source.readAddress();
     let _period = source.readBigNumber();
     let _picks = source.readBigNumber();
-    return { $$type: 'TicketData' as const, active: _active, owner: _owner, pool_account: _pool_account, draw: _draw, period: _period, picks: _picks };
+    let _jetton_amount = source.readBigNumber();
+    return { $$type: 'TicketData' as const, active: _active, owner: _owner, pool_master: _pool_master, period: _period, picks: _picks, jetton_amount: _jetton_amount };
 }
 
 function storeTupleTicketData(source: TicketData) {
     let builder = new TupleBuilder();
     builder.writeBoolean(source.active);
     builder.writeAddress(source.owner);
-    builder.writeAddress(source.pool_account);
-    builder.writeAddress(source.draw);
+    builder.writeAddress(source.pool_master);
     builder.writeNumber(source.period);
     builder.writeNumber(source.picks);
+    builder.writeNumber(source.jetton_amount);
     return builder.build();
 }
 
@@ -1718,6 +1925,56 @@ function dictValueParserChangeOwnerOk(): DictionaryValue<ChangeOwnerOk> {
     }
 }
 
+export type WinningSplit = {
+    $$type: 'WinningSplit';
+    n0: bigint;
+    n1: bigint;
+    n2: bigint;
+}
+
+export function storeWinningSplit(src: WinningSplit) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(src.n0, 8);
+        b_0.storeUint(src.n1, 8);
+        b_0.storeUint(src.n2, 8);
+    };
+}
+
+export function loadWinningSplit(slice: Slice) {
+    let sc_0 = slice;
+    let _n0 = sc_0.loadUintBig(8);
+    let _n1 = sc_0.loadUintBig(8);
+    let _n2 = sc_0.loadUintBig(8);
+    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2 };
+}
+
+function loadTupleWinningSplit(source: TupleReader) {
+    let _n0 = source.readBigNumber();
+    let _n1 = source.readBigNumber();
+    let _n2 = source.readBigNumber();
+    return { $$type: 'WinningSplit' as const, n0: _n0, n1: _n1, n2: _n2 };
+}
+
+function storeTupleWinningSplit(source: WinningSplit) {
+    let builder = new TupleBuilder();
+    builder.writeNumber(source.n0);
+    builder.writeNumber(source.n1);
+    builder.writeNumber(source.n2);
+    return builder.build();
+}
+
+function dictValueParserWinningSplit(): DictionaryValue<WinningSplit> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeWinningSplit(src)).endCell());
+        },
+        parse: (src) => {
+            return loadWinningSplit(src.loadRef().beginParse());
+        }
+    }
+}
+
  type PrizeReserve_init_args = {
     $$type: 'PrizeReserve_init_args';
     pool_master: Address;
@@ -1731,8 +1988,8 @@ function initPrizeReserve_init_args(src: PrizeReserve_init_args) {
 }
 
 async function PrizeReserve_init(pool_master: Address) {
-    const __code = Cell.fromBase64('te6ccgECFQEABWcAART/APSkE/S88sgLAQIBYgIDAs7QAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxZ2zzy4ILI+EMBzH8BygABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wye1UFAQCAVgODwLUAZIwf+BwIddJwh+VMCDXCx/eIMAAItdJwSGwklt/4CCCEDQs11W6jrUw0x8BghA0LNdVuvLggfoA+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiBJsEts8f+CCEJRqmLa64wIwcAUGArpRIgGCAJy/AvhD+ChUIjDbPHBZyHABywFzAcsBcAHLABLMzMn5AMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCI+ELHBRLy9PhBbyQHCAKY0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yfhCAXBtbW0ibrOZWyBu8tCAbyIBkTLi+EFvJBNfA/gnbxABoYIImJaAueMPfwsMAbwD0PQEMG0hgVu5AYAQ9A9vofLghwGBW7kiAoAQ9BcigSRuAYAQ9A9vofLgh4EkbgECgBD0FwKCAKTNAYAQ9A9vofLghxKCAKTNAQKAEPQXyAHI9ADJAcxwAcoAVSAECQGibDH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMPoAMXHXIfoAMfoAMKcDqwCCCJiWgKD4J28QggiYloChAaEioXD7AnBagQCCbW1tCgC8WiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlgg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WyQHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wANAe6CCJiWgHD7AhAkcAMEgQCCUCPIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA0B3BAkcAMEgEJQI8hxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsADQCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzACVu70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwnZdOWrNOy3M6DpZtlGbopIAgFIEBEAEbCvu1E0NIAAYAIBIBITASWuGG2efBO3iEEETEtAUKkINglAFAB1rN3Ghq0uDM5nReXqLayuKgpsiIlszSzOquiqrootywiojKyu6E4JRsbuqqpKSkxNSy8GyqitDizKUEAAsu1E0NQB+GPSAAGOIPpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4Igx4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR');
-    const __system = Cell.fromBase64('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');
+    const __code = Cell.fromBase64('te6ccgECFQEABSsAART/APSkE/S88sgLAQIBYgIDAs7QAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxZ2zzy4ILI+EMBzH8BygABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8Wye1UFAQCAVgODwLUAZIwf+BwIddJwh+VMCDXCx/eIMAAItdJwSGwklt/4CCCEDQs11W6jrUw0x8BghA0LNdVuvLggfoA+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiBJsEts8f+CCEJRqmLa64wIwcAUGArRRIgGCAJy/AvhDURLbPHBZyHABywFzAcsBcAHLABLMzMn5AMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCI+ELHBRLy9PhBbyQHCAKY0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yfhCAXBtbW0ibrOZWyBu8tCAbyIBkTLi+EFvJBNfA/gnbxABoYIImJaAueMPfwsMAYgC0PQEMG0hgVu5AYAQ9A9vofLghwGBW7kiAoAQ9BcCgSRuAYAQ9A9vofLghxKBJG4BAoAQ9BfIAcj0AMkBzHABygBAAwkBomwx+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiDD6ADFx1yH6ADH6ADCnA6sAggiYloCg+CdvEIIImJaAoQGhIqFw+wJwWoEAgm1tbQoAflkg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYBINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WyQHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wANAe6CCJiWgHD7AhAkcAMEgQCCUCPIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA0B3BAkcAMEgEJQI8hxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsADQCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzACVu70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwnZdOWrNOy3M6DpZtlGbopIAgFIEBEAEbCvu1E0NIAAYAIBIBITASWuGG2efBO3iEEETEtAUKkINglAFAB1rN3Ghq0uDM5nReXqLatOSWrMLMoMJqpOTmtNLs8nBmaMSUpnKg0PTK4Mi01rTEpmKU8mjkkJZqpGsEAAsu1E0NQB+GPSAAGOIPpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4Igx4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR');
+    const __system = Cell.fromBase64('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');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -1770,29 +2027,29 @@ const PrizeReserve_errors: { [key: number]: { message: string } } = {
     3012: { message: `Invalid deposit amount` },
     3556: { message: `Draw not initialized` },
     4429: { message: `Invalid sender` },
-    6571: { message: `Draw is not over` },
+    5910: { message: `Only ticket` },
+    5913: { message: `Only draw` },
     8459: { message: `Invalid twab timestamp` },
-    8888: { message: `Only from draw` },
     10349: { message: `Start time >= timestamp` },
     11439: { message: `Zero average balance` },
     16022: { message: `Insufficient picks` },
+    16874: { message: `Zero jetton amount` },
     16960: { message: `Invalid claim amount` },
     17110: { message: `Draw already initialized` },
     19074: { message: `Empty twab store` },
     19102: { message: `Account locked` },
     19317: { message: `Invalid timestamp` },
     23432: { message: `timestamp >= End time` },
-    24632: { message: `Only from pool master` },
     27755: { message: `Insufficient prize amount` },
     30347: { message: `Invalid repay amount` },
     30919: { message: `Ticket is active` },
     31206: { message: `Start time >= End time` },
     40127: { message: `Only pool account` },
-    41207: { message: `invalid sender` },
+    43086: { message: `Only pool master` },
+    45150: { message: `Only jetton wallet` },
     46002: { message: `Pick used` },
     46439: { message: `Invalid withdraw amount` },
     47447: { message: `Invalid borrow amount` },
-    47849: { message: `Draw is over` },
     49516: { message: `Ticket is inactive` },
     54615: { message: `Insufficient balance` },
     54665: { message: `Draw is inactive` },
@@ -1807,31 +2064,35 @@ const PrizeReserve_types: ABIType[] = [
     {"name":"FactoryDeploy","header":1829761339,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"cashback","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"Twab","header":null,"fields":[{"name":"timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":128}}]},
     {"name":"TwabStore","header":null,"fields":[{"name":"store","type":{"kind":"dict","key":"int","value":"Twab","valueFormat":"ref"}},{"name":"size","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
-    {"name":"WinningSplit","header":null,"fields":[{"name":"n0","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n1","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n2","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n3","type":{"kind":"simple","type":"uint","optional":false,"format":8}}]},
     {"name":"Borrow","header":1154673471,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"Repay","header":3449863297,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"DepositInternal","header":2706550035,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"WithdrawInternal","header":4279924659,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"ClaimPrizeInternal","header":2692664058,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"Withdraw","header":195467089,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"DepositFinish","header":3488820906,"fields":[{"name":"timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"WithdrawFinish","header":339761243,"fields":[{"name":"timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
-    {"name":"PrepareInitTicket","header":1186592459,"fields":[{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"winning_number","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"start","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"end","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"avg_balance","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
-    {"name":"ClaimPrizeDebt","header":1998527298,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"reserve","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"PrepareInitTicket","header":2292165562,"fields":[{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"start","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"end","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"winning_number","type":{"kind":"simple","type":"uint","optional":false,"format":16}},{"name":"prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"jetton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"avg_balance","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"ticket_code","type":{"kind":"simple","type":"cell","optional":false}},{"name":"ticket_data","type":{"kind":"simple","type":"cell","optional":false}}]},
+    {"name":"PayPrizeDebtInternal","header":1233654330,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"ClaimPrizeDebt","header":738691372,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"prize_reserve","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"InitDraw","header":3109422989,"fields":[{"name":"twab_timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"twab_amount","type":{"kind":"simple","type":"uint","optional":false,"format":128}},{"name":"refund_address","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"OpenDraw","header":2109770718,"fields":[{"name":"twab_timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"twab_amount","type":{"kind":"simple","type":"uint","optional":false,"format":128}},{"name":"refund_address","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"InitTicket","header":2494876497,"fields":[{"name":"pool_account","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"ClaimPrizeInternal","header":2386274623,"fields":[{"name":"user","type":{"kind":"simple","type":"address","optional":false}},{"name":"pool_account","type":{"kind":"simple","type":"address","optional":false}},{"name":"prize_scale","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
-    {"name":"InitTicketInternal","header":1186322253,"fields":[{"name":"winning_number","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"draw_avg_balance","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"user_avg_balance","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
-    {"name":"PayPrizeDebtInternal","header":1422626960,"fields":[{"name":"user","type":{"kind":"simple","type":"address","optional":false}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
-    {"name":"ClaimPrize","header":2320191705,"fields":[{"name":"index_payload","type":{"kind":"simple","type":"cell","optional":false}}]},
+    {"name":"OpenDraw","header":2194139508,"fields":[{"name":"twab_timestamp","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"twab_amount","type":{"kind":"simple","type":"uint","optional":false,"format":128}},{"name":"prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"jetton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"refund_address","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"InitTicket","header":518518837,"fields":[{"name":"pool_account","type":{"kind":"simple","type":"address","optional":false}},{"name":"code","type":{"kind":"simple","type":"cell","optional":false}},{"name":"data","type":{"kind":"simple","type":"cell","optional":false}}]},
+    {"name":"ClaimJettonInternal","header":3910874751,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"InitTicketInternal","header":2551503563,"fields":[{"name":"winning_number","type":{"kind":"simple","type":"uint","optional":false,"format":16}},{"name":"total_prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"picks","type":{"kind":"simple","type":"uint","optional":false,"format":16}},{"name":"jetton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
+    {"name":"ClaimPrize","header":2348973855,"fields":[{"name":"index_payload","type":{"kind":"simple","type":"cell","optional":false}},{"name":"pool_master","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"ClaimJetton","header":866039975,"fields":[{"name":"pool_master","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"ClaimPrizeDebtInternal","header":875353941,"fields":[{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"user","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"PoolMasterData","header":null,"fields":[{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"prize_reserve","type":{"kind":"simple","type":"address","optional":false}},{"name":"twab","type":{"kind":"simple","type":"Twab","optional":false}},{"name":"share_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"borrow_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"next_period","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
-    {"name":"PoolAccountData","header":null,"fields":[{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"master","type":{"kind":"simple","type":"address","optional":false}},{"name":"prize_reserve","type":{"kind":"simple","type":"address","optional":false}},{"name":"share_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"debt_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
-    {"name":"DrawData","header":null,"fields":[{"name":"active","type":{"kind":"simple","type":"bool","optional":false}},{"name":"pool_master","type":{"kind":"simple","type":"address","optional":false}},{"name":"prize_reserve","type":{"kind":"simple","type":"address","optional":false}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"start","type":{"kind":"simple","type":"Twab","optional":true}},{"name":"end","type":{"kind":"simple","type":"Twab","optional":true}},{"name":"prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"avail_prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"winning_number","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"deadline","type":{"kind":"simple","type":"uint","optional":false,"format":64}}]},
-    {"name":"TicketData","header":null,"fields":[{"name":"active","type":{"kind":"simple","type":"bool","optional":false}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"pool_account","type":{"kind":"simple","type":"address","optional":false}},{"name":"draw","type":{"kind":"simple","type":"address","optional":false}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"picks","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
+    {"name":"JettonNotification","header":1935855772,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"from","type":{"kind":"simple","type":"address","optional":false}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
+    {"name":"JettonTransfer","header":260734629,"fields":[{"name":"query_id","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}},{"name":"forward_ton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
+    {"name":"PoolMasterData","header":null,"fields":[{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"jetton_master","type":{"kind":"simple","type":"address","optional":false}},{"name":"jetton_wallet_code","type":{"kind":"simple","type":"cell","optional":false}},{"name":"twab","type":{"kind":"simple","type":"Twab","optional":false}},{"name":"next_period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"share_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"borrow_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"avail_prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"jetton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
+    {"name":"PoolAccountData","header":null,"fields":[{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"master","type":{"kind":"simple","type":"address","optional":false}},{"name":"share_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"debt_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
+    {"name":"DrawData","header":null,"fields":[{"name":"active","type":{"kind":"simple","type":"bool","optional":false}},{"name":"pool_master","type":{"kind":"simple","type":"address","optional":false}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"start","type":{"kind":"simple","type":"Twab","optional":true}},{"name":"end","type":{"kind":"simple","type":"Twab","optional":true}},{"name":"prize_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"jetton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"winning_number","type":{"kind":"simple","type":"uint","optional":false,"format":16}}]},
+    {"name":"TicketData","header":null,"fields":[{"name":"active","type":{"kind":"simple","type":"bool","optional":false}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"pool_master","type":{"kind":"simple","type":"address","optional":false}},{"name":"period","type":{"kind":"simple","type":"uint","optional":false,"format":32}},{"name":"picks","type":{"kind":"simple","type":"uint","optional":false,"format":16}},{"name":"jetton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"PrizeReserveData","header":null,"fields":[{"name":"pool_master","type":{"kind":"simple","type":"address","optional":false}},{"name":"balance","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
     {"name":"ChangeOwner","header":2174598809,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"newOwner","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"ChangeOwnerOk","header":846932810,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"newOwner","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"WinningSplit","header":null,"fields":[{"name":"n0","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n1","type":{"kind":"simple","type":"uint","optional":false,"format":8}},{"name":"n2","type":{"kind":"simple","type":"uint","optional":false,"format":8}}]},
 ]
 
 const PrizeReserve_getters: ABIGetter[] = [
