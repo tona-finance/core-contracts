@@ -96,6 +96,7 @@ trait BasePoolAccount with Ownable, MsgValueHelper {
     }
 
     inline fun require_master() {
+        // require(sender() == self.master, "Only pool master");
         require(sender() == self.master, "Invalid sender");
     }
 }
