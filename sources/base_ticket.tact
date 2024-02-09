@@ -58,6 +58,10 @@ trait BaseTicket with Ownable, MsgValueHelper {
         self.requireOwner();
         require(self.jetton_amount > 0, "Zero jetton amount");
 
+        // claim prize gas fee 0.1
+        let rest_value: Int = self.msg_value(context(), ton("0.1"));
+        require(rest_value >= 0, "Insufficient value");
+
         self.forward(
             msg.pool_master,
             ClaimJettonInternal {

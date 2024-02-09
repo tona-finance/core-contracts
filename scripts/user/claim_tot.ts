@@ -12,7 +12,7 @@ async function main() {
     const ticket_client = Client.open(ticket);
     ticket_client.send(
         sender,
-        { value: toNano("0.1") },
+        { value: toNano("0.11") },
         {
             $$type: "ClaimJetton",
             pool_master: Deployments.PoolMaster,

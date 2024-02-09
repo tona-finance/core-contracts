@@ -224,7 +224,7 @@ trait BasePoolMaster with OwnableTransferable {
                 response_destination: msg.user,
                 custom_payload: null,
                 forward_ton_amount: 0,
-                forward_payload: emptySlice()
+                forward_payload: beginCell().asSlice()
             }.toCell(),
             false,
             null

@@ -23,7 +23,7 @@ async function main() {
         wallet.address,
         beginCell().endCell(),
         toNano("0.05"),
-        beginCell().storeBit(true).endCell(),
+        beginCell().endCell(),
     );
 }
 

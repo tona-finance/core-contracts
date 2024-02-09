@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: Ticket
-BOC Size: 2158 bytes
+BOC Size: 2198 bytes
 
 # Types
 Total Types: 37
@@ -191,7 +191,6 @@ Argument: index
 2805: Insufficient value
 3012: Invalid deposit amount
 3556: Draw not initialized
-4429: Invalid sender
 5910: Only ticket
 5913: Only draw
 8459: Invalid twab timestamp
