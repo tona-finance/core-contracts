@@ -100,7 +100,7 @@ trait BasePoolMaster with OwnableTransferable {
         } else {
             let amount: Int = msg.amount - self.borrow_amount;
             self.borrow_amount = 0;
-            self.prize_amount = self.prize_amount + msg.amount;
+            self.prize_amount = self.prize_amount + amount;
             self.avail_prize_amount = self.avail_prize_amount + amount;
         }
 

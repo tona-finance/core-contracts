@@ -17,8 +17,8 @@ export const JettonData = {
 }
 
 export const Deployments = {
-    PoolMaster: Address.parse("kQCDb3xYOT1gEJfRzOAGRSE31qjWIOEVXC4iTpy39I5wPkQJ"),
-    PrizeReserve: Address.parse("kQAfbrwf3df37_QcVEBZ4bov1Vfrpf6a9hmtJnafNwahmAWd"),
+    PoolMaster: Address.parse("kQCA4yDz2fdb_5j2DROtJmhnKm1AI2lJj1Z0Xotobugmojkg"),
+    PrizeReserve: Address.parse("kQBt_JOGycUNxs0VveA-PUc9L3N0Nm1KGNhfRZfrxAIRv4n5"),
 }
 
 export const TestPeriod = 0n;
