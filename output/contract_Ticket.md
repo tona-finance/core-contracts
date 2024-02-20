@@ -3,7 +3,7 @@ Contract: Ticket
 BOC Size: 2198 bytes
 
 # Types
-Total Types: 37
+Total Types: 36
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -78,8 +78,8 @@ TLB: `pay_prize_debt_internal#4988123a amount:coins user:address = PayPrizeDebtI
 Signature: `PayPrizeDebtInternal{amount:coins,user:address}`
 
 ## ClaimPrizeDebt
-TLB: `claim_prize_debt#2c07892c amount:coins prize_reserve:address = ClaimPrizeDebt`
-Signature: `ClaimPrizeDebt{amount:coins,prize_reserve:address}`
+TLB: `claim_prize_debt#b8c257a9 amount:coins = ClaimPrizeDebt`
+Signature: `ClaimPrizeDebt{amount:coins}`
 
 ## InitDraw
 TLB: `init_draw#b956078d twab_timestamp:uint64 twab_amount:uint128 refund_address:address = InitDraw`
@@ -136,10 +136,6 @@ Signature: `DrawData{active:bool,pool_master:address,period:uint32,start:Maybe T
 ## TicketData
 TLB: `_ active:bool owner:address pool_master:address period:uint32 picks:uint16 jetton_amount:coins = TicketData`
 Signature: `TicketData{active:bool,owner:address,pool_master:address,period:uint32,picks:uint16,jetton_amount:coins}`
-
-## PrizeReserveData
-TLB: `_ pool_master:address balance:coins = PrizeReserveData`
-Signature: `PrizeReserveData{pool_master:address,balance:coins}`
 
 ## ChangeOwner
 TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`

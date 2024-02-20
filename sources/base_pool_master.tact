@@ -231,6 +231,21 @@ trait BasePoolMaster with OwnableTransferable {
         );
     }
 
+    receive(msg: ClaimPrizeDebtInternal) {
+        self.require_account(msg.user);
+
+        self.avail_prize_amount = self.avail_prize_amount - msg.amount;
+        require(self.avail_prize_amount >= 0, "Insufficient prize amount");
+        self.native_reserve();
+
+        send(SendParameters {
+            bounce: false,
+            to: msg.user,
+            value: 0,
+            mode: SendRemainingBalance + SendIgnoreErrors
+        });
+    }
+
     inline fun native_reserve() {
         nativeReserve(self.storageReserve + self.share_amount + self.avail_prize_amount - self.borrow_amount, 0);
     }

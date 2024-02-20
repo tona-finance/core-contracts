@@ -7,7 +7,7 @@ async function main() {
     const keypair = await getKeyPair();
     const wallet = await getWallet(keypair);
 
-    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PrizeReserve);
+    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster);
     const pool_account_contract = Client.open(pool_account);
 
     const draw = await Draw.fromInit(Deployments.PoolMaster, TestPeriod);

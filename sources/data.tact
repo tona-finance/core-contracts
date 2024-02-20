@@ -41,7 +41,7 @@ struct TicketData {
     jetton_amount: Int as coins;
 }
 
-struct PrizeReserveData {
-    pool_master: Address;
-    balance: Int as coins;
-}
+// struct PrizeReserveData {
+//     pool_master: Address;
+//     balance: Int as coins;
+// }

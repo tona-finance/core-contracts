@@ -59,7 +59,7 @@ trait TicketManager with BasePoolAccount {
 
         self.debt_amount = self.debt_amount - msg.amount;
         self.forward(
-            msg.prize_reserve,
+            self.master,
             ClaimPrizeDebtInternal {
                 amount: msg.amount,
                 user: self.owner

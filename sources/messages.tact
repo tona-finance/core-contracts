@@ -60,7 +60,7 @@ message PayPrizeDebtInternal {
 
 message ClaimPrizeDebt {
     amount: Int as coins;
-    prize_reserve: Address;
+    // prize_reserve: Address;
 }
 
 // === Draw messages ===

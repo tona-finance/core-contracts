@@ -6,7 +6,6 @@ import "./data";
 import "./base_pool_master";
 import "./base_draw";
 import "./base_ticket.tact";
-import "./base_prize_reserve";
 import "./ticket_manager";
 
 // === Pool Master Contract ===
@@ -210,27 +209,27 @@ contract Ticket with BaseTicket {
     }
 }
 
-// === Prize Reserve Contract ===
+// // === Prize Reserve Contract ===
 
-contract PrizeReserve with BasePrizeReserve, Deployable {
-    override const storageReserve: Int = ton("0.01");
+// contract PrizeReserve with BasePrizeReserve, Deployable {
+//     override const storageReserve: Int = ton("0.01");
 
-    pool_master: Address;
+//     pool_master: Address;
 
-    init(pool_master: Address) {
-        self.pool_master = pool_master;
-    }
+//     init(pool_master: Address) {
+//         self.pool_master = pool_master;
+//     }
 
-    override inline fun _get_pool_account_init(user: Address): StateInit {
-        return initOf PoolAccount(user, self.pool_master);
-    }
+//     override inline fun _get_pool_account_init(user: Address): StateInit {
+//         return initOf PoolAccount(user, self.pool_master);
+//     }
 
-    // === get functions ===
+//     // === get functions ===
 
-    get fun get_core_data(): PrizeReserveData {
-        return PrizeReserveData {
-            pool_master: self.pool_master,
-            balance: myBalance() - self.storageReserve
-        };
-    }
-}
+//     get fun get_core_data(): PrizeReserveData {
+//         return PrizeReserveData {
+//             pool_master: self.pool_master,
+//             balance: myBalance() - self.storageReserve
+//         };
+//     }
+// }

@@ -25,7 +25,7 @@ async function main() {
     const payload = packWinningPicks(winning_picks);
     ticket_client.send(
         sender,
-        { value: toNano("1.0") },
+        { value: toNano("0.51") },
         {
             $$type: "ClaimPrize",
             index_payload: payload,
