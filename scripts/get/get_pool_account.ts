@@ -6,7 +6,7 @@ async function main() {
     const wallet = await getWallet(keypair);
 
     // get pool account address
-    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
+    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster);
     const pool_account_contract = Client.open(pool_account);
     // get pool account data
     console.log("Pool account data:", await pool_account_contract.getGetCoreData());

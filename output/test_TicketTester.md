@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: TicketTester
-BOC Size: 1174 bytes
+BOC Size: 1135 bytes
 
 # Types
 Total Types: 9
@@ -30,12 +30,12 @@ TLB: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
 Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
 
 ## WinningSplit
-TLB: `_ n0:uint8 n1:uint8 n2:uint8 n3:uint8 = WinningSplit`
-Signature: `WinningSplit{n0:uint8,n1:uint8,n2:uint8,n3:uint8}`
+TLB: `_ n0:uint8 n1:uint8 n2:uint8 = WinningSplit`
+Signature: `WinningSplit{n0:uint8,n1:uint8,n2:uint8}`
 
 ## ComputePickNumber
-TLB: `compute_pick_number#28b5ae3b index:uint32 expected_number:uint32 = ComputePickNumber`
-Signature: `ComputePickNumber{index:uint32,expected_number:uint32}`
+TLB: `compute_pick_number#fe621fd0 index:uint16 expected_number:uint16 = ComputePickNumber`
+Signature: `ComputePickNumber{index:uint16,expected_number:uint16}`
 
 ## ComputePrizeAmount
 TLB: `compute_prize_amount#beb13cdb expected_amount:coins index_payload:^cell = ComputePrizeAmount`

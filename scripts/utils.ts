@@ -1,8 +1,9 @@
-import { Address } from "@ton/core";
+import { Address, Cell } from "@ton/core";
 import { TonClient4, WalletContractV4 } from "@ton/ton";
 import { KeyPair, mnemonicToWalletKey } from "@ton/crypto";
-
+import walletHex from "./external/jetton-wallet.compiled.json";
 import * as dotenv from "dotenv";
+
 dotenv.config();
 
 export const Client = new TonClient4({
@@ -10,9 +11,13 @@ export const Client = new TonClient4({
     timeout: 30000,
 });
 
+export const JettonData = {
+    Master: Address.parse("EQAcjv-v76upZgRoRNUM6tCmd6d9Q09sWVTFqCdfLeuP4P3b"),
+    WalletCode: Cell.fromBoc(Buffer.from(walletHex.hex, "hex"))[0],
+}
+
 export const Deployments = {
-    PoolMaster: Address.parse("kQB3tIttfUco2gLAHYZMpbnEAvp98pYFKVn_252FCmIqaYr8"),
-    PrizeReserve: Address.parse("kQBvZ1CJ026mTvcE_y5axYJFMyGDdtynGR_x-T7DsZN8neQ5"),
+    PoolMaster: Address.parse("EQDO03QyvVmM2mooZgg4o27ptFW3IIfzSd46vNcxdBfSZ5FP"),
 }
 
 export const TestPeriod = 0n;

@@ -6,6 +6,8 @@ async function main() {
     const pool_master_contract = Client.open(pool_master);
     // get core data
     console.log("Pool core data:", await pool_master_contract.getGetCoreData());
+    // get jetton account
+    console.log("Jetton account:", await pool_master_contract.getGetJettonWalletAddress());
 }
 
 main().catch((error) => {

@@ -1,5 +1,5 @@
 
-// === Pool messages ===
+// === Pool master messages ===
 
 message Borrow {
     amount: Int as coins;
@@ -16,6 +16,12 @@ message DepositInternal {
 
 message WithdrawInternal {
     amount: Int as coins;
+    user: Address;
+}
+
+message ClaimPrizeInternal {
+    amount: Int as coins;
+    period: Int as uint32;
     user: Address;
 }
 
@@ -37,15 +43,24 @@ message WithdrawFinish {
 
 message PrepareInitTicket {
     period: Int as uint32;
-    winning_number: Int as uint32;
     start: Int as uint64;
     end: Int as uint64;
+    winning_number: Int as uint16;
+    prize_amount: Int as coins;
+    jetton_amount: Int as coins;
     avg_balance: Int as coins;
+    ticket_code: Cell;
+    ticket_data: Cell;
+}
+
+message PayPrizeDebtInternal {
+    amount: Int as coins;
+    user: Address;
 }
 
 message ClaimPrizeDebt {
     amount: Int as coins;
-    reserve: Address;
+    // prize_reserve: Address;
 }
 
 // === Draw messages ===
@@ -59,35 +74,39 @@ message InitDraw {
 message OpenDraw {
     twab_timestamp: Int as uint64;
     twab_amount: Int as uint128;
+    prize_amount: Int as coins;
+    jetton_amount: Int as coins;
     refund_address: Address;
 }
 
 message InitTicket {
     pool_account: Address;
+    code: Cell;
+    data: Cell;
 }
 
-message ClaimPrizeInternal {
+message ClaimJettonInternal {
+    amount: Int as coins;
+    period: Int as uint32;
     user: Address;
-    pool_account: Address;
-    prize_scale: Int as uint32;
 }
 
 // === Ticket messages ===
 
 message InitTicketInternal {
-    winning_number: Int as uint32;
-    draw_avg_balance: Int as coins;
-    user_avg_balance: Int as coins;
-}
-
-message PayPrizeDebtInternal {
-    user: Address;
-    amount: Int as coins;
-    period: Int as uint32;
+    winning_number: Int as uint16;
+    total_prize_amount: Int as coins;
+    picks: Int as uint16;
+    jetton_amount: Int as coins;
 }
 
 message ClaimPrize {
     index_payload: Cell;
+    pool_master: Address;
+}
+
+message ClaimJetton {
+    pool_master: Address;
 }
 
 // === Reserve messages ===
@@ -95,4 +114,23 @@ message ClaimPrize {
 message ClaimPrizeDebtInternal {
     amount: Int as coins;
     user: Address;
+}
+
+// === Jetton messages ===
+
+message(0x7362d09c) JettonNotification {
+    query_id: Int as uint64;
+    amount: Int as coins;
+    from: Address;
+    forward_payload: Slice as remaining;
+}
+
+message(0xf8a7ea5) JettonTransfer {
+    query_id: Int as uint64;
+    amount: Int as coins;
+    destination: Address;
+    response_destination: Address;
+    custom_payload: Cell?;
+    forward_ton_amount: Int as coins;
+    forward_payload: Slice as remaining;
 }

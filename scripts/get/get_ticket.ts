@@ -1,5 +1,4 @@
 import { Draw } from "../../output/contract_Draw";
-import { PoolAccount } from "../../output/contract_PoolAccount";
 import { Ticket } from "../../output/contract_Ticket";
 import { Client, Deployments, TestPeriod, getKeyPair, getWallet } from "../utils";
 import { computeWinningPicks, computePrizeAmount } from "../ticket_utils";
@@ -9,15 +8,13 @@ async function main() {
     const keypair = await getKeyPair();
     const wallet = await getWallet(keypair);
 
-    const pool_account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster, Deployments.PrizeReserve);
-    const draw = await Draw.fromInit(Deployments.PoolMaster, Deployments.PrizeReserve, TestPeriod);
+    const draw = await Draw.fromInit(Deployments.PoolMaster, TestPeriod);
     const draw_contract = Client.open(draw);
     const draw_data = await draw_contract.getGetCoreData();
     console.log("Draw data:", draw_data);
 
-    const ticket = await Ticket.fromInit(wallet.address, pool_account.address, draw.address, TestPeriod);
+    const ticket = await Ticket.fromInit(wallet.address, Deployments.PoolMaster, TestPeriod);
     const ticket_contract = Client.open(ticket);
-    // get core data
     const ticket_data = await ticket_contract.getGetCoreData();
     console.log("Ticket data:", ticket_data);
 

@@ -1,5 +1,5 @@
 import { toNano } from "@ton/core";
-import { PoolAccount } from "../../output/contract_PoolAccount";
+import { PoolMaster } from "../../output/contract_PoolMaster";
 import { Deployments, Client, getKeyPair, getWallet } from "../utils";
 
 async function main() {
@@ -8,12 +8,15 @@ async function main() {
     const wallet = await getWallet(keypair);
     const sender = Client.open(wallet).sender(keypair.secretKey);
 
-    const account = await PoolAccount.fromInit(wallet.address, Deployments.PoolMaster);
-    const account_client = Client.open(account);
-    await account_client.send(
+    const pool = PoolMaster.fromAddress(Deployments.PoolMaster);    // Create initial data for our contract
+    const borrow_amount = toNano("1.0");
+    await Client.open(pool).send(
         sender,
-        { value: toNano("2.0") },
-        "deposit"
+        { value: toNano("0.1") },
+        {
+            $$type: "Borrow",
+            amount: borrow_amount,
+        }
     );
 }
 
